@@ -1,4 +1,4 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Link, Outlet, useMatch } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -12,7 +12,8 @@ export const Route = createRootRoute({
 function RootComponent() {
     const location = useLocation();
 
-    const hideNavbarRoutes = ["/register"];
+    const hideNavbarRoutes = ["/register", "/login", "/reset-password", "/otp"];
+
 
     const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
@@ -35,7 +36,7 @@ function RootComponent() {
                             <Nav.Link as={Link} to="/login">
                             Login
                             </Nav.Link>
-                            <Nav.Link as={Link} to="/forgot-password">
+                            <Nav.Link as={Link} to="/reset-password">
                             forgot-password
                             </Nav.Link>
                             <Nav.Link as={Link} to="/otp">

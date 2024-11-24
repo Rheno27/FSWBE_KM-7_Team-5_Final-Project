@@ -5,7 +5,7 @@ import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import tiketkuImage from "../assets/tiketku.png";
+import tiketkuImage from "../assets/img/tiketku.png";
 
 export const Route = createLazyFileRoute("/register")({
     component: Register,
@@ -90,7 +90,11 @@ function Register() {
               </Form.Group>
 
               <div className="d-grid">
-                <Button type="submit" variant="primary" style={{ backgroundColor: "#7126B5", borderColor: "#7126B5" }}>
+                <Button 
+                  onClick={() => navigate({ to: "/otp" })}
+                  type="submit" 
+                  variant="primary" 
+                  style={{ backgroundColor: "#7126B5", borderColor: "#7126B5" }}>
                   Daftar
                 </Button>
               </div>
