@@ -1,60 +1,147 @@
+import React, { useState } from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import Card from "react-bootstrap/Card";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
+import { Row, Col, Form, Button } from "react-bootstrap";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import logo from "../assets/img/tiketku.png";
+
 export const Route = createLazyFileRoute("/login")({
     component: Login,
 });
+
 function Login() {
+
+    // State untuk menampilkan password
+    const [showPassword, setShowPassword] = useState(false);
+
+    // Fungsi untuk toggle password visibility
+    const togglePassword = () => {
+        setShowPassword(!showPassword);
+    };
+    
     return (
-    <Row className="mt-5">
-            <Col className="offset-md-3">
-                <Card className="text-center">
-                    <Card.Header>Login</Card.Header>
-                    <Card.Body>
-                        <Form>
-                            <Form.Group
-                                as={Row}
-                                className="mb-3"
-                                controlId="formPlaintextEmail"
-                            >
-                                <Form.Label column sm="2">
-                                    Email
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control
-                                        type="email"
-                                        placeholder="Email"
-                                        required
-                                    />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group
-                                as={Row}
-                                className="mb-3"
-                                controlId="formPlaintextPassword"
-                            >
-                                <Form.Label column sm="2">
-                                    Password
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control
-                                        type="password"
-                                        placeholder="Password"
-                                        required
-                                    />
-                                </Col>
-                            </Form.Group>
-                        </Form>
-                        <div className="d-grid gap-2">
-                            <Button variant="primary">Login</Button>
+        <section style={{ height: "100vh", backgroundColor: "white" }}>
+            <Row className="h-100 mx-auto gap-0">
+                <Col
+                    lg={6}
+                    md={12}
+                    className="d-none d-lg-block p-0"
+                    style={{
+                        position: "relative",
+                        overflow: "hidden",
+                    }}
+                >
+                    <img
+                        src={logo}
+                        alt="Logo"
+                        style={{
+                            width: "100%",
+                            height: "100vh",
+                            objectFit: "cover",
+                        }}
+                    />
+                </Col>
+                <Col
+                    lg={6}
+                    md={12}
+                    className="d-flex flex-column align-items-center justify-content-center"
+                >
+                    <Form
+                        style={{
+                            width: "100%",
+                            maxWidth: "452px",
+                            padding: "20px",
+                        }}
+                    >
+                        <h1
+                            className="mb-4"
+                            style={{
+                                fontSize: "2rem",
+                                fontWeight: "bold",
+                                fontFamily: "Poppins, sans-serif",
+                                textAlign: "left",
+                                marginBottom: "1rem",
+                            }}
+                        >
+                            Masuk
+                        </h1>
+                        <Form.Group controlId="email" className="mb-3">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="Example: johndoe@gmail.com"
+                                name="email"
+                                style={{
+                                    borderRadius: "16px",
+                                }}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="password" className="mb-3">
+                            <div className="d-flex justify-content-between align-items-center">
+                                <Form.Label>Password</Form.Label>
+                                <span
+                                    style={{
+                                        fontSize: "0.875rem",
+                                        color: "#7126B5",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    Forget password
+                                </span>
+                            </div>
+                            <div style={{ position: "relative" }}>
+                                <Form.Control
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Enter password"
+                                    name="password"
+                                    style={{
+                                        paddingRight: "3rem",
+                                        borderRadius: "16px",
+                                    }}
+                                />
+                                <div
+                                    style={{
+                                        position: "absolute",
+                                        top: "50%",
+                                        right: "10px",
+                                        transform: "translateY(-50%)",
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={togglePassword}
+                                >
+                                    {showPassword ? (
+                                        <FaEyeSlash />
+                                    ) : (
+                                        <FaEye />
+                                    )}
+                                </div>
+                            </div>
+                        </Form.Group>
+                        <Button
+                            type="submit"
+                            className="w-100"
+                            style={{
+                                backgroundColor: "#7126B5",
+                                borderColor: "#7126B5",
+                                borderRadius: "16px",
+                            }}
+                        >
+                            Masuk
+                        </Button>
+                        <div className="text-center mt-3">
+                            <span>
+                                Don't have an account?{" "}
+                                <a
+                                    href="#"
+                                    style={{ color: "#7126B5", fontWeight: "bold" }}
+                                >
+                                    Register here
+                                </a>
+                            </span>
                         </div>
-                    </Card.Body>
-                </Card>
-            </Col>
-            <Col md={3}></Col>
-        </Row>
+                    </Form>
+                </Col>
+            </Row>
+        </section>
+
     );
 }
