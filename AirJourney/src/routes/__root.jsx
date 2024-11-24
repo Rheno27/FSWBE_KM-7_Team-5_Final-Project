@@ -1,12 +1,15 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Link, Outlet, useMatch } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 export const Route = createRootRoute({
-    component: () => (
+    component: () => {
+        const isAuthPage = useMatch("/login") || useMatch("/register");
+
+    return (
         <>
-            <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+            {/* <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
                 <Container>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
@@ -31,11 +34,16 @@ export const Route = createRootRoute({
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
-            </Navbar>
-            <Container>
+            </Navbar> */}
+            {isAuthPage ? (
                 <Outlet />
-            </Container>
+            ) : (
+                <Container>
+                    <Outlet />
+                </Container>
+            )}
             <TanStackRouterDevtools />
         </>
-    ),
+    )
+    },
 });
