@@ -26,25 +26,36 @@ function Register() {
     const isSuccess = true;
 
     if (isSuccess) {
-      navigate({ to: "/"});
+      navigate({ to: "/otp"});
   } 
 };
 
    return (
-    <Row className="g-0" style={{ height: "100vh", overflow: "hidden" }}>
-    <Col md={6} className="p-0">
+    <section style={{ height: "100vh", backgroundColor: "white" }}>
+    <Row className="h-100 mx-auto gap-0">
+    <Col lg={6} md={12} className="d-none d-lg-block p-0" style={{ position: "relative",overflow: "hidden" }}>
       <img
         src={tiketkuImage}
         alt="Tiketku - Your Traveling Partner"
-        className="img-fluid h-100 w-100"
-        style={{ objectFit: "cover" }}
+        style={{ maxWidth: "100%", height: "100vh", objectFit: "cover" }}
       />
     </Col>
-      <Col md={6} className="d-flex align-items-center justify-content-center bg-white">
+      <Col lg={6} md={12} className="d-flex align-items-center justify-content-center">
         <Card className="w-75 border-0" style={{ height: "70%" }} >
           <Card.Body>
-            <h4 className=" fw-bold mb-4">Daftar</h4>
-            <Form onSubmit={onSubmit}>
+            <Form style={{  width: "100%", maxWidth: "452px", padding: "20px" }} onSubmit={onSubmit}>
+            <h4
+            style={{
+              fontSize: "2rem",
+              fontWeight: "bold",
+              fontFamily: "Poppins, sans-serif",
+              textAlign: "left",
+              marginBottom: "1rem",
+            }}
+            >
+            Daftar
+            </h4>
+
               <Form.Group className="mb-3" controlId="name">
                 <Form.Label>Nama</Form.Label>
                 <Form.Control
@@ -53,6 +64,7 @@ function Register() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  style={{ borderRadius: "16px" }}
                 />
               </Form.Group>
 
@@ -64,6 +76,7 @@ function Register() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  style={{ borderRadius: "16px" }}
                 />
               </Form.Group>
 
@@ -75,6 +88,7 @@ function Register() {
                   required
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
+                  style={{ borderRadius: "16px" }}
                 />
               </Form.Group>
 
@@ -86,6 +100,7 @@ function Register() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  style={{ borderRadius: "16px" }}
                 />
               </Form.Group>
 
@@ -94,14 +109,14 @@ function Register() {
                   onClick={() => navigate({ to: "/otp" })}
                   type="submit" 
                   variant="primary" 
-                  style={{ backgroundColor: "#7126B5", borderColor: "#7126B5" }}>
+                  style={{ backgroundColor: "#7126B5", borderColor: "#7126B5", borderRadius: "16px", }}>
                   Daftar
                 </Button>
               </div>
 
               <p className="text-center mt-3">
                 Sudah punya akun?{" "}
-                <Link to="/login" className="text-decoration-none text-purple">
+                <Link to="/login" style={{ color: "#7126B5", fontWeight: "bold" }}>
                   Masuk di sini
                 </Link>
               </p>
@@ -110,5 +125,6 @@ function Register() {
         </Card>
       </Col>
     </Row>
+  </section>
   );
 }
