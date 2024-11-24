@@ -3,9 +3,22 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import { useLocation } from "@tanstack/react-router";
+
 export const Route = createRootRoute({
-    component: () => (
+    component: RootComponent,
+});
+
+function RootComponent() {
+    const location = useLocation();
+
+    const hideNavbarRoutes = ["/register"];
+
+    const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
+
+    return (    
         <>
+            {shuoldShowNavbar && (
             <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
                 <Container>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -32,10 +45,10 @@ export const Route = createRootRoute({
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <Container>
-                <Outlet />
-            </Container>
+        )}
+            <Container> </Container>
+            <Outlet />
             <TanStackRouterDevtools />
         </>
-    ),
-});
+    );
+}
