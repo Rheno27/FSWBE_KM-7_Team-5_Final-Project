@@ -12,7 +12,8 @@ export const Route = createRootRoute({
 function RootComponent() {
     const location = useLocation();
 
-    const hideNavbarRoutes = ["/register"];
+    const hideNavbarRoutes = ["/register", "/login", "/forgot-password", "/otp"];
+
 
     const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 

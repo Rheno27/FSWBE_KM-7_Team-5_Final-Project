@@ -5,7 +5,7 @@ import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import tiketkuImage from "../assets/tiketku.png";
+import tiketkuImage from "../assets/img/tiketku.png";
 
 export const Route = createLazyFileRoute("/register")({
     component: Register,
