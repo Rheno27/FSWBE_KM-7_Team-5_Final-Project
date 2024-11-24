@@ -23,7 +23,7 @@ function RouteComponent() {
     <div className="flex h-full w-screen bg-white justify-center">
       {/* navigation */}
       <div className="fixed top-0 shadow-md h-16 bg-white text-black w-screen">
-        asu
+        LOGO
       </div>
 
       {/* otp */}
