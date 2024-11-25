@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Row, Col, Container, Form, Button, InputGroup } from 'react-bootstrap'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
-import tiketkuImage from '../assets/tiketku.png'
+import tiketkuImage from '../assets/img/tiketku.png'
 
 export const Route = createLazyFileRoute('/reset-password')({
   component: ResetPassword,
