@@ -26,7 +26,7 @@ function ResetPassword() {
 
   return (
     <>
-      <Row style={{ overflow: 'hidden', height: '100vh', height: '100vh', width: '100vw' }}>
+      <Row style={{ overflow: 'hidden', height: '100vh', width: '100vw' }}>
         <Col
           md={6}
           style={{ overflow: 'hidden', height: '100vh', position: 'relative' }}

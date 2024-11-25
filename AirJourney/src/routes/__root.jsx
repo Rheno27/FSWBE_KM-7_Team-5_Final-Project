@@ -1,21 +1,55 @@
 import { createRootRoute, Link, Outlet, useMatch } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import Container from 'react-bootstrap/Container';
-export const Route = createRootRoute({
-    component: () => {
-        const isAuthPage = useMatch("/login") || useMatch("/register");
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import { useLocation } from "@tanstack/react-router";
 
-    return (
+export const Route = createRootRoute({
+    component: RootComponent,
+});
+
+function RootComponent() {
+    const location = useLocation();
+
+    const hideNavbarRoutes = ["/register", "/login", "/reset-password", "/otp"];
+
+
+    const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
+
+    return (    
         <>
-            {isAuthPage ? (
-                <Outlet />
-            ) : (
+            {shuoldShowNavbar && (
+            <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
                 <Container>
-                    <Outlet />
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Collapse id="responsive-navbar-nav">
+                    <Nav className="me-auto">
+                        <Nav.Link as={Link} to="/">
+                            Home
+                        </Nav.Link>
+                    </Nav>
+                        <Nav>
+                            <Nav.Link as={Link} to="/register">
+                                Register
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/login">
+                            Login
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/reset-password">
+                            forgot-password
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/otp">
+                            otp
+                            </Nav.Link>
+                        </Nav>
+                    </Navbar.Collapse>
                 </Container>
-            )}
+            </Navbar>
+        )}
+            <Container> </Container>
+            <Outlet />
             <TanStackRouterDevtools />
         </>
-    )
-    },
-});
+    );
+}
