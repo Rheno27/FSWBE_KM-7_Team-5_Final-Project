@@ -8,95 +8,15 @@ import AirlineSeatReclineNormalIcon from "@mui/icons-material/AirlineSeatRecline
 import SearchIcon from "@mui/icons-material/Search";
 import { Switch } from "@/components/ui/switch";
 import { useEffect, useState } from "react";
+import dummy from "../data/dummy.json"
 export const Route = createLazyFileRoute("/")({
     component: Index,
 });
 function Index() {
     const [destination, setDestination] = useState(1);
     const [isReturn, setIsReturn] = useState(false);
-
-    const destinationQueryTest = [
-        { id: 1, name: "Semua" },
-        { id: 2, name: "Asia" },
-        { id: 3, name: "Amerika" },
-        { id: 4, name: "Australia" },
-        { id: 5, name: "Eropa" },
-        { id: 6, name: "Afrika" },
-    ];
-    const destinationListTest = [
-        {
-            id: 1,
-            from: "Jakarta",
-            to: "Bangkok",
-            airline: "AirAsia",
-            date: "20 - 30 Maret 2023",
-            price: 430000,
-            picture: "https://picsum.photos/200",
-        },
-        {
-            id: 2,
-            from: "Jakarta",
-            to: "Bangkok",
-            airline: "AirAsia",
-            date: "20 - 30 Maret 2023",
-            price: 430000,
-            picture: "https://picsum.photos/200",
-        },
-        {
-            id: 3,
-            from: "Jakarta",
-            to: "Bangkok",
-            airline: "AirAsia",
-            date: "20 - 30 Maret 2023",
-            price: 430000,
-            picture: "https://picsum.photos/200",
-        },
-        {
-            id: 1,
-            from: "Jakarta",
-            to: "Bangkok",
-            airline: "AirAsia",
-            date: "20 - 30 Maret 2023",
-            price: 430000,
-            picture: "https://picsum.photos/200",
-        },
-        {
-            id: 2,
-            from: "Jakarta",
-            to: "Bangkok",
-            airline: "AirAsia",
-            date: "20 - 30 Maret 2023",
-            price: 430000,
-            picture: "https://picsum.photos/200",
-        },
-        {
-            id: 3,
-            from: "Jakarta",
-            to: "Bangkok",
-            airline: "AirAsia",
-            date: "20 - 30 Maret 2023",
-            price: 430000,
-            picture: "https://picsum.photos/200",
-        },
-        {
-            id: 1,
-            from: "Jakarta",
-            to: "Bangkok",
-            airline: "AirAsia",
-            date: "20 - 30 Maret 2023",
-            price: 430000,
-            picture: "https://picsum.photos/200",
-        },
-        {
-            id: 2,
-            from: "Jakarta",
-            to: "Bangkok",
-            airline: "AirAsia",
-            date: "20 - 30 Maret 2023",
-            price: 430000,
-            picture: "https://picsum.photos/200",
-        },
-    ];
+    const destinationQueryTest = dummy.destination_query;
+    const destinationListTest = dummy.destination_list;
 
     useEffect(() => {
         console.log(destination, isReturn);
