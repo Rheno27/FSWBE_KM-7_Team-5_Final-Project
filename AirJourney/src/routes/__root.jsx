@@ -6,10 +6,12 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
-    return (
-        <React.Fragment>
-            <div>Hello "__root"!</div>
+    return (    
+        <>
+            <NavigationBar />
+            <Container> </Container>
             <Outlet />
-        </React.Fragment>
+            <TanStackRouterDevtools />
+        </>
     )
 }
