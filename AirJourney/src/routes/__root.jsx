@@ -12,14 +12,14 @@ export const Route = createRootRoute({
 function RootComponent() {
     const location = useLocation();
 
-    const hideNavbarRoutes = ["/register", "/login", "/reset-password", "/otp"];
+    const hideNavbarRoutes = ["/register", "/login", "/reset-password", "/otp", "/reset-request"];
 
 
-    const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
+    const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
     return (    
         <>
-            {shuoldShowNavbar && (
+            {shouldShowNavbar && (
             <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
                 <Container>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
