@@ -20,7 +20,6 @@ const ResetPasswordLazyImport = createFileRoute('/reset-password')()
 const RegisterLazyImport = createFileRoute('/register')()
 const OtpLazyImport = createFileRoute('/otp')()
 const LoginLazyImport = createFileRoute('/login')()
-const IndexLazyImport = createFileRoute('/')()
 const UsersPublicIndexLazyImport = createFileRoute('/users/public/')()
 
 // Create/Update Routes
@@ -51,17 +50,11 @@ const LoginLazyRoute = LoginLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
 
-const IndexLazyRoute = IndexLazyImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
-
 const UsersPublicIndexLazyRoute = UsersPublicIndexLazyImport.update({
   id: '/users/public/',
   path: '/users/public/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() =>
+} as any).lazy(() =>./routes/users/public/index.lazy
   import('./routes/users/public/index.lazy').then((d) => d.Route),
 )
 
@@ -69,13 +62,6 @@ const UsersPublicIndexLazyRoute = UsersPublicIndexLazyImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -117,7 +103,6 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
   '/otp': typeof OtpLazyRoute
   '/register': typeof RegisterLazyRoute
@@ -126,7 +111,6 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
   '/otp': typeof OtpLazyRoute
   '/register': typeof RegisterLazyRoute
@@ -136,7 +120,6 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
   '/otp': typeof OtpLazyRoute
   '/register': typeof RegisterLazyRoute
@@ -147,23 +130,15 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/login'
     | '/otp'
     | '/register'
     | '/reset-password'
     | '/users/public'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/login'
-    | '/otp'
-    | '/register'
-    | '/reset-password'
-    | '/users/public'
+  to: '/login' | '/otp' | '/register' | '/reset-password' | '/users/public'
   id:
     | '__root__'
-    | '/'
     | '/login'
     | '/otp'
     | '/register'
@@ -173,7 +148,6 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute
   LoginLazyRoute: typeof LoginLazyRoute
   OtpLazyRoute: typeof OtpLazyRoute
   RegisterLazyRoute: typeof RegisterLazyRoute
@@ -182,7 +156,6 @@ export interface RootRouteChildren {
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexLazyRoute: IndexLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
   OtpLazyRoute: OtpLazyRoute,
   RegisterLazyRoute: RegisterLazyRoute,
@@ -200,16 +173,12 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.jsx",
       "children": [
-        "/",
         "/login",
         "/otp",
         "/register",
         "/reset-password",
         "/users/public/"
       ]
-    },
-    "/": {
-      "filePath": "index.lazy.jsx"
     },
     "/login": {
       "filePath": "login.lazy.jsx"
