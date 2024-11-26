@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { Row, Col, Form, Button } from "react-bootstrap";
+import { Row, Col, Form, Button} from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import logo from "../assets/img/tiketku.png";
 
@@ -82,6 +83,7 @@ function Login() {
                                     href={`/reset-request`}
                                     style={{
                                         fontSize: "0.875rem",
+                                        fontWeight: "light",
                                         color: "#7126B5",
                                         textDecoration: "none",
                                     }}
@@ -131,12 +133,9 @@ function Login() {
                         <div className="text-center mt-3">
                             <span>
                                 Don't have an account?{" "}
-                                <a
-                                    href="#"
-                                    style={{ color: "#7126B5", fontWeight: "bold" }}
-                                >
+                                <Link to="/register" style={{ color: "#7126B5", fontWeight: "bold" }}>
                                     Register here
-                                </a>
+                                </Link>
                             </span>
                         </div>
                     </Form>

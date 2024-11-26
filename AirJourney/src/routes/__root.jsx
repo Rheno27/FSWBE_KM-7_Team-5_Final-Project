@@ -1,8 +1,7 @@
 import { createRootRoute, Link, Outlet, useMatch } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+import NavigationBar from '../components/Navbar';
 import { useLocation } from "@tanstack/react-router";
 
 export const Route = createRootRoute({
@@ -47,6 +46,10 @@ function RootComponent() {
                 </Container>
             </Navbar>
         )}
+        
+    return (    
+        <>
+            <NavigationBar />
             <Container> </Container>
             <Outlet />
             <TanStackRouterDevtools />
