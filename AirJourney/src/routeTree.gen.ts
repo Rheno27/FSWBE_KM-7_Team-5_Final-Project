@@ -118,13 +118,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordLazyImport
       parentRoute: typeof rootRoute
     }
-    '/users/private/checkout/': {
-      id: '/users/private/checkout/'
-      path: '/users/private/checkout'
-      fullPath: '/users/private/checkout'
-      preLoaderRoute: typeof UsersPrivateCheckoutIndexLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/reset-password-request': {
       id: '/reset-password-request'
       path: '/reset-password-request'
@@ -150,7 +143,6 @@ export interface FileRoutesByFullPath {
   '/otp': typeof OtpLazyRoute
   '/register': typeof RegisterLazyRoute
   '/reset-password': typeof ResetPasswordLazyRoute
-  '/users/private/checkout': typeof UsersPrivateCheckoutIndexLazyRoute
   '/reset-password-request': typeof ResetPasswordRequestLazyRoute
   '/users/private/checkout': typeof UsersPrivateCheckoutIndexLazyRoute
 }
@@ -161,7 +153,6 @@ export interface FileRoutesByTo {
   '/otp': typeof OtpLazyRoute
   '/register': typeof RegisterLazyRoute
   '/reset-password': typeof ResetPasswordLazyRoute
-  '/users/private/checkout': typeof UsersPrivateCheckoutIndexLazyRoute
   '/reset-password-request': typeof ResetPasswordRequestLazyRoute
   '/users/private/checkout': typeof UsersPrivateCheckoutIndexLazyRoute
 }
@@ -173,7 +164,6 @@ export interface FileRoutesById {
   '/otp': typeof OtpLazyRoute
   '/register': typeof RegisterLazyRoute
   '/reset-password': typeof ResetPasswordLazyRoute
-  '/users/private/checkout/': typeof UsersPrivateCheckoutIndexLazyRoute
   '/reset-password-request': typeof ResetPasswordRequestLazyRoute
   '/users/private/checkout/': typeof UsersPrivateCheckoutIndexLazyRoute
 }
@@ -186,7 +176,6 @@ export interface FileRouteTypes {
     | '/otp'
     | '/register'
     | '/reset-password'
-    | '/users/private/checkout'
     | '/reset-password-request'
     | '/users/private/checkout'
   fileRoutesByTo: FileRoutesByTo
@@ -196,7 +185,6 @@ export interface FileRouteTypes {
     | '/otp'
     | '/register'
     | '/reset-password'
-    | '/users/private/checkout'
     | '/reset-password-request'
     | '/users/private/checkout'
   id:
@@ -206,7 +194,6 @@ export interface FileRouteTypes {
     | '/otp'
     | '/register'
     | '/reset-password'
-    | '/users/private/checkout/'
     | '/reset-password-request'
     | '/users/private/checkout/'
   fileRoutesById: FileRoutesById
@@ -218,7 +205,6 @@ export interface RootRouteChildren {
   OtpLazyRoute: typeof OtpLazyRoute
   RegisterLazyRoute: typeof RegisterLazyRoute
   ResetPasswordLazyRoute: typeof ResetPasswordLazyRoute
-  UsersPrivateCheckoutIndexLazyRoute: typeof UsersPrivateCheckoutIndexLazyRoute
   ResetPasswordRequestLazyRoute: typeof ResetPasswordRequestLazyRoute
   UsersPrivateCheckoutIndexLazyRoute: typeof UsersPrivateCheckoutIndexLazyRoute
 }
@@ -229,7 +215,6 @@ const rootRouteChildren: RootRouteChildren = {
   OtpLazyRoute: OtpLazyRoute,
   RegisterLazyRoute: RegisterLazyRoute,
   ResetPasswordLazyRoute: ResetPasswordLazyRoute,
-  UsersPrivateCheckoutIndexLazyRoute: UsersPrivateCheckoutIndexLazyRoute,
   ResetPasswordRequestLazyRoute: ResetPasswordRequestLazyRoute,
   UsersPrivateCheckoutIndexLazyRoute: UsersPrivateCheckoutIndexLazyRoute,
 }
@@ -268,8 +253,6 @@ export const routeTree = rootRoute
     "/reset-password": {
       "filePath": "reset-password.lazy.jsx"
     },
-    "/users/private/checkout/": {
-      "filePath": "users/private/checkout/index.lazy.jsx"
     "/reset-password-request": {
       "filePath": "reset-password-request.lazy.jsx"
     },
