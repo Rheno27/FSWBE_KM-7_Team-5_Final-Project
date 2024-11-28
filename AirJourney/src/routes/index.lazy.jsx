@@ -7,14 +7,17 @@ import DateRangeIcon from "@mui/icons-material/DateRange";
 import AirlineSeatReclineNormalIcon from "@mui/icons-material/AirlineSeatReclineNormal";
 import SearchIcon from "@mui/icons-material/Search";
 import { Switch } from "@/components/ui/switch";
+import DestinationModal from "../components/Modal/destinationModal";
 import { useEffect, useState } from "react";
 import dummy from "../data/dummy.json"
+
 export const Route = createLazyFileRoute("/")({
     component: Index,
 });
 function Index() {
     const [destination, setDestination] = useState(1);
     const [isReturn, setIsReturn] = useState(false);
+    const [showDestinationModal,setShowDestinationModal] = useState(false);
     const destinationQueryTest = dummy.destination_query;
     const destinationListTest = dummy.destination_list;
 
@@ -46,7 +49,7 @@ function Index() {
                                     <span className="text-gray-500 w-10">
                                         From
                                     </span>
-                                    <button className="flex-1 pb-1 mx-3 text-lg text-start font-semibold border-b">
+                                    <button className="flex-1 pb-1 mx-3 text-lg text-start font-semibold border-b" onClick={()=>setShowDestinationModal(true)}>
                                         {"Jakarta (JKT)"}
                                     </button>
                                 </div>
@@ -171,7 +174,7 @@ function Index() {
                     </div>
                 </div>
                 {/* result */}
-                <div className="flex flex-row gap-4 flex-wrap justify-center">
+                <div className="flex flex-row gap-8 flex-wrap justify-center">
                     {destinationListTest.map((data) => (
                         <div
                             key={data.id}
@@ -203,6 +206,8 @@ function Index() {
                     ))}
                 </div>
             </div>
+            {/* modal */}
+            {showDestinationModal ? <DestinationModal /> : null}
         </div>
     );
 }
