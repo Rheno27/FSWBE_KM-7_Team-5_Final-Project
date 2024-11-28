@@ -7,6 +7,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useEffect, useState } from "react";
+import logo from "../assets/img/logo.png"
 
 export const Route = createLazyFileRoute("/otp")({
   component: RouteComponent,
@@ -19,18 +20,23 @@ function RouteComponent() {
     console.log(otp)
   },[otp])
 
+  const handleSubmit = (e)=>{
+    e.preventDefault();
+
+  }
+
   return (
     <div className="flex h-full w-screen bg-white justify-center">
       {/* navigation */}
-      <div className="fixed top-0 shadow-md h-16 bg-white text-black w-screen">
-        LOGO
+      <div className="fixed top-0 shadow-md h-16 bg-white text-black w-screen px-24 flex items-center">
+        <img src={logo}/>
       </div>
 
       {/* otp */}
-      <div className="flex mt-16 w-full max-w-5xl text-black flex-col items-center gap-12 relative">
+      <div className="flex mt-24 w-full max-w-5xl text-black flex-col items-center gap-12 relative">
         <h1 className="text-2xl w-1/2 font-bold">Masukkan OTP</h1>
         <form
-          action=""
+          action={handleSubmit}
           className="flex w-1/2 flex-col gap-12 items-center text-center"
         >
           <div className="flex flex-col w-1/2 items-center gap-4">
