@@ -6,6 +6,8 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import tiketkuImage from "../assets/img/tiketku.png";
+import { useDispatch } from "react-redux";
+import { setUser, setToken } from "../redux/slices/auth";  
 
 export const Route = createLazyFileRoute("/register")({
   component: Register,
@@ -13,49 +15,52 @@ export const Route = createLazyFileRoute("/register")({
 
 function Register() {
   const navigate = useNavigate();
+  const dispatch = useDispatch(); 
 
+  // State for form inputs
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
 
+  // Register mutation using react-query
   const { mutate: registerUser, isLoading } = useMutation({
     mutationFn: async (data) => {
-      const response = await fetch("/api/users/register", {
+      const response = await fetch("/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
-  
+      
       if (!response.ok) {
-        const errorText = await response.text();
-        let errorData = {};
-        try {
-          errorData = JSON.parse(errorText); 
-        } catch (e) {
-          errorData.message = errorText || "Unknown error";
-        }
-        throw new Error(errorData.message || "Registration failed");
+        const errorText = await response.text();  // Read as text to check error
+        throw new Error(errorText || "Registration failed");
       }
-  
-      const responseText = await response.text();
-      if (responseText) {
-        return JSON.parse(responseText);  
+      
+      try {
+        const data = await response.json();  // Attempt to parse JSON
+        return data;  // Return parsed data if successful
+      } catch (e) {
+        throw new Error("Invalid JSON response received");
       }
-      return {};  
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      dispatch(setUser(data.user));  
+      dispatch(setToken(data.token));  
+      localStorage.setItem("user", data.user); 
+      localStorage.setItem("token", data.token);  
+
       alert("Registration successful! Redirecting to login...");
-      navigate({ to: "/login" });
+      navigate({ to: "/login" }); 
     },
     onError: (error) => {
       alert(error.message);
     },
   });
-  
 
+  // Form submission handler
   const onSubmit = (event) => {
     event.preventDefault();
 

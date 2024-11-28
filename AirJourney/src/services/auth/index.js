@@ -7,7 +7,7 @@ export const register = async (request) => {
 
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/users/register`,
+      `${import.meta.env.VITE_API_URL}/auth/register`,
       {
         method: "POST",
         body: formData,
