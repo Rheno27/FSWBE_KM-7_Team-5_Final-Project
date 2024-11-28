@@ -80,7 +80,7 @@ function Login() {
                             <div className="d-flex justify-content-between align-items-center">
                                 <Form.Label>Password</Form.Label>
                                 <a
-                                    href={`/reset-`}
+                                    href={`/reset-password-request`}
                                     style={{
                                         fontSize: "0.875rem",
                                         fontWeight: "light",
