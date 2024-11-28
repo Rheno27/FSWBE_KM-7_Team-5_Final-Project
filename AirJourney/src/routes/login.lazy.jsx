@@ -79,17 +79,17 @@ function Login() {
                         <Form.Group controlId="password" className="mb-3">
                             <div className="d-flex justify-content-between align-items-center">
                                 <Form.Label>Password</Form.Label>
-                                <span
+                                <a
+                                    href={`/reset-password-request`}
                                     style={{
                                         fontSize: "0.875rem",
+                                        fontWeight: "light",
                                         color: "#7126B5",
-                                        cursor: "pointer",
+                                        textDecoration: "none",
                                     }}
                                 >
-                                    <Link to="/reset-password" style={{ color: "#7126B5", fontWeight: "light" }}>
-                                        Forget password
-                                    </Link>
-                                </span>
+                                    Forget password
+                                </a>
                             </div>
                             <div style={{ position: "relative" }}>
                                 <Form.Control

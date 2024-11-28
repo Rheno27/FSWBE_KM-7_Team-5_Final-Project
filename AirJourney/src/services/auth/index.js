@@ -5,19 +5,27 @@ export const register = async (request) => {
   formData.append("phoneNumber", request.phoneNumber);
   formData.append("password", request.password);
 
-  const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/api/users/register`,
-    {
-      method: "POST",
-      body: formData,
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/users/register`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData?.message || "Registration failed");
     }
-  );
 
-  // get the data if fetching succeed!
-  const result = await response.json();
-  if (!result?.success) {
-    throw new Error(result?.message);
+    const result = await response.json();
+    return {
+      userId: result?.data?.id,
+      message: result?.message || "Registration successful!",
+    };
+  } catch (error) {
+    console.error("Registration error:", error.message);
+    throw error;
   }
-
-  return result?.data;
 };
