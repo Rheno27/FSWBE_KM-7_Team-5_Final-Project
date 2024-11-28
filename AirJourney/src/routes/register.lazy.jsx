@@ -7,7 +7,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import tiketkuImage from "../assets/img/tiketku.png";
 import { useDispatch } from "react-redux";
-import { setUser, setToken } from "../redux/slices/auth";  
+import { setUser } from "../redux/slices/auth";  
 
 export const Route = createLazyFileRoute("/register")({
   component: Register,
@@ -24,9 +24,9 @@ function Register() {
   const [password, setPassword] = useState("");
 
   // Register mutation using react-query
-  const { mutate: registerUser, isLoading } = useMutation({
+  const { mutate: registerUser, isPending } = useMutation({
     mutationFn: async (data) => {
-      const response = await fetch("/auth/register", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,20 +40,18 @@ function Register() {
       }
       
       try {
-        const data = await response.json();  // Attempt to parse JSON
-        return data;  // Return parsed data if successful
+        const res = await response.json();  // Attempt to parse JSON
+        return res.data;  // Return parsed data if successful
       } catch (e) {
         throw new Error("Invalid JSON response received");
       }
     },
     onSuccess: (data) => {
-      dispatch(setUser(data.user));  
-      dispatch(setToken(data.token));  
-      localStorage.setItem("user", data.user); 
-      localStorage.setItem("token", data.token);  
+      dispatch(setUser(data));
+      localStorage.setItem("user", data);
 
-      alert("Registration successful! Redirecting to login...");
-      navigate({ to: "/login" }); 
+      alert("Registration successful! Redirecting to OTP...");
+      navigate({ to: "/otp" }); 
     },
     onError: (error) => {
       alert(error.message);
@@ -185,14 +183,14 @@ function Register() {
             <Button
               type="submit"
               className="w-100"
-              disabled={isLoading}
+              disabled={isPending}
               style={{
                 backgroundColor: "#7126B5",
                 borderColor: "#7126B5",
                 borderRadius: "16px",
               }}
             >
-              {isLoading ? "Mendaftar..." : "Daftar"}
+              {isPending ? "Mendaftar..." : "Daftar"}
             </Button>
 
             {/* Link to Login */}
