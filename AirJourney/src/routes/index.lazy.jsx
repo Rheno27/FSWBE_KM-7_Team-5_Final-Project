@@ -9,7 +9,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Switch } from "@/components/ui/switch";
 import DestinationModal from "../components/Modal/destinationModal";
 import { useEffect, useState } from "react";
-import dummy from "../data/dummy.json"
+import dummy from "../data/dummy.json";
 
 export const Route = createLazyFileRoute("/")({
     component: Index,
@@ -17,7 +17,10 @@ export const Route = createLazyFileRoute("/")({
 function Index() {
     const [destination, setDestination] = useState(1);
     const [isReturn, setIsReturn] = useState(false);
-    const [showDestinationModal,setShowDestinationModal] = useState(false);
+    const [showDestinationModal, setShowDestinationModal] = useState(false);
+    const [isFromModal, setIsFromModal] = useState(false);
+    const [fromDestination, setFromDestination] = useState("");
+    const [toDestination, setToDestination] = useState("");
     const destinationQueryTest = dummy.destination_query;
     const destinationListTest = dummy.destination_list;
 
@@ -49,7 +52,13 @@ function Index() {
                                     <span className="text-gray-500 w-10">
                                         From
                                     </span>
-                                    <button className="flex-1 pb-1 mx-3 text-lg text-start font-semibold border-b" onClick={()=>setShowDestinationModal(true)}>
+                                    <button
+                                        className="flex-1 pb-1 mx-3 text-lg text-start font-semibold border-b"
+                                        onClick={() => {
+                                            setShowDestinationModal(true);
+                                            setIsFromModal(true);
+                                        }}
+                                    >
                                         {"Jakarta (JKT)"}
                                     </button>
                                 </div>
@@ -64,7 +73,12 @@ function Index() {
                                     <span className="text-gray-500 w-10">
                                         To
                                     </span>
-                                    <button className="flex-1 pb-1 mx-3 text-lg text-start font-semibold border-b">
+                                    <button
+                                        className="flex-1 pb-1 mx-3 text-lg text-start font-semibold border-b"
+                                        onClick={() =>
+                                            setShowDestinationModal(true)
+                                        }
+                                    >
                                         {"Melbourne (MBA)"}
                                     </button>
                                 </div>
@@ -192,9 +206,7 @@ function Index() {
                                 <p className="font-bold text-sm text-darkblue4">
                                     {data.airline}
                                 </p>
-                                <p className="text-sm">
-                                    {data.date}
-                                </p>
+                                <p className="text-sm">{data.date}</p>
                                 <p className="">
                                     Mulai dari{" "}
                                     <span className="font-bold text-[#FF0000]">
@@ -207,7 +219,14 @@ function Index() {
                 </div>
             </div>
             {/* modal */}
-            {showDestinationModal ? <DestinationModal /> : null}
+            {showDestinationModal ? (
+                <DestinationModal
+                    setShowDestinationModal={setShowDestinationModal}
+                    setFromDestination={setFromDestination}
+                    setToDestination={setToDestination}
+                    isFromModal={isFromModal}
+                />
+            ) : null}
         </div>
     );
 }
