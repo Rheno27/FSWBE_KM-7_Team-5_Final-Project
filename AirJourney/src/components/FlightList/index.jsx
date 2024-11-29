@@ -85,7 +85,6 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
               </div>
             </Accordion.Header>
 
-            {/* Flight Details */}
 {/* Flight Details */}
 <Accordion.Body className="flight-details">
   <Container>
