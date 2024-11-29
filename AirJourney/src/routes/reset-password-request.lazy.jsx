@@ -12,9 +12,10 @@ export const Route = createLazyFileRoute('/reset-password-request')({
 function ResetRequest() {
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
+  let url = `${import.meta.env.VITE_API_URL}/auth/reset-password/request`;
 
   const mutation = useMutation({
-    mutationFn: (email) => axios.post('/api/request-reset', { email }),
+    mutationFn: (email) => axios.post(url, { email }, { headers: { 'Content-Type': 'application/json' }}),
     onSuccess: (response) => {
       setMessage(response.data.message) // Handle success
     },
@@ -52,7 +53,6 @@ function ResetRequest() {
           />
         </Col>
         <Col md={6}>
-          <Form onSubmit={handleSubmit}>
             <Container
               className="p-5 d-flex justify-content-center align-items-center"
               style={{ minHeight: '100vh' }}
@@ -88,7 +88,7 @@ function ResetRequest() {
                             lineHeight: '1.7',
                             color: '#7126B5',
                             marginTop: '0.8rem',
-                            boxShadow: '4px 4px 10px 2px rgba(0, 0, 0, 0.2)',
+                            // boxShadow: '2px 2px 18px 1px rgba(0, 0, 0, 0.2)',
                           }}
                         >
                           Kembali ke Login
@@ -123,7 +123,6 @@ function ResetRequest() {
                 </Form>
               </div>
             </Container>
-          </Form>
         </Col>
       </Row>
     </>

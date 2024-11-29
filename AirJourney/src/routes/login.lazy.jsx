@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { Row, Col, Form, Button} from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import logo from "../assets/img/tiketku.png";
+import logo from "../assets/img/logo.png";
 
 export const Route = createLazyFileRoute("/login")({
     component: Login,
