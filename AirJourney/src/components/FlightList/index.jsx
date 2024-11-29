@@ -50,22 +50,19 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
                           <h6 className="fw-bold mb-0">{flight?.arrival_time || "00:00"}</h6>
                           <small>{destinationAirport.code || "MLB"}</small>
                         </Col>
-                      </Row>
-                        
-                    </div>
-                  </Col>
-                  {/* Koper Section (Center) */}
-                  <Col sm={1} >
-                  <div className="koper-container text-center my-3">
-                    <img
+                        <Col>
+                        <img
                     src={koper}
                     alt="koper"
                     style={{ width: "30px", height: "30px", marginRight: "10px" }}
                   />
-                  </div>
+                        </Col>
+                      </Row>
+                        
+                    </div>
                   </Col>
                   {/* Price Section (Right) */}
-                  <Col sm={2} className="d-flex flex-column align-items-end">
+                  <Col sm={3} className="d-flex flex-column align-items-end">
                     <h6 className="fw-bold text-purple mb-2" style={{ color: "#7126B5" }}>
                       {flight?.price ? (
                         <>
@@ -88,57 +85,71 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
 {/* Flight Details */}
 <Accordion.Body className="flight-details">
   <Container>
-    {/* Kebarangkatan */}
-    <Row>
+    {/* Section Title */}
+    <h6 className="text-purple mb-3">Detail Penerbangan</h6>
+
+    {/* Keberangkatan */}
+    <Row className="align-items-start mb-4">
       <Col>
-        <p className="mb-2">
-          <strong>Kebarangkatan</strong>
-          <br />
-          {flight?.departure_time} - {flight?.date || "N/A"}
-          <br />
+        <h6 className="fw-bold mb-0">{flight?.departure_time || "00:00"}</h6>
+        <small>{flight?.date || "N/A"}</small>
+        <br />
+        <small>
           {originAirport.name || "Unknown Origin"} - Terminal {flight?.terminal || "N/A"}
-        </p>
+        </small>
+      </Col>
+      <Col xs="auto" className="text-end">
+        <small className="text-purple">Keberangkatan</small>
       </Col>
     </Row>
+    <hr className="my-2"/>
 
     {/* Airline and Flight Information */}
-    <Row>
+    <Row className="mb-4">
       <Col>
-        <p className="mb-2">
-          <strong>{airline.name || "Jet Air"} - {flight?.class || "Economy"}</strong>
-          <br />
-          {flight?.flight_number || "JT-203"}
-        </p>
+        <h6 className="fw-bold mb-0">
+          {airline.name || "Jet Air"} - {flight?.class || "Economy"}
+        </h6>
+        <small>{flight?.flight_number || "JT-203"}</small>
       </Col>
     </Row>
 
-    {/* Additional Information */}
-    <Row>
+    {/* Informasi */}
+    <Row className="align-items-center mb-4">
       <Col>
         <p className="mb-2">
-          <strong>Informasi:</strong>
+          <strong>
+            <img
+            src={logo}
+            alt="logo"
+            style={{ width: "20px", height: "20px", marginRight: "5px" }}
+          />Informasi:</strong>
           <br />
-          Baggage 20 kg <br />
-          Cabin baggage 7 kg <br />
+          Baggage 20 kg
+          <br />
+          Cabin baggage 7 kg
+          <br />
           In-Flight Entertainment
         </p>
       </Col>
     </Row>
+    <hr className="my-2 "/>
 
     {/* Kedatangan */}
-    <Row>
+    <Row className="align-items-start">
       <Col>
-        <p>
-          <strong>Kedatangan</strong>
-          <br />
-          {flight?.arrival_time} - {flight?.date || "N/A"}
-          <br />
-          {destinationAirport.name || "Unknown Destination"}
-        </p>
+        <h6 className="fw-bold mb-0">{flight?.arrival_time || "00:00"}</h6>
+        <small>{flight?.date || "N/A"}</small>
+        <br />
+        <small>{destinationAirport.name || "Unknown Destination"}</small>
+      </Col>
+      <Col xs="auto" className="text-end">
+        <small className="text-purple">Kedatangan</small>
       </Col>
     </Row>
   </Container>
 </Accordion.Body>
+
           </Accordion.Item>
         );
       })}
