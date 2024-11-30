@@ -7,7 +7,8 @@ import DateRangeIcon from "@mui/icons-material/DateRange";
 import AirlineSeatReclineNormalIcon from "@mui/icons-material/AirlineSeatReclineNormal";
 import SearchIcon from "@mui/icons-material/Search";
 import { Switch } from "@/components/ui/switch";
-import DestinationModal from "../components/Modal/destinationModal";
+import DestinationModal from "../components/Modal/DestinationModal";
+import DateModal from "../components/Modal/DateModal"
 import { useEffect, useState } from "react";
 import dummy from "../data/dummy.json";
 
@@ -18,6 +19,7 @@ function Index() {
     const [destination, setDestination] = useState(1);
     const [isReturn, setIsReturn] = useState(false);
     const [showDestinationModal, setShowDestinationModal] = useState(false);
+    const [showDateModal, setShowDateModal] = useState(false);
     const [isFromModal, setIsFromModal] = useState(false);
     const [fromDestination, setFromDestination] = useState("");
     const [toDestination, setToDestination] = useState("");
@@ -25,8 +27,8 @@ function Index() {
     const destinationListTest = dummy.destination_list;
 
     useEffect(() => {
-        console.log(destination, isReturn);
-    }, [destination, isReturn]);
+        console.log(`from: ${fromDestination}, to: ${toDestination}`);
+    }, [fromDestination, toDestination]);
 
     return (
         <div className="flex flex-col items-center">
@@ -39,14 +41,15 @@ function Index() {
 
             {/* search */}
             <div className="w-full h-64 flex justify-center relative">
-                <div className="w-full max-w-5xl flex justify-between flex-col h-72 -top-16 rounded-xl bg-white border shadow-sm overflow-hidden absolute">
+                <div className="w-full max-w-5xl flex justify-between flex-col h-72 -top-16 rounded-xl bg-white border shadow-sm absolute">
                     <div className="h-full flex flex-col px-8 py-6 gap-3">
                         <div className="font-bold text-xl">
                             Pilih Jadwal Penerbangan spesial di{" "}
                             <span className="text-darkblue5">Terbangin!</span>
                         </div>
                         <div className="flex flex-col h-full justify-between">
-                            <div className="flex w-full gap-4 justify-between">
+                            {/* destination */}
+                            <div className="flex w-full gap-4 justify-between relative">
                                 <div className="flex items-center flex-1 gap-3">
                                     <FlightTakeoffIcon color="disabled" />
                                     <span className="text-gray-500 w-10">
@@ -59,13 +62,22 @@ function Index() {
                                             setIsFromModal(true);
                                         }}
                                     >
-                                        {"Jakarta (JKT)"}
+                                        {fromDestination || (
+                                            <span className="text-darkblue4">
+                                                Pilih destinasi
+                                            </span>
+                                        )}
                                     </button>
                                 </div>
                                 <button>
                                     <SwapHorizIcon
                                         fontSize="large"
                                         sx={{ color: "#4B1979" }}
+                                        onClick={() => {
+                                            const fromTemp = fromDestination;
+                                            setFromDestination(toDestination);
+                                            setToDestination(fromTemp);
+                                        }}
                                     />
                                 </button>
                                 <div className="flex items-center flex-1 gap-3">
@@ -79,13 +91,35 @@ function Index() {
                                             setShowDestinationModal(true)
                                         }
                                     >
-                                        {"Melbourne (MBA)"}
+                                        {toDestination || (
+                                            <span className="text-darkblue4">
+                                                Pilih destinasi
+                                            </span>
+                                        )}
                                     </button>
                                 </div>
+                                {showDestinationModal && (
+                                    <>
+                                        <DestinationModal
+                                            setShowDestinationModal={
+                                                setShowDestinationModal
+                                            }
+                                            setFromDestination={
+                                                setFromDestination
+                                            }
+                                            setToDestination={setToDestination}
+                                            isFromModal={isFromModal}
+                                            setIsFromModal={setIsFromModal}
+                                        />
+                                        <div className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"></div>
+                                    </>
+                                )}
                             </div>
 
+                            {/* date & passenger*/}
                             <div className="flex w-full gap-4 justify-between">
-                                <div className="flex items-center flex-1 gap-3">
+                                {/* date */}
+                                <div className="flex items-center flex-1 gap-3 relative">
                                     <DateRangeIcon color="disabled" />
                                     <span className="text-gray-500 w-10">
                                         Date
@@ -95,7 +129,7 @@ function Index() {
                                             <span className="text-gray-500 w-10">
                                                 Departure
                                             </span>
-                                            <button className="flex-1 text-lg text-start font-semibold">
+                                            <button className="flex-1 text-lg text-start font-semibold" onClick={()=>setShowDateModal(true)}>
                                                 {"Jakarta (JKT)"}
                                             </button>
                                         </div>
@@ -125,13 +159,33 @@ function Index() {
                                             </button>
                                         </div>
                                     </div>
+                                    {showDateModal && (
+                                        <>
+                                            <DateModal
+                                                setShowDateModal={
+                                                    setShowDateModal
+                                                }
+                                                setFromDestination={
+                                                    setFromDestination
+                                                }
+                                                setToDestination={
+                                                    setToDestination
+                                                }
+                                                isFromModal={isFromModal}
+                                                setIsFromModal={setIsFromModal}
+                                            />
+                                            <div className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"></div>
+                                        </>
+                                    )}
                                 </div>
+
                                 <button disabled>
                                     <SwapHorizIcon
                                         fontSize="large"
                                         sx={{ color: "white" }}
                                     />
                                 </button>
+
                                 <div className="flex items-center flex-1 gap-3">
                                     <AirlineSeatReclineNormalIcon color="disabled" />
                                     <span className="text-gray-500 w-10">
@@ -161,7 +215,7 @@ function Index() {
                             </div>
                         </div>
                     </div>
-                    <button className="py-2.5 bg-darkblue4 text-white font-semibold">
+                    <button className="py-2.5 bg-darkblue4 text-white font-semibold rounded-b-xl">
                         Cari Penerbangan
                     </button>
                 </div>
@@ -218,15 +272,6 @@ function Index() {
                     ))}
                 </div>
             </div>
-            {/* modal */}
-            {showDestinationModal ? (
-                <DestinationModal
-                    setShowDestinationModal={setShowDestinationModal}
-                    setFromDestination={setFromDestination}
-                    setToDestination={setToDestination}
-                    isFromModal={isFromModal}
-                />
-            ) : null}
         </div>
     );
 }

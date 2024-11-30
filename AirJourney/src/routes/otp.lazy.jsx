@@ -6,12 +6,13 @@ import {
     InputOTPSeparator,
     InputOTPSlot,
 } from "@/components/ui/input-otp";
-import {useState } from "react";
+import { useState } from "react";
 import logo from "../assets/img/logo.png";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Countdown from "react-countdown";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export const Route = createLazyFileRoute("/otp")({
     component: RouteComponent,
@@ -29,17 +30,29 @@ function RouteComponent() {
     const { mutate: sendOtp } = useMutation({
         mutationFn: (data) => {
             setIsLoading(true);
+            const toastId = toast.loading("Mengirim OTP...",{position:"bottom-center", className:""});
             axios
                 .post(`${import.meta.env.VITE_API_URL}/auth/otp/verify`, data)
                 .then((res) => {
                     console.log(res);
+                    toast.update(toastId, {
+                        render: "Redirecting...",
+                        type: "success",
+                        autoClose: 3000,
+                        isLoading:false,
+                    });
                     navigate({ to: "/" });
-                    setIsLoading(false);
                 })
                 .catch((err) => {
                     console.log(err);
-                    setIsLoading(false);
-                });
+                    toast.update(toastId, {
+                        render: (<span className="text-red-500 font-bold">Kode OTP invalid</span>),
+                        type: "error",
+                        autoClose: 3000,
+                        isLoading:false,
+                    });
+                })
+                .finally(() => setIsLoading(false));
         },
     });
     const handleSubmit = (e) => {
@@ -88,7 +101,7 @@ function RouteComponent() {
         <div className="flex h-full w-screen bg-white justify-center">
             {/* navigation */}
             <div className="fixed top-0 shadow-md h-16 bg-white text-black w-screen px-24 flex items-center">
-                <img src={logo} />
+                <img src={logo} onClick={()=>navigate({ to: "/" })}/>
             </div>
 
             {/* otp */}

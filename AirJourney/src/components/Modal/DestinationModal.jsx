@@ -1,11 +1,27 @@
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import PropTypes from "prop-types";
+import dummy from "../../data/dummy.json";
 
-const DestinationModal = ({ setShowDestinationModal,setFromDestination,setToDestination,isFromModal }) => {
+const DestinationModal = ({
+    setShowDestinationModal,
+    setFromDestination,
+    setToDestination,
+    isFromModal,
+    setIsFromModal,
+}) => {
+    const destinationList = dummy.destination_query;
+    const destinationClickHandler = (name) => {
+        if (isFromModal) {
+            setFromDestination(name);
+            setIsFromModal(false);
+        } else {
+            setToDestination(name);
+        }
+        setShowDestinationModal(false);
+    };
     return (
-        <div className="fixed z-50 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center">
-            <div className="relative w-full max-w-3xl mx-auto h-80 rounded-xl p-4 bg-white">
+            <div className="absolute inset-12 z-2 w-full max-w-3xl mx-auto h-80 rounded-xl p-4 bg-white">
                 <div className="flex items-center justify-between gap-2">
                     <div className="flex flex-1 items-center border-1 border-gray-400 rounded-lg gap-3 px-3 py-1">
                         <SearchIcon color="disabled" fontSize="large" />
@@ -23,7 +39,7 @@ const DestinationModal = ({ setShowDestinationModal,setFromDestination,setToDest
                         className="cursor-pointer"
                     />
                 </div>
-                <div className="flex flex-col py-4">
+                <div className="flex flex-col py-4 h-64">
                     <div className="flex justify-between">
                         <span className="font-semibold text-lg">
                             Pencarian terkini
@@ -36,36 +52,29 @@ const DestinationModal = ({ setShowDestinationModal,setFromDestination,setToDest
                         </span>
                     </div>
                     <div className="flex flex-col flex-1 gap-3 py-3 overflow-auto">
-                        {/*  */}
-                        <div className="flex justify-between border-b py-2">
-                            <span>{`Djakarta`}</span>
-                            <CloseIcon
-                                color="disabled"
-                                className="cursor-pointer"
-                                onClick={() => {}}
-                            />
-                        </div>
-                        <div className="flex justify-between border-b py-2">
-                            <span>{`Djakarta`}</span>
-                            <CloseIcon
-                                color="disabled"
-                                className="cursor-pointer"
-                                onClick={() => {}}
-                            />
-                        </div>
-                        <div className="flex justify-between border-b py-2">
-                            <span>{`Djakarta`}</span>
-                            <CloseIcon
-                                color="disabled"
-                                className="cursor-pointer"
-                                onClick={() => {}}
-                            />
-                        </div>
-                        {/*  */}
+                        {destinationList.map((data) => (
+                            <div
+                                key={data.id}
+                                className="flex justify-between border-b py-2"
+                            >
+                                <span
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                        destinationClickHandler(data.name);
+                                    }}
+                                >
+                                    {data.name}
+                                </span>
+                                <CloseIcon
+                                    color="disabled"
+                                    className="cursor-pointer"
+                                    onClick={() => {}}
+                                />
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
-        </div>
     );
 };
 
@@ -73,6 +82,7 @@ DestinationModal.propTypes = {
     setShowDestinationModal: PropTypes.any,
     setFromDestination: PropTypes.any,
     setToDestination: PropTypes.any,
+    setIsFromModal: PropTypes.any,
     isFromModal: PropTypes.bool,
 };
 export default DestinationModal;
