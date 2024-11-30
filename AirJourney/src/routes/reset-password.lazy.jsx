@@ -41,14 +41,17 @@ function ResetPassword() {
     }
   
     try {
-      // Send only the new password in the request body
+      // Send both the token and the newPassword in the request body
       const response = await axios.post(url, {
-        newPassword,
-      }, {
+        token,        // Include the token from the URL (extracted with useSearchParams)
+        newPassword,  // Send the new password from the state
+      },
+      {
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-      });
+      }
+    );
   
       setMessage(response.data.message); // Update UI with success message
     } catch (error) {
@@ -56,7 +59,7 @@ function ResetPassword() {
       setMessage(errorMessage); // Update UI with error message
       console.error('Password update error:', error); // Log error for debugging
     }
-  };
+  };  
 
   return (
     <>
