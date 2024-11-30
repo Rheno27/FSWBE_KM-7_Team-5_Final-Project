@@ -7,7 +7,8 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import tiketkuImage from "../assets/img/tiketku.png";
 import { useDispatch } from "react-redux";
-import { setUser } from "../redux/slices/auth";  
+import { setUser } from "../redux/slices/auth";
+import { toast } from "react-toastify";
 
 export const Route = createLazyFileRoute("/register")({
   component: Register,
@@ -15,15 +16,20 @@ export const Route = createLazyFileRoute("/register")({
 
 function Register() {
   const navigate = useNavigate();
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
 
-  // State for form inputs
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+  });
 
-  // Register mutation using react-query
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
   const { mutate: registerUser, isPending } = useMutation({
     mutationFn: async (data) => {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
@@ -33,86 +39,84 @@ function Register() {
         },
         body: JSON.stringify(data),
       });
-      
+
       if (!response.ok) {
-        const errorText = await response.text();  
+        const errorText = await response.text();
         throw new Error(errorText || "Registration failed");
       }
-      
-      try {
-        const res = await response.json();  // Attempt to parse JSON
-        return res.data;  // Return parsed data if successful
-      } catch (e) {
-        throw new Error("Invalid JSON response received");
-      }
+
+      const res = await response.json();
+      return res.data;
     },
     onSuccess: (data) => {
       dispatch(setUser(data));
-      localStorage.setItem("user", data);
+      localStorage.setItem("user", JSON.stringify(data));
 
-      alert("Registration successful! Redirecting to OTP...");
-      navigate({ to: "/otp" }); 
+      toast.success("Registration successful! Redirecting to OTP...", {
+        position: toast.POSITION.BOTTOM_CENTER,
+        autoClose: 3000,
+        className: "toast-success",
+      });
+      navigate({ to: "/otp" });
     },
     onError: (error) => {
-      alert(error.message);
+      toast.error(`Error: ${error.message}`, {
+        position: toast.POSITION.BOTTOM_CENTER,
+        autoClose: 3000,
+        className: "toast-error",
+      });
     },
   });
 
-  // Form submission handler
   const onSubmit = (event) => {
     event.preventDefault();
 
+    const { name, email, phoneNumber, password } = formData;
+
     if (!name || !email || !phoneNumber || !password) {
-      alert("Please fill in all fields");
+      toast.warn("Please fill in all fields", {
+        position: toast.POSITION.BOTTOM_CENTER,
+        autoClose: 3000,
+        className: "toast-warn",
+      });
       return;
     }
 
-    const registrationData = {
-      name,
-      email,
-      phoneNumber,
-      password,
-    };
+    if (password.length < 6) {
+      toast.warn("Password must be at least 6 characters long", {
+        position: toast.POSITION.BOTTOM_CENTER,
+        autoClose: 3000,
+        className: "toast-warn",
+      });
+      return;
+    }
 
-    registerUser(registrationData);
+    registerUser(formData);
   };
 
   return (
     <section style={{ height: "100vh", backgroundColor: "white" }}>
       <Row className="h-100 mx-auto gap-0">
-        {/* Left Column with Image */}
         <Col
           lg={6}
           md={12}
           className="d-none d-lg-block p-0"
-          style={{
-            position: "relative",
-            overflow: "hidden",
-          }}
+          style={{ position: "relative", overflow: "hidden" }}
         >
           <img
             src={tiketkuImage}
             alt="Tiketku - Your Traveling Partner"
-            style={{
-              width: "100%",
-              height: "100vh",
-              objectFit: "cover",
-            }}
+            style={{ width: "100%", height: "100vh", objectFit: "cover" }}
           />
         </Col>
 
-        {/* Right Column with Form */}
         <Col
           lg={6}
           md={12}
           className="d-flex flex-column align-items-center justify-content-center"
         >
           <Form
-            style={{
-              width: "100%",
-              maxWidth: "452px",
-              padding: "20px",
-            }}
+            style={{ width: "100%", maxWidth: "452px", padding: "20px" }}
             onSubmit={onSubmit}
           >
             <h4
@@ -127,59 +131,58 @@ function Register() {
               Daftar
             </h4>
 
-            {/* Name Input */}
             <Form.Group className="mb-3" controlId="name">
               <Form.Label>Nama</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Nama Lengkap"
+                value={formData.name}
+                onChange={handleChange}
                 required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
                 style={{ borderRadius: "16px" }}
+                aria-label="Name"
               />
             </Form.Group>
 
-            {/* Email Input */}
             <Form.Group className="mb-3" controlId="email">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
                 placeholder="Contoh: johndee@gmail.com"
+                value={formData.email}
+                onChange={handleChange}
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 style={{ borderRadius: "16px" }}
+                aria-label="Email"
               />
             </Form.Group>
 
-            {/* Phone Number Input */}
-            <Form.Group className="mb-3" controlId="phone">
+            <Form.Group className="mb-3" controlId="phoneNumber">
               <Form.Label>Nomor Telepon</Form.Label>
               <Form.Control
                 type="tel"
                 placeholder="+62"
+                value={formData.phoneNumber}
+                onChange={handleChange}
                 required
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
                 style={{ borderRadius: "16px" }}
+                aria-label="Phone number"
               />
             </Form.Group>
 
-            {/* Password Input */}
             <Form.Group className="mb-3" controlId="password">
               <Form.Label>Buat Password</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Buat Password"
+                value={formData.password}
+                onChange={handleChange}
                 required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 style={{ borderRadius: "16px" }}
+                aria-label="Password"
               />
             </Form.Group>
 
-            {/* Submit Button */}
             <Button
               type="submit"
               className="w-100"
@@ -193,7 +196,6 @@ function Register() {
               {isPending ? "Mendaftar..." : "Daftar"}
             </Button>
 
-            {/* Link to Login */}
             <div className="text-center mt-3">
               <p>
                 Sudah punya akun?{" "}
