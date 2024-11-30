@@ -40,8 +40,8 @@ function Register() {
       }
       
       try {
-        const res = await response.json();  
-        return res.data;  
+        const res = await response.json();  // Attempt to parse JSON
+        return res.data;  // Return parsed data if successful
       } catch (e) {
         throw new Error("Invalid JSON response received");
       }
