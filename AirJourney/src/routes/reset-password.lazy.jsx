@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { ToastContainer, toast } from "react-toastify";
 import { useSearchParams } from "react-router-dom";
+import { createLazyFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { Row, Col, Container, Form, Button, InputGroup } from 'react-bootstrap';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import tiketkuImage from '../assets/img/tiketku.png';
@@ -11,20 +12,52 @@ export const Route = createLazyFileRoute('/reset-password')({
 });
 
 function ResetPassword() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
 
-  console.log("Extracted Token:", token);
-
   if (!token) {
-    return <p>Invalid or missing token!</p>;
+    toast.warning("Token is missing or invalid.", {
+      position: "top-center",
+    });
+    return;
   }
 
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState(''); 
   const [showPassword, setShowPassword] = useState(false);
+  const [isTokenValid, setIsTokenValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
+
+  let validationUrl = `${import.meta.env.VITE_API_URL}/auth/reset-password/validate/${token}`;
   let url = `${import.meta.env.VITE_API_URL}/auth/reset-password`;
+
+  // Validate token
+  useEffect(() => {
+    const validateToken = async () => {
+      try {
+        setIsLoading(true); 
+        const response = await axios.get(validationUrl);
+
+        if (response.status === 200) {
+          setIsTokenValid(true);
+        } else {
+          setIsTokenValid(false);
+          toast.error("Token has expired or is invalid");
+        }
+
+      } catch (error) {
+        setIsTokenValid(false);
+        toast.error(error.response?.data?.message || "An unexpected error occured");
+
+      } finally {
+        setIsLoading(false); // Set loading to false after validation
+      }
+    };
+
+    if (token) validateToken();
+  }, [token, validationUrl]);
 
   // For password visibility option
   const togglePassword = () => {
@@ -33,31 +66,36 @@ function ResetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!isTokenValid) {
+      toast.error("The token is invalid or expired.");
+      return; 
+    }
   
     // Validate new password and confirm password match
     if (newPassword !== confirmPassword) {
-      setMessage("Passwords do not match.");
+      toast.warning("Passwords do not match.");
       return;
     }
   
     try {
       // Send both the token and the newPassword in the request body
       const response = await axios.post(url, {
-        token,        // Include the token from the URL (extracted with useSearchParams)
-        newPassword,  // Send the new password from the state
+        token,        
+        newPassword,  
       },
       {
         headers: {
           'Content-Type': 'application/json',
         },
-      }
-    );
+      });
   
-      setMessage(response.data.message); // Update UI with success message
+      toast.success('Password reset successfully. Redirecting to login...');
+      setTimeout(() => navigate({ to: "/login" }), 3000);
+
     } catch (error) {
       const errorMessage = error.response?.data?.message || "An error occurred.";
-      setMessage(errorMessage); // Update UI with error message
-      console.error('Password update error:', error); // Log error for debugging
+      toast.error(errorMessage); 
     }
   };  
 
@@ -77,78 +115,99 @@ function ResetPassword() {
               height: 'auto',
               objectFit: 'contain',
               position: 'absolute',
-              top: 0,
-              left: 0,
             }}
           />
         </Col>
-        <Col md={6}>
+        <Col md={6} className={{position: 'relative'}}>
           <Container
             className="p-5 d-flex justify-content-center align-items-center"
             style={{ minHeight: '100vh' }}
           >
+            {isLoading ? (
+                <p>Validating token, please wait...</p>
+              ) : (
             <div className="w-100 m-lg-5 m-0">
               <h4 className="mb-3 fw-bold">Reset Password</h4>
-              <Form onSubmit={handleSubmit}>
-                <Form.Group as={Col} className="mb-2" controlId="newPassword">
-                  <Form.Label>New Password</Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="Enter new password"
-                      style={{ fontSize: '14px', lineHeight: '2' }}
-                      required
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                    />
-                    <InputGroup.Text onClick={togglePassword} style={{ cursor: 'pointer' }}>
-                      {showPassword ? <FaEyeSlash /> : <FaEye />}
-                    </InputGroup.Text>
-                  </InputGroup>
-                </Form.Group>
-                <Form.Group as={Col} className="mb-3" controlId="confirmPassword">
-                  <Form.Label>Confirm New Password</Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="Confirm new password"
-                      style={{ fontSize: '14px', lineHeight: '2' }}
-                      required
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-                    <InputGroup.Text onClick={togglePassword} style={{ cursor: 'pointer' }}>
-                      {showPassword ? <FaEyeSlash /> : <FaEye />}
-                    </InputGroup.Text>
-                  </InputGroup>
-                </Form.Group>
-                <div className="d-grid gap-2">
-                  <Button
-                    type="submit"
+                <Form onSubmit={handleSubmit}>
+                  <ToastContainer
+                    position="bottom-center"
                     style={{
-                      backgroundColor: '#7126B5',
-                      borderColor: '#7126B5',
-                      lineHeight: '1.7',
-                      boxShadow: '4px 4px 10px 2px rgba(0, 0, 0, 0.2)',
+                      position: 'absolute', 
+                      bottom: 10,          
+                      right: '10%',          
+                      zIndex: 9999       
                     }}
-                    className="rounded-3 mt-1"
-                  >
-                    Save
-                  </Button>
-                </div>
-                <div className="text-center mt-3">
-                  <span>
-                    Sudah ingat password?{" "}
-                    <a
-                      href={`/login`}
-                      style={{ color: "#7126B5", fontWeight: "bold" }}
+                  />
+                  <Form.Group as={Col} className="mb-3" controlId="newPassword">
+                    <Form.Label>Masukkan password baru</Form.Label>
+                    <InputGroup>
+                      <Form.Control
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Masukkan password baru"
+                        style={{ fontSize: '14px', lineHeight: '2' }}
+                        required
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                      />
+                      <InputGroup.Text onClick={togglePassword} style={{ cursor: 'pointer' }}>
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </InputGroup.Text>
+                    </InputGroup>
+                  </Form.Group>
+                  <Form.Group as={Col} className="mb-2" controlId="confirmPassword">
+                    <Form.Label>Ulangi password baru</Form.Label>
+                    <InputGroup>
+                      <Form.Control
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Ulangi password baru"
+                        style={{ fontSize: '14px', lineHeight: '2' }}
+                        required
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                      />
+                      <InputGroup.Text onClick={togglePassword} style={{ cursor: 'pointer' }}>
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </InputGroup.Text>
+                    </InputGroup>
+                  </Form.Group>
+                  <div className="d-grid gap-2">
+                    <Button
+                      type="submit"
+                      style={{
+                        backgroundColor: isTokenValid ? '#7126B5' : '#bfa0d7',
+                        borderColor: isTokenValid ? '#7126B5' : '#bfa0d7',
+                        borderRadius: '10px',
+                        marginTop: '1rem',
+                        lineHeight: '1.7',
+                        boxShadow: '4px 4px 10px 2px rgba(0, 0, 0, 0.2)',
+                      }}
                     >
-                      Login now
-                    </a>
-                  </span>
-                </div>
-              </Form>
+                      Simpan
+                    </Button>
+                  </div>
+
+                  <div className="text-center mt-3">
+                    <span>
+                      Sudah ingat password?{" "}
+                      <a
+                        href={`/login`}
+                        style={{ color: "#7126B5", fontWeight: "bold" }}
+                      >
+                        Masuk sekarang
+                      </a>
+                    </span>
+                  </div>
+                </Form>
+                 {!isTokenValid && (
+                  <div className="text-center text-danger mt-5">
+                    <span>{message}. {" "}<a href={`/reset-password-request`} style={{ color: "#7126B5" }}>
+                      Please try again
+                    </a></span>
+                  </div>
+                )}
+              
             </div>
+            )}
           </Container>
         </Col>
       </Row>

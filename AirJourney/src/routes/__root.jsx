@@ -1,13 +1,13 @@
-import * as React from 'react'
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import NavigationBar from '../components/Navbar'
-import { Container } from 'react-bootstrap'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-// import { useLocation } from "@tanstack/react-router";
+import * as React from "react";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { Outlet, createRootRoute } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import NavigationBar from "../components/Navbar";
 
 export const Route = createRootRoute({
     component: RootComponent,
-})
+});
 
 function RootComponent() {
 
@@ -19,10 +19,9 @@ const showNavbar = !hideNavbar.includes(window.location.pathname);
             {showNavbar && (
                 <NavigationBar />
             )}
-            {/* <Container> </Container> */}
             <Outlet />
-
+            <ToastContainer limit={3} />
             <TanStackRouterDevtools />
         </>
-    )
+    );
 }

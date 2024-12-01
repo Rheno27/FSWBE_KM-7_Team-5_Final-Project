@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useMutation } from '@tanstack/react-query'
+import { ToastContainer, toast } from "react-toastify";
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Row, Col, Container, Form, Button } from 'react-bootstrap'
-import { useMutation } from '@tanstack/react-query'
 import tiketkuImage from '../assets/img/tiketku.png'
 
 export const Route = createLazyFileRoute('/reset-password-request')({
@@ -10,28 +11,36 @@ export const Route = createLazyFileRoute('/reset-password-request')({
 })
 
 function ResetRequest() {
-  const [email, setEmail] = useState('')
-  const [message, setMessage] = useState('')
+  const [email, setEmail] = useState('');
+
   let url = `${import.meta.env.VITE_API_URL}/auth/reset-password/request`;
 
   const mutation = useMutation({
-    mutationFn: (email) => axios.post(url, { email }, { headers: { 'Content-Type': 'application/json' }}),
+    mutationFn: (email) => 
+      axios.post(url, { email }, { headers: { 'Content-Type': 'application/json' }}),
+
     onSuccess: (response) => {
-      setMessage(response.data.message) // Handle success
+      console.log('Response Message:', response.data?.message);
+      toast.success(response.data?.message || 'Reset link was sent successfully!.', {
+        autoClose: 3000, 
+      });
     },
+
     onError: (error) => {
-      setMessage(error.response?.data?.message || 'An error occurred.') // Handle error
+      if (error.response?.status === 404) {
+        toast.error('Your email was not found in our records.', { 
+          autoClose: 3000,
+        });
+      } 
     },
   })
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     mutation.mutate(email)
-    // Placeholder for submit logic; nothing happens for now
     console.log('submit')
   }
   
-
   return (
     <>
       <Row style={{ overflow: 'hidden', height: '100vh', width: '100vw' }}>
@@ -48,12 +57,10 @@ function ResetRequest() {
               height: 'auto',
               objectFit: 'contain',
               position: 'absolute',
-              top: 0,
-              left: 0,
             }}
           />
         </Col>
-        <Col md={6}>
+        <Col md={6} style={{position:'relative'}}>
             <Container
               className="p-5 d-flex justify-content-center align-items-center"
               style={{ minHeight: '100vh' }}
@@ -61,6 +68,15 @@ function ResetRequest() {
               <div className="w-100 m-lg-5 m-0">
                 <h4 className="mb-4 fw-bold">Lupa Password</h4>
                 <Form onSubmit={handleSubmit}>
+                <ToastContainer
+                  position="bottom-center"
+                  style={{
+                    position: 'absolute', 
+                    bottom: 10,          
+                    right: '10%',          
+                    zIndex: 9999       
+                  }}
+                />
                   <Form.Group as={Col} className="mb-3" controlId="email">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
@@ -89,7 +105,7 @@ function ResetRequest() {
                             lineHeight: '1.7',
                             color: '#7126B5',
                             marginTop: '0.8rem',
-                            // boxShadow: '2px 2px 18px 1px rgba(0, 0, 0, 0.2)',
+                            boxShadow: '2px 2px 5px 1px rgba(0, 0, 0, 0.1)',
                           }}
                         >
                           Kembali ke Login
@@ -100,6 +116,7 @@ function ResetRequest() {
                       <div className="d-grid">
                         <Button
                           type="submit"
+                          onClick={() => mutation.mutate()}
                           style={{
                             backgroundColor: '#7126B5',
                             borderColor: '#7126B5',
@@ -108,16 +125,9 @@ function ResetRequest() {
                             marginTop: '0.8rem',
                             boxShadow: '4px 4px 10px 2px rgba(0, 0, 0, 0.2)',
                           }}
-                          disabled={mutation.isLoading}
                         >
-                          {mutation.isLoading
-                            ? 'Mengirim...'
-                            : 'Kirim Permintaan'}
+                          Kirim Permintaan
                         </Button>
-                        {mutation.isError && (
-                          <p>Error: {mutation.error.message}</p>
-                        )}
-                        {mutation.isSuccess && <p>{message}</p>}
                       </div>
                     </Col>
                   </Row>

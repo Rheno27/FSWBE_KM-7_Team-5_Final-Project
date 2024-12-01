@@ -1,0 +1,71 @@
+.flight-list {
+  width: 100%;
+}
+
+.flight-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.flight-card .text-purple {
+  color: #7126b5;
+}
+
+.flight-header {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+}
+
+.flight-timing-col {
+  flex: 0 0 80%; 
+  max-width: 80%; 
+}
+
+.flight-timing .row {
+  margin: 0;
+}
+
+.flight-timing .text-center {
+  padding: 15px 0;
+}
+
+.flight-timing .fw-bold {
+  font-size: 18px; 
+}
+
+.flight-timing small {
+  font-size: 14px; 
+  color: #000000;
+}
+
+.flight-schedule hr {
+  width: 60px;
+  border: 1px solid #ccc;
+}
+
+.text-purple {
+  color: #7126b5;
+}
+
+.flight-details {
+  background-color: #f9f9f9;
+  border-top: 1px solid #ddd;
+  padding: 16px;
+}
+
+
+.button-select {
+  background-color: #7126b5; 
+  color: white;
+  border-radius: 10px;
+  border: none;
+  width: 90px;
+}
+
+.button-select:hover {
+  background-color: #5a32a1; 
+}
