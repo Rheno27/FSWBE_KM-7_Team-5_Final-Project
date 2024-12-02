@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
-import Thumbnail from '../../assets/img/thumbnail.png';
+import Thumbnail from '../../assets/img/Thumbnail.png';
 
 function FlightDetails() {
     return (
