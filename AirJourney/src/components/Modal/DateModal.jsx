@@ -14,7 +14,7 @@ const DateModal = ({
         console.log(date);
     }, [date]);
     return (
-        <div className="absolute inset-16 z-2 w-fit mx-auto h-96 rounded-xl p-4 bg-white">
+        <div className="absolute inset-16 z-2 w-fit mx-auto h-fit rounded-xl p-4 bg-white">
             <div className="flex justify-between">
                 <span>Pilih Tanggal</span>
                 <CloseIcon
