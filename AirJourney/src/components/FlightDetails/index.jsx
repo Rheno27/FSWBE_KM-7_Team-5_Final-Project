@@ -99,7 +99,7 @@ function FlightDetails() {
                             11:00
                         </div>
                         <div className="flight-details">
-                            <div className="departure mb-3">
+                            <div className="departure mb-2">
                             <div className="date">3 Maret 2023</div>
                                 <div className="airport">Melbourne International Airport</div>
                             </div>  
@@ -135,7 +135,7 @@ function FlightDetails() {
                             Rincian Harga
                         </div>
                         <div className="flight-details">
-                            <div className="departure mb-3">
+                            <div className="departure ">
                                 <div className="passenger">1 Adult</div>
                                 <div className="tax">Tax</div>
                             </div>  

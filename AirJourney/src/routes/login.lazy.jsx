@@ -3,7 +3,7 @@ import { Link, useNavigate, createLazyFileRoute } from "@tanstack/react-router";
 
 import { Row, Col, Form, Button} from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import logo from "../assets/img/tiketku.png";
+import background from "../assets/img/login-illust.png"
 
 import { useDispatch, useSelector} from "react-redux";
 import { setToken } from "../redux/slices/auth";
@@ -64,7 +64,7 @@ function Login() {
     }
 
     return (
-        <section style={{ height: "100vh", backgroundColor: "white" }}>
+        <section style={{ height: "100vh", backgroundColor: "white", backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: "center" }}>
             <Row className="h-100 mx-auto gap-0">
                 <Col
                     lg={6}
@@ -75,20 +75,12 @@ function Login() {
                         overflow: "hidden",
                     }}
                 >
-                    <img
-                        src={logo}
-                        alt="Logo"
-                        style={{
-                            width: "100%",
-                            height: "100vh",
-                            objectFit: "cover",
-                        }}
-                    />
+                    
                 </Col>
                 <Col
                     lg={6}
                     md={12}
-                    className="d-flex flex-column align-items-center justify-content-center"
+                    className="d-flex flex-column align-items-center justify-content-center p-5"
                 >
                     <Form
                         style={{
@@ -96,6 +88,7 @@ function Login() {
                             maxWidth: "452px",
                             padding: "20px",
                         }}
+                        className="bg-white bg-opacity-75 border-1 rounded-xl p-5 shadow-sm"
                         onSubmit={onSubmit}
                     >
                         <h1
