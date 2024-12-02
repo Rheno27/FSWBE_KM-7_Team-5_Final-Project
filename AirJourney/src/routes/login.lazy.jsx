@@ -3,7 +3,7 @@ import { Link, useNavigate, createLazyFileRoute } from "@tanstack/react-router";
 
 import { Row, Col, Form, Button} from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import background from "../assets/img/illustration73.png"
+import background from "../assets/img/login-illust.png"
 
 import { useDispatch, useSelector} from "react-redux";
 import { setToken } from "../redux/slices/auth";

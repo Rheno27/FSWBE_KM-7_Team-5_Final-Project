@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import background from "../assets/img/illustration73.png";
+import background from "../assets/img/login-illust.png";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/slices/auth";
 import { toast } from "react-toastify";

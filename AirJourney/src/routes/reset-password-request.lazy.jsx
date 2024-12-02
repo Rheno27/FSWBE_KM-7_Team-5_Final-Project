@@ -3,7 +3,7 @@ import axios from 'axios'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Row, Col, Container, Form, Button } from 'react-bootstrap'
 import { useMutation } from '@tanstack/react-query'
-import background from '../assets/img/Illustration73.png'
+import background from '../assets/img/login-illust.png'
 
 export const Route = createLazyFileRoute('/reset-password-request')({
   component: ResetRequest,
