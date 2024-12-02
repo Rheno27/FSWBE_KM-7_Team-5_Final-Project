@@ -9,9 +9,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Switch } from "@/components/ui/switch";
 import DestinationModal from "../components/Modal/DestinationModal";
 import DateModal from "../components/Modal/DateModal";
+import ClassModal from "../components/Modal/ClassModal";
+import PassengerModal from "../components/Modal/PassengerModal";
 import { useEffect, useState } from "react";
 import dummy from "../data/dummy.json";
-import PassengerModal from "../components/Modal/PassengerModal";
 
 export const Route = createLazyFileRoute("/")({
     component: Index,
@@ -23,13 +24,24 @@ function Index() {
     const [isFromModal, setIsFromModal] = useState(false);
     const [showDateModal, setShowDateModal] = useState(false);
     const [showPassengerModal, setShowPassengerModal] = useState(false);
+    const [showClassModal, setShowClassModal] = useState(false);
+    const [isFormFilled, setIsFormFilled] = useState(true);
 
     //for search value
     const [destination, setDestination] = useState(1);
-    const [fromDestination, setFromDestination] = useState("");
-    const [toDestination, setToDestination] = useState("");
+    const [fromDestination, setFromDestination] = useState("Jakarta");
+    const [toDestination, setToDestination] = useState("Inti Bumi");
     const [searchDate, setSearchDate] = useState(new Date());
     const [passenger, setPassenger] = useState({ adult: 1, child: 0, baby: 0 });
+    const [classType, setClassType] = useState("Economy");
+
+    const [formData, setFormData] = useState({
+        fromDestination,
+        toDestination,
+        searchDate,
+        passenger,
+        classType,
+    });
 
     const month = [
         "Jan",
@@ -49,9 +61,32 @@ function Index() {
     const destinationListTest = dummy.destination_list;
 
     useEffect(() => {
-        console.log(`from: ${fromDestination}, to: ${toDestination}`);
-        console.log(searchDate);
-    }, [fromDestination, toDestination, searchDate]);
+        setFormData({
+            fromDestination,
+            toDestination,
+            searchDate,
+            passenger,
+            classType,
+        });
+        console.log(formData);
+        const dataCheck = [
+            fromDestination,
+            toDestination,
+            searchDate,
+            passenger.adult + passenger.child + passenger.baby,
+            classType,
+        ];
+        setIsFormFilled(true);
+        dataCheck.map((item) => {
+            !item && setIsFormFilled(false);
+        });
+    }, [
+        fromDestination,
+        toDestination,
+        searchDate,
+        passenger,
+        classType,
+    ]);
 
     return (
         <div className="flex flex-col items-center">
@@ -136,9 +171,10 @@ function Index() {
                                         />
                                         <div
                                             className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
-                                            onClick={() =>
-                                                setShowDestinationModal(false)
-                                            }
+                                            onClick={() => {
+                                                setShowDestinationModal(false);
+                                                isFromModal(false);
+                                            }}
                                         ></div>
                                     </>
                                 )}
@@ -278,22 +314,51 @@ function Index() {
                                             )}
                                         </div>
                                         {/* class */}
-                                        <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
+                                        <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1 relative">
                                             <div>
                                                 <span className="text-gray-500 w-10">
                                                     Seat Class
                                                 </span>
                                             </div>
-                                            <button className="flex-1 text-lg text-start font-semibold text-darkblue4">
-                                                {"Pilih Class"}
+                                            <button
+                                                className="flex-1 text-lg text-start font-semibold text-nowrap"
+                                                onClick={() =>
+                                                    setShowClassModal(true)
+                                                }
+                                            >
+                                                {classType}
                                             </button>
+                                            {showClassModal && (
+                                                <>
+                                                    <ClassModal
+                                                        setShowClassModal={
+                                                            setShowClassModal
+                                                        }
+                                                        classType={classType}
+                                                        setClassType={
+                                                            setClassType
+                                                        }
+                                                    />
+                                                    <div
+                                                        className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
+                                                        onClick={() =>
+                                                            setShowClassModal(
+                                                                false
+                                                            )
+                                                        }
+                                                    ></div>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button className="py-2.5 bg-darkblue4 text-white font-semibold rounded-b-xl">
+                    <button
+                        className="py-2.5 bg-darkblue4 text-white font-semibold rounded-b-xl disabled:bg-darkblue3"
+                        disabled={!isFormFilled}
+                    >
                         Cari Penerbangan
                     </button>
                 </div>
