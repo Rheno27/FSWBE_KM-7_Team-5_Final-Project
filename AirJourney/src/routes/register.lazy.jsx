@@ -1,6 +1,7 @@
 import { createLazyFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -30,70 +31,61 @@ function Register() {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
+  const showToast = (type, message, isLoading = false, id = null) => {
+    if (isLoading) {
+      return toast.loading(message, { position: "bottom-center" });
+    }
+    toast.update(id, {
+      render: message,
+      type,
+      autoClose: 3000,
+      isLoading: false,
+    });
+  };
+
   const { mutate: registerUser, isPending } = useMutation({
     mutationFn: async (data) => {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const toastId = showToast("info", "Processing registration...", true);
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/auth/register`,
+          data,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || "Registration failed");
+        const resData = response.data.data;
+
+        showToast("success", "Registration successful! Redirecting to OTP...", false, toastId);
+        dispatch(setUser(resData));
+        navigate({ to: "/otp" });
+      } catch (error) {
+        const errorMessage = error.response
+          ? error.response.data?.message || "Registration failed."
+          : "Network error. Please try again later.";
+        showToast("error", errorMessage, false, toastId);
       }
-
-      const res = await response.json();
-      return res.data;
-    },
-    onSuccess: (data) => {
-      dispatch(setUser(data));
-      localStorage.setItem("user", JSON.stringify(data));
-
-      toast.success("Registration successful! Redirecting to OTP...", {
-        position: toast.POSITION.BOTTOM_CENTER,
-        autoClose: 3000,
-        className: "toast-success",
-      });
-      navigate({ to: "/otp" });
-    },
-    onError: (error) => {
-      toast.error(`Error: ${error.message}`, {
-        position: toast.POSITION.BOTTOM_CENTER,
-        autoClose: 3000,
-        className: "toast-error",
-      });
     },
   });
 
   const onSubmit = (event) => {
     event.preventDefault();
-
     const { name, email, phoneNumber, password } = formData;
 
     if (!name || !email || !phoneNumber || !password) {
-      toast.warn("Please fill in all fields", {
-        position: toast.POSITION.BOTTOM_CENTER,
-        autoClose: 3000,
-        className: "toast-warn",
-      });
+      toast.warn("Please fill in all fields", { position: "bottom-center" });
       return;
     }
 
     if (password.length < 6) {
-      toast.warn("Password must be at least 6 characters long", {
-        position: toast.POSITION.BOTTOM_CENTER,
-        autoClose: 3000,
-        className: "toast-warn",
-      });
+      toast.warn("Password must be at least 6 characters long", { position: "bottom-center" });
       return;
     }
 
     registerUser(formData);
   };
-
+  
   return (
     <section style={{ height: "100vh", backgroundColor: "white" }}>
       <Row className="h-100 mx-auto gap-0">
