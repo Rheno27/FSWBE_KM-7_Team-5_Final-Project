@@ -68,7 +68,6 @@ function Index() {
             passenger,
             classType,
         });
-        console.log(formData);
         const dataCheck = [
             fromDestination,
             toDestination,
@@ -372,14 +371,14 @@ function Index() {
                     <div className="flex gap-4">
                         {destinationQueryTest.map((data) => (
                             <button
-                                key={data.id}
+                                key={data?.id}
                                 onClick={() => {
-                                    setDestination(data.id);
+                                    setDestination(data?.id);
                                 }}
-                                className={`flex gap-1 items-center rounded-xl px-6 py-2.5 ${destination == data.id ? "bg-darkblue4 text-white" : "bg-darkblue1 text-black"}`}
+                                className={`flex gap-1 items-center rounded-xl px-6 py-2.5 ${destination == data?.id ? "bg-darkblue4 text-white" : "bg-darkblue1 text-black"}`}
                             >
                                 <SearchIcon />
-                                <span>{data.name}</span>
+                                <span>{data?.name}</span>
                             </button>
                         ))}
                     </div>
@@ -388,26 +387,26 @@ function Index() {
                 <div className="flex flex-row gap-8 flex-wrap justify-center">
                     {destinationListTest.map((data) => (
                         <div
-                            key={data.id}
+                            key={data?.id}
                             className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2"
                         >
                             <img
-                                src={data.picture}
+                                src={data?.picture}
                                 alt=""
                                 className="rounded-md overflow-hidden w-full h-28"
                             />
                             <div className="flex flex-col flex-initial">
                                 <p className="font-medium">
-                                    {data.from} {"->"} {data.to}
+                                    {data?.from} {"->"} {data?.to}
                                 </p>
                                 <p className="font-bold text-sm text-darkblue4">
-                                    {data.airline}
+                                    {data?.airline}
                                 </p>
-                                <p className="text-sm">{data.date}</p>
+                                <p className="text-sm">{data?.date}</p>
                                 <p className="">
                                     Mulai dari{" "}
                                     <span className="font-bold text-[#FF0000]">
-                                        IDR {data.price}
+                                        IDR {data?.price}
                                     </span>
                                 </p>
                             </div>
