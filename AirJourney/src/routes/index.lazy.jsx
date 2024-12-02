@@ -11,6 +11,7 @@ import DestinationModal from "../components/Modal/DestinationModal";
 import DateModal from "../components/Modal/DateModal";
 import { useEffect, useState } from "react";
 import dummy from "../data/dummy.json";
+import PassengerModal from "../components/Modal/PassengerModal";
 
 export const Route = createLazyFileRoute("/")({
     component: Index,
@@ -19,14 +20,16 @@ function Index() {
     // for component state
     const [isReturn, setIsReturn] = useState(false);
     const [showDestinationModal, setShowDestinationModal] = useState(false);
-    const [showDateModal, setShowDateModal] = useState(false);
     const [isFromModal, setIsFromModal] = useState(false);
+    const [showDateModal, setShowDateModal] = useState(false);
+    const [showPassengerModal, setShowPassengerModal] = useState(false);
 
     //for search value
     const [destination, setDestination] = useState(1);
     const [fromDestination, setFromDestination] = useState("");
     const [toDestination, setToDestination] = useState("");
     const [searchDate, setSearchDate] = useState(new Date());
+    const [passenger, setPassenger] = useState({ adult: 1, child: 0, baby: 0 });
 
     const month = [
         "Jan",
@@ -131,7 +134,12 @@ function Index() {
                                             isFromModal={isFromModal}
                                             setIsFromModal={setIsFromModal}
                                         />
-                                        <div className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"></div>
+                                        <div
+                                            className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
+                                            onClick={() =>
+                                                setShowDestinationModal(false)
+                                            }
+                                        ></div>
                                     </>
                                 )}
                             </div>
@@ -207,7 +215,12 @@ function Index() {
                                                 searchDate={searchDate}
                                                 setSearchDate={setSearchDate}
                                             />
-                                            <div className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"></div>
+                                            <div
+                                                className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
+                                                onClick={() =>
+                                                    setShowDateModal(false)
+                                                }
+                                            ></div>
                                         </>
                                     )}
                                 </div>
@@ -219,20 +232,52 @@ function Index() {
                                     />
                                 </button>
 
+                                {/* passenger & class */}
                                 <div className="flex items-center flex-1 gap-3">
                                     <AirlineSeatReclineNormalIcon color="disabled" />
                                     <span className="text-gray-500 w-10">
                                         To
                                     </span>
                                     <div className="flex flex-1 justify-between">
-                                        <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
+                                        {/* passenger */}
+                                        <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1 relative">
                                             <span className="text-gray-500 w-10">
                                                 Passengers
                                             </span>
-                                            <button className="flex-1 text-lg text-start font-semibold">
-                                                {"2"} Penumpang
+                                            <button
+                                                className="flex-1 text-lg text-start font-semibold"
+                                                onClick={() =>
+                                                    setShowPassengerModal(true)
+                                                }
+                                            >
+                                                {passenger?.adult +
+                                                    passenger?.child +
+                                                    passenger?.baby}{" "}
+                                                Penumpang
                                             </button>
+                                            {showPassengerModal && (
+                                                <>
+                                                    <PassengerModal
+                                                        setShowPassengerModal={
+                                                            setShowPassengerModal
+                                                        }
+                                                        passenger={passenger}
+                                                        setPassenger={
+                                                            setPassenger
+                                                        }
+                                                    />
+                                                    <div
+                                                        className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
+                                                        onClick={() =>
+                                                            setShowPassengerModal(
+                                                                false
+                                                            )
+                                                        }
+                                                    ></div>
+                                                </>
+                                            )}
                                         </div>
+                                        {/* class */}
                                         <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
                                             <div>
                                                 <span className="text-gray-500 w-10">
