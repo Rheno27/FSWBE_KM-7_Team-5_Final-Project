@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, createLazyFileRoute } from "@tanstack/react-router";
 
 import { Row, Col, Form, Button} from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -33,9 +32,11 @@ function Login() {
         setShowPassword(!showPassword);
     };
 
-    if (token) {
-        navigate({to: "/"});
-    }
+    useEffect(() => {
+        if (token) {
+            navigate({ to: "/" });
+        }
+    }, [token, navigate]);
     
     const {mutate: loginUser} = useMutation({
         mutationFn: (body) => {

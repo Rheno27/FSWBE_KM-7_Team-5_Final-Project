@@ -11,7 +11,7 @@ import { Link, useLocation } from '@tanstack/react-router';
 const NavigationBar = () => {
     const location = useLocation();
 
-    const hideNavbarRoutes = ["/register", "/login", "/reset-password", "/otp"];
+    const hideNavbarRoutes = ["/register", "/login", "/reset-password","/reset-password-request", "/otp"];
 
     const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
     return (
