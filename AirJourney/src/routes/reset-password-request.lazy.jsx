@@ -3,7 +3,7 @@ import axios from 'axios'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Row, Col, Container, Form, Button } from 'react-bootstrap'
 import { useMutation } from '@tanstack/react-query'
-import tiketkuImage from '../assets/img/tiketku.png'
+import background from '../assets/img/login-illust.png'
 
 export const Route = createLazyFileRoute('/reset-password-request')({
   component: ResetRequest,
@@ -32,34 +32,22 @@ function ResetRequest() {
 
   return (
     <>
-      <Row style={{ overflow: 'hidden', height: '100vh', width: '100vw' }}>
+      <Row style={{ overflow: 'hidden', height: '100vh', width: '100vw', backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: "center"  }}>
         <Col
           md={6}
           style={{ overflow: 'hidden', height: '100vh', position: 'relative' }}
           className="d-none d-md-block"
         >
-          <img
-            src={tiketkuImage}
-            alt="Tiketku"
-            style={{
-              maxWidth: '100%',
-              height: 'auto',
-              objectFit: 'contain',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-            }}
-          />
         </Col>
         <Col md={6}>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} >
             <Container
-              className="p-5 d-flex justify-content-center align-items-center"
+              className="p-5 d-flex justify-content-center align-items-center "
               style={{ minHeight: '100vh' }}
             >
-              <div className="w-100 m-lg-5 m-0">
+              <div className="w-100 m-lg-5 m-0 bg-white border-1 border rounded-3 p-4 bg-opacity-75">
                 <h4 className="mb-4 fw-bold">Lupa Password</h4>
-                <Form onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit} >
                   <Form.Group as={Col} className="mb-3" controlId="email">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
