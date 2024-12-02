@@ -3,17 +3,49 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import logo from '../../assets/img/logo.png';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import LoginIcon from '@mui/icons-material/Login';
-import SearchIcon from '@mui/icons-material/Search';
-import { Link, useLocation } from '@tanstack/react-router';
+import { 
+    Search as SearchIcon,
+    History as HistoryIcon,
+    NotificationsNone as NotificationIcon,
+    PersonOutline as ProfileIcon,
+    Login as LoginIcon, 
+} from '@mui/icons-material';
+import { Link, useLocation, useNavigate } from '@tanstack/react-router';
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { setUser } from "../../redux/slices/auth";
 
 const NavigationBar = () => {
+    const navigate = useNavigate();
+    const { user, token } = useSelector((state) => state.auth);
     const location = useLocation();
 
     const hideNavbarRoutes = ["/register", "/login", "/reset-password", "/otp"];
 
     const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            navigate("/");
+        }
+    }, [navigate]);
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        const body = {
+            email,
+            password
+        }
+        const result = await login(body);
+        if (result.success) {
+            dispatch(setUser(result.data.token));
+            navigate("/");
+            return;
+        }
+        alert(result.message);
+    }
+
     return (
         <>
             {shuoldShowNavbar && (
@@ -26,7 +58,11 @@ const NavigationBar = () => {
                             <img src={logo} alt="logo" />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="navbarScroll" />
-                        <Form className="d-flex" style={{ position: 'relative', marginLeft: '34px', width: '444px' }}>
+                        <Form
+                            className="d-flex"
+                            style={{ position: 'relative', marginLeft: '34px', width: '444px' }}
+                            onSubmit={onSubmit}
+                        >
                             <Form.Control
                                 type="search"
                                 placeholder="Search"
@@ -46,29 +82,61 @@ const NavigationBar = () => {
                                 }}
                             />
                         </Form>
-                        <Navbar.Collapse
-                            id="navbarScroll"
-                            style={{ marginRight: '150px' }}
-                        >
+                        <Navbar.Collapse id="navbarScroll">
                             <Nav
-                                className="me-auto my-2 my-lg-0"
+                                className="ms-auto my-2 my-lg-0"
                                 style={{ maxHeight: '100px' }}
                                 navbarScroll
-                            ></Nav>
-                            <Button
-                                variant="primary"
-                                style={{
-                                    backgroundColor: '#7126B5',
-                                    borderRadius: '12px',
-                                }}
-                                as={Link}
-                                to="/login"
                             >
-                                <LoginIcon
-                                    style={{ marginRight: '8px' }}
-                                />
-                                Masuk
-                            </Button>
+                                {user ? (
+                                    <>
+                                        <Nav.Link
+                                            as={Link}
+                                            to="/history"
+                                        >
+                                            <HistoryIcon
+                                                style={{ marginRight: '8px' }}
+                                            />
+                                        </Nav.Link>
+                                        <Nav.Link
+                                            as={Link}
+                                            to="/notification"
+                                        >
+                                            <NotificationIcon
+                                                style={{ marginRight: '8px' }}
+                                            />
+                                        </Nav.Link>
+                                        
+                                        <Nav.Link
+                                            as={Link}
+                                            to="/profile"
+                                        >
+                                            <ProfileIcon
+                                                style={{ marginRight: '8px' }}
+                                            />
+                                        </Nav.Link>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Nav.Link
+                                            variant="primary"
+                                            style={{
+                                                backgroundColor: '#7126B5',
+                                                borderRadius: '12px',
+                                                marginRight: '70px',
+                                                color: 'white',
+                                            }}
+                                            as={Link}
+                                            to="/login"
+                                        >
+                                            <LoginIcon
+                                                style={{ marginRight: '8px' }}
+                                            />
+                                            Masuk
+                                        </Nav.Link>
+                                    </>
+                                )}
+                            </Nav>
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>

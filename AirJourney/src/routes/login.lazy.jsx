@@ -1,15 +1,28 @@
 import React, { useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { Link, useNavigate, createLazyFileRoute } from "@tanstack/react-router";
+
 import { Row, Col, Form, Button} from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import logo from "../assets/img/tiketku.png";
+
+import { useDispatch, useSelector} from "react-redux";
+import { setToken } from "../redux/slices/auth";
+import { login } from "../services/auth";
+import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 
 export const Route = createLazyFileRoute("/login")({
     component: Login,
 });
 
 function Login() {
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const {token} = useSelector((state) => state.auth);
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState(""); 
 
     // State untuk menampilkan password
     const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +31,36 @@ function Login() {
     const togglePassword = () => {
         setShowPassword(!showPassword);
     };
+
+    if (token) {
+        navigate({to: "/"});
+    }
     
+    const {mutate: loginUser} = useMutation({
+        mutationFn: (body) => {
+            return login(body);
+        },
+        onSuccess: (data) => {
+            dispatch(setToken(data?.token));
+            navigate({ to: "/" });
+        },
+        onError: (error) => {
+        toast.error(error.message);
+        },
+    });
+
+    const onSubmit = async (event) => {
+        event.preventDefault();
+    
+        const body = {
+            email,
+            password,
+        };
+    
+        //hit api
+        loginUser(body);
+    }
+
     return (
         <section style={{ height: "100vh", backgroundColor: "white" }}>
             <Row className="h-100 mx-auto gap-0">
@@ -52,6 +94,7 @@ function Login() {
                             maxWidth: "452px",
                             padding: "20px",
                         }}
+                        onSubmit={onSubmit}
                     >
                         <h1
                             className="mb-4"
@@ -71,6 +114,8 @@ function Login() {
                                 type="email"
                                 placeholder="Example: johndoe@gmail.com"
                                 name="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 style={{
                                     borderRadius: "16px",
                                 }}
@@ -96,6 +141,8 @@ function Login() {
                                     type={showPassword ? "text" : "password"}
                                     placeholder="Enter password"
                                     name="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     style={{
                                         paddingRight: "3rem",
                                         borderRadius: "16px",
