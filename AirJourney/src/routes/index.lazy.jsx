@@ -8,7 +8,7 @@ import AirlineSeatReclineNormalIcon from "@mui/icons-material/AirlineSeatRecline
 import SearchIcon from "@mui/icons-material/Search";
 import { Switch } from "@/components/ui/switch";
 import DestinationModal from "../components/Modal/DestinationModal";
-import DateModal from "../components/Modal/DateModal"
+import DateModal from "../components/Modal/DateModal";
 import { useEffect, useState } from "react";
 import dummy from "../data/dummy.json";
 
@@ -16,19 +16,39 @@ export const Route = createLazyFileRoute("/")({
     component: Index,
 });
 function Index() {
-    const [destination, setDestination] = useState(1);
+    // for component state
     const [isReturn, setIsReturn] = useState(false);
     const [showDestinationModal, setShowDestinationModal] = useState(false);
     const [showDateModal, setShowDateModal] = useState(false);
     const [isFromModal, setIsFromModal] = useState(false);
+
+    //for search value
+    const [destination, setDestination] = useState(1);
     const [fromDestination, setFromDestination] = useState("");
     const [toDestination, setToDestination] = useState("");
+    const [searchDate, setSearchDate] = useState(new Date());
+
+    const month = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agu",
+        "Sept",
+        "Okt",
+        "Nov",
+        "Des",
+    ];
     const destinationQueryTest = dummy.destination_query;
     const destinationListTest = dummy.destination_list;
 
     useEffect(() => {
         console.log(`from: ${fromDestination}, to: ${toDestination}`);
-    }, [fromDestination, toDestination]);
+        console.log(searchDate);
+    }, [fromDestination, toDestination, searchDate]);
 
     return (
         <div className="flex flex-col items-center">
@@ -129,8 +149,15 @@ function Index() {
                                             <span className="text-gray-500 w-10">
                                                 Departure
                                             </span>
-                                            <button className="flex-1 text-lg text-start font-semibold" onClick={()=>setShowDateModal(true)}>
-                                                {"Jakarta (JKT)"}
+                                            <button
+                                                className="flex-1 text-lg text-start font-semibold"
+                                                onClick={() =>
+                                                    setShowDateModal(true)
+                                                }
+                                            >
+                                                {isReturn && searchDate.from > 1
+                                                    ? `${searchDate.from.getDate()} - ${month[searchDate.from.getMonth()]} - ${searchDate.from.getFullYear()}`
+                                                    : `${searchDate.getDate()} - ${month[searchDate.getMonth()]} - ${searchDate.getFullYear()}`}
                                             </button>
                                         </div>
                                         <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
@@ -143,6 +170,11 @@ function Index() {
                                                             setIsReturn(
                                                                 !isReturn
                                                             );
+                                                            searchDate.from
+                                                                ? setSearchDate(
+                                                                      searchDate.from
+                                                                  )
+                                                                : null;
                                                         }}
                                                     />
                                                 </div>
@@ -150,11 +182,17 @@ function Index() {
                                             <button
                                                 className="flex-1 text-lg text-start font-semibold"
                                                 disabled={!isReturn}
+                                                onClick={() =>
+                                                    setShowDateModal(true)
+                                                }
                                             >
                                                 <span
                                                     className={`${isReturn ? "text-darkblue4" : "text-darkblue2"}`}
                                                 >
-                                                    {"Pilih Tanggal"}
+                                                    {isReturn &&
+                                                    searchDate.to > 1
+                                                        ? `${searchDate.to.getDate()} - ${month[searchDate.to.getMonth()]} - ${searchDate.to.getFullYear()}`
+                                                        : `Pilih Tanggal`}
                                                 </span>
                                             </button>
                                         </div>
@@ -165,14 +203,9 @@ function Index() {
                                                 setShowDateModal={
                                                     setShowDateModal
                                                 }
-                                                setFromDestination={
-                                                    setFromDestination
-                                                }
-                                                setToDestination={
-                                                    setToDestination
-                                                }
-                                                isFromModal={isFromModal}
-                                                setIsFromModal={setIsFromModal}
+                                                isReturn={isReturn}
+                                                searchDate={searchDate}
+                                                setSearchDate={setSearchDate}
                                             />
                                             <div className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"></div>
                                         </>
