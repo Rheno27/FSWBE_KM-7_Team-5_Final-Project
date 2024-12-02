@@ -3,7 +3,15 @@ export const login = async (body) => {
         body: JSON.stringify(body),
         method: 'POST',
         headers: {
-            "content-Type": "aplication/json"
+            "Content-Type": "application/json",
         }
-    })
-}
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        throw new Error(result?.message || 'Unknown error');
+    }
+
+    return result?.data;
+};
