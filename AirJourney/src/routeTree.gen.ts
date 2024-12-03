@@ -27,6 +27,9 @@ const IndexLazyImport = createFileRoute('/')()
 const UsersPublicDetailPenerbanganLazyImport = createFileRoute(
   '/users/public/detailPenerbangan',
 )()
+const UsersPrivatePaymentIndexLazyImport = createFileRoute(
+  '/users/private/payment/',
+)()
 const UsersPrivateCheckoutIndexLazyImport = createFileRoute(
   '/users/private/checkout/',
 )()
@@ -80,6 +83,15 @@ const UsersPublicDetailPenerbanganLazyRoute =
     getParentRoute: () => rootRoute,
   } as any).lazy(() =>
     import('./routes/users/public/detailPenerbangan.lazy').then((d) => d.Route),
+  )
+
+const UsersPrivatePaymentIndexLazyRoute =
+  UsersPrivatePaymentIndexLazyImport.update({
+    id: '/users/private/payment/',
+    path: '/users/private/payment/',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/users/private/payment/index.lazy').then((d) => d.Route),
   )
 
 const UsersPrivateCheckoutIndexLazyRoute =
@@ -151,6 +163,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsersPrivateCheckoutIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/users/private/payment/': {
+      id: '/users/private/payment/'
+      path: '/users/private/payment'
+      fullPath: '/users/private/payment'
+      preLoaderRoute: typeof UsersPrivatePaymentIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -165,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/reset-password-request': typeof ResetPasswordRequestLazyRoute
   '/users/public/detailPenerbangan': typeof UsersPublicDetailPenerbanganLazyRoute
   '/users/private/checkout': typeof UsersPrivateCheckoutIndexLazyRoute
+  '/users/private/payment': typeof UsersPrivatePaymentIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -176,6 +196,7 @@ export interface FileRoutesByTo {
   '/reset-password-request': typeof ResetPasswordRequestLazyRoute
   '/users/public/detailPenerbangan': typeof UsersPublicDetailPenerbanganLazyRoute
   '/users/private/checkout': typeof UsersPrivateCheckoutIndexLazyRoute
+  '/users/private/payment': typeof UsersPrivatePaymentIndexLazyRoute
 }
 
 export interface FileRoutesById {
@@ -188,6 +209,7 @@ export interface FileRoutesById {
   '/reset-password-request': typeof ResetPasswordRequestLazyRoute
   '/users/public/detailPenerbangan': typeof UsersPublicDetailPenerbanganLazyRoute
   '/users/private/checkout/': typeof UsersPrivateCheckoutIndexLazyRoute
+  '/users/private/payment/': typeof UsersPrivatePaymentIndexLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -201,6 +223,7 @@ export interface FileRouteTypes {
     | '/reset-password-request'
     | '/users/public/detailPenerbangan'
     | '/users/private/checkout'
+    | '/users/private/payment'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -211,6 +234,7 @@ export interface FileRouteTypes {
     | '/reset-password-request'
     | '/users/public/detailPenerbangan'
     | '/users/private/checkout'
+    | '/users/private/payment'
   id:
     | '__root__'
     | '/'
@@ -221,6 +245,7 @@ export interface FileRouteTypes {
     | '/reset-password-request'
     | '/users/public/detailPenerbangan'
     | '/users/private/checkout/'
+    | '/users/private/payment/'
   fileRoutesById: FileRoutesById
 }
 
@@ -233,6 +258,7 @@ export interface RootRouteChildren {
   ResetPasswordRequestLazyRoute: typeof ResetPasswordRequestLazyRoute
   UsersPublicDetailPenerbanganLazyRoute: typeof UsersPublicDetailPenerbanganLazyRoute
   UsersPrivateCheckoutIndexLazyRoute: typeof UsersPrivateCheckoutIndexLazyRoute
+  UsersPrivatePaymentIndexLazyRoute: typeof UsersPrivatePaymentIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -244,6 +270,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRequestLazyRoute: ResetPasswordRequestLazyRoute,
   UsersPublicDetailPenerbanganLazyRoute: UsersPublicDetailPenerbanganLazyRoute,
   UsersPrivateCheckoutIndexLazyRoute: UsersPrivateCheckoutIndexLazyRoute,
+  UsersPrivatePaymentIndexLazyRoute: UsersPrivatePaymentIndexLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -263,7 +290,8 @@ export const routeTree = rootRoute
         "/reset-password",
         "/reset-password-request",
         "/users/public/detailPenerbangan",
-        "/users/private/checkout/"
+        "/users/private/checkout/",
+        "/users/private/payment/"
       ]
     },
     "/": {
@@ -289,6 +317,9 @@ export const routeTree = rootRoute
     },
     "/users/private/checkout/": {
       "filePath": "users/private/checkout/index.lazy.jsx"
+    },
+    "/users/private/payment/": {
+      "filePath": "users/private/payment/index.lazy.jsx"
     }
   }
 }

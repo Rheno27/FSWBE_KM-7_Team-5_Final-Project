@@ -8,7 +8,9 @@ import AirlineSeatReclineNormalIcon from "@mui/icons-material/AirlineSeatRecline
 import SearchIcon from "@mui/icons-material/Search";
 import { Switch } from "@/components/ui/switch";
 import DestinationModal from "../components/Modal/DestinationModal";
-import DateModal from "../components/Modal/DateModal"
+import DateModal from "../components/Modal/DateModal";
+import ClassModal from "../components/Modal/ClassModal";
+import PassengerModal from "../components/Modal/PassengerModal";
 import { useEffect, useState } from "react";
 import dummy from "../data/dummy.json";
 
@@ -16,19 +18,74 @@ export const Route = createLazyFileRoute("/")({
     component: Index,
 });
 function Index() {
-    const [destination, setDestination] = useState(1);
+    // for component state
     const [isReturn, setIsReturn] = useState(false);
     const [showDestinationModal, setShowDestinationModal] = useState(false);
-    const [showDateModal, setShowDateModal] = useState(false);
     const [isFromModal, setIsFromModal] = useState(false);
-    const [fromDestination, setFromDestination] = useState("");
-    const [toDestination, setToDestination] = useState("");
+    const [showDateModal, setShowDateModal] = useState(false);
+    const [showPassengerModal, setShowPassengerModal] = useState(false);
+    const [showClassModal, setShowClassModal] = useState(false);
+    const [isFormFilled, setIsFormFilled] = useState(true);
+
+    //for search value
+    const [destination, setDestination] = useState(1);
+    const [fromDestination, setFromDestination] = useState("Jakarta");
+    const [toDestination, setToDestination] = useState("Inti Bumi");
+    const [searchDate, setSearchDate] = useState(new Date());
+    const [passenger, setPassenger] = useState({ adult: 1, child: 0, baby: 0 });
+    const [classType, setClassType] = useState("Economy");
+
+    const [formData, setFormData] = useState({
+        fromDestination,
+        toDestination,
+        searchDate,
+        passenger,
+        classType,
+    });
+
+    const month = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agu",
+        "Sept",
+        "Okt",
+        "Nov",
+        "Des",
+    ];
     const destinationQueryTest = dummy.destination_query;
     const destinationListTest = dummy.destination_list;
 
     useEffect(() => {
-        console.log(`from: ${fromDestination}, to: ${toDestination}`);
-    }, [fromDestination, toDestination]);
+        setFormData({
+            fromDestination,
+            toDestination,
+            searchDate,
+            passenger,
+            classType,
+        });
+        const dataCheck = [
+            fromDestination,
+            toDestination,
+            searchDate,
+            passenger.adult + passenger.child + passenger.baby,
+            classType,
+        ];
+        setIsFormFilled(true);
+        dataCheck.map((item) => {
+            !item && setIsFormFilled(false);
+        });
+    }, [
+        fromDestination,
+        toDestination,
+        searchDate,
+        passenger,
+        classType,
+    ]);
 
     return (
         <div className="flex flex-col items-center">
@@ -111,7 +168,13 @@ function Index() {
                                             isFromModal={isFromModal}
                                             setIsFromModal={setIsFromModal}
                                         />
-                                        <div className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"></div>
+                                        <div
+                                            className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
+                                            onClick={() => {
+                                                setShowDestinationModal(false);
+                                                isFromModal(false);
+                                            }}
+                                        ></div>
                                     </>
                                 )}
                             </div>
@@ -129,8 +192,15 @@ function Index() {
                                             <span className="text-gray-500 w-10">
                                                 Departure
                                             </span>
-                                            <button className="flex-1 text-lg text-start font-semibold" onClick={()=>setShowDateModal(true)}>
-                                                {"Jakarta (JKT)"}
+                                            <button
+                                                className="flex-1 text-lg text-start font-semibold"
+                                                onClick={() =>
+                                                    setShowDateModal(true)
+                                                }
+                                            >
+                                                {isReturn && searchDate.from > 1
+                                                    ? `${searchDate.from.getDate()} - ${month[searchDate.from.getMonth()]} - ${searchDate.from.getFullYear()}`
+                                                    : `${searchDate.getDate()} - ${month[searchDate.getMonth()]} - ${searchDate.getFullYear()}`}
                                             </button>
                                         </div>
                                         <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
@@ -143,6 +213,11 @@ function Index() {
                                                             setIsReturn(
                                                                 !isReturn
                                                             );
+                                                            searchDate.from
+                                                                ? setSearchDate(
+                                                                      searchDate.from
+                                                                  )
+                                                                : null;
                                                         }}
                                                     />
                                                 </div>
@@ -150,11 +225,17 @@ function Index() {
                                             <button
                                                 className="flex-1 text-lg text-start font-semibold"
                                                 disabled={!isReturn}
+                                                onClick={() =>
+                                                    setShowDateModal(true)
+                                                }
                                             >
                                                 <span
                                                     className={`${isReturn ? "text-darkblue4" : "text-darkblue2"}`}
                                                 >
-                                                    {"Pilih Tanggal"}
+                                                    {isReturn &&
+                                                    searchDate.to > 1
+                                                        ? `${searchDate.to.getDate()} - ${month[searchDate.to.getMonth()]} - ${searchDate.to.getFullYear()}`
+                                                        : `Pilih Tanggal`}
                                                 </span>
                                             </button>
                                         </div>
@@ -165,16 +246,16 @@ function Index() {
                                                 setShowDateModal={
                                                     setShowDateModal
                                                 }
-                                                setFromDestination={
-                                                    setFromDestination
-                                                }
-                                                setToDestination={
-                                                    setToDestination
-                                                }
-                                                isFromModal={isFromModal}
-                                                setIsFromModal={setIsFromModal}
+                                                isReturn={isReturn}
+                                                searchDate={searchDate}
+                                                setSearchDate={setSearchDate}
                                             />
-                                            <div className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"></div>
+                                            <div
+                                                className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
+                                                onClick={() =>
+                                                    setShowDateModal(false)
+                                                }
+                                            ></div>
                                         </>
                                     )}
                                 </div>
@@ -186,36 +267,97 @@ function Index() {
                                     />
                                 </button>
 
+                                {/* passenger & class */}
                                 <div className="flex items-center flex-1 gap-3">
                                     <AirlineSeatReclineNormalIcon color="disabled" />
                                     <span className="text-gray-500 w-10">
                                         To
                                     </span>
                                     <div className="flex flex-1 justify-between">
-                                        <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
+                                        {/* passenger */}
+                                        <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1 relative">
                                             <span className="text-gray-500 w-10">
                                                 Passengers
                                             </span>
-                                            <button className="flex-1 text-lg text-start font-semibold">
-                                                {"2"} Penumpang
+                                            <button
+                                                className="flex-1 text-lg text-start font-semibold"
+                                                onClick={() =>
+                                                    setShowPassengerModal(true)
+                                                }
+                                            >
+                                                {passenger?.adult +
+                                                    passenger?.child +
+                                                    passenger?.baby}{" "}
+                                                Penumpang
                                             </button>
+                                            {showPassengerModal && (
+                                                <>
+                                                    <PassengerModal
+                                                        setShowPassengerModal={
+                                                            setShowPassengerModal
+                                                        }
+                                                        passenger={passenger}
+                                                        setPassenger={
+                                                            setPassenger
+                                                        }
+                                                    />
+                                                    <div
+                                                        className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
+                                                        onClick={() =>
+                                                            setShowPassengerModal(
+                                                                false
+                                                            )
+                                                        }
+                                                    ></div>
+                                                </>
+                                            )}
                                         </div>
-                                        <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
+                                        {/* class */}
+                                        <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1 relative">
                                             <div>
                                                 <span className="text-gray-500 w-10">
                                                     Seat Class
                                                 </span>
                                             </div>
-                                            <button className="flex-1 text-lg text-start font-semibold text-darkblue4">
-                                                {"Pilih Class"}
+                                            <button
+                                                className="flex-1 text-lg text-start font-semibold text-nowrap"
+                                                onClick={() =>
+                                                    setShowClassModal(true)
+                                                }
+                                            >
+                                                {classType}
                                             </button>
+                                            {showClassModal && (
+                                                <>
+                                                    <ClassModal
+                                                        setShowClassModal={
+                                                            setShowClassModal
+                                                        }
+                                                        classType={classType}
+                                                        setClassType={
+                                                            setClassType
+                                                        }
+                                                    />
+                                                    <div
+                                                        className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
+                                                        onClick={() =>
+                                                            setShowClassModal(
+                                                                false
+                                                            )
+                                                        }
+                                                    ></div>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button className="py-2.5 bg-darkblue4 text-white font-semibold rounded-b-xl">
+                    <button
+                        className="py-2.5 bg-darkblue4 text-white font-semibold rounded-b-xl disabled:bg-darkblue3"
+                        disabled={!isFormFilled}
+                    >
                         Cari Penerbangan
                     </button>
                 </div>
@@ -229,14 +371,14 @@ function Index() {
                     <div className="flex gap-4">
                         {destinationQueryTest.map((data) => (
                             <button
-                                key={data.id}
+                                key={data?.id}
                                 onClick={() => {
-                                    setDestination(data.id);
+                                    setDestination(data?.id);
                                 }}
-                                className={`flex gap-1 items-center rounded-xl px-6 py-2.5 ${destination == data.id ? "bg-darkblue4 text-white" : "bg-darkblue1 text-black"}`}
+                                className={`flex gap-1 items-center rounded-xl px-6 py-2.5 ${destination == data?.id ? "bg-darkblue4 text-white" : "bg-darkblue1 text-black"}`}
                             >
                                 <SearchIcon />
-                                <span>{data.name}</span>
+                                <span>{data?.name}</span>
                             </button>
                         ))}
                     </div>
@@ -245,26 +387,26 @@ function Index() {
                 <div className="flex flex-row gap-8 flex-wrap justify-center">
                     {destinationListTest.map((data) => (
                         <div
-                            key={data.id}
+                            key={data?.id}
                             className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2"
                         >
                             <img
-                                src={data.picture}
+                                src={data?.picture}
                                 alt=""
                                 className="rounded-md overflow-hidden w-full h-28"
                             />
                             <div className="flex flex-col flex-initial">
                                 <p className="font-medium">
-                                    {data.from} {"->"} {data.to}
+                                    {data?.from} {"->"} {data?.to}
                                 </p>
                                 <p className="font-bold text-sm text-darkblue4">
-                                    {data.airline}
+                                    {data?.airline}
                                 </p>
-                                <p className="text-sm">{data.date}</p>
+                                <p className="text-sm">{data?.date}</p>
                                 <p className="">
                                     Mulai dari{" "}
                                     <span className="font-bold text-[#FF0000]">
-                                        IDR {data.price}
+                                        IDR {data?.price}
                                     </span>
                                 </p>
                             </div>
