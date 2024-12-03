@@ -37,7 +37,7 @@ function RouteComponent() {
                     marginRight: "10px",
                 }}
             >
-                Isi Data Diri
+                Akun
             </h4>
           </div>
           <Row>
