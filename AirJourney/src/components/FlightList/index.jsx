@@ -3,8 +3,22 @@ import "./FlightList.css";
 import { Accordion, Button, Row, Col, Container } from "react-bootstrap";
 import logo from "../../assets/img/Thumbnail.png";
 import koper from "../../assets/img/koper.png";
+import noDataImage from "../../assets/img/notfound.png"; 
 
 const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
+  if (flights.length === 0) {
+    return (
+      <div className="no-data-container text-center">
+        <img
+          src={noDataImage}
+          alt="No Flights Found"
+          className="no-data-image"
+          style={{ width: "320px", marginBottom: "20px" }}
+        />
+      </div>
+    );
+  }
+
   return (
     <Accordion className="flight-list">
       {flights.map((flight, index) => {

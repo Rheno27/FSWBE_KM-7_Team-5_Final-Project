@@ -22,6 +22,7 @@ const ResetPasswordRequestLazyImport = createFileRoute(
 const ResetPasswordLazyImport = createFileRoute('/reset-password')()
 const RegisterLazyImport = createFileRoute('/register')()
 const OtpLazyImport = createFileRoute('/otp')()
+const NotificationLazyImport = createFileRoute('/notification')()
 const LoginLazyImport = createFileRoute('/login')()
 const IndexLazyImport = createFileRoute('/')()
 const UsersPublicDetailPenerbanganLazyImport = createFileRoute(
@@ -60,6 +61,12 @@ const OtpLazyRoute = OtpLazyImport.update({
   path: '/otp',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/otp.lazy').then((d) => d.Route))
+
+const NotificationLazyRoute = NotificationLazyImport.update({
+  id: '/notification',
+  path: '/notification',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/notification.lazy').then((d) => d.Route))
 
 const LoginLazyRoute = LoginLazyImport.update({
   id: '/login',
@@ -107,6 +114,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/notification': {
+      id: '/notification'
+      path: '/notification'
+      fullPath: '/notification'
+      preLoaderRoute: typeof NotificationLazyImport
       parentRoute: typeof rootRoute
     }
     '/otp': {
@@ -159,6 +173,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
+  '/notification': typeof NotificationLazyRoute
   '/otp': typeof OtpLazyRoute
   '/register': typeof RegisterLazyRoute
   '/reset-password': typeof ResetPasswordLazyRoute
@@ -170,6 +185,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
+  '/notification': typeof NotificationLazyRoute
   '/otp': typeof OtpLazyRoute
   '/register': typeof RegisterLazyRoute
   '/reset-password': typeof ResetPasswordLazyRoute
@@ -182,6 +198,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
+  '/notification': typeof NotificationLazyRoute
   '/otp': typeof OtpLazyRoute
   '/register': typeof RegisterLazyRoute
   '/reset-password': typeof ResetPasswordLazyRoute
@@ -195,6 +212,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/notification'
     | '/otp'
     | '/register'
     | '/reset-password'
@@ -205,6 +223,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/notification'
     | '/otp'
     | '/register'
     | '/reset-password'
@@ -215,6 +234,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/login'
+    | '/notification'
     | '/otp'
     | '/register'
     | '/reset-password'
@@ -227,6 +247,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   LoginLazyRoute: typeof LoginLazyRoute
+  NotificationLazyRoute: typeof NotificationLazyRoute
   OtpLazyRoute: typeof OtpLazyRoute
   RegisterLazyRoute: typeof RegisterLazyRoute
   ResetPasswordLazyRoute: typeof ResetPasswordLazyRoute
@@ -238,6 +259,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
+  NotificationLazyRoute: NotificationLazyRoute,
   OtpLazyRoute: OtpLazyRoute,
   RegisterLazyRoute: RegisterLazyRoute,
   ResetPasswordLazyRoute: ResetPasswordLazyRoute,
@@ -258,6 +280,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/login",
+        "/notification",
         "/otp",
         "/register",
         "/reset-password",
@@ -271,6 +294,9 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.lazy.jsx"
+    },
+    "/notification": {
+      "filePath": "notification.lazy.jsx"
     },
     "/otp": {
       "filePath": "otp.lazy.jsx"

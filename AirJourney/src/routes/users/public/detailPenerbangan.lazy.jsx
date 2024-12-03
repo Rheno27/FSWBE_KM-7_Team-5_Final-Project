@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai'; // For sorting icons
+import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai'; 
 import { createLazyFileRoute } from '@tanstack/react-router';
 import FlightList from '../../../components/FlightList';
 import Sidebar from '../../../components/Sidebar';
@@ -12,16 +12,15 @@ export const Route = createLazyFileRoute('/users/public/detailPenerbangan')({
 });
 
 function Index() {
-  const [isAsc, setIsAsc] = useState(true); // For toggle sorting
-
+  const [isAsc, setIsAsc] = useState(true); 
   const toggleSort = () => {
-    setIsAsc(!isAsc); // Toggle between ascending and descending
+    setIsAsc(!isAsc); 
   };
 
   return (
     <div>
       {/* Page Title */}
-      <h5 className="fw-bold" style={{ marginTop: '40px', marginLeft: '9rem' }}>
+      <h5 className="fw-bold" style={{ marginTop: '40px', marginLeft: '9rem',fontFamily: 'Poppins' }}>
         Detail Penerbangan
       </h5>
 

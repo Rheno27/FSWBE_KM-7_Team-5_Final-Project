@@ -19,7 +19,7 @@
             "user_id": "uuid-1",
             "title": "Booking Confirmation",
             "message": "Your booking is confirmed!",
-            "isRead": false,
+            "isRead": true,
             "created_at": "2024-01-02T10:00:00Z",
             "updated_at": "2024-01-02T10:30:00Z"
         }
