@@ -4,14 +4,14 @@ import { useMutation } from '@tanstack/react-query';
 import { ToastContainer, toast } from 'react-toastify';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { createLazyFileRoute, Link } from '@tanstack/react-router';
-import tiketkuImage from '../assets/img/tiketku.png';
+import background from '../assets/img/login-illust.png';
 
 export const Route = createLazyFileRoute('/reset-password-request')({
   component: ResetRequest,
 })
-
+ 
 function ResetRequest() {
-  // Form input state
+
   const [email, setEmail] = useState('');
 
   let url = `${import.meta.env.VITE_API_URL}/auth/reset-password/request`;
@@ -25,16 +25,16 @@ function ResetRequest() {
         { headers: { 'Content-Type': 'application/json' }}
       ),
 
-    onSuccess: (response) => {
+    onSuccess: () => {
       toast.success('Reset link was sent successfully! Please check your email', {
-        autoClose: 3000, 
+        autoClose: 4000, 
       });
     },
 
     onError: (error) => {
       if (error.response?.status === 404) {
         toast.error('Your email was not found in our records.', { 
-          autoClose: 3000,
+          autoClose: 4000,
         });
       } else {
         toast.error('An unexpected error occured')
@@ -46,14 +46,15 @@ function ResetRequest() {
   // Form submission handler
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // Call mutation
     sendRequest(email)
   }
   
   return (
-    <section style={{ height: "100vh", backgroundColor: "white" }}>
+    <section style={{ height: "100vh", backgroundColor: "white", backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: "center" }}>
       <Row className="h-100 mx-auto gap-0">
         
-        {/* Left column with image */}
         <Col
             lg={6}
             md={12}
@@ -63,24 +64,13 @@ function ResetRequest() {
                 overflow: "hidden",
             }}
         >
-          <img
-              src={tiketkuImage}
-              alt="tiketku"
-              style={{
-                  width: "100%",
-                  height: "100vh",
-                  objectFit: "cover",
-              }}
-          />
         </Col>
-        {/* End of left column */}
 
         {/* Right column with form */}
         <Col
             lg={6}
             md={12}
-            style={{position:'relative'}}
-            className="d-flex flex-column align-items-center justify-content-center"
+            className="d-flex flex-column align-items-center justify-content-center p-5"
         >
           <Form
               style={{
@@ -88,32 +78,30 @@ function ResetRequest() {
                   maxWidth: "452px",
                   padding: "20px",
               }}
+              className="bg-white bg-opacity-75 border-1 rounded-xl p-5 shadow-sm"
               onSubmit={handleSubmit}
           >
             {/* ToastContainer for response message */}
             <ToastContainer
               position="bottom-center"
-              style={{
-                position: 'absolute', 
-                bottom: 10,          
-                right: '10%',          
-                zIndex: 9999       
+              style={{ 
+                bottom: 10,        
               }}
             />
             {/* End of toast */}
 
-              <h1
-                  className="mb-4"
-                  style={{
-                      fontSize: "2rem",
-                      fontWeight: "bold",
-                      fontFamily: "Poppins, sans-serif",
-                      textAlign: "left",
-                      marginBottom: "1rem",
-                  }}
-              >
-                  Lupa Password
-              </h1>
+            <h1
+                className="mb-4"
+                style={{
+                    fontSize: "2rem",
+                    fontWeight: "bold",
+                    fontFamily: "Poppins, sans-serif",
+                    textAlign: "left",
+                    marginBottom: "1rem",
+                }}
+            >
+                Lupa Password
+            </h1>
 
               {/* Email form field */}
               <Form.Group controlId="email" className="mb-4">

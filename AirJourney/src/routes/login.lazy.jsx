@@ -1,15 +1,28 @@
-import React, { useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, createLazyFileRoute } from "@tanstack/react-router";
+
 import { Row, Col, Form, Button} from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import tiketku from "../assets/img/tiketku.png";
+import background from "../assets/img/login-illust.png"
+
+import { useDispatch, useSelector} from "react-redux";
+import { setToken } from "../redux/slices/auth";
+import { login } from "../services/auth";
+import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 
 export const Route = createLazyFileRoute("/login")({
     component: Login,
 });
 
 function Login() {
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const {token} = useSelector((state) => state.auth);
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState(""); 
 
     // State untuk menampilkan password
     const [showPassword, setShowPassword] = useState(false);
@@ -18,9 +31,40 @@ function Login() {
     const togglePassword = () => {
         setShowPassword(!showPassword);
     };
+
+    useEffect(() => {
+        if (token) {
+            navigate({ to: "/" });
+        }
+    }, [token, navigate]);
     
+    const {mutate: loginUser} = useMutation({
+        mutationFn: (body) => {
+            return login(body);
+        },
+        onSuccess: (data) => {
+            dispatch(setToken(data?.token));
+            navigate({ to: "/" });
+        },
+        onError: (error) => {
+        toast.error(error.message);
+        },
+    });
+
+    const onSubmit = async (event) => {
+        event.preventDefault();
+    
+        const body = {
+            email,
+            password,
+        };
+    
+        //hit api
+        loginUser(body);
+    }
+
     return (
-        <section style={{ height: "100vh", backgroundColor: "white" }}>
+        <section style={{ height: "100vh", backgroundColor: "white", backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: "center" }}>
             <Row className="h-100 mx-auto gap-0">
                 <Col
                     lg={6}
@@ -31,20 +75,12 @@ function Login() {
                         overflow: "hidden",
                     }}
                 >
-                    <img
-                        src={tiketku}
-                        alt="tiketku"
-                        style={{
-                            width: "100%",
-                            height: "100vh",
-                            objectFit: "cover",
-                        }}
-                    />
+                    
                 </Col>
                 <Col
                     lg={6}
                     md={12}
-                    className="d-flex flex-column align-items-center justify-content-center"
+                    className="d-flex flex-column align-items-center justify-content-center p-5"
                 >
                     <Form
                         style={{
@@ -52,6 +88,8 @@ function Login() {
                             maxWidth: "452px",
                             padding: "20px",
                         }}
+                        className="bg-white bg-opacity-75 border-1 rounded-xl p-5 shadow-sm"
+                        onSubmit={onSubmit}
                     >
                         <h1
                             className="mb-4"
@@ -71,6 +109,8 @@ function Login() {
                                 type="email"
                                 placeholder="Example: johndoe@gmail.com"
                                 name="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 style={{
                                     borderRadius: "16px",
                                 }}
@@ -96,6 +136,8 @@ function Login() {
                                     type={showPassword ? "text" : "password"}
                                     placeholder="Enter password"
                                     name="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     style={{
                                         paddingRight: "3rem",
                                         borderRadius: "16px",

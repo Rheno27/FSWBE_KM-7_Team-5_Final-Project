@@ -7,7 +7,8 @@ import { Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
 import { createLazyFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import tiketkuImage from '../assets/img/tiketku.png';
+import background from "../assets/img/login-illust.png"
+import { resetPassword } from '../services/auth';
 
 export const Route = createLazyFileRoute('/reset-password')({
   component: ResetPassword,
@@ -23,7 +24,9 @@ function ResetPassword() {
   if (!token) {
     toast.error("Token is missing. Please try new request", {
       position: "top-center",
+      autoClose: 5000,
     });
+    navigate({ to: "/reset-password-request" });
     return;
   }
 
@@ -42,7 +45,6 @@ function ResetPassword() {
   const [message, setMessage] = useState("");
  
   let validationUrl = `${import.meta.env.VITE_API_URL}/auth/reset-password/validate/${token}`;
-  let url = `${import.meta.env.VITE_API_URL}/auth/reset-password`;
 
   // Token validation
   useEffect(() => {
@@ -53,12 +55,13 @@ function ResetPassword() {
 
         if (response.status === 200) {
           setIsTokenValid(true);
-        } 
-
+        } else {
+          setIsTokenValid(false);
+          toast.error("Token has expired or is invalid")
+        }
       } catch (error) {
         setIsTokenValid(false);
-        toast.error(error.response?.data?.message || "An unexpected error occured");
-
+        toast.error(error.message || "An unexpected error occured");
       } finally {
         setIsLoading(false); // Set loading to false after validation
       }
@@ -74,13 +77,9 @@ function ResetPassword() {
 
    // Update password mutation
    const { mutate: savePassword, isPending } = useMutation({
-    mutationFn: async (email) => 
-      await axios.post(
-        url, 
-        { token, newPassword }, 
-        { headers: { 'Content-Type': 'application/json' }}
-      ),
-
+    mutationFn: (data) => {
+      return resetPassword(data);
+    },
     onSuccess: (response) => {
       toast.success('Password reset successfull. Redirecting to login page...', {
         autoClose: 4000, 
@@ -89,12 +88,10 @@ function ResetPassword() {
     },
 
     onError: (error) => {
-      if (error.response?.status === 404) {
-        toast.error('Your email was not found in our records.', { 
-          autoClose: 3000,
-        });
+      if (error.response?.status === 503) {
+        toast.error('Service unavailable. Please try again later.')
       } else {
-        toast.error(error.response?.data?.message || "An error occurred.")
+        toast.error(error.message || "An unexpected error occurred.")
       }
     },
   })
@@ -104,16 +101,15 @@ function ResetPassword() {
     e.preventDefault();
 
     if (!isTokenValid) {
-      toast.error("The token has expired or is invalid.");
+      toast.error("Token has expired or is invalid.");
       return; 
     }
   
     // Basic password validation checks
     const validatePassword = () => {
-      if (newPassword.length < 8 || !/\d/.test(newPassword)) {
-        return "Password must be at least 8 characters long and a number.";
+      if (newPassword.length < 6) {
+        return "Password must be at least 6 characters long";
       }
-  
       if (newPassword !== confirmPassword) {
         return "Passwords do not match.";
       }
@@ -123,21 +119,25 @@ function ResetPassword() {
   
     const passwordError = validatePassword();
     if (passwordError) {
-      toast.error(passwordError);
+      toast.warn(passwordError);
       return;
     }
 
     // If password is valid, proceed with form submission
     setPasswordValid(true)
     setMessage("");
-    savePassword(token, newPassword)
+
+    const data = {
+      token,
+      newPassword,
+    };
+
+    savePassword(data)
   };  
 
   return (
-    <section style={{ height: "100vh", backgroundColor: "white" }}>
+    <section style={{ height: "100vh", backgroundColor: "white", backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: "center" }}>
       <Row className="h-100 mx-auto gap-0">
-        
-        {/* Left column with image */}
         <Col
             lg={6}
             md={12}
@@ -147,27 +147,16 @@ function ResetPassword() {
                 overflow: "hidden",
             }}
         >
-          <img
-              src={tiketkuImage}
-              alt="tiketku"
-              style={{
-                  width: "100%",
-                  height: "100vh",
-                  objectFit: "cover",
-              }}
-          />
         </Col>
-        {/* End of left column */}
 
         {/* Right column with form */}
         <Col
             lg={6}
             md={12}
-            style={{position:'relative'}}
             className="d-flex flex-column align-items-center justify-content-center"
         >
         {isLoading ? (
-          <p>Validating token, please wait...</p>
+          <p className='p-3 bg-light bg-opacity-75 border-2 shadow-sm rounded'>Validating token, please wait...</p>
         ) : (
           <Form
               style={{
@@ -175,16 +164,14 @@ function ResetPassword() {
                   maxWidth: "452px",
                   padding: "20px",
               }}
+              className="bg-white bg-opacity-75 border-1 rounded-xl p-5 shadow-sm"
               onSubmit={handleSubmit}
           >
             {/* ToastContainer for response message */}
             <ToastContainer
               position="bottom-center"
               style={{
-                position: 'absolute', 
-                bottom: 10,          
-                right: '10%',          
-                zIndex: 9999       
+                bottom: 10,      
               }}
             />
             {/* End of toast */}
@@ -264,7 +251,7 @@ function ResetPassword() {
                 </div>
               </Form.Group>
               <div className="text-muted mb-4 mt-2">
-                <span>* At least 8 characters long and a number</span>
+                <span>*Password must be at least 6 characters long.</span>
               </div>
 
               {/* Submit button */}
