@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 import { 
   ArrowBack as ArrowBackIcon,
@@ -14,6 +14,8 @@ export const Route = createFileRoute('/users/private/profile/')({
 })
 
 function RouteComponent() {
+  const navigate = useNavigate();
+
   return (
     <Container className="profile-page">
       <Container
@@ -42,7 +44,9 @@ function RouteComponent() {
             <Col lg={12}>
               <div
                 className="timer"
+                onClick={() => navigate({ to: "/" })}
                 style={{
+                  cursor: "pointer",
                   backgroundColor: "#7126B5",
                   marginTop: "10px",
                   borderRadius: "10px",
