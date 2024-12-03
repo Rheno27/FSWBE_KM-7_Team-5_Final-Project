@@ -42,11 +42,11 @@ const NavigationBar = () => {
     });
 
     
-    const handleLogout = useCallback(() => {
-        localStorage.removeItem("token");
-        dispatch(setToken(null));
-        dispatch(setUser(null));
-    }, [dispatch]);
+    // const handleLogout = useCallback(() => {
+    //     localStorage.removeItem("token");
+    //     dispatch(setToken(null));
+    //     dispatch(setUser(null));
+    // }, [dispatch]);
 
 
     useEffect(() => {
@@ -55,20 +55,20 @@ const NavigationBar = () => {
             dispatch(setToken(localStorage.getItem("token")));
         }
         if (isError) {
-            handleLogout();
+            navigate({ to: "/login" });
         }
-    }, [isSuccess, isError, dispatch, data, handleLogout,user]);
+    }, [isSuccess, isError, dispatch, data,user]);
 
     const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
     const onSubmit = async (e) => {
         e.preventDefault();
     };
-    const logout = (e) => {
-        e.preventDefault();
-        handleLogout();
-        navigate({ to: "/login" });
-    };
+    // const logout = (e) => {
+    //     e.preventDefault();
+    //     handleLogout();
+    //     navigate({ to: "/login" });
+    // };
 
     return (
         <>
@@ -126,15 +126,15 @@ const NavigationBar = () => {
                                             />
                                         </Nav.Link>
 
-                                        <Nav.Link as={Link} to="/profile">
+                                        <Nav.Link as={Link} to="/users/private/profile">
                                             <ProfileIcon
                                                 style={{ marginRight: "8px" }}
                                             />
                                         </Nav.Link>
-
+{/* 
                                         <button onClick={logout}>
                                             Log out
-                                        </button>
+                                        </button> */}
                                     </>
                                 ) : (
                                     <>
