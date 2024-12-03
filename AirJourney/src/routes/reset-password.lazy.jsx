@@ -33,7 +33,6 @@ function ResetPassword() {
 
   // Password validation state
   const [passwordValid, setPasswordValid] = useState(true);
-  const [matchPasswords, setMatchPasswords] = useState(true);
 
   // Password visibility option state
   const [showPassword, setShowPassword] = useState(false);
