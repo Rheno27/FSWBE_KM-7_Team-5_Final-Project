@@ -1,7 +1,7 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import logo from "../../assets/img/logo.png";
+import logo from "../../assets/img/logoterbangin.png";
 import Form from "react-bootstrap/Form";
 import {
     Search as SearchIcon,
@@ -57,7 +57,7 @@ const NavigationBar = () => {
         if (isError) {
             handleLogout();
         }
-    }, [isSuccess, isError, dispatch, data, handleLogout]);
+    }, [isSuccess, isError, dispatch, data, handleLogout,user]);
 
     const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
@@ -73,7 +73,7 @@ const NavigationBar = () => {
     return (
         <>
             {shuoldShowNavbar && (
-                <Navbar expand="lg" className="bg-body-tertiary">
+                <Navbar expand="lg" className="bg-white">
                     <Container fluid>
                         <Navbar.Brand href="#" style={{ marginLeft: "128px" }}>
                             <img src={logo} alt="logo" />
