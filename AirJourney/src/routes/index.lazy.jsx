@@ -11,6 +11,7 @@ import DestinationModal from "../components/Modal/DestinationModal";
 import DateModal from "../components/Modal/DateModal";
 import ClassModal from "../components/Modal/ClassModal";
 import PassengerModal from "../components/Modal/PassengerModal";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffect, useState } from "react";
 import dummy from "../data/dummy.json";
 
@@ -58,7 +59,9 @@ function Index() {
         "Des",
     ];
     const destinationQueryTest = dummy.destination_query;
-    const destinationListTest = dummy.destination_list;
+    const [destinationListTest, setDestinationListTest] = useState(
+        dummy.destination_list
+    );
 
     useEffect(() => {
         setFormData({
@@ -79,14 +82,15 @@ function Index() {
         dataCheck.map((item) => {
             !item && setIsFormFilled(false);
         });
-    }, [
-        fromDestination,
-        toDestination,
-        searchDate,
-        passenger,
-        classType,
-    ]);
+    }, [fromDestination, toDestination, searchDate, passenger, classType]);
 
+    const seedLoader = () => {
+        setTimeout(() => {
+            setDestinationListTest(
+                destinationListTest.concat(dummy.destination_list)
+            );
+        }, 3000);
+    };
     return (
         <div className="flex flex-col items-center">
             {/* banner */}
@@ -384,7 +388,14 @@ function Index() {
                     </div>
                 </div>
                 {/* result */}
-                <div className="flex flex-row gap-8 flex-wrap justify-center">
+                <InfiniteScroll
+                    className="flex flex-row gap-8 flex-wrap justify-center"
+                    dataLength={destinationListTest.length}
+                    next={seedLoader}
+                    hasMore={true}
+                    loader={<>load</>}
+                    endMessage={<span>yay</span>}
+                >
                     {destinationListTest.map((data) => (
                         <div
                             key={data?.id}
@@ -412,7 +423,7 @@ function Index() {
                             </div>
                         </div>
                     ))}
-                </div>
+                </InfiniteScroll>
             </div>
         </div>
     );
