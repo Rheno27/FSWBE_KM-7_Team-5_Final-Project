@@ -10,8 +10,10 @@ const DestinationModal = ({
     setToDestination,
     isFromModal,
     setIsFromModal,
+    fromDestination,
+    toDestination
 }) => {
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState(isFromModal ? fromDestination : toDestination);
     const destinationList = dummy.destination_query;
     useEffect(() => {
         if (isFromModal) {
@@ -38,6 +40,7 @@ const DestinationModal = ({
                         type="text"
                         name=""
                         id=""
+                        value={search}
                         className="focus:outline-none w-full"
                         placeholder="Masukkan Kota atau Negara"
                         onChange={(e) => setSearch(e.target.value)}
@@ -103,5 +106,7 @@ DestinationModal.propTypes = {
     setToDestination: PropTypes.any,
     setIsFromModal: PropTypes.any,
     isFromModal: PropTypes.bool,
+    fromDestination: PropTypes.string,
+    toDestination: PropTypes.string
 };
 export default DestinationModal;

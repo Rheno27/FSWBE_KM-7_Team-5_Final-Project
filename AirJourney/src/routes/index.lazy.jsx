@@ -27,6 +27,7 @@ function Index() {
     const [showPassengerModal, setShowPassengerModal] = useState(false);
     const [showClassModal, setShowClassModal] = useState(false);
     const [isFormFilled, setIsFormFilled] = useState(true);
+    const loadersCount = [1, 2, 3, 4];
 
     //for search value
     const [destination, setDestination] = useState(1);
@@ -171,12 +172,14 @@ function Index() {
                                             setToDestination={setToDestination}
                                             isFromModal={isFromModal}
                                             setIsFromModal={setIsFromModal}
+                                            fromDestination={fromDestination}
+                                            toDestination={toDestination}
                                         />
                                         <div
                                             className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
                                             onClick={() => {
+                                                setIsFromModal(false);
                                                 setShowDestinationModal(false);
-                                                isFromModal(false);
                                             }}
                                         ></div>
                                     </>
@@ -393,13 +396,25 @@ function Index() {
                     dataLength={destinationListTest.length}
                     next={seedLoader}
                     hasMore={true}
-                    loader={<>load</>}
+                    loader={loadersCount.map((count) => (
+                        <div
+                            key={count?.id}
+                            className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2 w-52 animate-pulse"
+                        >
+                            <div className="rounded-md overflow-hidden w-full h-28 bg-darkblue1"></div>
+                            <div className="flex flex-col flex-initial gap-2">
+                                <div className="w-full h-4 bg-darkblue1"></div>
+                                <div className="w-full h-4 bg-darkblue1"></div>
+                                <div className="w-full h-4 bg-darkblue1"></div>
+                            </div>
+                        </div>
+                    ))}
                     endMessage={<span>yay</span>}
                 >
                     {destinationListTest.map((data) => (
                         <div
                             key={data?.id}
-                            className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2"
+                            className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2 w-52"
                         >
                             <img
                                 src={data?.picture}
