@@ -392,7 +392,7 @@ function Index() {
                 </div>
                 {/* result */}
                 <InfiniteScroll
-                    className="flex flex-row gap-8 flex-wrap justify-center"
+                    className="flex flex-row gap-8 flex-wrap justify-center mb-12"
                     dataLength={destinationListTest.length}
                     next={seedLoader}
                     hasMore={true}
@@ -409,7 +409,7 @@ function Index() {
                             </div>
                         </div>
                     ))}
-                    endMessage={<span>yay</span>}
+                    endMessage={<span className="text-slate-500">Yah, sudah tidak ada lagi</span>}
                 >
                     {destinationListTest.map((data) => (
                         <div
