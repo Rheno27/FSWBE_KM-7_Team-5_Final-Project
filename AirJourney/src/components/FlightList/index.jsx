@@ -1,9 +1,33 @@
 import React from "react";
 import "./FlightList.css";
 import { Accordion, Button, Row, Col, Container } from "react-bootstrap";
+import Card from 'react-bootstrap/Card';
+import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 import logo from "../../assets/img/Thumbnail.png";
 import koper from "../../assets/img/koper.png";
 import noDataImage from "../../assets/img/notfound.png"; 
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+
+function CustomToggle({ children, eventKey }) {
+  const [isAccordionOpen,setIsAccordionOpen] = React.useState(false);
+  const decoratedOnClick = useAccordionButton(eventKey, () =>
+    isAccordionOpen ? setIsAccordionOpen(false) : setIsAccordionOpen(true)
+  );
+
+  return (
+    <button
+      type="button"
+      className="border-0 bg-white"
+      onClick={decoratedOnClick}
+    >
+      
+      {isAccordionOpen ? (
+                      <KeyboardArrowUpIcon />):(
+                      <KeyboardArrowDownIcon />)}
+    </button>
+  );
+}
 
 const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
   if (flights.length === 0) {
@@ -25,11 +49,10 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
         const airline = airlines?.find((airline) => airline.id === flight.airline_id) || {};
         const originAirport = airports?.find((airport) => airport.id === flight.airport_id_from) || {};
         const destinationAirport = airports?.find((airport) => airport.id === flight.airport_id_to) || {};
-
         return (
-          <Accordion.Item eventKey={index} key={index} className="flight-card">
+          <Accordion.Item eventKey={index} key={index} className="flight-card px-3 py-2">
             {/* Flight Summary */}
-            <Accordion.Header>
+            <Card.Header>
               <div className="w-100">
                 {/* Logo and Airline Info */}
                 <Row className="mb-3">
@@ -42,6 +65,9 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
                     <h6 className="mb-0 fw-bold" style={{ fontSize: "16px", marginLeft: "10px" }}>
                       {airline.name || "Unknown Airline"} - {flight?.class || "Economy"}
                     </h6>
+                  </Col>
+                  <Col sm={4} className="d-flex align-items-center justify-content-end">
+                    <CustomToggle eventKey="0" />
                   </Col>
                 </Row>
 
@@ -93,10 +119,10 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
                   </Col>
                 </Row>
               </div>
-            </Accordion.Header>
+            </Card.Header>
 
             {/* Flight Details */}
-            <Accordion.Body className="flight-details">
+            <Accordion.Collapse className="flight-details" eventKey="0">
               <Container>
                 {/* Section Title */}
                 <h6 className="text-purple mb-3">Detail Penerbangan</h6>
@@ -163,7 +189,7 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
                   </Col>
                 </Row>
               </Container>
-            </Accordion.Body>
+            </Accordion.Collapse>
           </Accordion.Item>
         );
       })}
