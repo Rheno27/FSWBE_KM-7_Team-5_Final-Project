@@ -1,0 +1,29 @@
+/* BreadcrumbNav.module.css */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  .breadcrumbItem a {
+    text-decoration: none; 
+    color: #000000;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  
+  .disabledBreadcrumb a {
+    text-decoration: none;
+    color: #8A8A8A;
+    cursor: default;
+    font-weight: 600;
+    pointer-events: none; /* Disable clicks */
+  }
+  
+  .breadcrumbSeparator {
+    margin: 0 5px;
+    color: #8A8A8A;
+    font-weight: bold;
+  }
+  
+    

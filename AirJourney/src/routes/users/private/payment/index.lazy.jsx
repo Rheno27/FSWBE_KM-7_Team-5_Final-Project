@@ -1,32 +1,35 @@
-import React from "react";
-import { createLazyFileRoute } from "@tanstack/react-router";
-import { Row, Col, Card, Form, Button } from "react-bootstrap";
-import "./payment.css"; 
-import { BreadcrumbNav, ReminderBox } from "../../../../components/ProgresBar/custom.jsx";
+import React from 'react'
+import { createLazyFileRoute } from '@tanstack/react-router'
+import { Row, Col, Card, Form, Button, Container } from 'react-bootstrap'
+import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
+import { AlertBox } from '../../../../components/ui/alertBox.jsx'
+import styles from './payment.module.css'
 
 export const Route = createLazyFileRoute('/users/private/payment/')({
-    component: Payment,
-});
+  component: Payment,
+})
 
 function Payment() {
   return (
     <div className="payment-page">
-      <Row className="justify-content-center mt-4">
+      <Row className="justify-content-center mt-2 mb-4 py-3 shadow-sm">
         <Col lg={9} md={10}>
-            <BreadcrumbNav
-                items={[
-                    { label: "Isi Data Diri", path: "/users/private/checkout" },
-                    { label: "Bayar", path: "users/private/payment" },
-                    { label: "Selesai"},
-                ]}
-            />
-            <ReminderBox type="error" message="Selesaikan Pembayaran sampai 10 Maret 2023 12:00" />
+          <BreadcrumbNav
+            items={[
+              { label: 'Isi Data Diri', path: '/users/private/checkout' },
+              { label: 'Bayar', path: './' },
+              { label: 'Selesai' },
+            ]}
+          />
+          <AlertBox
+            type="warning"
+            message="Selesaikan Pembayaran sampai 10 Maret 2023 12:00 AM"
+          />
         </Col>
       </Row>
-
-      <Row className="justify-content-center">
-        <Col lg={6} md={6}>
-          <Card className="mb-4 shadow-sm">
+      <Container>
+        <Row className="justify-content-center my-4">
+          <Col lg={6} md={6} className="mb-4">
             <Card.Body>
               <h5>Isi Data Pembayaran</h5>
               <div className="payment-method">
@@ -78,59 +81,85 @@ function Payment() {
                 </Button>
               </Form>
             </Card.Body>
-          </Card>
-        </Col>
+          </Col>
 
-        <Col lg={3} md={4}>
-          <Card className="shadow-sm">
-            <Card.Body>
-              <h6>Booking Code: <a href="#" className="booking-code">6723y2GHK</a></h6>
+          <Col lg={4} md={5}>
+            <h6>
+              Booking Code:{' '}
+              <a href="#" className="booking-code">
+                6723y2GHK
+              </a>
+            </h6>
 
-              <div className="flight-info mt-4">
-                <p>
-                  <strong>07:00</strong> <br />
-                  3 Maret 2023 <br />
-                  Soekarno Hatta - Terminal 1A Domestik
-                </p>
-                <p className="text-muted">Keberangkatan</p>
+            <div className="flight-info mt-4">
+              <Row>
+                <Col xs={8}>
+                  <div>
+                    <span>
+                      <strong>07:00</strong>
+                    </span>
+                    <br />
+                    <span>3 Maret 2023</span>
+                  </div>
+                </Col>
+                <Col xs={4} className="text-end align-self-start">
+                  <p className="text-muted">Keberangkatan</p>
+                </Col>
+                <span>Soekarno Hatta - Terminal 1A Domestik</span>
+              </Row>
+              <hr />
+              <Row>
+                <Col xs={2}>
+                  <img src="" alt="airline-logo" />
+                </Col>
+                <Col xs={10}>
+                  <p>
+                    <strong>Jet Air - Economy</strong> <br />
+                    JT - 203
+                  </p>
+                  <p>
+                    <strong>Informasi:</strong> <br />
+                    Baggage 20 kg <br />
+                    Cabin baggage 7 kg <br />
+                    In-Flight Entertainment
+                  </p>
+                </Col>
+              </Row>
+              <hr />
+              <Row>
+                <Col xs={8}>
+                  <div>
+                    <span>
+                      <strong>11:00</strong>
+                    </span>
+                    <br />
+                    <span>3 Maret 2023</span>
+                  </div>
+                </Col>
+                <Col xs={4} className="text-end align-self-start">
+                  <p className="text-muted">Kedatangan</p>
+                </Col>
+                <span>Melbourne International Airport</span>
+              </Row>
+              <hr />
+            </div>
 
-                <p>
-                  <strong>Jet Air - Economy</strong> <br />
-                  JT - 203
-                </p>
-
-                <p>
-                  <strong>Informasi:</strong> <br />
-                  Baggage 20 kg <br />
-                  Cabin baggage 7 kg <br />
-                  In-Flight Entertainment
-                </p>
-
-                <p>
-                  <strong>11:00</strong> <br />
-                  3 Maret 2023 <br />
-                  Melbourne International Airport
-                </p>
-                <p className="text-muted">Kedatangan</p>
-              </div>
-
-              <div className="price-details mt-4">
-                <p>
-                  2 Adults <span className="float-end">IDR 9.550.000</span> <br />
-                  1 Baby <span className="float-end">IDR 0</span> <br />
-                  Tax <span className="float-end">IDR 300.000</span>
-                </p>
-                <hr />
-                <h5>
-                  Total <span className="float-end">IDR 9.850.000</span>
-                </h5>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+            <div className="price-details mt-4">
+              <p>
+                2 Adults <span className="float-end">IDR 9.550.000</span> <br />
+                1 Baby <span className="float-end">IDR 0</span> <br />
+                Tax <span className="float-end">IDR 300.000</span>
+              </p>
+              <hr />
+              <h5>
+                Total <span className="float-end">IDR 9.850.000</span>
+              </h5>
+            </div>
+          </Col>
+        </Row>
+      </Container>
     </div>
-  );
-};
+  )
+}
 
-export default Payment;
+export default Payment
