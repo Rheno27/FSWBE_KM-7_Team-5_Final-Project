@@ -32,7 +32,7 @@ const DestinationModal = ({
         setShowDestinationModal(false);
     };
     return (
-        <div className="absolute inset-12 z-2 w-full max-w-3xl mx-auto h-80 rounded-xl p-4 bg-white">
+        <div className="absolute md:inset-12 z-2 w-full max-w-3xl mx-auto h-80 rounded-xl p-4 bg-white">
             <div className="flex items-center justify-between gap-2">
                 <div className="flex flex-1 items-center border-1 border-gray-400 rounded-lg gap-3 px-3 py-1">
                     <SearchIcon color="disabled" fontSize="large" />

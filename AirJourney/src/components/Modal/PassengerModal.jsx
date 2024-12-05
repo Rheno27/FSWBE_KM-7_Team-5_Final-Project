@@ -15,7 +15,7 @@ const PassengerModal = ({ setShowPassengerModal, passenger, setPassenger }) => {
         console.log(passenger);
     }, [passenger, adult, child, baby, setPassenger]);
     return (
-        <div className="absolute inset-y-16 z-2 w-fit mx-auto h-fit rounded-xl p-4 bg-white">
+        <div className="absolute -inset-x-full md:inset-x-0 md:inset-y-16 z-2 w-fit md:mx-auto h-fit rounded-xl p-4 bg-white">
             <div className="flex justify-end mb-4">
                 <CloseIcon
                     className="cursor-pointer"
@@ -23,7 +23,7 @@ const PassengerModal = ({ setShowPassengerModal, passenger, setPassenger }) => {
                 />
             </div>
             <div className="flex flex-col gap-2">
-                <div className="flex gap-20 border-b pb-2 justify-between">
+                <div className="flex gap-2 md:gap-20 border-b pb-2 justify-between">
                     <div className="flex gap-2">
                         <ManIcon />
                         <div className="flex flex-col text-nowrap">
@@ -57,7 +57,7 @@ const PassengerModal = ({ setShowPassengerModal, passenger, setPassenger }) => {
                         </button>
                     </div>
                 </div>
-                <div className="flex gap-20 border-b pb-2 justify-between">
+                <div className="flex gap-2 md:gap-20 border-b pb-2 justify-between">
                     <div className="flex gap-2">
                         <ManIcon />
                         <div className="flex flex-col text-nowrap">
@@ -91,7 +91,7 @@ const PassengerModal = ({ setShowPassengerModal, passenger, setPassenger }) => {
                         </button>
                     </div>
                 </div>
-                <div className="flex gap-20 border-b pb-2 justify-between">
+                <div className="flex gap-2 md:gap-20 border-b pb-2 justify-between">
                     <div className="flex gap-2">
                         <ManIcon />
                         <div className="flex flex-col text-nowrap">
