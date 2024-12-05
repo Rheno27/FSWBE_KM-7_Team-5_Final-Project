@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { Form } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { CiFilter } from "react-icons/ci";
+import { ArrowBack as ArrowBackIcon } from "@mui/icons-material"; 
 import data from "../../data/dummy.json";
 
 const Notification = () => {
   const [notifications, setNotifications] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setNotifications(data.notification); 
@@ -38,7 +41,7 @@ const Notification = () => {
           style={styles.backButton}
           onClick={() => navigate({ to: "/" })} 
         >
-          ⬅ Beranda
+          <ArrowBackIcon /> Beranda
         </button>
         <button style={styles.filterButton}>
           <CiFilter style={styles.filterIcon} /> Filter
@@ -118,7 +121,9 @@ const styles = {
     width: "60%",
     margin: "0 auto",
     alignItems: "center",
-  },
+    border: "1px solid #eaeaea",
+    borderRadius: "10px",
+  },    
   notificationItem: {
     display: "flex",
     alignItems: "center",
@@ -136,20 +141,20 @@ const styles = {
   },
   title: {
     margin: "0",
-    fontSize: "14px",
-    color: "#6c5ce7",
+    fontSize: "18px",
+    color: "#000",
   },
   message: {
     margin: "5px 0 0",
     fontSize: "12px",
-    color: "#333",
+    color: "##8A8A8A",
   },
   meta: {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-end",
     fontSize: "12px",
-    color: "#888",
+    color: "#8A8A8A",
   },
   statusDot: {
     width: "8px",

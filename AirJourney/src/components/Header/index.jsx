@@ -1,4 +1,6 @@
 import React from "react";
+import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const Header = () => {
   return (
@@ -7,7 +9,7 @@ const Header = () => {
       <div style={rowStyle}>
         {/* Back Button */}
         <button style={{ ...backButtonStyle }}>
-          JKT → MLB • 2 Penumpang • Economy
+        <ArrowBackIcon style={{  marginRight: "16px" }}/>JKT <ArrowForwardIosIcon style={{ fontSize: "14px", marginTop: "6px", marginLeft: "5px" }} /> MLB • 2 Penumpang • Economy
         </button>
 
         {/* Search Button */}
@@ -84,12 +86,14 @@ const activeButtonStyle = {
   backgroundColor: "#A06ECE",
   color: "white",
   fontWeight: "bold",
+  borderRadius: "10px",
 };
 
 const inactiveButtonStyle = {
   ...buttonStyle,
-  backgroundColor: "#f8f9fa",
+  backgroundColor: "#fff",
   color: "#343a40",
+  borderRadius: "10px",
 };
 
 const modifyButtonStyle = {

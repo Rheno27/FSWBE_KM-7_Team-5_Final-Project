@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export const login = async (body) => {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
     body: JSON.stringify(body),
@@ -46,4 +48,17 @@ export const register = async (request) => {
     console.error("Registration error:", error.message);
     throw error;
   }
+};
+
+export const resetPassword = async (data) => {
+  let url = `${import.meta.env.VITE_API_URL}/auth/reset-password`;
+  const { token, newPassword } = data;
+
+  const response = await axios.post(
+    url,
+    { token, newPassword },
+    { headers: { 'Content-Type': 'application/json' }}
+  );
+
+  return response.data;
 };

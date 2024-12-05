@@ -1,15 +1,16 @@
 .flight-list {
   width: 90%;
   font-family: "Poppins";
+  margin-bottom: auto;
 }
 
   
   .flight-card {
     border: 1px solid #ffff;
     border-radius: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 26px;
     margin-right: 26px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     
   }
   
