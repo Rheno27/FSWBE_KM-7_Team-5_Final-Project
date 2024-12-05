@@ -2,6 +2,7 @@ import React from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { Row, Col, Card, Form, Button } from "react-bootstrap";
 import "./payment.css"; 
+import { BreadcrumbNav, ReminderBox } from "../../../../components/ProgresBar/custom.jsx";
 
 export const Route = createLazyFileRoute('/users/private/payment/')({
     component: Payment,
@@ -11,18 +12,20 @@ function Payment() {
   return (
     <div className="payment-page">
       <Row className="justify-content-center mt-4">
-        <Col lg={10}>
-          <div className="breadcrumb">
-            <span>Isi Data Diri</span> &gt; <span>Bayar</span> &gt; <span className="inactive">Selesai</span>
-          </div>
-          <div className="alert alert-danger mt-3 text-center" role="alert">
-            Selesaikan Pembayaran sampai 10 Maret 2023 12:00
-          </div>
+        <Col lg={9} md={10}>
+            <BreadcrumbNav
+                items={[
+                    { label: "Isi Data Diri", path: "/users/private/checkout" },
+                    { label: "Bayar", path: "users/private/payment" },
+                    { label: "Selesai"},
+                ]}
+            />
+            <ReminderBox type="error" message="Selesaikan Pembayaran sampai 10 Maret 2023 12:00" />
         </Col>
       </Row>
 
       <Row className="justify-content-center">
-        <Col lg={6} md={8}>
+        <Col lg={6} md={6}>
           <Card className="mb-4 shadow-sm">
             <Card.Body>
               <h5>Isi Data Pembayaran</h5>
@@ -78,7 +81,7 @@ function Payment() {
           </Card>
         </Col>
 
-        <Col lg={4} md={6}>
+        <Col lg={3} md={4}>
           <Card className="shadow-sm">
             <Card.Body>
               <h6>Booking Code: <a href="#" className="booking-code">6723y2GHK</a></h6>
