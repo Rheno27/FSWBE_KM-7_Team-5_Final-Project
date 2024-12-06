@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+.payment-page {
+    background-color: #ffffff;
+    padding: 20px 0;
+    font-family: "Poppins, sans-serif",
+  }
+  
+  .breadcrumb {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #6c757d;
+  }
+  
+  .breadcrumb span.inactive {
+    color: #d3d3d3;
+  }
+  
+  .alert-danger {
+    background-color: #ff4d4d;
+    color: white;
+  }
+  
+  .payment-method {
+    margin-bottom: 20px;
+  }
+  
+  .flight-info {
+    font-size: 0.9rem;
+    color: #333;
+  }
+  
+  .price-details p,
+  .price-details h5 {
+    font-weight: 600;
+  }
+  
+  .booking-code {
+    color: #7b1fa2;
+    font-weight: bold;
+  }
+  

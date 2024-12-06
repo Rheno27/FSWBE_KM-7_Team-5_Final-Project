@@ -4,6 +4,7 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      screens:{phone:"425px"},
       colors: {
         darkblue1: "#E2D4F0",
         darkblue2: "#D0B7E6",

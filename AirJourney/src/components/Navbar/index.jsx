@@ -1,21 +1,22 @@
-import React, { useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import logo from "../../assets/img/logoterbangin.png";
 import Form from "react-bootstrap/Form";
-import { 
-    Search as SearchIcon, 
-    History as HistoryIcon, 
-    PersonOutline as ProfileIcon, 
-    Login as LoginIcon } from "@mui/icons-material";
+import {
+    Search as SearchIcon,
+    History as HistoryIcon,
+    PersonOutline as ProfileIcon,
+    Login as LoginIcon,
+} from "@mui/icons-material";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useQuery } from "@tanstack/react-query";
+import { setUser, setToken } from "../../redux/slices/auth";
 import axios from "axios";
 import NotificationDropdown from "../Notification/dropdown"; 
 import dummyData from "../../data/dummy.json";
-import { setUser, setToken } from "../../redux/slices/auth";
-import logo from "../../assets/img/logoterbangin.png";
+import { useQuery } from "@tanstack/react-query";
 
 const NavigationBar = () => {
     const location = useLocation();
@@ -132,22 +133,24 @@ const NavigationBar = () => {
                                         </button> */}
                                     </>
                                 ) : (
-                                    <Nav.Link
-                                        variant="primary"
-                                        style={{
-                                            backgroundColor: "#7126B5",
-                                            borderRadius: "12px",
-                                            marginRight: "70px",
-                                            color: "white",
-                                        }}
-                                        as={Link}
-                                        to="/login"
-                                    >
-                                        <LoginIcon
-                                            style={{ marginRight: "8px" }}
-                                        />
-                                        Masuk
-                                    </Nav.Link>
+                                    <>
+                                        <Nav.Link
+                                            variant="primary"
+                                            style={{
+                                                backgroundColor: "#7126B5",
+                                                borderRadius: "12px",
+                                                marginRight: "70px",
+                                                color: "white",
+                                            }}
+                                            as={Link}
+                                            to="/login"
+                                        >
+                                            <LoginIcon
+                                                style={{ marginRight: "8px" }}
+                                            />
+                                            Masuk
+                                        </Nav.Link>
+                                    </>
                                 )}
                             </Nav>
                         </Navbar.Collapse>
