@@ -3,7 +3,7 @@ import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Row, Col, Button, Container } from 'react-bootstrap'
 import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
 import { AlertBox } from '../../../../components/ui/alertBox.jsx'
-import paymentSuccess from '../../../../../assets/img/empty_page.png'
+import paymentSuccess from '../../../../assets/img/empty-illust.png'
 
 export const Route = createLazyFileRoute('/users/private/payment/success')({
   component: PaymentSuccess,
