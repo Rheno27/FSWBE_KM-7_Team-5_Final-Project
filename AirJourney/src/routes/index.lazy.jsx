@@ -11,6 +11,7 @@ import DestinationModal from "../components/Modal/DestinationModal";
 import DateModal from "../components/Modal/DateModal";
 import ClassModal from "../components/Modal/ClassModal";
 import PassengerModal from "../components/Modal/PassengerModal";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffect, useState } from "react";
 import dummy from "../data/dummy.json";
 
@@ -26,6 +27,7 @@ function Index() {
     const [showPassengerModal, setShowPassengerModal] = useState(false);
     const [showClassModal, setShowClassModal] = useState(false);
     const [isFormFilled, setIsFormFilled] = useState(true);
+    const loadersCount = [1, 2, 3, 4];
 
     //for search value
     const [destination, setDestination] = useState(1);
@@ -58,7 +60,9 @@ function Index() {
         "Des",
     ];
     const destinationQueryTest = dummy.destination_query;
-    const destinationListTest = dummy.destination_list;
+    const [destinationListTest, setDestinationListTest] = useState(
+        dummy.destination_list
+    );
 
     useEffect(() => {
         setFormData({
@@ -79,34 +83,35 @@ function Index() {
         dataCheck.map((item) => {
             !item && setIsFormFilled(false);
         });
-    }, [
-        fromDestination,
-        toDestination,
-        searchDate,
-        passenger,
-        classType,
-    ]);
+    }, [fromDestination, toDestination, searchDate, passenger, classType]);
 
+    const seedLoader = () => {
+        setTimeout(() => {
+            setDestinationListTest(
+                destinationListTest.concat(dummy.destination_list)
+            );
+        }, 3000);
+    };
     return (
         <div className="flex flex-col items-center">
             {/* banner */}
-            <div className="w-full h-32 flex justify-center relative my-16 bg-gradient-to-r from-darkblue3 to-darkblue2">
-                <div className="w-full max-w-7xl h-60 flex items-center justify-center absolute -top-14">
+            <div className="w-full h-fit flex justify-center relative my-16 mb-24 bg-gradient-to-r from-white to-white md:from-darkblue3 md:to-darkblue3 phone:h-32 phone:mb-16">
+                <div className="w-full max-w-7xl h-fit flex items-center justify-center absolute -top-14 phone:h-60">
                     <img src={banner} />
                 </div>
             </div>
 
             {/* search */}
             <div className="w-full h-64 flex justify-center relative">
-                <div className="w-full max-w-5xl flex justify-between flex-col h-72 -top-16 rounded-xl bg-white border shadow-sm absolute">
-                    <div className="h-full flex flex-col px-8 py-6 gap-3">
+                <div className="w-11/12 max-w-5xl flex justify-between flex-col h-fit -top-16 rounded-xl bg-white border shadow-sm absolute md:w-full">
+                    <div className="h-fit flex flex-col px-8 py-6 gap-3">
                         <div className="font-bold text-xl">
                             Pilih Jadwal Penerbangan spesial di{" "}
                             <span className="text-darkblue5">Terbangin!</span>
                         </div>
-                        <div className="flex flex-col h-full justify-between">
+                        <div className="flex flex-col h-fit justify-between gap-12">
                             {/* destination */}
-                            <div className="flex w-full gap-4 justify-between relative">
+                            <div className="flex flex-col w-full gap-4 justify-between relative sm:flex-row">
                                 <div className="flex items-center flex-1 gap-3">
                                     <FlightTakeoffIcon color="disabled" />
                                     <span className="text-gray-500 w-10">
@@ -167,12 +172,14 @@ function Index() {
                                             setToDestination={setToDestination}
                                             isFromModal={isFromModal}
                                             setIsFromModal={setIsFromModal}
+                                            fromDestination={fromDestination}
+                                            toDestination={toDestination}
                                         />
                                         <div
                                             className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
                                             onClick={() => {
+                                                setIsFromModal(false);
                                                 setShowDestinationModal(false);
-                                                isFromModal(false);
                                             }}
                                         ></div>
                                     </>
@@ -180,14 +187,14 @@ function Index() {
                             </div>
 
                             {/* date & passenger*/}
-                            <div className="flex w-full gap-4 justify-between">
+                            <div className="flex flex-col w-full gap-4 justify-between sm:flex-row">
                                 {/* date */}
-                                <div className="flex items-center flex-1 gap-3 relative">
+                                <div className="flex items-start flex-1 gap-3 relative sm:items-center">
                                     <DateRangeIcon color="disabled" />
                                     <span className="text-gray-500 w-10">
                                         Date
                                     </span>
-                                    <div className="flex flex-1 justify-between">
+                                    <div className="flex flex-col gap-4 flex-1 justify-between md:flex-row phone:gap-0">
                                         <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
                                             <span className="text-gray-500 w-10">
                                                 Departure
@@ -268,19 +275,19 @@ function Index() {
                                 </button>
 
                                 {/* passenger & class */}
-                                <div className="flex items-center flex-1 gap-3">
+                                <div className="flex items-start flex-1 gap-3 md:items-center">
                                     <AirlineSeatReclineNormalIcon color="disabled" />
                                     <span className="text-gray-500 w-10">
                                         To
                                     </span>
-                                    <div className="flex flex-1 justify-between">
+                                    <div className="flex flex-col flex-1 gap-4 justify-between md:flex-row md:gap-0">
                                         {/* passenger */}
                                         <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1 relative">
                                             <span className="text-gray-500 w-10">
                                                 Passengers
                                             </span>
                                             <button
-                                                className="flex-1 text-lg text-start font-semibold"
+                                                className="flex-1 text-lg text-start font-semibold text-nowrap"
                                                 onClick={() =>
                                                     setShowPassengerModal(true)
                                                 }
@@ -364,11 +371,11 @@ function Index() {
             </div>
 
             {/* list */}
-            <div className="w-full max-w-5xl flex flex-col px-8 gap-4">
+            <div className="w-full max-w-5xl flex flex-col px-8 pt-96 mt-16 gap-4 phone:mt-0 sm:pt-24 lg:pt-0 lg:mt-0">
                 {/* query */}
                 <div className="flex flex-col gap-3">
                     <span className="font-bold text-lg">Destinasi Favorit</span>
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 flex-wrap">
                         {destinationQueryTest.map((data) => (
                             <button
                                 key={data?.id}
@@ -384,11 +391,34 @@ function Index() {
                     </div>
                 </div>
                 {/* result */}
-                <div className="flex flex-row gap-8 flex-wrap justify-center">
+                <InfiniteScroll
+                    className="flex flex-row gap-8 flex-wrap justify-center mb-12"
+                    dataLength={destinationListTest.length}
+                    next={seedLoader}
+                    hasMore={true}
+                    loader={loadersCount.map((count) => (
+                        <div
+                            key={count?.id}
+                            className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2 w-72 animate-pulse sm:w-52"
+                        >
+                            <div className="rounded-md overflow-hidden w-full h-28 bg-darkblue1"></div>
+                            <div className="flex flex-col flex-initial gap-2">
+                                <div className="w-full h-4 bg-darkblue1"></div>
+                                <div className="w-full h-4 bg-darkblue1"></div>
+                                <div className="w-full h-4 bg-darkblue1"></div>
+                            </div>
+                        </div>
+                    ))}
+                    endMessage={
+                        <span className="text-slate-500">
+                            Yah, sudah tidak ada lagi
+                        </span>
+                    }
+                >
                     {destinationListTest.map((data) => (
                         <div
                             key={data?.id}
-                            className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2"
+                            className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2 w-72 sm:w-52"
                         >
                             <img
                                 src={data?.picture}
@@ -412,7 +442,7 @@ function Index() {
                             </div>
                         </div>
                     ))}
-                </div>
+                </InfiniteScroll>
             </div>
         </div>
     );
