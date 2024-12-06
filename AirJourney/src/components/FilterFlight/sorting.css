@@ -56,6 +56,10 @@
   color: white;
 }
 
+.sort-option:not(:last-child) {
+  border-bottom: 1px solid #ddd;
+}
+
 .sort-apply-button {
   background-color: #7126b5;
   color: white;

@@ -24,12 +24,16 @@ function Index() {
   return (
     <div>
       <h5
-        className="fw-bold"
-        style={{ marginTop: "40px", marginLeft: "9rem", fontFamily: "Poppins" }}
-      >
-        Detail Penerbangan
-      </h5>
-
+  className="fw-bold row justify-content-center"
+  style={{
+    marginTop: "40px", 
+    fontFamily: "Poppins",
+  }}
+>
+  <div className="col-12 col-md-9 text-start">
+    Pilih Penerbangan
+  </div>
+</h5>
       <Header />
 
       {/* Sold Out */}
@@ -43,22 +47,28 @@ function Index() {
           <h3 style={{ fontFamily: "Poppins", color: "#555" }}>Tickets Sold Out</h3>
         </div>
       ) : (
-        <div className="row mt-4">
-          {/* Sorting Button */}
-          <div className="col-12 d-flex justify-content-end mb-3">
-            <SortingButton
-              selectedSort={selectedSort}
-              onSortChange={handleSortChange}
-            />
+        <div className="container mt-4">
+          {/* Sorting Button aligned to the right */}
+          <div className="row mb-3">
+            <div className="col-12 d-flex justify-content-end">
+              <SortingButton
+                selectedSort={selectedSort}
+                onSortChange={handleSortChange}
+              />
+            </div>
           </div>
 
-          {/* Sidebar and Flight List */}
-          <div className="col-md-3" style={{ top: "10px" }}>
-            <Sidebar />
-          </div>
+          {/* Sidebar and Flight List container */}
+          <div className="row d-flex justify-content-center">
+            {/* Sidebar (on top for mobile) */}
+            <div className="col-12 col-md-4 mb-4 mb-md-0">
+              <Sidebar />
+            </div>
 
-          <div className="col-md-9">
-            <FlightList flights={data.flight} airlines={data.airlane} />
+            {/* Flight List */}
+            <div className="col-12 col-md-8">
+              <FlightList flights={data.flight} airlines={data.airlane} />
+            </div>
           </div>
         </div>
       )}
