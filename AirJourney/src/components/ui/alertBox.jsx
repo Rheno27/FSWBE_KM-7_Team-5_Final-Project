@@ -10,13 +10,11 @@ export const AlertBox = ({ message, type = "info" }) => {
 
   const alertBox = {
       backgroundColor: alertVariant.bgColor,
-      fontFamily: "Poppins, sans-serif",
-      fontSize: "0.9rem",
       color: alertVariant.textColor,
+      fontSize: "1rem",
       textAlign: 'center',
       borderRadius: '12px',
       padding: '10px',
-      margin: '0 10px'
   };
 
   return (

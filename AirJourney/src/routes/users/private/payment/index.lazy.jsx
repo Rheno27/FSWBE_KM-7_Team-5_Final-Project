@@ -3,17 +3,16 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Row, Col, Card, Form, Button, Container } from 'react-bootstrap'
 import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
 import { AlertBox } from '../../../../components/ui/alertBox.jsx'
-import styles from './payment.module.css'
 
 export const Route = createLazyFileRoute('/users/private/payment/')({
   component: Payment,
 })
-
+ 
 function Payment() {
   return (
-    <div className="payment-page">
-      <Row className="justify-content-center mt-2 mb-4 py-3 shadow-sm">
-        <Col lg={9} md={10}>
+    <div>
+      <Row className="justify-content-center mt-2 mb-4 p-3 shadow-sm">
+        <Col lg={10} md={10} sm={12}>
           <BreadcrumbNav
             items={[
               { label: 'Isi Data Diri', path: '/users/private/checkout' },
@@ -28,11 +27,11 @@ function Payment() {
         </Col>
       </Row>
       <Container>
-        <Row className="justify-content-center my-4">
+        <Row className="justify-content-center my-5">
           <Col lg={6} md={6} className="mb-4">
             <Card.Body>
-              <h5>Isi Data Pembayaran</h5>
-              <div className="payment-method">
+              <h4>Isi Data Pembayaran</h4>
+              <div className="my-3">
                 <Form.Select className="mb-3">
                   <option>Gopay</option>
                 </Form.Select>
@@ -86,12 +85,12 @@ function Payment() {
           <Col lg={4} md={5}>
             <h6>
               Booking Code:{' '}
-              <a href="#" className="booking-code">
+              <a href="#">
                 6723y2GHK
               </a>
             </h6>
 
-            <div className="flight-info mt-4">
+            <div className="mt-4">
               <Row>
                 <Col xs={8}>
                   <div>
@@ -144,15 +143,15 @@ function Payment() {
               <hr />
             </div>
 
-            <div className="price-details mt-4">
+            <div className="mt-4">
               <p>
-                2 Adults <span className="float-end">IDR 9.550.000</span> <br />
-                1 Baby <span className="float-end">IDR 0</span> <br />
-                Tax <span className="float-end">IDR 300.000</span>
+                2 Adults <span>IDR 9.550.000</span> <br />
+                1 Baby <span>IDR 0</span> <br />
+                Tax <span>IDR 300.000</span>
               </p>
               <hr />
               <h5>
-                Total <span className="float-end">IDR 9.850.000</span>
+                Total <span>IDR 9.850.000</span>
               </h5>
             </div>
           </Col>
