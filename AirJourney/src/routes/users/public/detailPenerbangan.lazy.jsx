@@ -1,70 +1,79 @@
-import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
-import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai'; // For sorting icons
-import { createLazyFileRoute } from '@tanstack/react-router';
-import FlightList from '../../../components/FlightList';
-import Sidebar from '../../../components/Sidebar';
-import Header from '../../../components/Header';
-import data from '../../../data/dummy.json';
+import React, { useState } from "react";
+import { createLazyFileRoute } from "@tanstack/react-router";
+import FlightList from "../../../components/FlightList";
+import Sidebar from "../../../components/Sidebar";
+import Header from "../../../components/Header";
+import SoldOutImage from "../../../assets/img/soldout.png";
+import SortingButton from "../../../components/FilterFlight/index";
+import data from "../../../data/dummy.json";
 
-export const Route = createLazyFileRoute('/users/public/detailPenerbangan')({
+export const Route = createLazyFileRoute("/users/public/detailPenerbangan")({
   component: Index,
 });
 
 function Index() {
-  const [isAsc, setIsAsc] = useState(true); // For toggle sorting
+  const [selectedSort, setSelectedSort] = useState("Harga - Termurah");
 
-  const toggleSort = () => {
-    setIsAsc(!isAsc); // Toggle between ascending and descending
+  const handleSortChange = (option) => {
+    setSelectedSort(option.label);
+    // Implement your sorting logic here
   };
+
+  const isSoldOut = data.flight.length > 0 && data.flight.every((flight) => flight.availableSeats === 0);
 
   return (
     <div>
-      {/* Page Title */}
-      <h5 className="fw-bold" style={{ marginTop: '40px', marginLeft: '9rem' }}>
-        Detail Penerbangan
-      </h5>
-
-      {/* Header */}
+      <h5
+  className="fw-bold row justify-content-center"
+  style={{
+    marginTop: "40px", 
+    fontFamily: "Poppins",
+  }}
+>
+  <div className="col-12 col-md-9 text-start">
+    Pilih Penerbangan
+  </div>
+</h5>
       <Header />
 
-      {/* Main Content */}
-      <div className="row mt-4">
-        {/* Sorting Button (placed above Sidebar and Flight List) */}
-        <div className="col-12 d-flex justify-content-end mb-3">
-          <Button
-            variant="outline-primary"
-            onClick={toggleSort}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              borderRadius: '20px',
-              color: '#7126b5',
-              borderColor: '#7126b5',
-              padding: '10px 20px',
-              marginRight: '9rem',
-              marginBottom: '1rem',
-            }}
-          >
-            {isAsc ? (
-              <AiOutlineArrowDown style={{ marginRight: '8px' }} />
-            ) : (
-              <AiOutlineArrowUp style={{ marginRight: '8px' }} />
-            )}
-            Termurah
-          </Button>
+      {/* Sold Out */}
+      {isSoldOut ? (
+        <div className="text-center">
+          <img
+            src={SoldOutImage}
+            alt="Tickets Sold Out"
+            style={{ maxWidth: "400px", height: "auto" }}
+          />
+          <h3 style={{ fontFamily: "Poppins", color: "#555" }}>Tickets Sold Out</h3>
         </div>
+      ) : (
+        <div className="container mt-4">
+          {/* Sorting Button aligned to the right */}
+          <div className="row mb-3">
+            <div className="col-12 d-flex justify-content-end">
+              <SortingButton
+                selectedSort={selectedSort}
+                onSortChange={handleSortChange}
+              />
+            </div>
+          </div>
 
-        {/* Sidebar and Flight List */}
-        <div className="col-md-3" style={{ top: '10px' }}>
-          <Sidebar />
-        </div>
+          {/* Sidebar and Flight List container */}
+          <div className="row d-flex justify-content-center">
+            {/* Sidebar (on top for mobile) */}
+            <div className="col-12 col-md-4 mb-4 mb-md-0">
+              <Sidebar />
+            </div>
 
-        <div className="col-md-9">
-          {/* Flight List Component */}
-          <FlightList flights={data.flight} airlines={data.airlane} isAsc={isAsc} />
+            {/* Flight List */}
+            <div className="col-12 col-md-8">
+              <FlightList flights={data.flight} airlines={data.airlane} />
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
+
+export default Index;
