@@ -135,7 +135,7 @@ const NavigationBar = () => {
                                             />
                                         </Nav.Link>
                                         <NotificationDropdown notifications={notifications} />
-                                        <Nav.Link as={Link} to="/users/private/profile">
+                                        <Nav.Link as={Link} to="/users/private/profile/id">
                                             <ProfileIcon
                                                 style={{ marginRight: '8px' }}
                                             />
