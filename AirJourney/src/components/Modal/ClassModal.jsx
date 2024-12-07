@@ -26,7 +26,7 @@ const ClassModal = ({ setShowClassModal, classType, setClassType }) => {
                             className={`flex items-center justify-between border-b rounded-lg py-2 px-4 ${classType == item.name ? "bg-darkblue5 text-white" : ""}`}
                             onClick={() => setClassType(item.name)}
                         >
-                            <div className="flex flex-col text-left">
+                            <div className="flex flex-col text-left w-36 sm:w-52">
                                 <span className="font-bold">{item.name}</span>
                                 <span
                                     className={

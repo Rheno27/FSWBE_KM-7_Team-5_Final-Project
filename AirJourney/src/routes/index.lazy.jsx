@@ -13,6 +13,8 @@ import ClassModal from "../components/Modal/ClassModal";
 import PassengerModal from "../components/Modal/PassengerModal";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import dummy from "../data/dummy.json";
 
 export const Route = createLazyFileRoute("/")({
@@ -27,16 +29,20 @@ function Index() {
     const [showPassengerModal, setShowPassengerModal] = useState(false);
     const [showClassModal, setShowClassModal] = useState(false);
     const [isFormFilled, setIsFormFilled] = useState(true);
+    const [isHasMore, setIsHasMore] = useState(true);
+    const [isInitialized, setIsInitialized] = useState(false);
     const loadersCount = [1, 2, 3, 4];
 
     //for search value
-    const [destination, setDestination] = useState(1);
+    const [destination, setDestination] = useState("ALL");
     const [fromDestination, setFromDestination] = useState("Jakarta");
     const [toDestination, setToDestination] = useState("Inti Bumi");
     const [searchDate, setSearchDate] = useState(new Date());
     const [passenger, setPassenger] = useState({ adult: 1, child: 0, baby: 0 });
     const [classType, setClassType] = useState("Economy");
 
+    // data
+    const [destinationList, setDestinationList] = useState([]);
     const [formData, setFormData] = useState({
         fromDestination,
         toDestination,
@@ -44,6 +50,16 @@ function Index() {
         passenger,
         classType,
     });
+
+    const CONTINENT = [
+        { id: "ALL", name: "Semua" },
+        { id: "ASIA", name: "Asia" },
+        { id: "EUROPE", name: "Eropa" },
+        { id: "NORTH_AMERICA", name: "Amerika Utara" },
+        { id: "SOUTH_AMERICA", name: "Amerika Selatan" },
+        { id: "AUSTRALIA", name: "Australia" },
+        { id: "ANTARCTICA", name: "Antartika" },
+    ];
 
     const month = [
         "Jan",
@@ -59,10 +75,6 @@ function Index() {
         "Nov",
         "Des",
     ];
-    const destinationQueryTest = dummy.destination_query;
-    const [destinationListTest, setDestinationListTest] = useState(
-        dummy.destination_list
-    );
 
     useEffect(() => {
         setFormData({
@@ -85,13 +97,44 @@ function Index() {
         });
     }, [fromDestination, toDestination, searchDate, passenger, classType]);
 
-    const seedLoader = () => {
-        setTimeout(() => {
-            setDestinationListTest(
-                destinationListTest.concat(dummy.destination_list)
-            );
-        }, 3000);
+    const seedLoader = (destinationQuery, isDestinationChanged) => {
+        setIsHasMore(true);
+        const params = {};
+
+        if (destination != "ALL") {
+            params.continent = destinationQuery || destination;
+        }
+        if (isDestinationChanged) {
+            setDestinationList([]);
+        } else if (destinationList.length > 0) {
+            params.cursorId = destinationList[destinationList.length - 1].id;
+        }
+
+        axios
+            .get(`${import.meta.env.VITE_API_URL}/flights`, { params })
+            .then((res) => {
+                isDestinationChanged
+                    ? setDestinationList(res.data.data)
+                    : setDestinationList([
+                          ...destinationList,
+                          ...res.data.data,
+                      ]);
+                if (res.data.data.length < 3) {
+                    setIsHasMore(false);
+                }
+            });
     };
+    
+    useEffect(() => {
+        if (isInitialized) {
+            seedLoader(destination, true);
+            console.log(destination + " from useeffect");
+        } else {
+            setIsInitialized(true);
+        }
+    }, [destination]);
+
+
     return (
         <div className="flex flex-col items-center">
             {/* banner */}
@@ -375,8 +418,8 @@ function Index() {
                 {/* query */}
                 <div className="flex flex-col gap-3">
                     <span className="font-bold text-lg">Destinasi Favorit</span>
-                    <div className="flex gap-4 flex-wrap">
-                        {destinationQueryTest.map((data) => (
+                    <div className="flex gap-x-4 gap-y-4 flex-wrap">
+                        {CONTINENT.map((data) => (
                             <button
                                 key={data?.id}
                                 onClick={() => {
@@ -393,9 +436,9 @@ function Index() {
                 {/* result */}
                 <InfiniteScroll
                     className="flex flex-row gap-8 flex-wrap justify-center mb-12"
-                    dataLength={destinationListTest.length}
-                    next={seedLoader}
-                    hasMore={true}
+                    dataLength={destinationList.length}
+                    next={()=>{seedLoader();console.log("from infinite")}}
+                    hasMore={isHasMore}
                     loader={loadersCount.map((count) => (
                         <div
                             key={count?.id}
@@ -410,38 +453,46 @@ function Index() {
                         </div>
                     ))}
                     endMessage={
-                        <span className="text-slate-500">
-                            Yah, sudah tidak ada lagi
+                        <span className="text-slate-500 w-screen text-center">
+                            {destinationList.length
+                                ? "Tidak ada destinasi lagi"
+                                : "Tidak ada destinasi"}
                         </span>
                     }
                 >
-                    {destinationListTest.map((data) => (
-                        <div
-                            key={data?.id}
-                            className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2 w-72 sm:w-52"
-                        >
-                            <img
-                                src={data?.picture}
-                                alt=""
-                                className="rounded-md overflow-hidden w-full h-28"
-                            />
-                            <div className="flex flex-col flex-initial">
-                                <p className="font-medium">
-                                    {data?.from} {"->"} {data?.to}
-                                </p>
-                                <p className="font-bold text-sm text-darkblue4">
-                                    {data?.airline}
-                                </p>
-                                <p className="text-sm">{data?.date}</p>
-                                <p className="">
-                                    Mulai dari{" "}
-                                    <span className="font-bold text-[#FF0000]">
-                                        IDR {data?.price}
-                                    </span>
-                                </p>
+                    {destinationList.length > 0 &&
+                        destinationList.map((data) => (
+                            <div
+                                key={data?.id}
+                                className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2 w-72 sm:w-52"
+                            >
+                                <img
+                                    src={data?.picture}
+                                    alt=""
+                                    className="rounded-md overflow-hidden w-full h-32"
+                                />
+                                <div className="flex flex-col flex-initial justify-between h-28">
+                                    <p className="font-medium">
+                                        {data?.airportFrom.city} {"->"}{" "}
+                                        {data?.airportTo.city}
+                                    </p>
+                                    <div>
+                                        <p className="font-bold text-sm text-darkblue4">
+                                            {data?.airline.name}
+                                        </p>
+                                        <p className="text-sm">
+                                            {data?.departureDate.split("T")[0]}
+                                        </p>
+                                        <p className="">
+                                            Mulai dari{" "}
+                                            <span className="font-bold text-[#FF0000]">
+                                                IDR {data?.price}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
                 </InfiniteScroll>
             </div>
         </div>
