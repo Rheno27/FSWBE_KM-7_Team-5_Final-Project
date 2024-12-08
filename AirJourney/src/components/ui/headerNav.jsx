@@ -9,15 +9,24 @@ export const HeaderNav = () => {
   // State for modals visibility
   const [isDateModalOpen, setDateModalOpen] = useState(false);
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
-  const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
+  const [position, setPosition] = useState({ top: 0, left: 0 });
   const buttonRef = useRef(null);
 
   // Handlers to show modals
-  const handleSearchModalShow = () => setSearchModalOpen(true);
+  const handleSearchModalShow = () => {
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setPosition({
+        top: rect.bottom + window.scrollY + 10, // Offset below the button
+        left: rect.left + rect.width / 2 - 150, // Centered (assuming modal width is 300px)
+      });
+    }
+    setSearchModalOpen(!isSearchModalOpen)
+  };
   const handleDateModalShow = () => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      setModalPosition({
+      setPosition({
         top: rect.bottom + window.scrollY + 10, // Offset below the button
         left: rect.left + rect.width / 2 - 150, // Centered (assuming modal width is 300px)
       });
@@ -84,6 +93,7 @@ export const HeaderNav = () => {
                 Filter
             </Button>
             <Search
+            ref={buttonRef}
             onClick={handleSearchModalShow}
                 fontSize="large"
                 sx={{
@@ -99,13 +109,16 @@ export const HeaderNav = () => {
             isOpen={isDateModalOpen}
             onClose={dateModalClose}
             position={{
-              top: `${modalPosition.top}px`,
-              left: `${modalPosition.left}px`,
+              top: `${position.top}px`,
+              left: `${position.left}px`,
             }}
           />
 
           {/* Search Modal */}
-          <SearchModal show={isSearchModalOpen} onHide={searchModalClose} />
+          <SearchModal isOpen={isSearchModalOpen} onClose={searchModalClose} position={{
+              top: `${position.top}px`,
+              left: `${position.left}px`,
+            }} />
         </Row>
       </Col>
     </Row>

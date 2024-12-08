@@ -40,7 +40,7 @@ const DateFilterModal = ({isOpen, onClose, position}) => {
             <p>Please select a date</p>
           )}
         </div>
-          <button onClick={handleSave} className="save-button justify-content-end">Simpan</button>
+          <button onClick={handleSave} className="save-button d-flex justify-content-end">Simpan</button>
         </div>
       </div>
     </>
