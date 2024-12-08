@@ -127,6 +127,8 @@ const Header = ({ flights = [], onFilteredFlightsChange }) => {
 
         {/* Empty columns 10-12 */}
         <div style={{ gridColumn: "11 / 13" }}></div>
+        {/* Empty columns 10-12 */}
+        <div style={{ gridColumn: "11 / 13" }}></div>
       </div>
 
       {/* Row 2: Date Selector */}

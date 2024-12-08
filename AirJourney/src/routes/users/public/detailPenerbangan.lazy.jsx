@@ -97,7 +97,7 @@ function Index() {
     if (loaderRef.current) {
       const rect = loaderRef.current.getBoundingClientRect();
       if (rect.top <= window.innerHeight && !loading && hasMore) {
-        setLoading(true); 
+        setLoading(true);
         fetchFlightsData(); 
       }
     }
@@ -172,16 +172,14 @@ function Index() {
           <div className="col-12 col-md-4 mb-4 mb-md-0">
             <Sidebar />
           </div>
-
+          
           <div className="col-12 col-md-8">
             <FlightList filteredFlights={filteredFlights} />
-
             {loading && (
               <div className="text-center mt-3">
                 <span>Loading...</span>
               </div>
             )}
-
             <div ref={loaderRef} style={{ height: "1px" }}></div>
           </div>
         </div>
