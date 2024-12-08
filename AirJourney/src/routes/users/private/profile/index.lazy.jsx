@@ -25,6 +25,13 @@ function EditProfile() {
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
 
+  useEffect(() => {
+    if (!token) {
+      
+      navigate({ to: '/' })
+    }
+  }, [token, navigate])
+
   const handleLogout = useCallback(
     (event) => {
       localStorage.removeItem('token')
@@ -36,9 +43,11 @@ function EditProfile() {
   )
 
   const { data: user, isSuccess, isError } = useQuery({
-    queryKey: ['user'],
+    queryKey: ['user', token],
     queryFn: getUser,
     enabled: !!token,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   })
 
   const { mutate: userUpdate, isPending: isUpdating } = useMutation({
