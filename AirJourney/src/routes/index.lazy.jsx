@@ -13,44 +13,59 @@ import ClassModal from "../components/Modal/ClassModal";
 import PassengerModal from "../components/Modal/PassengerModal";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import dummy from "../data/dummy.json";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    setFromDestinationRedux,
+    setToDestinationRedux,
+    setSearchDateRedux,
+    setPassengerRedux,
+    setClassTypeRedux,
+    setIsReturnRedux,
+} from "../redux/slices/searchQuery";
 
 export const Route = createLazyFileRoute("/")({
     component: Index,
 });
 function Index() {
+    const dispatch = useDispatch();
     // for component state
-    const [isReturn, setIsReturn] = useState(false);
+    const [isReturn, setIsReturn] = useState(
+        useSelector((state) => state.searchQuery.isReturn) || false
+    );
     const [showDestinationModal, setShowDestinationModal] = useState(false);
     const [isFromModal, setIsFromModal] = useState(false);
     const [showDateModal, setShowDateModal] = useState(false);
     const [showPassengerModal, setShowPassengerModal] = useState(false);
     const [showClassModal, setShowClassModal] = useState(false);
-    const [isFormFilled, setIsFormFilled] = useState(true);
     const [isHasMore, setIsHasMore] = useState(true);
     const [isInitialized, setIsInitialized] = useState(false);
     const loadersCount = [1, 2, 3, 4];
 
     //for search value
     const [destination, setDestination] = useState("ALL");
-    const [fromDestination, setFromDestination] = useState("Jakarta");
-    const [toDestination, setToDestination] = useState("Inti Bumi");
-    const [searchDate, setSearchDate] = useState(new Date());
-    const [passenger, setPassenger] = useState({ adult: 1, child: 0, baby: 0 });
-    const [classType, setClassType] = useState("Economy");
+    const [fromDestination, setFromDestination] = useState(
+        useSelector((state) => state.searchQuery.fromDestination) || "Jakarta"
+    );
+    const [toDestination, setToDestination] = useState(
+        useSelector((state) => state.searchQuery.toDestination) || "Inti Bumi"
+    );
+    const [searchDate, setSearchDate] = useState(
+        useSelector((state) => state.searchQuery.searchDate) || new Date()
+    );
+    const [passenger, setPassenger] = useState(
+        useSelector((state) => state.searchQuery.passenger) || {
+            adult: 1,
+            child: 0,
+            baby: 0,
+        }
+    );
+    const [classType, setClassType] = useState(
+        useSelector((state) => state.searchQuery.classType) || "Economy"
+    );
 
     // data
     const [destinationList, setDestinationList] = useState([]);
-    const [formData, setFormData] = useState({
-        fromDestination,
-        toDestination,
-        searchDate,
-        passenger,
-        classType,
-    });
-
     const CONTINENT = [
         { id: "ALL", name: "Semua" },
         { id: "ASIA", name: "Asia" },
@@ -60,8 +75,7 @@ function Index() {
         { id: "AUSTRALIA", name: "Australia" },
         { id: "ANTARCTICA", name: "Antartika" },
     ];
-
-    const month = [
+    const MONTH = [
         "Jan",
         "Feb",
         "Mar",
@@ -76,27 +90,16 @@ function Index() {
         "Des",
     ];
 
-    useEffect(() => {
-        setFormData({
-            fromDestination,
-            toDestination,
-            searchDate,
-            passenger,
-            classType,
-        });
-        const dataCheck = [
-            fromDestination,
-            toDestination,
-            searchDate,
-            passenger.adult + passenger.child + passenger.baby,
-            classType,
-        ];
-        setIsFormFilled(true);
-        dataCheck.map((item) => {
-            !item && setIsFormFilled(false);
-        });
-    }, [fromDestination, toDestination, searchDate, passenger, classType]);
+    const searchClickHandler = () => {
+        dispatch(setFromDestinationRedux(fromDestination));
+        dispatch(setToDestinationRedux(toDestination));
+        dispatch(setSearchDateRedux(searchDate));
+        dispatch(setPassengerRedux(passenger));
+        dispatch(setClassTypeRedux(classType));
+        dispatch(setIsReturnRedux(isReturn));
+    };
 
+    // for infinite scroll
     const seedLoader = (destinationQuery, isDestinationChanged) => {
         setIsHasMore(true);
         const params = {};
@@ -124,16 +127,14 @@ function Index() {
                 }
             });
     };
-    
+
     useEffect(() => {
         if (isInitialized) {
             seedLoader(destination, true);
-            console.log(destination + " from useeffect");
         } else {
             setIsInitialized(true);
         }
     }, [destination]);
-
 
     return (
         <div className="flex flex-col items-center">
@@ -249,8 +250,8 @@ function Index() {
                                                 }
                                             >
                                                 {isReturn && searchDate.from > 1
-                                                    ? `${searchDate.from.getDate()} - ${month[searchDate.from.getMonth()]} - ${searchDate.from.getFullYear()}`
-                                                    : `${searchDate.getDate()} - ${month[searchDate.getMonth()]} - ${searchDate.getFullYear()}`}
+                                                    ? `${searchDate.from.getDate()} - ${MONTH[searchDate.from.getMonth()]} - ${searchDate.from.getFullYear()}`
+                                                    : `${searchDate.getDate()} - ${MONTH[searchDate.getMonth()]} - ${searchDate.getFullYear()}`}
                                             </button>
                                         </div>
                                         <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
@@ -284,7 +285,7 @@ function Index() {
                                                 >
                                                     {isReturn &&
                                                     searchDate.to > 1
-                                                        ? `${searchDate.to.getDate()} - ${month[searchDate.to.getMonth()]} - ${searchDate.to.getFullYear()}`
+                                                        ? `${searchDate.to.getDate()} - ${MONTH[searchDate.to.getMonth()]} - ${searchDate.to.getFullYear()}`
                                                         : `Pilih Tanggal`}
                                                 </span>
                                             </button>
@@ -405,8 +406,8 @@ function Index() {
                         </div>
                     </div>
                     <button
-                        className="py-2.5 bg-darkblue4 text-white font-semibold rounded-b-xl disabled:bg-darkblue3"
-                        disabled={!isFormFilled}
+                        className="py-2.5 bg-darkblue4 text-white font-semibold rounded-b-xl"
+                        onClick={searchClickHandler}
                     >
                         Cari Penerbangan
                     </button>
@@ -437,7 +438,10 @@ function Index() {
                 <InfiniteScroll
                     className="flex flex-row gap-8 flex-wrap justify-center mb-12"
                     dataLength={destinationList.length}
-                    next={()=>{seedLoader();console.log("from infinite")}}
+                    next={() => {
+                        seedLoader();
+                        console.log("from infinite");
+                    }}
                     hasMore={isHasMore}
                     loader={loadersCount.map((count) => (
                         <div
