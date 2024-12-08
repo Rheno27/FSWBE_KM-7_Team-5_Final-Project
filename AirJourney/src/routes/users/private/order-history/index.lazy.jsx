@@ -21,7 +21,7 @@ function OrderHistory() {
     color: "white",
     textAlign: "center",
     borderRadius: "20px",
-    padding: "5px 10px",
+    padding: "4px 10px",
     width: "fit-content",
   };
 
@@ -35,19 +35,19 @@ function OrderHistory() {
       <HeaderNav />
       <Container>
         {transactions.map((transaction) => (
-          <Row key={transaction.id} className="justify-content-center my-4">
-            <Col lg={6} md={6} className="mb-4">
+          <Row key={transaction.id} className="justify-content-center gap-3 my-4">
+            <Col lg={6} md={6}>
             <span><strong>Desember 2024</strong></span>
-              <Card className="p-3 shadow-sm rounded-3 mt-2">
+              <Card className="p-3 shadow-sm rounded-3 mt-2 w-100">
                 {payments.map((payment) => (
-                  <div key={payment.id} className="payment-card">
+                  <div key={payment.id}>
                     <Alert variant="filled" style={statusBadge}>
                       {capitalizeFirstLetter(payment.status)}
                     </Alert>
                   </div>
                 ))}
-                <Row className="align-items-center mt-2 fs-8">
-                  <Col xs={1} className="ps-2 m-0">
+                <Row className="align-items-center fs-8">
+                  <Col xs={1} className="m-0">
                     <Place color="secondary" />
                   </Col>
                   <Col xs={3} className="p-0 m-0">
@@ -57,7 +57,7 @@ function OrderHistory() {
                     <br />
                     <span>12.00</span>
                   </Col>
-                  <Col xs={4} className="p-0 m-0 text-center">
+                  <Col xs={4} className="p-0 m-0 text-center px-2">
                     <span className="pe-3 text-muted">4h 1m</span>
                     <br />
                     <svg width="100%" height="24" viewBox="0 0 160 24">
@@ -74,7 +74,7 @@ function OrderHistory() {
                       <polygon points="140,12 130,6 130,18" fill="#7126b4" />
                     </svg>
                   </Col>
-                  <Col xs={1} className="ps-2 m-0">
+                  <Col xs={1} className="m-0">
                     <Place color="secondary" />
                   </Col>
                   <Col xs={3} className="p-0 m-0">
@@ -104,7 +104,8 @@ function OrderHistory() {
                 </Row>
               </Card>
             </Col>
-            <Col lg={4} md={5}>
+            <Col lg={4} md={5} className="mt-4">
+              <Card className="p-3 shadow-sm rounded-3 mt-1 w-100">
               <Form>
                 {payments.map((payment) => (
                   <Row key={payment.id}>
@@ -120,14 +121,13 @@ function OrderHistory() {
                 ))}
                 <h6>
                   Booking Code:{' '}
-                  <a href="#" className="booking-code">
+                  <a href="#" className="booking-code mb-2">
                     6723y2GHK
                   </a>
                 </h6>
-
-                <div className="flight-info mt-4">
+                <div className="flight-info">
                   <Row>
-                    <Col xs={8}>
+                    <Col xs={7}>
                       <div>
                         <span>
                           <strong>07:00</strong>
@@ -136,7 +136,7 @@ function OrderHistory() {
                         <span>3 Maret 2023</span>
                       </div>
                     </Col>
-                    <Col xs={4} className="text-end align-self-start">
+                    <Col xs={5} className="text-end align-self-start">
                       <p className="text-muted">Keberangkatan</p>
                     </Col>
                     <span>Soekarno Hatta - Terminal 1A Domestik</span>
@@ -209,6 +209,7 @@ function OrderHistory() {
                   </span>
                 </Button>
               </Form>
+              </Card>
             </Col>
           </Row>
         ))}
