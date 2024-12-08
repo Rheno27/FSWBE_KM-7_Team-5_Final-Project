@@ -1,10 +1,8 @@
 import React from "react";
 import "./FlightList.css";
 import { Accordion, Button, Row, Col, Container } from "react-bootstrap";
-import Card from 'react-bootstrap/Card';
 import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 import Card from 'react-bootstrap/Card';
-import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 import logo from "../../assets/img/Thumbnail.png";
 import koper from "../../assets/img/koper.png";
 import noDataImage from "../../assets/img/notfound.png"; 
