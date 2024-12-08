@@ -27,8 +27,9 @@ function CustomToggle({ eventKey }) {
   );
 }
 
-const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
-  if (flights.length === 0) {
+const FlightList = ({ filteredFlights }) => {
+  // No Flights Data
+  if (!Array.isArray(filteredFlights) || filteredFlights.length === 0) {
     return (
       <div className="no-data-container text-center">
         <img
@@ -42,10 +43,8 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
 
   return (
     <Accordion className="flight-list">
-      {flights.map((flight, index) => {
-        const airline = airlines?.find((airline) => airline.id === flight.airline_id) ?? {};
-        const originAirport = airports?.find((airport) => airport.id === flight.airport_id_from) ?? {};
-        const destinationAirport = airports?.find((airport) => airport.id === flight.airport_id_to) ?? {};
+      {filteredFlights.map((flight, index) => {
+        const { airline, airportFrom, airportTo } = flight;
 
         return (
           <Accordion.Item eventKey={index.toString()} key={index} className="flight-card px-3 py-2">
@@ -59,7 +58,7 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
                     style={{ maxWidth: "50px" }}
                   />
                   <h6 className="mb-0 fw-bold text-truncate" style={{ marginLeft: "10px" }}>
-                    {airline.name ?? "Unknown Airline"} - {flight?.class ?? "Economy"}
+                    {airline?.name ?? "Unknown Airline"} - {flight.class ?? "Economy"}
                   </h6>
                 </Col>
                 <Col xs={4} sm={4} className="text-end">
@@ -70,27 +69,27 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
               <Row className="mt-3 align-items-center">
                 <Col xs={12} md={9}>
                   <Row>
-                    <Col xs={4} className="text-center">
-                      <h6 className="fw-bold mb-0">{flight?.departure_time ?? "00:00"}</h6>
-                      <small>{originAirport.code ?? "JKT"}</small>
+                    <Col xs={2} className="text-center">
+                      <h6 className="fw-bold mb-0">{flight.departureTime ?? "00:00"}</h6>
+                      <small>{airportFrom?.code ?? "JKT"}</small>
                     </Col>
-                    <Col xs={3} className="text-center">
-                      <small className="text-muted">{flight?.duration ?? "N/A"}</small>
+                    <Col xs={7} className="text-center">
+                      <small className="text-muted">{flight.duration ?? "N/A"} minutes</small>
                       <hr className="m-1" />
-                      <small>{flight?.description ?? "Direct"}</small>
+                      <small>{flight.description ?? "Direct"}</small>
                     </Col>
-                    <Col xs={4} className="text-center">
-                      <h6 className="fw-bold mb-0">{flight?.arrival_time ?? "00:00"}</h6>
-                      <small>{destinationAirport.code ?? "MLB"}</small>
+                    <Col xs={2} className="text-center">
+                      <h6 className="fw-bold mb-0">{flight.arrivalTime ?? "00:00"}</h6>
+                      <small>{airportTo?.code ?? "MLB"}</small>
                     </Col>
                     <Col xs={1} className="text-center">
-                      <img src={koper} alt="Koper Logo" className="img-fluid"/>
+                      <img src={koper} alt="Koper Logo" className="img-fluid" />
                     </Col>
                   </Row>
                 </Col>
                 <Col xs={12} md={3} className="text-md-end mt-3 mt-md-0">
                   <h6 className="fw-bold text-purple mb-2" style={{ color: "#7126B5" }}>
-                    {flight?.price ? (
+                    {flight.price ? (
                       <>
                         <span>IDR </span>
                         <span>{flight.price.toLocaleString("id-ID")}</span>
@@ -107,27 +106,26 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
                 </Col>
               </Row>
             </Card.Header>
-            <div >
+            <div>
               <Accordion.Collapse className="flight-details" eventKey={index.toString()}>
                 <Container>
                   <h6 className="text-purple mb-3 fw-bold">Detail Penerbangan</h6>
                   <Row className="align-items-start mb-4">
                     <Col>
-                      <h6 className="fw-bold mb-0">{flight?.departure_time ?? "00:00"}</h6>
-                      <small>{flight?.date ?? "N/A"}</small>
+                      <h6 className="fw-bold mb-0">{flight.departureTime ?? "00:00"}</h6>
+                      <small>{new Date(flight.departureDate).toLocaleDateString("en-CA") ?? "N/A"}</small>
                       <br />
-                      <small>{originAirport.name ?? "Unknown Origin"} - Terminal {flight?.terminal ?? "N/A"}</small>
+                      <small>{airportFrom?.name ?? "Unknown Origin"} - Terminal {flight.terminal ?? "N/A"}</small>
                     </Col>
                     <Col xs="auto" className="text-end">
                       <small className="text-purple fw-bold">Keberangkatan</small>
                     </Col>
                   </Row>
                   <hr />
-                  {/* Informasi Section */}
                   <Row className="align-items-center mb-4">
                     <Col xs="auto" className="text-start">
                       <img
-                        src={logo} 
+                        src={logo}
                         alt="Informasi Icon"
                         className="informasi-icon img-fluid"
                         style={{ maxWidth: "40px" }}
@@ -135,9 +133,9 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
                     </Col>
                     <Col>
                       <h6 className="fw-bold mb-1">
-                        {airline.name ?? "Jet Air"} - {flight?.class ?? "Economy"}
+                        {airline?.name ?? "Jet Air"} - {flight.class ?? "Economy"}
                       </h6>
-                      <small>{flight?.flight_number ?? "JT-203"}</small>
+                      <small>{flight.flight_number ?? "JT-203"}</small>
                       <p className="mb-0 mt-2">
                         <strong>Informasi:</strong>
                         <br />
@@ -153,10 +151,10 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
                   <hr />
                   <Row className="align-items-start">
                     <Col>
-                      <h6 className="fw-bold mb-0">{flight?.arrival_time ?? "00:00"}</h6>
-                      <small>{flight?.date ?? "N/A"}</small>
+                      <h6 className="fw-bold mb-0">{flight.arrivalTime ?? "00:00"}</h6>
+                      <small>{new Date(flight.arrivalDate).toLocaleDateString("en-CA") ?? "N/A"}</small>
                       <br />
-                      <small>{destinationAirport.name ?? "Unknown Destination"}</small>
+                      <small>{airportTo?.name ?? "Unknown Destination"}</small>
                     </Col>
                     <Col xs="auto" className="text-end">
                       <small className="text-purple fw-bold">Kedatangan</small>
@@ -171,6 +169,5 @@ const FlightList = ({ flights = [], airlines = [], airports = [] }) => {
     </Accordion>
   );
 };
-
 
 export default FlightList;

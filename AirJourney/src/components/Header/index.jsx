@@ -1,20 +1,67 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-const Header = () => {
-  const [activeDayIndex, setActiveDay] = React.useState(2); 
+const Header = ({ flights = [], onFilteredFlightsChange }) => {
+  const [activeDayIndex, setActiveDay] = React.useState(null); 
+  const [filteredFlights, setFilteredFlights] = React.useState(flights); 
+  const [selectedDate, setSelectedDate] = React.useState(null); 
+  
+  const navigate = useNavigate();
 
-  const days = [
-    { name: "Selasa", date: "01/03/2023" },
-    { name: "Rabu", date: "02/03/2023" },
-    { name: "Kamis", date: "03/03/2023" },
-    { name: "Jumat", date: "04/03/2023" },
-    { name: "Sabtu", date: "05/03/2023" },
-    { name: "Minggu", date: "06/03/2023" },
-    { name: "Senin", date: "07/03/2023" },
-    { name: "Selasa", date: "08/03/2023" },
-  ];
+  const departureDate = flights?.length > 0 ? flights[0]?.departureDate : null;
+  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+  const getDaysWithDates = () => {
+    if (!departureDate) return [];
+    const dateObj = new Date(departureDate);
+    const daysWithDates = [];
+    
+    // Set days with dates
+    for (let i = 0; i < 7; i++) {
+      const newDate = new Date(dateObj);
+      newDate.setDate(dateObj.getDate() + i);
+      const dateStr = newDate.toLocaleDateString("en-CA");
+      daysWithDates.push({ day: daysOfWeek[i], date: dateStr });
+    }
+    return daysWithDates;
+  };
+
+  const daysWithDates = getDaysWithDates();
+
+  useEffect(() => {
+    if (departureDate && !selectedDate) {
+      const dateObj = new Date(departureDate);
+      const selectedDateString = dateObj.toLocaleDateString("en-CA");
+      setSelectedDate(selectedDateString); 
+      setActiveDay(dateObj.getDay()); 
+    }
+  }, [departureDate, selectedDate]);
+
+  const handleDateClick = (index) => {
+    if (index === activeDayIndex) return;
+
+    const selectedDayDate = daysWithDates[index].date;
+    setSelectedDate(selectedDayDate); 
+    setActiveDay(index); 
+
+    const newFilteredFlights = flights.filter((flight) => {
+      const flightDate = new Date(flight?.departureDate)?.toLocaleDateString("en-CA");
+      return flightDate === selectedDayDate;
+    });
+
+    setFilteredFlights(newFilteredFlights); 
+    if (onFilteredFlightsChange) {
+      onFilteredFlightsChange(newFilteredFlights);
+    }
+  };
+
+  useEffect(() => {
+    if (onFilteredFlightsChange) {
+      onFilteredFlightsChange(filteredFlights);
+    }
+  }, [filteredFlights, onFilteredFlightsChange]);
 
   return (
     <header
@@ -34,7 +81,7 @@ const Header = () => {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(12, 1fr)",
-          gap: "1rem", 
+          gap: "1rem",
           alignItems: "center",
         }}
       >
@@ -70,9 +117,10 @@ const Header = () => {
             borderRadius: "12px",
             padding: "0.7rem 1.5rem",
             fontWeight: "bold",
-            gridColumn: "9 / 11", // This takes up columns 7 to 9
+            gridColumn: "9 / 11", 
             transition: "background-color 0.3s ease",
           }}
+          onClick={() => navigate({ to: "/" })}
         >
           Ubah Pencarian
         </button>
@@ -90,10 +138,10 @@ const Header = () => {
           flexWrap: "wrap",
         }}
       >
-        {days.map((day, index) => (
+        {daysWithDates.map((dayObj, index) => (
           <button
             key={index}
-            onClick={() => setActiveDay(index)}
+            onClick={() => handleDateClick(index)} 
             style={{
               fontSize: "0.9rem",
               lineHeight: "1.2",
@@ -108,8 +156,8 @@ const Header = () => {
               cursor: "pointer",
             }}
           >
-            <div style={{ fontWeight: "bold" }}>{day.name}</div>
-            <small>{day.date}</small>
+            <div style={{ fontWeight: "bold" }}>{dayObj.day}</div>
+            <small>{dayObj.date}</small> {/* Show the corresponding date */}
           </button>
         ))}
       </div>
