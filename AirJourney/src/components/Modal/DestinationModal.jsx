@@ -2,7 +2,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import PropTypes from "prop-types";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const DestinationModal = ({
@@ -13,6 +13,8 @@ const DestinationModal = ({
     setIsFromModal,
     fromDestination,
     toDestination,
+    setFromDestinationId,
+    setToDestinationId,
 }) => {
     const [search, setSearch] = useState(
         isFromModal ? fromDestination : toDestination
@@ -20,24 +22,33 @@ const DestinationModal = ({
     const [destinationHistory, setDestinationHistory] = useState(
         JSON.parse(localStorage.getItem("destination_history")) || []
     );
-    /*
+
     const {
         data: airportList,
         isSuccess,
-        isPending,
     } = useQuery({
-        queryKey: "airports",
-        queryFn: () => {
-            axios.get(`${import.meta.env.VITE_API_URL}/airports`);
-        },
+        queryKey: ["airports"],
+        queryFn: () => axios.get(`${import.meta.env.VITE_API_URL}/airports`),
     });
-    */
-    const destinationClickHandler = (name) => {
+
+    useEffect(() => {
+        if(isSuccess){
+            setDestinationHistory([...airportList.data.data])
+        }
+    }, [isSuccess]);
+    
+    useEffect(()=>{
+        console.log(destinationHistory)
+    },[destinationHistory])
+
+    const destinationClickHandler = (name,id) => {
         if (isFromModal) {
             setFromDestination(name);
+            setFromDestinationId(id);
             setIsFromModal(false);
         } else {
             setToDestination(name);
+            setToDestinationId(id);
         }
         setShowDestinationModal(false);
     };
@@ -46,10 +57,10 @@ const DestinationModal = ({
         if (e.key === "Enter") {
             setShowDestinationModal(false);
             setIsFromModal(false);
-            localStorage.setItem(
-                "destination_history",
-                JSON.stringify([...destinationHistory, search])
-            );
+            // localStorage.setItem(
+            //     "destination_history",
+            //     JSON.stringify([...destinationHistory, search])
+            // );
             if (isFromModal) {
                 setFromDestination(search);
             } else {
@@ -76,6 +87,7 @@ const DestinationModal = ({
                         placeholder="Masukkan Kota atau Negara"
                         onChange={(e) => setSearch(e.target.value)}
                         onKeyDown={onKeyDownHandler}
+                        disabled
                     />
                 </div>
                 <CloseIcon
@@ -102,16 +114,16 @@ const DestinationModal = ({
                 <div className="flex flex-col flex-1 gap-3 py-3 overflow-auto">
                     {destinationHistory.map((data) => (
                         <div
-                            key={data}
+                            key={data.id}
                             className="flex justify-between border-b py-2"
                         >
                             <span
                                 className="cursor-pointer"
                                 onClick={() => {
-                                    destinationClickHandler(data);
+                                    destinationClickHandler(data.name,data.id);
                                 }}
                             >
-                                {data}
+                                {data.name}
                             </span>
                             <CloseIcon
                                 color="disabled"
@@ -134,5 +146,7 @@ DestinationModal.propTypes = {
     isFromModal: PropTypes.bool,
     fromDestination: PropTypes.string,
     toDestination: PropTypes.string,
+    setFromDestinationId:PropTypes.any,
+    setToDestinationId:PropTypes.any
 };
 export default DestinationModal;
