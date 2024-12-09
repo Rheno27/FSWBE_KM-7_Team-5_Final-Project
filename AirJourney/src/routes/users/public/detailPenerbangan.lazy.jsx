@@ -88,7 +88,12 @@ function Index() {
 
   useEffect(() => {
     if (flights.length > 0) {
-      const soldOut = flights.every((flight) => flight.availableSeats === 0);
+      const soldOut = flights.every((flight) => {
+        const availableSeats = flight.seat?.data
+          ? flight.seat.data.some((seat) => seat.status === "AVAILABLE")  
+          : false;  
+        return !availableSeats;
+      });
       setIsSoldOut(soldOut);
     }
   }, [flights]);
