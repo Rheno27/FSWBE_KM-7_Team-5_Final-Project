@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     setFromDestinationRedux,
     setToDestinationRedux,
+    setFromDestinationIdRedux,
+    setToDestinationIdRedux,
     setArrivalDateRedux,
     setDepartureDateRedux,
     setPassengerRedux,
@@ -37,10 +39,18 @@ const HomepageTicketSearch = () => {
     const [showClassModal, setShowClassModal] = useState(false);
 
     // for query
-    const [fromDestination, setFromDestination] = useState("");
-    const [toDestination, setToDestination] = useState("");
-    const [fromDestinationId, setFromDestinationId] = useState("");
-    const [toDestinationId, setToDestinationId] = useState("");
+    const [fromDestination, setFromDestination] = useState(
+        useSelector((state) => state.searchQuery.fromDestination) || null
+    );
+    const [toDestination, setToDestination] = useState(
+        useSelector((state) => state.searchQuery.toDestination) || null
+    );
+    const [fromDestinationId, setFromDestinationId] = useState(
+        useSelector((state) => state.searchQuery.fromDestinationId) || null
+    );
+    const [toDestinationId, setToDestinationId] = useState(
+        useSelector((state) => state.searchQuery.toDestinationId || null)
+    );
     const [searchDate, setSearchDate] = useState(
         useSelector((state) => state.searchQuery.searchDate) || new Date()
     );
@@ -72,7 +82,9 @@ const HomepageTicketSearch = () => {
 
     const searchClickHandler = () => {
         dispatch(setFromDestinationRedux(fromDestination));
+        dispatch(setFromDestinationIdRedux(fromDestinationId));
         dispatch(setToDestinationRedux(toDestination));
+        dispatch(setToDestinationIdRedux(toDestinationId));
         dispatch(setPassengerRedux(passenger));
         dispatch(setClassTypeRedux(classType));
         dispatch(setIsReturnRedux(isReturn));
