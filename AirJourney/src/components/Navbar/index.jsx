@@ -1,7 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import logo from '../../assets/img/logo.png';
+import logo from '../../assets/img/logoterbangin.png';
 import Form from 'react-bootstrap/Form';
 import { 
     Search as SearchIcon,
@@ -47,6 +47,21 @@ const NavigationBar = () => {
 
     const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
     const notifications = dummyData.notification;
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        const body = {
+            email,
+            password
+        }
+        const result = await login(body);
+        if (result.success) {
+            dispatch(setUser(result.data.token));
+            navigate("/");
+            return;
+        }
+        alert(result.message);
+    }
 
     return (
         <>
