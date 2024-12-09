@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     fromDestination: null,
     toDestination: null,
-    searchDate: null,
+    departureDate: null,
+    arrivalDate: null,
     passenger: null,
     classType: null,
     isReturn: false,
@@ -19,8 +20,11 @@ export const searchQuerySlice = createSlice({
         setToDestinationRedux: (state, action) => {
             state.toDestination = action.payload;
         },
-        setSearchDateRedux: (state, action) => {
-            state.searchDate = action.payload;
+        setDepartureDateRedux: (state, action) => {
+            state.departureDate = action.payload;
+        },
+        setArrivalDateRedux: (state, action) => {
+            state.arrivalDate = action.payload;
         },
         setPassengerRedux: (state, action) => {
             state.passenger = action.payload;
@@ -37,7 +41,8 @@ export const searchQuerySlice = createSlice({
 export const {
     setFromDestinationRedux,
     setToDestinationRedux,
-    setSearchDateRedux,
+    setDepartureDateRedux,
+    setArrivalDateRedux,
     setPassengerRedux,
     setClassTypeRedux,
     setIsReturnRedux,

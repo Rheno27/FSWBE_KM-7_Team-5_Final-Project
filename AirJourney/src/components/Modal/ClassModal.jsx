@@ -7,7 +7,7 @@ const ClassModal = ({ setShowClassModal, classType, setClassType }) => {
         { name: "Economy", price: "IDR 4.950.000" },
         { name: "Premium Economy", price: "IDR 7.550.000" },
         { name: "Business", price: "IDR 29.220.000" },
-        { name: "First", price: "IDR 87.620.000" },
+        { name: "First Class", price: "IDR 87.620.000" },
     ];
 
     return (

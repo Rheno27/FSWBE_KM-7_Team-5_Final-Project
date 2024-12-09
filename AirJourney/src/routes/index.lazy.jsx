@@ -1,4 +1,4 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import "../index.css";
 import banner from "../assets/img/home-banner.png";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
@@ -18,7 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     setFromDestinationRedux,
     setToDestinationRedux,
-    setSearchDateRedux,
+    setArrivalDateRedux,
+    setDepartureDateRedux,
     setPassengerRedux,
     setClassTypeRedux,
     setIsReturnRedux,
@@ -29,6 +30,8 @@ export const Route = createLazyFileRoute("/")({
 });
 function Index() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     // for component state
     const [isReturn, setIsReturn] = useState(
         useSelector((state) => state.searchQuery.isReturn) || false
@@ -93,10 +96,36 @@ function Index() {
     const searchClickHandler = () => {
         dispatch(setFromDestinationRedux(fromDestination));
         dispatch(setToDestinationRedux(toDestination));
-        dispatch(setSearchDateRedux(searchDate));
         dispatch(setPassengerRedux(passenger));
         dispatch(setClassTypeRedux(classType));
         dispatch(setIsReturnRedux(isReturn));
+
+        const formData = {
+            classType: classType.toUpperCase().replace(/\s/g, "_"),
+            //airportIdFrom: fromDestination,
+            //airportIdTo: toDestination,
+        };
+        if (isReturn) {
+            formData.departureDate = searchDate.from
+                .toISOString()
+                .split("T")[0];
+            formData.arrivalDate = searchDate.to.toISOString().split("T")[0];
+            dispatch(
+                setDepartureDateRedux(
+                    searchDate.from.toISOString().split("T")[0]
+                )
+            );
+            dispatch(
+                setArrivalDateRedux(searchDate.to.toISOString().split("T")[0])
+            );
+        } else {
+            formData.departureDate = searchDate.toISOString().split("T")[0];
+            dispatch(
+                setDepartureDateRedux(searchDate.toISOString().split("T")[0])
+            );
+        }
+        console.log(formData);
+        navigate({to:`/users/public/detailPenerbangan?${new URLSearchParams(formData).toString()}`});
     };
 
     // for infinite scroll
