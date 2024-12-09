@@ -53,7 +53,7 @@ const NavigationBar = () => {
             {shuoldShowNavbar && (
                 <Navbar expand="lg" className="bg-white">
                     <Container fluid>
-                        <Navbar.Brand href="#" style={{ marginLeft: "128px" }}>
+                        <Navbar.Brand href="/" style={{ marginLeft: "128px" }}>
                             <img src={logo} alt="logo" />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -90,7 +90,7 @@ const NavigationBar = () => {
                                     <>
                                         <Nav.Link
                                             as={Link}
-                                            to="/history"
+                                            to="users/private/order-history/"
                                         >
                                             <HistoryIcon
                                                 style={{ marginRight: '8px' }}
