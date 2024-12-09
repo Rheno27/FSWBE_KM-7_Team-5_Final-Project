@@ -230,5 +230,18 @@
             "price": 430000,
             "picture": "https://picsum.photos/200"
         }
+    ],
+    "dummyFlights": [
+        {
+            "id": 1,
+            "from": "Jakarta",
+            "to": "Singapore",
+            "departureDate": "2024-12-15",
+            "returnDate": "2024-12-20",
+            "classType": "Economy",
+            "price": 1500000,
+            "passengers": 2
+        }
     ]
+    
 }
