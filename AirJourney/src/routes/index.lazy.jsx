@@ -101,7 +101,7 @@ function Index() {
         dispatch(setIsReturnRedux(isReturn));
 
         const formData = {
-            classType: classType.toUpperCase().replace(/\s/g, "_"),
+            class: classType.toUpperCase().replace(/\s/g, "_"),
             //airportIdFrom: fromDestination,
             //airportIdTo: toDestination,
         };
