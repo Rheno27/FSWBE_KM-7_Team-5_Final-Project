@@ -3,8 +3,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useSelector } from "react-redux";
+import PropTypes from "prop-types"
 
-const Header = ({ flights = [], onFilteredFlightsChange }) => {
+const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData }) => {
   const isReturn = useSelector((state) => state.searchQuery.isReturn);
   const [activeDayIndex, setActiveDay] = React.useState(null); 
   const [activeArrivalDayIndex, setArrivalActiveDay] = React.useState(null); 
@@ -58,6 +59,8 @@ const Header = ({ flights = [], onFilteredFlightsChange }) => {
     const selectedDayDate = daysWithDates[index].date;
     setSelectedDate(selectedDayDate); 
     setActiveDay(index); 
+
+    fetchFlightsData(true,selectedDate); //
 
     const newFilteredFlights = flights.filter((flight) => {
       const flightDate = new Date(flight?.departureDate)?.toLocaleDateString("en-CA");
@@ -179,5 +182,11 @@ const Header = ({ flights = [], onFilteredFlightsChange }) => {
     </header>
   );
 };
+
+Header.propTypes={
+  flights:PropTypes.array,
+  onFilteredFlightsChange:PropTypes.any,
+  fetchFlightsData:PropTypes.any,
+}
 
 export default Header;

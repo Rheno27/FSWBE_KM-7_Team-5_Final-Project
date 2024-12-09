@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import FlightList from "../../../components/FlightList";
 import Sidebar from "../../../components/Sidebar";
@@ -6,6 +6,7 @@ import Header from "../../../components/Header";
 import SoldOutImage from "../../../assets/img/soldout.png";
 import loadingImage from "../../../assets/img/search-loading.png"
 import SortingButton from "../../../components/FilterFlight/index";
+import { useSelector } from "react-redux";
 
 export const Route = createLazyFileRoute("/users/public/detailPenerbangan")({
   component: Index,
@@ -21,15 +22,32 @@ function Index() {
   const [selectedSort, setSelectedSort] = useState("Harga - Termurah");
   const [isSoldOut, setIsSoldOut] = useState(false);
   const loaderRef = useRef(null); 
+  const {classType,fromDestinationId,toDestinationId} = useSelector(state=>state.searchQuery);
 
-  const fetchFlightsData = async () => {
+  const fetchFlightsData = async (resetList,newDate) => {
     if (loading || !hasMore) return;
 
     setLoading(true);
     setError("");
     try {
-      const params = window.location.search ? new URLSearchParams(window.location.search) : new URLSearchParams();
-      if (cursorId) params.append("cursorId", cursorId);
+      const params = resetList ? new URLSearchParams() : (window.location.search ? new URLSearchParams(window.location.search) : new URLSearchParams());
+      if(resetList){ //
+        setFlights([])
+        const params = new URLSearchParams();
+        params.append("departureDate", newDate);
+        if(classType){
+          params.append("class",classType)
+        }
+        if(fromDestinationId){
+          params.append("airportFromId",fromDestinationId)
+        }
+        if(toDestinationId){
+          params.append("airportToId",toDestinationId)
+        }
+      }
+      else{
+        if (cursorId) params.append("cursorId", cursorId);
+      } //
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/flights?${params.toString()}`
@@ -159,6 +177,7 @@ function Index() {
       <Header
         flights={flights}
         onFilteredFlightsChange={handleFilteredFlightsChange}
+        fetchFlightsData={fetchFlightsData}
       />
 
       <div className="container mt-4">
