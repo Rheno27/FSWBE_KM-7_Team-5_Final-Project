@@ -46,27 +46,12 @@ const NavigationBar = () => {
 
     const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
-    const onSubmit = async (e) => {
-        e.preventDefault();
-        const body = {
-            email,
-            password
-        }
-        const result = await login(body);
-        if (result.success) {
-            dispatch(setUser(result.data.token));
-            navigate("/");
-            return;
-        }
-        alert(result.message);
-    }
-
     return (
         <>
             {shuoldShowNavbar && (
                 <Navbar expand="lg" className="bg-white">
                     <Container fluid>
-                        <Navbar.Brand href="#" style={{ marginLeft: "128px" }}>
+                        <Navbar.Brand href="/" style={{ marginLeft: "128px" }}>
                             <img src={logo} alt="logo" />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -103,7 +88,7 @@ const NavigationBar = () => {
                                     <>
                                         <Nav.Link
                                             as={Link}
-                                            to="/history"
+                                            to="users/private/order-history/"
                                         >
                                             <HistoryIcon
                                                 style={{ marginRight: '8px' }}
