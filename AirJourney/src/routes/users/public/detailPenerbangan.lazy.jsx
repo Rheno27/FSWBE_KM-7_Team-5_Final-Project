@@ -4,6 +4,7 @@ import FlightList from "../../../components/FlightList";
 import Sidebar from "../../../components/Sidebar";
 import Header from "../../../components/Header";
 import SoldOutImage from "../../../assets/img/soldout.png";
+import loadingImage from "../../../assets/img/search-loading.png"
 import SortingButton from "../../../components/FilterFlight/index";
 
 export const Route = createLazyFileRoute("/users/public/detailPenerbangan")({
@@ -26,9 +27,8 @@ function Index() {
 
     setLoading(true);
     setError("");
-
     try {
-      const params = new URLSearchParams();
+      const params = window.location.search ? new URLSearchParams(window.location.search) : new URLSearchParams();
       if (cursorId) params.append("cursorId", cursorId);
 
       const response = await fetch(
@@ -117,7 +117,10 @@ function Index() {
   }, [loading, hasMore]);
 
   if (loading && flights.length === 0) {
-    return <div>Loading...</div>;
+    return <div className="d-flex flex-column align-items-center justify-content-center">
+      <h5 className="text-center mb-4">Mencari Penerbangan Terbaik ...</h5>
+      <img src={loadingImage} alt="loading..." style={{ maxWidth: "400px", height: "auto" }} />
+    </div>;
   }
 
   if (error && flights.length === 0) {
@@ -130,7 +133,7 @@ function Index() {
         <img
           src={SoldOutImage}
           alt="Tickets Sold Out"
-          style={{ maxWidth: "400px", height: "auto" }}
+          style={{ maxWidth: "400px", height: "auto", "margin-bottom":"20px" }}
         />
         <h5 style={{ fontFamily: "Poppins", color: "#000000" }}>
           Maaf, Tiket terjual habis!
