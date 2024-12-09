@@ -1,96 +1,102 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
-import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
+import React, { useEffect, useState, useCallback } from 'react'
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
+import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap'
 import {
   ArrowBack as ArrowBackIcon,
   DriveFileRenameOutline as DriveFileRenameOutlineIcon,
   Settings as SettingsIcon,
   Logout as LogoutIcon,
-} from '@mui/icons-material';
-import { useSelector, useDispatch } from 'react-redux';
-import { setUser, setToken } from '../../../../redux/slices/auth';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import {  updateUser } from '../../../../services/user';
+} from '@mui/icons-material'
+import { useSelector, useDispatch } from 'react-redux'
+import { setUser, setToken } from '../../../../redux/slices/auth'
+import { useQuery, useMutation } from '@tanstack/react-query'
+import { getUser, updateUser } from '../../../../services/user'
+import ProtectedRoute from '../../../../redux/slices/ProtectedRoute'
 
-export const Route = createLazyFileRoute('/users/private/profile/id')({
+export const Route = createLazyFileRoute('/users/private/profile/')({
   component: EditProfile,
-});
+})
 
 function EditProfile() {
-  const navigate = useNavigate();
-  const { user, token } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const { token } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
 
-  const [name, setName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [name, setName] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
 
-  const handleLogout = useCallback((event) => {
-    localStorage.removeItem('token');
-    dispatch(setUser(null));
-    dispatch(setToken(null));
-    navigate({ to: '/' });
-  }, [dispatch, navigate]);
+  useEffect(() => {
+    if (!token) {
+      
+      navigate({ to: '/' })
+    }
+  }, [token, navigate])
 
-  const { data, isSuccess, isError } = useQuery({
-    queryKey: ['user'],
-    enabled: !!token, 
-  });
+  const handleLogout = useCallback(
+    (event) => {
+      localStorage.removeItem('token')
+      dispatch(setUser(null))
+      dispatch(setToken(null))
+      navigate({ to: '/' })
+    },
+    [dispatch, navigate],
+  )
+
+  const { data: user, isSuccess, isError } = useQuery({
+    queryKey: ['user', token],
+    queryFn: getUser,
+    enabled: !!token,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  })
 
   const { mutate: userUpdate, isPending: isUpdating } = useMutation({
-    mutationFn: (data) => updateUser(data),
+    mutationFn: updateUser,
     onSuccess: () => {
-      navigate({ to: '/users/private/profile/id' });
+      navigate({ to: '/' })
     },
     onError: (error) => {
-      toast.error(error.message);
-    }
-  });
+      toast.error(error.message)
+    },
+  })
 
   useEffect(() => {
     if (isSuccess) {
-      setName(data?.name);
-      setPhoneNumber(data?.phoneNumber);
-    } if (isError) {
-      handleLogout();
+      setName(user?.name)
+      setPhoneNumber(user?.phoneNumber)
     }
-  }, [isSuccess, isError, data]);
-
+    if (isError) {
+      handleLogout()
+    }
+  }, [isSuccess, isError, user])
 
   const onSubmit = async (event) => {
-    event.preventDefault();
-    
-    // Buat object request hanya dengan field yang berubah
-    const request = {};
-    
-    // Bandingkan dengan data awal
-    if (name !== data?.name) {
-        request.name = name;
+    event.preventDefault()
+    const request = {}
+    if (name !== user?.name) {
+      request.name = name
     }
-    
-    if (phoneNumber !== data?.phoneNumber) {
-        if (phoneNumber) {
-            const phoneRegex = /^\+?[0-9]{10,13}$/;
-            if (!phoneRegex.test(phoneNumber)) {
-                toast.error('Format nomor telepon tidak valid');
-                return;
-            }
-            request.phoneNumber = phoneNumber;
+    if (phoneNumber !== user?.phoneNumber) {
+      if (phoneNumber) {
+        const phoneRegex = /^\+?[0-9]{10,13}$/
+        if (!phoneRegex.test(phoneNumber)) {
+          toast.error('Format nomor telepon tidak valid')
+          return
         }
+        request.phoneNumber = phoneNumber
+      }
     }
-    
-    // Cek apakah ada perubahan
     if (Object.keys(request).length === 0) {
-        toast.info('Tidak ada perubahan yang dilakukan');
-        return;
+      toast.info('Tidak ada perubahan yang dilakukan')
+      return
     }
-    userUpdate(request);
+    userUpdate(request)
   }
 
   const logout = (event) => {
-    event.preventDefault();
-    handleLogout();
+    event.preventDefault()
+    handleLogout()
   }
-
 
   return (
     <Container className="profile-page">
@@ -234,7 +240,7 @@ function EditProfile() {
                     type="text"
                     required
                     onChange={(e) => setName(e.target.value)}
-                    value={name || ""}
+                    value={name || ''}
                     style={{
                       borderRadius: '8px',
                       boxShadow: '0 0 5px rgba(0,0,0,0.1)',
@@ -255,7 +261,7 @@ function EditProfile() {
                     type="text"
                     required
                     onChange={(e) => setPhoneNumber(e.target.value)}
-                    value={phoneNumber || ""}
+                    value={phoneNumber || ''}
                     style={{
                       borderRadius: '8px',
                       boxShadow: '0 0 5px rgba(0,0,0,0.1)',
@@ -275,7 +281,7 @@ function EditProfile() {
                   <Form.Control
                     type="text"
                     disabled
-                    value={data?.email || ""}
+                    value={user?.email || ''}
                     style={{
                       borderRadius: '8px',
                       boxShadow: '0 0 5px rgba(0,0,0,0.1)',
@@ -302,5 +308,5 @@ function EditProfile() {
         </Col>
       </Row>
     </Container>
-  );
+  )
 }
