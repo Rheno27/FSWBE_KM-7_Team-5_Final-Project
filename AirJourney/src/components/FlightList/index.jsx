@@ -8,6 +8,7 @@ import koper from "../../assets/img/koper.png";
 import noDataImage from "../../assets/img/notfound.png"; 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { useNavigate } from "react-router-dom";
 
 function CustomToggle({ eventKey }) {
   const [isAccordionOpen, setIsAccordionOpen] = React.useState(false);
@@ -102,7 +103,7 @@ const FlightList = ({ filteredFlights }) => {
                     )}
                   </h6>
                   <div className="d-grid">
-                    <Button variant="primary" className="button-select">
+                    <Button variant="primary" className="button-select" onClick={() => navigate(`users/private/checkout`)}>
                       Pilih
                     </Button>
                   </div>
