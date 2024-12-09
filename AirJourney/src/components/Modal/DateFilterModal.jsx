@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { DayPicker } from "react-day-picker";
-import CloseIcon from "@mui/icons-material/Close";
+import Close from "@mui/icons-material/Close";
 import "react-day-picker/dist/style.css";
-import "./dateModal.css"; 
+import "./style.css"; 
 
 const DateFilterModal = ({isOpen, onClose, position}) => {
   if (!isOpen) return null;
@@ -25,22 +25,24 @@ const DateFilterModal = ({isOpen, onClose, position}) => {
 
   return (
     <>
-      <div className="modal-overlay" onClick={onClose} />
-      <div className="custom-modal" style={position}>
-        <div className="modal-header">
-          <button onClick={onClose}><CloseIcon /></button>
+      <div className='modal-overlay' onClick={onClose} />
+      <div className='custom-modal'style={position}>
+        <div className='modal-header'>
+          <Close onClick={onClose} className={{cursor: 'pointer'}} />
         </div>
-        <div className="modal-body">
+        <div>
           {/* DayPicker for date selection */}
         <DayPicker selected={selectedDate} onDayClick={handleDateChange} />
-        <div className="mt-3">
+        <div className="mx-4">
           {selectedDate ? (
             <p>Selected Date: {selectedDate.toLocaleDateString()}</p>
           ) : (
             <p>Please select a date</p>
           )}
         </div>
-          <button onClick={handleSave} className="save-button d-flex justify-content-end">Simpan</button>
+          <div className="d-flex justify-content-end">
+            <button onClick={handleSave} className='save-button'>Simpan</button>
+          </div>
         </div>
       </div>
     </>

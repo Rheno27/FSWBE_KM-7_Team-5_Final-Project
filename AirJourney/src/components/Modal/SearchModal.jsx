@@ -1,7 +1,6 @@
 // SearchModal.jsx
 import React, { useState } from 'react';
 import { Col, Form } from 'react-bootstrap';
-// import Close from "@mui/icons-material/Close";
 import { Search, Close } from '@mui/icons-material';
 
 const SearchModal = ({ isOpen, onClose, position }) => {

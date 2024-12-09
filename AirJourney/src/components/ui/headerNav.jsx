@@ -16,21 +16,45 @@ export const HeaderNav = () => {
   const handleSearchModalShow = () => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      setPosition({
-        top: rect.bottom + window.scrollY + 10, // Offset below the button
-        left: rect.left + rect.width / 2 - 150, // Centered (assuming modal width is 300px)
-      });
+      const isSmallScreen = window.innerWidth <= 768; // Define breakpoint for small screens
+    
+      if (isSmallScreen) {
+        // Center modal on smaller screens
+        setPosition({
+          top: window.innerHeight / 2.45 - 150, // Vertically centered (assuming modal height is 300px)
+          left: window.innerWidth / 2 - 150, // Horizontally centered (assuming modal width is 300px)
+        });
+      } else {
+        // Position relative to button for larger screens
+        setPosition({
+          top: rect.bottom + window.scrollY + 10, // Offset below the button
+          left: rect.left + rect.width / 2 - 300, // Centered (assuming modal width is 300px)
+        });
+      }
     }
+    
     setSearchModalOpen(!isSearchModalOpen)
   };
   const handleDateModalShow = () => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      setPosition({
-        top: rect.bottom + window.scrollY + 10, // Offset below the button
-        left: rect.left + rect.width / 2 - 150, // Centered (assuming modal width is 300px)
-      });
+      const isSmallScreen = window.innerWidth <= 768; // Define breakpoint for small screens
+    
+      if (isSmallScreen) {
+        // Center modal on smaller screens
+        setPosition({
+          top: window.innerHeight / 2.45 - 150, // Vertically centered (assuming modal height is 300px)
+          left: window.innerWidth / 2.2 - 150, // Horizontally centered (assuming modal width is 300px)
+        });
+      } else {
+        // Position relative to button for larger screens
+        setPosition({
+          top: rect.bottom + window.scrollY + 10, // Offset below the button
+          left: rect.left + rect.width / 2 - 300, // Centered (assuming modal width is 300px)
+        });
+      }
     }
+    
     setDateModalOpen(!isDateModalOpen);
   };
 
@@ -47,7 +71,7 @@ export const HeaderNav = () => {
     width: '100%',
     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
   }
-
+  
   return (
     <Row className="justify-content-center mt-2 mb-4 p-3 shadow-sm">
       <Col lg={10} md={10} sm={12}>
