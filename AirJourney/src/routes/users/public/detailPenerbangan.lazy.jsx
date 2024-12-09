@@ -87,11 +87,10 @@ function Index() {
   }, []);
 
   useEffect(() => {
-    if (flights.length > 0) {
-      const soldOut = flights.every((flight) => flight.availableSeats === 0);
-      setIsSoldOut(soldOut);
-    }
+    const soldOut = flights.every((flight) => (flight.data && flight.data.length === 0));
+    setIsSoldOut(soldOut);
   }, [flights]);
+  
 
   const checkIfLoadMore = () => {
     if (loaderRef.current) {
