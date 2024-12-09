@@ -79,8 +79,6 @@ const HomepageTicketSearch = () => {
 
         const formData = {
             class: classType.toUpperCase().replace(/\s/g, "_"),
-            airportIdFrom: fromDestinationId,
-            airportIdTo: toDestinationId,
         };
         const formatDate = (date) => {
             const year = date.getFullYear();
@@ -89,6 +87,12 @@ const HomepageTicketSearch = () => {
             return `${year}-${month}-${day}`;
         }; // toISOString() placeholder since its have a bug;
 
+        if (fromDestinationId) {
+            formData.airportIdFrom = fromDestinationId;
+        }
+        if (toDestinationId) {
+            formData.airportIdTo = toDestinationId;
+        }
         if (isReturn) {
             formData.departureDate = formatDate(searchDate.from);
             formData.arrivalDate = formatDate(searchDate.to);
