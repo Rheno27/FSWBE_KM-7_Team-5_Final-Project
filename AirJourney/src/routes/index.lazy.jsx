@@ -36,6 +36,7 @@ function Index() {
     const [isReturn, setIsReturn] = useState(
         useSelector((state) => state.searchQuery.isReturn) || false
     );
+    const [isReturnFilled,setIsReturnFilled]= useState(true);
     const [showDestinationModal, setShowDestinationModal] = useState(false);
     const [isFromModal, setIsFromModal] = useState(false);
     const [showDateModal, setShowDateModal] = useState(false);
@@ -105,26 +106,22 @@ function Index() {
             //airportIdFrom: fromDestination,
             //airportIdTo: toDestination,
         };
+        const formatDate = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            return `${year}-${month}-${day}`;
+        }; // toISOString() placeholder since its have a bug;
+
         if (isReturn) {
-            formData.departureDate = `${searchDate.from.getFullYear()}-${searchDate.from.getMonth() + 1}-${searchDate.from.getDate()}`; //toISOString() placeholder
-            formData.arrivalDate = `${searchDate.to.getFullYear()}-${searchDate.to.getMonth() + 1}-${searchDate.to.getDate()}`;
-            dispatch(
-                setDepartureDateRedux(
-                    `${searchDate.from.getFullYear()}-${searchDate.from.getMonth() + 1}-${searchDate.from.getDate()}`
-                )
-            );
-            dispatch(
-                setArrivalDateRedux(
-                    `${searchDate.to.getFullYear()}-${searchDate.to.getMonth() + 1}-${searchDate.to.getDate()}`
-                )
-            );
+            formData.departureDate = formatDate(searchDate.from);
+            formData.arrivalDate = formatDate(searchDate.to);
+
+            dispatch(setDepartureDateRedux(formData.departureDate));
+            dispatch(setArrivalDateRedux(formData.arrivalDate));
         } else {
-            formData.departureDate = `${searchDate.getFullYear()}-${searchDate.getMonth() + 1}-${searchDate.getDate()}`;
-            dispatch(
-                setDepartureDateRedux(
-                    `${searchDate.getFullYear()}-${searchDate.getMonth() + 1}-${searchDate.getDate()}`
-                )
-            );
+            formData.departureDate = formatDate(searchDate);
+            dispatch(setDepartureDateRedux(formData.departureDate));
         }
         console.log(formData);
         navigate({
@@ -168,6 +165,15 @@ function Index() {
             setIsInitialized(true);
         }
     }, [destination]);
+
+    useEffect(()=>{
+        if (isReturn && searchDate.to){
+            setIsReturnFilled(true);
+        }
+        else if(isReturn && !searchDate.to){
+            setIsReturnFilled(false);
+        }
+    },[searchDate,isReturn])
 
     return (
         <div className="flex flex-col items-center">
@@ -439,8 +445,9 @@ function Index() {
                         </div>
                     </div>
                     <button
-                        className="py-2.5 bg-darkblue4 text-white font-semibold rounded-b-xl"
+                        className="py-2.5 bg-darkblue4 disabled:bg-darkblue2 text-white font-semibold rounded-b-xl"
                         onClick={searchClickHandler}
+                        disabled={isReturn && !isReturnFilled}
                     >
                         Cari Penerbangan
                     </button>
