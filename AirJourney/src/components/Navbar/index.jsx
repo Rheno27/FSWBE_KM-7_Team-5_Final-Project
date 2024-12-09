@@ -6,79 +6,77 @@ import Form from 'react-bootstrap/Form';
 import { 
     Search as SearchIcon,
     History as HistoryIcon,
-    NotificationsNone as NotificationIcon,
     PersonOutline as ProfileIcon,
-    Login as LoginIcon, 
-} from '@mui/icons-material';
-import { Link, useLocation, useNavigate } from '@tanstack/react-router';
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { setUser } from "../../redux/slices/auth";
+    Login as LoginIcon,
+} from "@mui/icons-material";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, setToken } from "../../redux/slices/auth";
+import axios from "axios";
+import NotificationDropdown from "../Notification/dropdown"; 
+import dummyData from "../../data/dummy.json";
+import { useQuery } from "@tanstack/react-query";
+import { getUser } from "../../services/user";
 
 const NavigationBar = () => {
     const navigate = useNavigate();
-    const { user, token } = useSelector((state) => state.auth);
+    const { token } = useSelector((state) => state.auth);
     const location = useLocation();
+    const dispatch = useDispatch();
 
-    const hideNavbarRoutes = ["/register", "/login", "/reset-password","/reset-password-request", "/otp"];
+
+    const hideNavbarRoutes = [
+        "/register",
+        "/login",
+        "/reset-password",
+        "/reset-password-request",
+        "/otp",
+    ];
+    const { data: user, isSuccess, isError } = useQuery({
+        queryKey: ["user"],
+        queryFn: getUser,
+        enabled: !!token,
+        onSuccess: (data) => dispatch(setUser(data.data)),
+        onError: () => {
+            dispatch(setUser(null));
+            dispatch(setToken(null));
+            navigate({ to: "/login" });
+        },
+    });
 
     const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
-
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            navigate("/");
-        }
-    }, [navigate]);
-
-    const onSubmit = async (e) => {
-        e.preventDefault();
-        const body = {
-            email,
-            password
-        }
-        const result = await login(body);
-        if (result.success) {
-            dispatch(setUser(result.data.token));
-            navigate("/");
-            return;
-        }
-        alert(result.message);
-    }
+    const notifications = dummyData.notification;
 
     return (
         <>
             {shuoldShowNavbar && (
-                <Navbar expand="lg" className="bg-body-tertiary">
+                <Navbar expand="lg" className="bg-white">
                     <Container fluid>
-                        <Navbar.Brand
-                            href="#"
-                            style={{ marginLeft: '128px' }}
-                        >
+                        <Navbar.Brand href="#" style={{ marginLeft: "128px" }}>
                             <img src={logo} alt="logo" />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="navbarScroll" />
                         <Form
                             className="d-flex"
                             style={{ position: 'relative', marginLeft: '34px', width: '444px' }}
-                            onSubmit={onSubmit}
-                        >
+                            >
                             <Form.Control
                                 type="search"
                                 placeholder="Search"
                                 aria-label="Search"
                                 style={{
-                                    borderRadius: '12px',
-                                    paddingLeft: '20px',
+                                    borderRadius: "12px",
+                                    paddingLeft: "20px",
                                 }}
                             />
                             <SearchIcon
                                 style={{
-                                    position: 'absolute',
-                                    right: '10px',
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    color: 'gray',
+                                    position: "absolute",
+                                    right: "10px",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    color: "gray",
                                 }}
                             />
                         </Form>
@@ -98,19 +96,8 @@ const NavigationBar = () => {
                                                 style={{ marginRight: '8px' }}
                                             />
                                         </Nav.Link>
-                                        <Nav.Link
-                                            as={Link}
-                                            to="/notification"
-                                        >
-                                            <NotificationIcon
-                                                style={{ marginRight: '8px' }}
-                                            />
-                                        </Nav.Link>
-                                        
-                                        <Nav.Link
-                                            as={Link}
-                                            to="/profile"
-                                        >
+                                        <NotificationDropdown notifications={notifications} />
+                                        <Nav.Link as={Link} to="/users/private/profile/">
                                             <ProfileIcon
                                                 style={{ marginRight: '8px' }}
                                             />
