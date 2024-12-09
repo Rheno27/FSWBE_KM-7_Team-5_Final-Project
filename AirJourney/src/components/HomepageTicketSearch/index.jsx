@@ -1,4 +1,4 @@
-import {useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import "../../index.css";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
@@ -22,7 +22,6 @@ import {
 } from "../../redux/slices/searchQuery";
 
 const HomepageTicketSearch = () => {
-    
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -30,20 +29,18 @@ const HomepageTicketSearch = () => {
     const [isReturn, setIsReturn] = useState(
         useSelector((state) => state.searchQuery.isReturn) || false
     );
-    const [isReturnFilled,setIsReturnFilled]= useState(true);
+    const [isReturnFilled, setIsReturnFilled] = useState(true);
     const [showDestinationModal, setShowDestinationModal] = useState(false);
     const [isFromModal, setIsFromModal] = useState(false);
     const [showDateModal, setShowDateModal] = useState(false);
     const [showPassengerModal, setShowPassengerModal] = useState(false);
     const [showClassModal, setShowClassModal] = useState(false);
-    
+
     // for query
-    const [fromDestination, setFromDestination] = useState(
-        useSelector((state) => state.searchQuery.fromDestination) || "ntar"
-    );
-    const [toDestination, setToDestination] = useState(
-        useSelector((state) => state.searchQuery.toDestination) || "ngebug"
-    );
+    const [fromDestination, setFromDestination] = useState("");
+    const [toDestination, setToDestination] = useState("");
+    const [fromDestinationId, setFromDestinationId] = useState("");
+    const [toDestinationId, setToDestinationId] = useState("");
     const [searchDate, setSearchDate] = useState(
         useSelector((state) => state.searchQuery.searchDate) || new Date()
     );
@@ -82,8 +79,8 @@ const HomepageTicketSearch = () => {
 
         const formData = {
             class: classType.toUpperCase().replace(/\s/g, "_"),
-            //airportIdFrom: fromDestination,
-            //airportIdTo: toDestination,
+            airportIdFrom: fromDestinationId,
+            airportIdTo: toDestinationId,
         };
         const formatDate = (date) => {
             const year = date.getFullYear();
@@ -108,14 +105,13 @@ const HomepageTicketSearch = () => {
         });
     };
 
-    useEffect(()=>{
-        if (isReturn && searchDate.to){
+    useEffect(() => {
+        if (isReturn && searchDate.to) {
             setIsReturnFilled(true);
-        }
-        else if(isReturn && !searchDate.to){
+        } else if (isReturn && !searchDate.to) {
             setIsReturnFilled(false);
         }
-    },[searchDate,isReturn])
+    }, [searchDate, isReturn]);
 
     return (
         <div className="w-full h-64 flex justify-center relative">
@@ -184,6 +180,10 @@ const HomepageTicketSearch = () => {
                                         setIsFromModal={setIsFromModal}
                                         fromDestination={fromDestination}
                                         toDestination={toDestination}
+                                        setFromDestinationId={
+                                            setFromDestinationId
+                                        }
+                                        setToDestinationId={setToDestinationId}
                                     />
                                     <div
                                         className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
