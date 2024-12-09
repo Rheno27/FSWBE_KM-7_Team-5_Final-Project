@@ -3,17 +3,42 @@ import { useNavigate } from "@tanstack/react-router";
 import { Form } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { CiFilter } from "react-icons/ci";
-import { ArrowBack as ArrowBackIcon } from "@mui/icons-material"; 
-import data from "../../data/dummy.json";
+import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
+import axios from "axios";
 
 const Notification = () => {
   const [notifications, setNotifications] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    setNotifications(data.notification); 
+    const fetchNotifications = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/user-notifications`);
+        
+        if (response.status === 404) {
+          setError("Notifications not found.");
+        } else {
+          setNotifications(response.data.notifications); 
+        }
+      } catch (err) {
+        if (err.response && err.response.status === 404) {
+          setError("Notifications not found.");
+        } else {
+          setError("Failed to fetch notifications. Please try again later.");
+        }
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
   }, []);
 
   const handleSearch = (event) => {
@@ -21,12 +46,8 @@ const Notification = () => {
   };
 
   const toggleSearchVisibility = () => {
-    setIsSearchVisible((prev) => !prev); 
+    setIsSearchVisible((prev) => !prev);
   };
-
-  const filteredNotifications = notifications.filter((notif) =>
-    notif.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   return (
     <div style={styles.container}>
@@ -39,7 +60,7 @@ const Notification = () => {
       <header style={styles.header}>
         <button
           style={styles.backButton}
-          onClick={() => navigate({ to: "/" })} 
+          onClick={() => navigate({ to: "/" })}
         >
           <ArrowBackIcon /> Beranda
         </button>
@@ -49,7 +70,7 @@ const Notification = () => {
         <div style={styles.searchWrapper}>
           <FaSearch
             style={styles.searchIcon}
-            onClick={toggleSearchVisibility} 
+            onClick={toggleSearchVisibility}
           />
           {isSearchVisible && (
             <Form.Control
@@ -63,8 +84,12 @@ const Notification = () => {
         </div>
       </header>
       <div style={styles.notifications}>
-        {filteredNotifications.length > 0 ? (
-          filteredNotifications.map((notif) => (
+        {loading ? (
+          <p>Loading notifications...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : notifications.length > 0 ? (
+          notifications.map((notif) => (
             <div key={notif.id} style={styles.notificationItem}>
               <div style={styles.icon}>🔔</div>
               <div style={styles.content}>
@@ -123,7 +148,7 @@ const styles = {
     alignItems: "center",
     border: "1px solid #eaeaea",
     borderRadius: "10px",
-  },    
+  },
   notificationItem: {
     display: "flex",
     alignItems: "center",
