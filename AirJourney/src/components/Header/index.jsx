@@ -2,22 +2,26 @@ import React, { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useSelector } from "react-redux";
 
 const Header = ({ flights = [], onFilteredFlightsChange }) => {
+  const isReturn = useSelector((state) => state.searchQuery.isReturn);
   const [activeDayIndex, setActiveDay] = React.useState(null); 
+  const [activeArrivalDayIndex, setArrivalActiveDay] = React.useState(null); 
   const [filteredFlights, setFilteredFlights] = React.useState(flights); 
   const [selectedDate, setSelectedDate] = React.useState(null); 
+  const [selectedArrivalDate, setSelectedArrivalDate] = React.useState(null); 
   
   const navigate = useNavigate();
 
-  const departureDate = flights?.length > 0 ? flights[0]?.departureDate : null;
+  const departureDate = useSelector((state) => state.searchQuery.departureDate) || flights?.length > 0 ? flights[0]?.departureDate : null;
+  const arrivalDate = useSelector((state) => state.searchQuery.arrivalDate);
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   const getDaysWithDates = () => {
     if (!departureDate) return [];
     const dateObj = new Date(departureDate);
     const daysWithDates = [];
-    
     // Set days with dates
     for (let i = 0; i < 7; i++) {
       const newDate = new Date(dateObj);
@@ -35,9 +39,18 @@ const Header = ({ flights = [], onFilteredFlightsChange }) => {
       const dateObj = new Date(departureDate);
       const selectedDateString = dateObj.toLocaleDateString("en-CA");
       setSelectedDate(selectedDateString); 
-      setActiveDay(dateObj.getDay()); 
+      setActiveDay(dateObj.getDay() - 1);
     }
   }, [departureDate, selectedDate]);
+
+  useEffect(() => {
+    if (arrivalDate && !selectedArrivalDate) {
+      const dateObj = new Date(arrivalDate);
+      const selectedDateString = dateObj.toLocaleDateString("en-CA");
+      setSelectedArrivalDate(selectedDateString); 
+      setArrivalActiveDay(dateObj.getDay() - 1);
+    }
+  }, [arrivalDate, selectedArrivalDate]);
 
   const handleDateClick = (index) => {
     if (index === activeDayIndex) return;
@@ -153,8 +166,8 @@ const Header = ({ flights = [], onFilteredFlightsChange }) => {
               borderRadius: "12px",
               border: "none",
               transition: "all 0.3s ease",
-              backgroundColor: index === activeDayIndex ? "#A06ECE" : "#fff",
-              color: index === activeDayIndex ? "white" : "#343a40",
+              backgroundColor: index === activeDayIndex ? "#A06ECE" : (isReturn && index === activeArrivalDayIndex ? "#73CA5C" : "#fff"),
+              color: index === activeDayIndex ? "white" :( isReturn && index === activeArrivalDayIndex ? "white" : "#343a40"),
               cursor: "pointer",
             }}
           >
