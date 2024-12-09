@@ -31,12 +31,15 @@ const FlightList = ({ filteredFlights }) => {
   // No Flights Data
   if (!Array.isArray(filteredFlights) || filteredFlights.length === 0) {
     return (
-      <div className="no-data-container text-center">
+      <div className="d-flex flex-column align-items-center no-data-container text-center">
         <img
           src={noDataImage}
           alt="No Flights Found"
           className="no-data-image img-fluid"
+          style={{maxWidth:"400px", height:"auto", marginBottom:"20px"}}
         />
+        <h5 className="font-bold" >Maaf pencarian anda tidak ditemukan</h5>
+        <p style={{color:"#7126B5"}}>Coba cari perjalanan lainnya!</p>
       </div>
     );
   }
