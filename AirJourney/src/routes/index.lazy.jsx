@@ -106,26 +106,30 @@ function Index() {
             //airportIdTo: toDestination,
         };
         if (isReturn) {
-            formData.departureDate = searchDate.from
-                .toISOString()
-                .split("T")[0];
-            formData.arrivalDate = searchDate.to.toISOString().split("T")[0];
+            formData.departureDate = `${searchDate.from.getFullYear()}-${searchDate.from.getMonth() + 1}-${searchDate.from.getDate()}`; //toISOString() placeholder
+            formData.arrivalDate = `${searchDate.to.getFullYear()}-${searchDate.to.getMonth() + 1}-${searchDate.to.getDate()}`;
             dispatch(
                 setDepartureDateRedux(
-                    searchDate.from.toISOString().split("T")[0]
+                    `${searchDate.from.getFullYear()}-${searchDate.from.getMonth() + 1}-${searchDate.from.getDate()}`
                 )
             );
             dispatch(
-                setArrivalDateRedux(searchDate.to.toISOString().split("T")[0])
+                setArrivalDateRedux(
+                    `${searchDate.to.getFullYear()}-${searchDate.to.getMonth() + 1}-${searchDate.to.getDate()}`
+                )
             );
         } else {
-            formData.departureDate = searchDate.toISOString().split("T")[0];
+            formData.departureDate = `${searchDate.getFullYear()}-${searchDate.getMonth() + 1}-${searchDate.getDate()}`;
             dispatch(
-                setDepartureDateRedux(searchDate.toISOString().split("T")[0])
+                setDepartureDateRedux(
+                    `${searchDate.getFullYear()}-${searchDate.getMonth() + 1}-${searchDate.getDate()}`
+                )
             );
         }
         console.log(formData);
-        navigate({to:`/users/public/detailPenerbangan?${new URLSearchParams(formData).toString()}`});
+        navigate({
+            to: `/users/public/detailPenerbangan?${new URLSearchParams(formData).toString()}`,
+        });
     };
 
     // for infinite scroll
