@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser, setToken } from "../../redux/slices/auth";
 import axios from "axios";
 import NotificationDropdown from "../Notification/dropdown"; 
-import dummyData from "../../data/dummy.json";
 import { useQuery } from "@tanstack/react-query";
 import { getUser } from "../../services/user";
 
@@ -46,29 +45,13 @@ const NavigationBar = () => {
     });
 
     const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
-    const notifications = dummyData.notification;
-
-    const onSubmit = async (e) => {
-        e.preventDefault();
-        const body = {
-            email,
-            password
-        }
-        const result = await login(body);
-        if (result.success) {
-            dispatch(setUser(result.data.token));
-            navigate("/");
-            return;
-        }
-        alert(result.message);
-    }
 
     return (
         <>
             {shuoldShowNavbar && (
                 <Navbar expand="lg" className="bg-white">
                     <Container fluid>
-                        <Navbar.Brand href="#" style={{ marginLeft: "128px" }}>
+                        <Navbar.Brand href="/" style={{ marginLeft: "128px" }}>
                             <img src={logo} alt="logo" />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -105,13 +88,15 @@ const NavigationBar = () => {
                                     <>
                                         <Nav.Link
                                             as={Link}
-                                            to="/history"
+                                            to="users/private/order-history/"
                                         >
                                             <HistoryIcon
                                                 style={{ marginRight: '8px' }}
                                             />
                                         </Nav.Link>
-                                        <NotificationDropdown notifications={notifications} />
+                                        <NotificationDropdown 
+                                            as={Link}
+                                            to="/notification"/>
                                         <Nav.Link as={Link} to="/users/private/profile/">
                                             <ProfileIcon
                                                 style={{ marginRight: '8px' }}

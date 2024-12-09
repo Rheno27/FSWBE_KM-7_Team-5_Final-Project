@@ -87,11 +87,10 @@ function Index() {
   }, []);
 
   useEffect(() => {
-    if (flights.length > 0) {
-      const soldOut = flights.every((flight) => flight.availableSeats === 0);
-      setIsSoldOut(soldOut);
-    }
+    const soldOut = flights.every((flight) => (flight.data && flight.data.length === 0));
+    setIsSoldOut(soldOut);
   }, [flights]);
+  
 
   const checkIfLoadMore = () => {
     if (loaderRef.current) {
@@ -129,11 +128,11 @@ function Index() {
 
   if (!loading && flights.length === 0 && !hasMore) {
     return (
-      <div className="text-center">
+      <div className="text-center d-flex flex-column align-items-center">
         <img
           src={SoldOutImage}
           alt="Tickets Sold Out"
-          style={{ maxWidth: "400px", height: "auto", "margin-bottom":"20px" }}
+          style={{ maxWidth: "400px", height: "auto", marginBottom:"20px" }}
         />
         <h5 style={{ fontFamily: "Poppins", color: "#000000" }}>
           Maaf, Tiket terjual habis!

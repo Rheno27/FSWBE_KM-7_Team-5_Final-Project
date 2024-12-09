@@ -6,6 +6,8 @@ import OrderForm from '../../../../components/OrderForm';
 import PassengerForm from '../../../../components/PassengerForm';
 import SeatPicker from '../../../../components/SeatPicker';
 import FlightDetails from '../../../../components/FlightDetails';
+import { useNavigate } from "react-router-dom"; 
+
 
 export const Route = createLazyFileRoute('/users/private/checkout/')({
     component: Checkout,
@@ -13,6 +15,7 @@ export const Route = createLazyFileRoute('/users/private/checkout/')({
 
 
 function Checkout() {
+    const navigate = useNavigate();
     return (
         <Container className="checkout-page">
             {/* Progress Bar */}
@@ -44,6 +47,7 @@ function Checkout() {
                             backgroundColor: "#FF0000",
                             borderColor: "#FF0000",
                         }}
+                        onClick={() => navigate(`users/private/payment`)}
                     >
                         Lanjutkan Pembayaran
                     </Button>
