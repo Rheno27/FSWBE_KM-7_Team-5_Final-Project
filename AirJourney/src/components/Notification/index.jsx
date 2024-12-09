@@ -16,6 +16,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
   const { token } = useSelector((state) => state.auth);
   const [localNotifications, setLocalNotifications] = useState(notifications);
   const [localError, setLocalError] = useState(error);
+  const [localLoading, setLocalLoading] = useState(loading);
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
@@ -27,6 +28,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
 
   useEffect(() => {
     const fetchNotifications = async () => {
+      setLocalLoading(true);
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/notifications`,
@@ -42,6 +44,8 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
       } catch (err) {
         console.error("Failed to fetch notifications:", err);
         setLocalError("Failed to fetch notifications.");
+      } finally {
+        setLocalLoading(false);
       }
     };
   
@@ -173,7 +177,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
           borderRadius: "10px",
         }}
       >
-        {loading ? (
+        {localLoading ? (
           <p>Loading notifications...</p>
         ) : localError ? (
           <p>{localError}</p>

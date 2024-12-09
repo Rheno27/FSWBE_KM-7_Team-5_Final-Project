@@ -7,7 +7,7 @@ const ClassModal = ({ setShowClassModal, classType, setClassType }) => {
         { name: "Economy", price: "IDR 4.950.000" },
         { name: "Premium Economy", price: "IDR 7.550.000" },
         { name: "Business", price: "IDR 29.220.000" },
-        { name: "First", price: "IDR 87.620.000" },
+        { name: "First Class", price: "IDR 87.620.000" },
     ];
 
     return (
@@ -26,7 +26,7 @@ const ClassModal = ({ setShowClassModal, classType, setClassType }) => {
                             className={`flex items-center justify-between border-b rounded-lg py-2 px-4 ${classType == item.name ? "bg-darkblue5 text-white" : ""}`}
                             onClick={() => setClassType(item.name)}
                         >
-                            <div className="flex flex-col text-left">
+                            <div className="flex flex-col text-left w-36 sm:w-52">
                                 <span className="font-bold">{item.name}</span>
                                 <span
                                     className={

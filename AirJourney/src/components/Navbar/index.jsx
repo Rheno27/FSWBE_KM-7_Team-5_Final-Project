@@ -16,10 +16,11 @@ import { setUser, setToken } from "../../redux/slices/auth";
 import axios from "axios";
 import NotificationDropdown from "../Notification/dropdown"; 
 import { useQuery } from "@tanstack/react-query";
+import { getUser } from "../../services/user";
 
 const NavigationBar = () => {
     const navigate = useNavigate();
-    const { user, token } = useSelector((state) => state.auth);
+    const { token } = useSelector((state) => state.auth);
     const location = useLocation();
     const dispatch = useDispatch();
 
@@ -31,32 +32,17 @@ const NavigationBar = () => {
         "/reset-password-request",
         "/otp",
     ];
-    const { data, isSuccess, isError } = useQuery({
+    const { data: user, isSuccess, isError } = useQuery({
         queryKey: ["user"],
-        queryFn: async () =>
-            await axios.get(`${import.meta.env.VITE_API_URL}/users/me`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-            }),
-        enabled: !!localStorage.getItem("token"),
-    });
-
-    // const handleLogout = useCallback(() => {
-    //     localStorage.removeItem("token");
-    //     dispatch(setToken(null));
-    //     dispatch(setUser(null));
-    // }, [dispatch]);
-
-    useEffect(() => {
-        if (isSuccess) {
-            dispatch(setUser(data.data));
-            dispatch(setToken(localStorage.getItem("token")));
-        }
-        if (isError) {
+        queryFn: getUser,
+        enabled: !!token,
+        onSuccess: (data) => dispatch(setUser(data.data)),
+        onError: () => {
+            dispatch(setUser(null));
+            dispatch(setToken(null));
             navigate({ to: "/login" });
-        }
-    }, [isSuccess, isError, dispatch, data, user]);
+        },
+    });
 
     const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
@@ -87,8 +73,7 @@ const NavigationBar = () => {
                         <Form
                             className="d-flex"
                             style={{ position: 'relative', marginLeft: '34px', width: '444px' }}
-                            onSubmit={onSubmit}
-                        >
+                            >
                             <Form.Control
                                 type="search"
                                 placeholder="Search"
