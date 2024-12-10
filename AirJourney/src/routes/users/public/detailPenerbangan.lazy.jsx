@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import FlightList from "../../../components/FlightList";
 import Sidebar from "../../../components/Sidebar";
 import Header from "../../../components/Header";
@@ -13,6 +13,7 @@ export const Route = createLazyFileRoute("/users/public/detailPenerbangan")({
 });
 
 function Index() {
+  const navigate = useNavigate();
   const [flights, setFlights] = useState([]);
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,32 +23,34 @@ function Index() {
   const [selectedSort, setSelectedSort] = useState("Harga - Termurah");
   const [isSoldOut, setIsSoldOut] = useState(false);
   const loaderRef = useRef(null); 
-  const {classType,fromDestinationId,toDestinationId} = useSelector(state=>state.searchQuery);
 
   const fetchFlightsData = async (resetList,newDate) => {
-    if (loading || !hasMore) return;
+    console.log("fetch hit")
+    if(loading) return;
+    if(resetList){
+      setHasMore(true);
+    }
+    else if (!hasMore) return;
 
     setLoading(true);
     setError("");
     try {
       const params = resetList ? new URLSearchParams() : (window.location.search ? new URLSearchParams(window.location.search) : new URLSearchParams());
-      if(resetList){ //
-        setFlights([])
-        const params = new URLSearchParams();
+      const urlParams = new URLSearchParams(window.location.search);
+      if(resetList){
         params.append("departureDate", newDate);
-        if(classType){
-          params.append("class",classType)
+        if(urlParams.get("class")){
+          params.append("class",urlParams.get("class").toUpperCase())
         }
-        if(fromDestinationId){
-          params.append("airportFromId",fromDestinationId)
+        if(urlParams.get("airportIdFrom")){
+          params.append("airportIdFrom",urlParams.get("airportIdFrom"))
         }
-        if(toDestinationId){
-          params.append("airportToId",toDestinationId)
+        if(urlParams.get("airportIdTo")){
+          params.append("airportIdTo",urlParams.get("airportIdTo"))
         }
+        navigate({to:`/users/public/detailPenerbangan?${params.toString()}`})
       }
-      else{
-        if (cursorId) params.append("cursorId", cursorId);
-      } //
+      if (cursorId) params.append("cursorId", cursorId);
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/flights?${params.toString()}`
@@ -65,7 +68,8 @@ function Index() {
         ? result.data
         : [];
 
-      const allFlights = [...flights, ...newFlights];
+      const allFlights = resetList ? [...newFlights] : [...flights, ...newFlights];
+      console.log(allFlights);
       const uniqueFlightsMap = new Map(allFlights.map((flight) => [flight.id, flight]));
       const uniqueFlights = Array.from(uniqueFlightsMap.values());
 
@@ -140,28 +144,28 @@ function Index() {
       <img src={loadingImage} alt="loading..." style={{ maxWidth: "400px", height: "auto" }} />
     </div>;
   }
-
   if (error && flights.length === 0) {
     return <div>{error}</div>;
   }
 
-  if (!loading && flights.length === 0 && !hasMore) {
-    return (
-      <div className="text-center">
-        <img
-          src={SoldOutImage}
-          alt="Tickets Sold Out"
-          style={{ maxWidth: "400px", height: "auto", "margin-bottom":"20px" }}
-        />
-        <h5 style={{ fontFamily: "Poppins", color: "#000000" }}>
-          Maaf, Tiket terjual habis!
-        </h5>
-        <h5 style={{ fontFamily: "Poppins", color: "#7126B5" }}>
-          Coba cari perjalanan lainnya!
-        </h5>
-      </div>
-    );
-  }
+  
+  // if (!loading && flights.length === 0 && !hasMore) {
+  //   return (
+  //     <div className="text-center">
+  //       <img
+  //         src={SoldOutImage}
+  //         alt="Tickets Sold Out"
+  //         style={{ maxWidth: "400px", height: "auto", "margin-bottom":"20px" }}
+  //       />
+  //       <h5 style={{ fontFamily: "Poppins", color: "#000000" }}>
+  //         Maaf, Tiket terjual habis!
+  //       </h5>
+  //       <h5 style={{ fontFamily: "Poppins", color: "#7126B5" }}>
+  //         Coba cari perjalanan lainnya!
+  //       </h5>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div>
@@ -196,7 +200,7 @@ function Index() {
           </div>
           
           <div className="col-12 col-md-8">
-            <FlightList filteredFlights={filteredFlights} />
+            <FlightList filteredFlights={filteredFlights}/>
             {loading && (
               <div className="text-center mt-3">
                 <span>Loading...</span>

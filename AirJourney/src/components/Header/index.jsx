@@ -15,13 +15,16 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData }) => {
   
   const navigate = useNavigate();
 
-  const departureDate = useSelector((state) => state.searchQuery.departureDate) || flights?.length > 0 ? flights[0]?.departureDate : null;
+  const urlParams = new URLSearchParams(window.location.search);
+  const departureDate = new Date(urlParams.get("departureDate")).toLocaleDateString("en-CA") || (flights?.length ? flights[0]?.departureDate : new Date().toLocaleDateString("en-CA"));
   const arrivalDate = useSelector((state) => state.searchQuery.arrivalDate);
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   const getDaysWithDates = () => {
     if (!departureDate) return [];
+    const getDateIndex = new Date(departureDate).getDay();
     const dateObj = new Date(departureDate);
+    dateObj.setDate(dateObj.getDate() - getDateIndex);
     const daysWithDates = [];
     // Set days with dates
     for (let i = 0; i < 7; i++) {
@@ -34,13 +37,12 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData }) => {
   };
 
   const daysWithDates = getDaysWithDates();
-
+  console.log("rendered")
   useEffect(() => {
     if (departureDate && !selectedDate) {
       const dateObj = new Date(departureDate);
       const selectedDateString = dateObj.toLocaleDateString("en-CA");
       setSelectedDate(selectedDateString); 
-      setActiveDay(dateObj.getDay() - 1);
     }
   }, [departureDate, selectedDate]);
 
@@ -49,18 +51,16 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData }) => {
       const dateObj = new Date(arrivalDate);
       const selectedDateString = dateObj.toLocaleDateString("en-CA");
       setSelectedArrivalDate(selectedDateString); 
-      setArrivalActiveDay(dateObj.getDay() - 1);
     }
   }, [arrivalDate, selectedArrivalDate]);
 
-  const handleDateClick = (index) => {
-    if (index === activeDayIndex) return;
+  const handleDateClick = (date) => {
+    if (date === selectedDate || date < new Date().toLocaleDateString("en-CA")) return;
 
-    const selectedDayDate = daysWithDates[index].date;
-    setSelectedDate(selectedDayDate); 
-    setActiveDay(index); 
+    const selectedDayDate = date;
+    setSelectedDate(selectedDayDate);
 
-    fetchFlightsData(true,selectedDate); //
+    fetchFlightsData(true,selectedDayDate); //
 
     const newFilteredFlights = flights.filter((flight) => {
       const flightDate = new Date(flight?.departureDate)?.toLocaleDateString("en-CA");
@@ -159,7 +159,7 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData }) => {
         {daysWithDates.map((dayObj, index) => (
           <button
             key={index}
-            onClick={() => handleDateClick(index)} 
+            onClick={() => handleDateClick(dayObj.date)} 
             style={{
               fontSize: "0.9rem",
               lineHeight: "1.2",
@@ -169,8 +169,8 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData }) => {
               borderRadius: "12px",
               border: "none",
               transition: "all 0.3s ease",
-              backgroundColor: index === activeDayIndex ? "#A06ECE" : (isReturn && index === activeArrivalDayIndex ? "#73CA5C" : "#fff"),
-              color: index === activeDayIndex ? "white" :( isReturn && index === activeArrivalDayIndex ? "white" : "#343a40"),
+              backgroundColor: dayObj.date === selectedDate ? "#A06ECE" : (isReturn && dayObj.date === selectedArrivalDate ? "#73CA5C" : "#fff"),
+              color: dayObj.date === selectedDate ? "white" :( isReturn && dayObj.date === selectedArrivalDate ? "white" : "#343a40"),
               cursor: "pointer",
             }}
           >
