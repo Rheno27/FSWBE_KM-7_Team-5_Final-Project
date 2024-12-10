@@ -48,6 +48,11 @@ function Index() {
         if(urlParams.get("airportIdTo")){
           params.append("airportIdTo",urlParams.get("airportIdTo"))
         }
+        if(urlParams.get("arrivalDate")){
+          if(new Date(urlParams.get("departureDate")) < new Date(urlParams.get("arrivalDate"))){
+            params.append("arrivalDate",urlParams.get("arrivalDate"))
+          }
+        }
         navigate({to:`/users/public/detailPenerbangan?${params.toString()}`})
       }
       if (cursorId) params.append("cursorId", cursorId);

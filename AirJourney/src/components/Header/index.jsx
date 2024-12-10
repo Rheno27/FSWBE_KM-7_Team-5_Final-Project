@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import PropTypes from "prop-types"
 
 const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData }) => {
-  const isReturn = useSelector((state) => state.searchQuery.isReturn);
   const [activeDayIndex, setActiveDay] = React.useState(null); 
   const [activeArrivalDayIndex, setArrivalActiveDay] = React.useState(null); 
   const [filteredFlights, setFilteredFlights] = React.useState(flights); 
@@ -16,8 +15,9 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData }) => {
   const navigate = useNavigate();
 
   const urlParams = new URLSearchParams(window.location.search);
+  const isReturn = urlParams.get("arrivalDate") ? true : false;
   const departureDate = new Date(urlParams.get("departureDate")).toLocaleDateString("en-CA") || (flights?.length ? flights[0]?.departureDate : new Date().toLocaleDateString("en-CA"));
-  const arrivalDate = useSelector((state) => state.searchQuery.arrivalDate);
+  const arrivalDate = urlParams.get("arrivalDate");
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   const getDaysWithDates = () => {
