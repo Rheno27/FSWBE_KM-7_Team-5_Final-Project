@@ -7,6 +7,7 @@ import SoldOutImage from "../../../assets/img/soldout.png";
 import loadingImage from "../../../assets/img/search-loading.png"
 import SortingButton from "../../../components/FilterFlight/index";
 import { useSelector } from "react-redux";
+import { SelectedFlight } from "../../../components/SelectedFlight";
 
 export const Route = createLazyFileRoute("/users/public/detailPenerbangan")({
   component: Index,
@@ -22,6 +23,8 @@ function Index() {
   const [hasMore, setHasMore] = useState(true);
   const [selectedSort, setSelectedSort] = useState("Harga - Termurah");
   const [isSoldOut, setIsSoldOut] = useState(false);
+  const [isFromSelected,setIsFromSelected] = useState(false);
+  const [selectedFlightId,setSelectedFlightId] = useState(null);
   const loaderRef = useRef(null); 
 
   const fetchFlightsData = async (resetList,newDate) => {
@@ -200,12 +203,13 @@ function Index() {
         </div>
 
         <div className="row d-flex justify-content-center">
-          <div className="col-12 col-md-4 mb-4 mb-md-0">
+          <div className="col-12 col-md-4 mb-4 mb-md-0 gap-5">
             <Sidebar />
+            {isFromSelected && (<SelectedFlight selectedFlightId={selectedFlightId} setSelectedFlightId={setSelectedFlightId} setIsFromSelected={setIsFromSelected} />)}
           </div>
           
           <div className="col-12 col-md-8">
-            <FlightList filteredFlights={filteredFlights}/>
+            <FlightList filteredFlights={filteredFlights} isFromSelected={isFromSelected} setIsFromSelected={setIsFromSelected} setSelectedFlightId={setSelectedFlightId}/>
             {loading && (
               <div className="text-center mt-3">
                 <span>Loading...</span>
