@@ -1,5 +1,5 @@
 import React from "react";
-import "./FlightList.css";
+import "./style.css";
 import { Accordion, Button, Row, Col, Container } from "react-bootstrap";
 import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 import Card from 'react-bootstrap/Card';

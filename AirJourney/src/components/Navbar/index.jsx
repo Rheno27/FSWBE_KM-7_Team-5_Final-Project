@@ -94,9 +94,7 @@ const NavigationBar = () => {
                                                 style={{ marginRight: '8px' }}
                                             />
                                         </Nav.Link>
-                                        <NotificationDropdown 
-                                            as={Link}
-                                            to="/notification"/>
+                                        <NotificationDropdown/>
                                         <Nav.Link as={Link} to="/users/private/profile/">
                                             <ProfileIcon
                                                 style={{ marginRight: '8px' }}
