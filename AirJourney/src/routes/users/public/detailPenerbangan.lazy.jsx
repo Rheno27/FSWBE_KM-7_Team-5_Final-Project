@@ -4,7 +4,7 @@ import FlightList from "../../../components/FlightList";
 import Sidebar from "../../../components/Sidebar";
 import Header from "../../../components/Header";
 import SoldOutImage from "../../../assets/img/soldout.png";
-import loadingImage from "../../../assets/img/search-loading.png"
+import loadingImage from "../../../assets/img/search-loading.png";
 import SortingButton from "../../../components/FilterFlight/index";
 import { useSelector } from "react-redux";
 import { SelectedFlight } from "../../../components/SelectedFlight";
@@ -23,40 +23,50 @@ function Index() {
   const [hasMore, setHasMore] = useState(true);
   const [selectedSort, setSelectedSort] = useState("Harga - Termurah");
   const [isSoldOut, setIsSoldOut] = useState(false);
-  const [isFromSelected,setIsFromSelected] = useState(false);
-  const [selectedFlightId,setSelectedFlightId] = useState(null);
-  const loaderRef = useRef(null); 
+  const [isFromSelected, setIsFromSelected] = useState(false);
+  const [selectedFlightId, setSelectedFlightId] = useState(null);
+  const [isToSelected, setIsToSelected] = useState(false);
+  const [selectedFlightIdTo, setSelectedFlightIdTo] = useState(null);
+  const loaderRef = useRef(null);
 
-  const fetchFlightsData = async (resetList,newDate) => {
-    console.log("fetch hit")
-    if(loading) return;
-    if(resetList){
+  const fetchFlightsData = async (resetList, newDate) => {
+    console.log("fetch hit");
+    if (loading) return;
+    if (resetList) {
       setHasMore(true);
-    }
-    else if (!hasMore) return;
+    } else if (!hasMore) return;
 
     setLoading(true);
     setError("");
     try {
-      const params = resetList ? new URLSearchParams() : (window.location.search ? new URLSearchParams(window.location.search) : new URLSearchParams());
+      const params = resetList
+        ? new URLSearchParams()
+        : window.location.search
+          ? new URLSearchParams(window.location.search)
+          : new URLSearchParams();
       const urlParams = new URLSearchParams(window.location.search);
-      if(resetList){
+      if (resetList) {
         params.append("departureDate", newDate);
-        if(urlParams.get("class")){
-          params.append("class",urlParams.get("class").toUpperCase())
+        if (urlParams.get("class")) {
+          params.append("class", urlParams.get("class").toUpperCase());
         }
-        if(urlParams.get("airportIdFrom")){
-          params.append("airportIdFrom",urlParams.get("airportIdFrom"))
+        if (urlParams.get("airportIdFrom")) {
+          params.append("airportIdFrom", urlParams.get("airportIdFrom"));
         }
-        if(urlParams.get("airportIdTo")){
-          params.append("airportIdTo",urlParams.get("airportIdTo"))
+        if (urlParams.get("airportIdTo")) {
+          params.append("airportIdTo", urlParams.get("airportIdTo"));
         }
-        if(urlParams.get("arrivalDate")){
-          if(new Date(urlParams.get("departureDate")) < new Date(urlParams.get("arrivalDate"))){
-            params.append("arrivalDate",urlParams.get("arrivalDate"))
+        if (urlParams.get("arrivalDate")) {
+          if (
+            new Date(urlParams.get("departureDate")) <
+            new Date(urlParams.get("arrivalDate"))
+          ) {
+            params.append("arrivalDate", urlParams.get("arrivalDate"));
           }
         }
-        navigate({to:`/users/public/detailPenerbangan?${params.toString()}`})
+        navigate({
+          to: `/users/public/detailPenerbangan?${params.toString()}`,
+        });
       }
       if (cursorId) params.append("cursorId", cursorId);
 
@@ -73,12 +83,16 @@ function Index() {
       const newFlights = Array.isArray(result)
         ? result
         : Array.isArray(result.data)
-        ? result.data
-        : [];
+          ? result.data
+          : [];
 
-      const allFlights = resetList ? [...newFlights] : [...flights, ...newFlights];
+      const allFlights = resetList
+        ? [...newFlights]
+        : [...flights, ...newFlights];
       console.log(allFlights);
-      const uniqueFlightsMap = new Map(allFlights.map((flight) => [flight.id, flight]));
+      const uniqueFlightsMap = new Map(
+        allFlights.map((flight) => [flight.id, flight])
+      );
       const uniqueFlights = Array.from(uniqueFlightsMap.values());
 
       // Update state
@@ -128,7 +142,7 @@ function Index() {
       const rect = loaderRef.current.getBoundingClientRect();
       if (rect.top <= window.innerHeight && !loading && hasMore) {
         setLoading(true);
-        fetchFlightsData(); 
+        fetchFlightsData();
       }
     }
   };
@@ -147,16 +161,21 @@ function Index() {
   }, [loading, hasMore]);
 
   if (loading && flights.length === 0) {
-    return <div className="d-flex flex-column align-items-center justify-content-center">
-      <h5 className="text-center mb-4">Mencari Penerbangan Terbaik ...</h5>
-      <img src={loadingImage} alt="loading..." style={{ maxWidth: "400px", height: "auto" }} />
-    </div>;
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center">
+        <h5 className="text-center mb-4">Mencari Penerbangan Terbaik ...</h5>
+        <img
+          src={loadingImage}
+          alt="loading..."
+          style={{ maxWidth: "400px", height: "auto" }}
+        />
+      </div>
+    );
   }
   if (error && flights.length === 0) {
     return <div>{error}</div>;
   }
 
-  
   // if (!loading && flights.length === 0 && !hasMore) {
   //   return (
   //     <div className="text-center">
@@ -205,11 +224,24 @@ function Index() {
         <div className="row d-flex justify-content-center">
           <div className="col-12 col-md-4 mb-4 mb-md-0 gap-5">
             <Sidebar />
-            {isFromSelected && (<SelectedFlight selectedFlightId={selectedFlightId} setSelectedFlightId={setSelectedFlightId} setIsFromSelected={setIsFromSelected} />)}
+            {isFromSelected && (
+              <SelectedFlight
+                selectedFlightId={selectedFlightId}
+                setSelectedFlightId={setSelectedFlightId}
+                setIsFromSelected={setIsFromSelected}
+                fetchFlightsData={fetchFlightsData}
+              />
+            )}
           </div>
-          
+
           <div className="col-12 col-md-8">
-            <FlightList filteredFlights={filteredFlights} isFromSelected={isFromSelected} setIsFromSelected={setIsFromSelected} setSelectedFlightId={setSelectedFlightId}/>
+            <FlightList
+              filteredFlights={filteredFlights}
+              isFromSelected={isFromSelected}
+              setIsFromSelected={setIsFromSelected}
+              setSelectedFlightId={setSelectedFlightId}
+              fetchFlightsData={fetchFlightsData}
+            />
             {loading && (
               <div className="text-center mt-3">
                 <span>Loading...</span>

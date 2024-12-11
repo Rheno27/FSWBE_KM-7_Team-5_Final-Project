@@ -30,16 +30,19 @@ function CustomToggle({ eventKey }) {
   );
 }
 
-const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelectedFlightId }) => {
+const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelectedFlightId,fetchFlightsData }) => {
+  const returnDate = useSelector((state) => state.searchQuery.returnDate) || "2024-12-14";
   const navigate = useNavigate();
-  const {isReturn} = useSelector(state=>state.searchQuery);
+  const url = new URLSearchParams(window.location.search)
+  const isReturn = url.get("arrivalDate") ? true : false;
   const clickHandler = (flightId) =>  {
     if(isReturn && !isFromSelected){
       setIsFromSelected(true);
       setSelectedFlightId(flightId);
+      fetchFlightsData(true,returnDate);
     }
     else {
-      navigate(`/detail/${flightId}`);
+      navigate({to:`/users/private/checkout`});
     }
 
   }
