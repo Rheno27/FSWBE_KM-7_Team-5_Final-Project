@@ -14,8 +14,8 @@ const PassengerModal = ({ setShowPassengerModal, passenger, setPassenger }) => {
 
     useEffect(() => {
         setPassenger({ adult, child, baby });
-        console.log(passenger);
-    }, [passenger, adult, child, baby, setPassenger]);
+    }, [adult, child, baby]);
+    
     return (
         <div className="absolute -inset-x-1/2 md:inset-x-0 md:inset-y-16 z-2 w-fit md:mx-auto h-fit rounded-xl p-4 bg-white">
             <div className="flex justify-end mb-4">
