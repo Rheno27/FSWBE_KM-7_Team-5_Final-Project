@@ -1,9 +1,12 @@
 import "../../index.css";
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import PropTypes from "prop-types"
+
 export const SelectedFlight = ({selectedFlightId, setSelectedFlightId,setIsFromSelected,fetchFlightsData}) => {
-    const returnDate = "2024-12-14";
+    const returnDate = useSelector(state=>state.searchQuery.arrivalDate) || new Date();
+
     const { data: flight, isSuccess } = useQuery({
         queryKey: ["flight", selectedFlightId],
         queryFn: () =>
@@ -13,6 +16,7 @@ export const SelectedFlight = ({selectedFlightId, setSelectedFlightId,setIsFromS
     const clickHandler = () =>{
       setIsFromSelected(false);
       setSelectedFlightId(null);
+      fetchFlightsData(true,returnDate);
     }
 
     return (
@@ -59,3 +63,10 @@ export const SelectedFlight = ({selectedFlightId, setSelectedFlightId,setIsFromS
         </div>
     );
 };
+
+SelectedFlight.propTypes = {
+  selectedFlightId:PropTypes.any,
+  setSelectedFlightId:PropTypes.any,
+  setIsFromSelected:PropTypes.any,
+  fetchFlightsData:PropTypes.any
+}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import FlightList from "../../../components/FlightList";
 import Sidebar from "../../../components/Sidebar";
@@ -6,7 +6,6 @@ import Header from "../../../components/Header";
 import SoldOutImage from "../../../assets/img/soldout.png";
 import loadingImage from "../../../assets/img/search-loading.png";
 import SortingButton from "../../../components/FilterFlight/index";
-import { useSelector } from "react-redux";
 import { SelectedFlight } from "../../../components/SelectedFlight";
 
 export const Route = createLazyFileRoute("/users/public/detailPenerbangan")({
@@ -25,12 +24,9 @@ function Index() {
   const [isSoldOut, setIsSoldOut] = useState(false);
   const [isFromSelected, setIsFromSelected] = useState(false);
   const [selectedFlightId, setSelectedFlightId] = useState(null);
-  const [isToSelected, setIsToSelected] = useState(false);
-  const [selectedFlightIdTo, setSelectedFlightIdTo] = useState(null);
   const loaderRef = useRef(null);
 
-  const fetchFlightsData = async (resetList, newDate) => {
-    console.log("fetch hit");
+  const fetchFlightsData = useCallback(async (resetList = false, newDate = null) => {
     if (loading) return;
     if (resetList) {
       setHasMore(true);
@@ -39,57 +35,38 @@ function Index() {
     setLoading(true);
     setError("");
     try {
-      const params = resetList
-        ? new URLSearchParams()
-        : window.location.search
-          ? new URLSearchParams(window.location.search)
-          : new URLSearchParams();
-      const urlParams = new URLSearchParams(window.location.search);
+      // Params
+      const params = new URLSearchParams(window.location.search);
       if (resetList) {
-        params.append("departureDate", newDate);
-        if (urlParams.get("class")) {
-          params.append("class", urlParams.get("class").toUpperCase());
-        }
-        if (urlParams.get("airportIdFrom")) {
-          params.append("airportIdFrom", urlParams.get("airportIdFrom"));
-        }
-        if (urlParams.get("airportIdTo")) {
-          params.append("airportIdTo", urlParams.get("airportIdTo"));
-        }
-        if (urlParams.get("arrivalDate")) {
-          if (
-            new Date(urlParams.get("departureDate")) <
-            new Date(urlParams.get("arrivalDate"))
-          ) {
-            params.append("arrivalDate", urlParams.get("arrivalDate"));
-          }
-        }
+        params.delete('cursorId');
+        if (newDate) params.set('departureDate', newDate);
         navigate({
           to: `/users/public/detailPenerbangan?${params.toString()}`,
         });
+      } else if (cursorId) {
+        params.set('cursorId', cursorId);
       }
-      if (cursorId) params.append("cursorId", cursorId);
 
+      // Fetch
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/flights?${params.toString()}`
       );
+
       if (!response.ok) {
         throw new Error("Failed to fetch flights data.");
       }
+
       const result = await response.json();
-
-      console.log("API Response:", result);
-
-      const newFlights = Array.isArray(result)
-        ? result
-        : Array.isArray(result.data)
-          ? result.data
+      const newFlights = Array.isArray(result) 
+        ? result 
+        : Array.isArray(result.data) 
+          ? result.data 
           : [];
 
-      const allFlights = resetList
-        ? [...newFlights]
+      const allFlights = resetList 
+        ? newFlights 
         : [...flights, ...newFlights];
-      console.log(allFlights);
+      
       const uniqueFlightsMap = new Map(
         allFlights.map((flight) => [flight.id, flight])
       );
@@ -108,44 +85,43 @@ function Index() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [loading, hasMore, cursorId, flights, navigate]);
 
-  // Handle sorting of flights
-  const handleSortChange = (option) => {
+  const handleSortChange = useCallback((option) => {
     setSelectedSort(option.label);
-    let sortedFlights = [...filteredFlights];
-    if (option.label === "Harga - Termurah") {
-      sortedFlights.sort((a, b) => a.price - b.price);
-    } else if (option.label === "Harga - Termahal") {
-      sortedFlights.sort((a, b) => b.price - a.price);
-    }
+    
+    const sortedFlights = [...filteredFlights].sort((a, b) => {
+      switch(option.label) {
+        case "Harga - Termurah":
+          return a.price - b.price;
+        case "Harga - Termahal":
+          return b.price - a.price;
+        default:
+          return 0;
+      }
+    });
+
     setFilteredFlights(sortedFlights);
-  };
+  }, [filteredFlights]);
 
-  const handleFilteredFlightsChange = (newFilteredFlights) => {
-    setFilteredFlights(newFilteredFlights);
-  };
+  const checkIfLoadMore = useCallback(() => {
+    if (loaderRef.current) {
+      const rect = loaderRef.current.getBoundingClientRect();
+      if (rect.top <= window.innerHeight && !loading && hasMore) {
+        fetchFlightsData();
+      }
+    }
+  }, [loading, hasMore, fetchFlightsData]);
 
+  //initiate
   useEffect(() => {
     fetchFlightsData();
   }, []);
 
-  useEffect(() => {
-    if (flights.length > 0) {
-      const soldOut = flights.every((flight) => flight.availableSeats === 0);
-      setIsSoldOut(soldOut);
-    }
-  }, [flights]);
-
-  const checkIfLoadMore = () => {
-    if (loaderRef.current) {
-      const rect = loaderRef.current.getBoundingClientRect();
-      if (rect.top <= window.innerHeight && !loading && hasMore) {
-        setLoading(true);
-        fetchFlightsData();
-      }
-    }
-  };
+  // useEffect(() => {
+  //   const soldOut = flights.length > 0 && flights.every((flight) => flight?.seats === 0);
+  //   setIsSoldOut(soldOut);
+  // }, [flights]);
 
   // Add scroll event listener
   useEffect(() => {
@@ -154,24 +130,11 @@ function Index() {
     };
 
     window.addEventListener("scroll", onScroll);
-
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [loading, hasMore]);
+  }, [checkIfLoadMore]);
 
-  if (loading && flights.length === 0) {
-    return (
-      <div className="d-flex flex-column align-items-center justify-content-center">
-        <h5 className="text-center mb-4">Mencari Penerbangan Terbaik ...</h5>
-        <img
-          src={loadingImage}
-          alt="loading..."
-          style={{ maxWidth: "400px", height: "auto" }}
-        />
-      </div>
-    );
-  }
   if (error && flights.length === 0) {
     return <div>{error}</div>;
   }
@@ -207,8 +170,10 @@ function Index() {
       </h5>
       <Header
         flights={flights}
-        onFilteredFlightsChange={handleFilteredFlightsChange}
+        onFilteredFlightsChange={setFilteredFlights}
         fetchFlightsData={fetchFlightsData}
+        isFromSelected={isFromSelected}
+        loading={loading}
       />
 
       <div className="container mt-4">
@@ -235,19 +200,34 @@ function Index() {
           </div>
 
           <div className="col-12 col-md-8">
-            <FlightList
-              filteredFlights={filteredFlights}
-              isFromSelected={isFromSelected}
-              setIsFromSelected={setIsFromSelected}
-              setSelectedFlightId={setSelectedFlightId}
-              fetchFlightsData={fetchFlightsData}
-            />
-            {loading && (
-              <div className="text-center mt-3">
-                <span>Loading...</span>
+            {loading && flights.length === 0 ? (
+              <div className="d-flex flex-column align-items-center justify-content-center">
+                <h5 className="text-center mb-4">
+                  Mencari Penerbangan Terbaik ...
+                </h5>
+                <img
+                  src={loadingImage}
+                  alt="loading..."
+                  style={{ maxWidth: "400px", height: "auto" }}
+                />
               </div>
+            ) : (
+              <>
+                <FlightList
+                  filteredFlights={filteredFlights}
+                  isFromSelected={isFromSelected}
+                  setIsFromSelected={setIsFromSelected}
+                  setSelectedFlightId={setSelectedFlightId}
+                  fetchFlightsData={fetchFlightsData}
+                />
+                {loading && (
+                  <div className="text-center mt-3">
+                    <span>Loading...</span>
+                  </div>
+                )}
+                <div ref={loaderRef} style={{ height: "1px" }}></div>
+              </>
             )}
-            <div ref={loaderRef} style={{ height: "1px" }}></div>
           </div>
         </div>
       </div>

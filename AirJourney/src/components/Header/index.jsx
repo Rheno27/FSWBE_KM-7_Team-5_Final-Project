@@ -5,19 +5,18 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types"
 
-const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData }) => {
-  const [activeDayIndex, setActiveDay] = React.useState(null); 
-  const [activeArrivalDayIndex, setArrivalActiveDay] = React.useState(null); 
-  const [filteredFlights, setFilteredFlights] = React.useState(flights); 
+const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromSelected,loading}) => {
+  //const [filteredFlights, setFilteredFlights] = React.useState(flights); 
   const [selectedDate, setSelectedDate] = React.useState(null); 
   const [selectedArrivalDate, setSelectedArrivalDate] = React.useState(null); 
   
   const navigate = useNavigate();
 
   const urlParams = new URLSearchParams(window.location.search);
-  const isReturn = urlParams.get("arrivalDate") ? true : false;
-  const departureDate = new Date(urlParams.get("departureDate")).toLocaleDateString("en-CA") || (flights?.length ? flights[0]?.departureDate : new Date().toLocaleDateString("en-CA"));
-  const arrivalDate = urlParams.get("arrivalDate");
+  const isReturn = useSelector(state=>state.searchQuery.isReturn);
+  const departureDate = (new Date(urlParams.get("departureDate")).toLocaleDateString("en-CA") || (flights?.length ? flights[0]?.departureDate : new Date().toLocaleDateString("en-CA")));
+  const departureDateFrom = useSelector(state=>state.searchQuery.departureDate);
+  const arrivalDate = useSelector(state=>state.searchQuery.arrivalDate);
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   const getDaysWithDates = () => {
@@ -37,9 +36,14 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData }) => {
   };
 
   const daysWithDates = getDaysWithDates();
-  console.log("rendered")
   useEffect(() => {
-    if (departureDate && !selectedDate) {
+    if(isFromSelected){
+      const dateObj = new Date(departureDateFrom);
+      const selectedDateString = dateObj.toLocaleDateString("en-CA");
+      setSelectedDate(selectedDateString);
+      return;
+    }
+    if (departureDate && !selectedDate && !isFromSelected) {
       const dateObj = new Date(departureDate);
       const selectedDateString = dateObj.toLocaleDateString("en-CA");
       setSelectedDate(selectedDateString); 
@@ -47,37 +51,51 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData }) => {
   }, [departureDate, selectedDate]);
 
   useEffect(() => {
+    if(isFromSelected){
+      const dateObj = new Date(departureDate);
+      const selectedDateString = dateObj.toLocaleDateString("en-CA");
+      setSelectedArrivalDate(selectedDateString);
+      return;
+    }
     if (arrivalDate && !selectedArrivalDate) {
       const dateObj = new Date(arrivalDate);
       const selectedDateString = dateObj.toLocaleDateString("en-CA");
       setSelectedArrivalDate(selectedDateString); 
     }
-  }, [arrivalDate, selectedArrivalDate]);
+  }, []);
 
   const handleDateClick = (date) => {
-    if (date === selectedDate || date < new Date().toLocaleDateString("en-CA")) return;
-
-    const selectedDayDate = date;
-    setSelectedDate(selectedDayDate);
-
-    fetchFlightsData(true,selectedDayDate); //
-
-    const newFilteredFlights = flights.filter((flight) => {
-      const flightDate = new Date(flight?.departureDate)?.toLocaleDateString("en-CA");
-      return flightDate === selectedDayDate;
-    });
-
-    setFilteredFlights(newFilteredFlights); 
-    if (onFilteredFlightsChange) {
-      onFilteredFlightsChange(newFilteredFlights);
+    let selectedDayDate = null;
+    if(isFromSelected){
+      if (date === selectedArrivalDate || date < new Date(selectedDate).toLocaleDateString("en-CA")) return;
+      selectedDayDate = date;
+      setSelectedArrivalDate(date);
+      fetchFlightsData(true,selectedDayDate); 
     }
+    else{
+      if (date === selectedDate || date < new Date().toLocaleDateString("en-CA")) return;
+
+      selectedDayDate = date;
+      setSelectedDate(selectedDayDate);
+      fetchFlightsData(true,selectedDayDate); 
+    }
+
+    // const newFilteredFlights = flights.filter((flight) => {
+    //   const flightDate = new Date(flight?.departureDate)?.toLocaleDateString("en-CA");
+    //   return flightDate === selectedDayDate;
+    // });
+
+    // setFilteredFlights(newFilteredFlights); 
+    // if (onFilteredFlightsChange) {
+    //   onFilteredFlightsChange(newFilteredFlights);
+    // }
   };
 
-  useEffect(() => {
-    if (onFilteredFlightsChange) {
-      onFilteredFlightsChange(filteredFlights);
-    }
-  }, [filteredFlights, onFilteredFlightsChange]);
+  // useEffect(() => {
+  //   if (onFilteredFlightsChange) {
+  //     onFilteredFlightsChange(filteredFlights);
+  //   }
+  // }, [filteredFlights, onFilteredFlightsChange]);
 
   return (
     <header
@@ -160,6 +178,7 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData }) => {
           <button
             key={index}
             onClick={() => handleDateClick(dayObj.date)} 
+            disabled={loading}
             style={{
               fontSize: "0.9rem",
               lineHeight: "1.2",
@@ -172,6 +191,7 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData }) => {
               backgroundColor: dayObj.date === selectedDate ? "#A06ECE" : (isReturn && dayObj.date === selectedArrivalDate ? "#73CA5C" : "#fff"),
               color: dayObj.date === selectedDate ? "white" :( isReturn && dayObj.date === selectedArrivalDate ? "white" : "#343a40"),
               cursor: "pointer",
+              opacity: loading ? 0.5 : 1
             }}
           >
             <div style={{ fontWeight: "bold" }}>{dayObj.day}</div>
@@ -187,6 +207,8 @@ Header.propTypes={
   flights:PropTypes.array,
   onFilteredFlightsChange:PropTypes.any,
   fetchFlightsData:PropTypes.any,
+  isFromSelected:PropTypes.bool,
+  loading:PropTypes.bool
 }
 
 export default Header;

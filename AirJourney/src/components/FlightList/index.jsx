@@ -31,15 +31,15 @@ function CustomToggle({ eventKey }) {
 }
 
 const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelectedFlightId,fetchFlightsData }) => {
-  const returnDate = useSelector((state) => state.searchQuery.returnDate) || "2024-12-14";
+  const returnDate = useSelector((state) => state.searchQuery.arrivalDate) || new Date();
   const navigate = useNavigate();
-  const url = new URLSearchParams(window.location.search)
-  const isReturn = url.get("arrivalDate") ? true : false;
+  const isReturn = useSelector(state=>state.searchQuery.isReturn);
   const clickHandler = (flightId) =>  {
     if(isReturn && !isFromSelected){
       setIsFromSelected(true);
       setSelectedFlightId(flightId);
       fetchFlightsData(true,returnDate);
+      return;
     }
     else {
       navigate({to:`/users/private/checkout`});
@@ -197,6 +197,9 @@ FlightList.propTypes={
   isFromSelected:PropTypes.bool,
   setIsFromSelected:PropTypes.any,
   setSelectedFlightId:PropTypes.any,
+  fetchFlightsData:PropTypes.any
+}
+CustomToggle.propTypes={
   eventKey:PropTypes.any
 }
 
