@@ -7,6 +7,7 @@ import SoldOutImage from "../../../assets/img/soldout.png";
 import loadingImage from "../../../assets/img/search-loading.png";
 import SortingButton from "../../../components/FilterFlight/index";
 import { SelectedFlight } from "../../../components/SelectedFlight";
+import { useSelector } from "react-redux";
 
 export const Route = createLazyFileRoute("/users/public/detailPenerbangan")({
   component: Index,
@@ -26,6 +27,7 @@ function Index() {
   const [selectedFlightId, setSelectedFlightId] = useState(null);
   const loaderRef = useRef(null);
 
+  const {isReturn, arrivalDate} = useSelector(state=>state.searchQuery);
   const fetchFlightsData = useCallback(async (resetList = false, newDate = null) => {
     if (loading) return;
     if (resetList) {
@@ -71,10 +73,18 @@ function Index() {
         allFlights.map((flight) => [flight.id, flight])
       );
       const uniqueFlights = Array.from(uniqueFlightsMap.values());
-
       // Update state
-      setFlights(uniqueFlights);
-      setFilteredFlights(uniqueFlights);
+      if(isReturn && !isFromSelected) { 
+        const returnDate = new Date(arrivalDate);
+        const filterFlightsArrive = uniqueFlights.filter((flight) => new Date(flight.arrivalDate) < returnDate);
+        
+        setFlights(filterFlightsArrive);
+        setFilteredFlights(filterFlightsArrive);
+      }
+      else{
+        setFlights(uniqueFlights);
+        setFilteredFlights(uniqueFlights);
+      }
       setCursorId(
         newFlights.length > 0 ? newFlights[newFlights.length - 1].id : null
       );
@@ -85,7 +95,7 @@ function Index() {
     } finally {
       setLoading(false);
     }
-  }, [loading, hasMore, cursorId, flights, navigate]);
+  }, [loading, hasMore, cursorId, flights, isReturn, isFromSelected, navigate, arrivalDate]);
 
   const handleSortChange = useCallback((option) => {
     setSelectedSort(option.label);
@@ -218,6 +228,7 @@ function Index() {
                   isFromSelected={isFromSelected}
                   setIsFromSelected={setIsFromSelected}
                   setSelectedFlightId={setSelectedFlightId}
+                  selectedFlightId={selectedFlightId}
                   fetchFlightsData={fetchFlightsData}
                 />
                 {loading && (
