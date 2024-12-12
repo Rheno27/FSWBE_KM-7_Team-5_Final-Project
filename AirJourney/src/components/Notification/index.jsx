@@ -80,9 +80,13 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
       <h5
         className="fw-bold"
         style={{
-          marginTop: "10px",
-          marginLeft: "8rem",
-          marginBottom: "30px",
+          fontSize: "24px", 
+          fontWeight: "bold", 
+          marginTop: "10px", 
+          marginLeft: "8rem", 
+          marginBottom: "30px", 
+          textAlign: "start", 
+          width: "auto",
         }}
       >
         Notifikasi
@@ -120,17 +124,24 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
             padding: "8px 15px",
             borderRadius: "20px",
             cursor: "pointer",
+            width: "100px",
+            height: "40px",
+            display: "flex", 
+            alignItems: "center", 
+            justifyContent: "center",
           }}
         >
           <CiFilter
             style={{
               color: "#7126B5",
               fontSize: "24px",
+              marginRight: "5px",
+              marginLeft: "5px",
             }}
           />
           Filter
         </button>
-        <div
+         <div
           style={{
             display: "flex",
             alignItems: "center",
@@ -174,7 +185,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
           margin: "0 auto",
           alignItems: "center",
           border: "1px solid #eaeaea",
-          borderRadius: "10px",
+        
         }}
       >
         {localLoading ? (
@@ -210,7 +221,6 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
                 />
               </div>
         
-              {/* Notification content */}
               <div style={{ flex: 1 }}>
                 <h4
                   style={{
