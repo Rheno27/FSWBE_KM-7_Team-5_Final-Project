@@ -1,6 +1,7 @@
 // routes/notification.js
 import { createLazyFileRoute } from "@tanstack/react-router";
 import Notification from "../components/Notification";
+import axios from "axios"
 
 export const Route = createLazyFileRoute("/notification")({
   component: Notification,

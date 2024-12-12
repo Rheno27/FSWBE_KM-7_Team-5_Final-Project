@@ -7,6 +7,8 @@ const initialState = {
     toDestinationId: null,
     departureDate: null,
     arrivalDate: null,
+    flightId:null,
+    returnFlightId:null,
     passenger: null,
     classType: null,
     isReturn: false,
@@ -34,6 +36,12 @@ export const searchQuerySlice = createSlice({
         setArrivalDateRedux: (state, action) => {
             state.arrivalDate = action.payload;
         },
+        setFlightIdRedux: (state, action) => {
+            state.flightId = action.payload;
+        },
+        setReturnFlightIdRedux: (state, action) => {
+            state.returnFlightId = action.payload;
+        },
         setPassengerRedux: (state, action) => {
             state.passenger = action.payload;
         },
@@ -53,6 +61,8 @@ export const {
     setToDestinationIdRedux,
     setDepartureDateRedux,
     setArrivalDateRedux,
+    setFlightIdRedux,
+    setReturnFlightIdRedux,
     setPassengerRedux,
     setClassTypeRedux,
     setIsReturnRedux,
