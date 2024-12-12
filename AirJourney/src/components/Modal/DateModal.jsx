@@ -1,7 +1,7 @@
 import CloseIcon from "@mui/icons-material/Close";
 import PropTypes from "prop-types";
 import { Calendar } from "@/components/ui/calendar";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 
 const DateModal = ({
     setShowDateModal,
@@ -10,9 +10,6 @@ const DateModal = ({
     setSearchDate,
 }) => {
     const [date, setDate] = useState(searchDate);
-    useEffect(() => {
-        console.log(date);
-    }, [date]);
     return (
         <div className="absolute -inset-x-8 md:inset-16 z-2 w-fit md:mx-auto h-fit rounded-xl p-4 bg-white">
             <div className="flex justify-between">
@@ -33,9 +30,9 @@ const DateModal = ({
                         setSearchDate(value);
                     }}
                     mode={isReturn ? "range" : "single"}
+                    disabled={{ before: new Date() }}
                     required
                 />
-                {/* <Calendar selected={date} onSelect={setDate} mode="range" /> */}
             </div>
         </div>
     );

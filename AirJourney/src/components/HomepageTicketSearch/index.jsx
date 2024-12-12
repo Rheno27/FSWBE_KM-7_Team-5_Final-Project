@@ -107,10 +107,9 @@ const HomepageTicketSearch = () => {
         }
         if (isReturn) {
             formData.departureDate = formatDate(searchDate.from);
-            formData.arrivalDate = formatDate(searchDate.to);
 
             dispatch(setDepartureDateRedux(formData.departureDate));
-            dispatch(setArrivalDateRedux(formData.arrivalDate));
+            dispatch(setArrivalDateRedux(formatDate(searchDate.to)));
         } else {
             formData.departureDate = formatDate(searchDate);
             dispatch(setDepartureDateRedux(formData.departureDate));

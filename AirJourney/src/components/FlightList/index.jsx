@@ -8,7 +8,10 @@ import koper from "../../assets/img/koper.png";
 import noDataImage from "../../assets/img/notfound.png"; 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
+import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import {setFlightIdRedux,setReturnFlightIdRedux} from "../../redux/slices/searchQuery";
 
 function CustomToggle({ eventKey }) {
   const [isAccordionOpen, setIsAccordionOpen] = React.useState(false);
@@ -28,9 +31,29 @@ function CustomToggle({ eventKey }) {
   );
 }
 
-
-const FlightList = ({ filteredFlights }) => {
+const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelectedFlightId,selectedFlightId,fetchFlightsData }) => {
+  const dispatch = useDispatch();
+  const returnDate = useSelector((state) => state.searchQuery.arrivalDate) || new Date();
   const navigate = useNavigate();
+  const isReturn = useSelector(state=>state.searchQuery.isReturn);
+  const clickHandler = (flightId) =>  {
+    if(isReturn && !isFromSelected){
+      setIsFromSelected(true);
+      setSelectedFlightId(flightId);
+      fetchFlightsData(true,returnDate);
+      return;
+    }
+    else {
+      if(isReturn && isFromSelected){
+        dispatch(setReturnFlightIdRedux(flightId));
+        dispatch(setFlightIdRedux(selectedFlightId));
+      }
+      else{dispatch(setFlightIdRedux(flightId))};
+      navigate({to:`/users/private/checkout`});
+    }
+
+  }
+  
   // No Flights Data
   if (!Array.isArray(filteredFlights) || filteredFlights.length === 0) {
     return (
@@ -105,7 +128,7 @@ const FlightList = ({ filteredFlights }) => {
                     )}
                   </h6>
                   <div className="d-grid">
-                    <Button variant="primary" className="button-select" onClick={() => navigate(`users/private/checkout`)}>
+                    <Button variant="primary" className="button-select" onClick={() => {clickHandler(flight.id)}}>
                       Pilih
                     </Button>
                   </div>
@@ -176,5 +199,16 @@ const FlightList = ({ filteredFlights }) => {
   );
 };
 
+FlightList.propTypes={
+  filteredFlights:PropTypes.any,
+  isFromSelected:PropTypes.bool,
+  setIsFromSelected:PropTypes.any,
+  selectedFlightId:PropTypes.any,
+  setSelectedFlightId:PropTypes.any,
+  fetchFlightsData:PropTypes.any
+}
+CustomToggle.propTypes={
+  eventKey:PropTypes.any
+}
 
 export default FlightList;
