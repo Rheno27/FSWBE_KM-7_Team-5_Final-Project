@@ -1,5 +1,5 @@
 import React from "react";
-import "./FlightList.css";
+import "./style.css";
 import { Accordion, Button, Row, Col, Container } from "react-bootstrap";
 import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 import Card from 'react-bootstrap/Card';
@@ -8,6 +8,10 @@ import koper from "../../assets/img/koper.png";
 import noDataImage from "../../assets/img/notfound.png"; 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { useNavigate } from "@tanstack/react-router";
+import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import {setFlightIdRedux,setReturnFlightIdRedux} from "../../redux/slices/searchQuery";
 
 function CustomToggle({ eventKey }) {
   const [isAccordionOpen, setIsAccordionOpen] = React.useState(false);
@@ -27,9 +31,6 @@ function CustomToggle({ eventKey }) {
   );
 }
 
-<<<<<<< Updated upstream
-const FlightList = ({ filteredFlights }) => {
-=======
 const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelectedFlightId,selectedFlightId,fetchFlightsData }) => {
   const dispatch = useDispatch();
   const returnDate = useSelector((state) => state.searchQuery.arrivalDate) || new Date();
@@ -39,7 +40,6 @@ const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelect
     if(isReturn && !isFromSelected){
       setIsFromSelected(true);
       setSelectedFlightId(flightId);
-      dispatch(setFlightIdRedux(flightId));
       fetchFlightsData(true,returnDate);
       return;
     }
@@ -48,23 +48,24 @@ const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelect
         dispatch(setReturnFlightIdRedux(flightId));
         dispatch(setFlightIdRedux(selectedFlightId));
       }
-      else{
-        dispatch(setFlightIdRedux(flightId))};
+      else{dispatch(setFlightIdRedux(flightId))};
       navigate({to:`/users/private/checkout`});
     }
 
   }
   
->>>>>>> Stashed changes
   // No Flights Data
   if (!Array.isArray(filteredFlights) || filteredFlights.length === 0) {
     return (
-      <div className="no-data-container text-center">
+      <div className="d-flex flex-column align-items-center no-data-container text-center">
         <img
           src={noDataImage}
           alt="No Flights Found"
           className="no-data-image img-fluid"
+          style={{maxWidth:"400px", height:"auto", marginBottom:"20px"}}
         />
+        <h5 className="font-bold" >Maaf pencarian anda tidak ditemukan</h5>
+        <p style={{color:"#7126B5"}}>Coba cari perjalanan lainnya!</p>
       </div>
     );
   }
@@ -127,7 +128,7 @@ const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelect
                     )}
                   </h6>
                   <div className="d-grid">
-                    <Button variant="primary" className="button-select">
+                    <Button variant="primary" className="button-select" onClick={() => {clickHandler(flight.id)}}>
                       Pilih
                     </Button>
                   </div>
@@ -198,5 +199,16 @@ const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelect
   );
 };
 
+FlightList.propTypes={
+  filteredFlights:PropTypes.any,
+  isFromSelected:PropTypes.bool,
+  setIsFromSelected:PropTypes.any,
+  selectedFlightId:PropTypes.any,
+  setSelectedFlightId:PropTypes.any,
+  fetchFlightsData:PropTypes.any
+}
+CustomToggle.propTypes={
+  eventKey:PropTypes.any
+}
 
 export default FlightList;
