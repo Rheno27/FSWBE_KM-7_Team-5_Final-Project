@@ -107,10 +107,9 @@ const HomepageTicketSearch = () => {
         }
         if (isReturn) {
             formData.departureDate = formatDate(searchDate.from);
-            formData.arrivalDate = formatDate(searchDate.to);
 
             dispatch(setDepartureDateRedux(formData.departureDate));
-            dispatch(setArrivalDateRedux(formData.arrivalDate));
+            dispatch(setArrivalDateRedux(formatDate(searchDate.to)));
         } else {
             formData.departureDate = formatDate(searchDate);
             dispatch(setDepartureDateRedux(formData.departureDate));
@@ -122,12 +121,12 @@ const HomepageTicketSearch = () => {
     };
 
     useEffect(() => {
-        if (isReturn && searchDate.to) {
+        if (isReturn && searchDate.to && fromDestinationId && toDestinationId) {
             setIsReturnFilled(true);
-        } else if (isReturn && !searchDate.to) {
+        } else if (isReturn && !searchDate.to && !fromDestinationId && !toDestinationId) {
             setIsReturnFilled(false);
         }
-    }, [searchDate, isReturn]);
+    }, [searchDate, isReturn, fromDestinationId, toDestinationId]);
 
     return (
         <div className="w-full h-64 flex justify-center relative">
