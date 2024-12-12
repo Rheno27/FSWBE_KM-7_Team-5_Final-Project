@@ -1,27 +1,26 @@
 import React from "react";
 import { IoCubeOutline } from "react-icons/io5";
-import { FaRegHeart, FaDollarSign } from "react-icons/fa"; 
+import { FaRegHeart, FaDollarSign } from "react-icons/fa";
 
 const Sidebar = () => {
   return (
     <div
       style={{
-        backgroundColor: "#ffff",
+        backgroundColor: "#fff",
         padding: "1rem",
         borderRadius: "10px",
         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        width: "70%",
+        width: "60%",
         height: "auto",
-        marginLeft: "5rem",
-        // Responsive design for small screens
+        marginLeft: "auto",
+        marginRight: "auto",
+        // Responsive design for smaller screens
         "@media (max-width: 768px)": {
           width: "100%",
-          marginLeft: "0",
         },
       }}
     >
       <h5 className="fw-bold mb-3">Filter</h5>
-      {/* Filter Options */}
       <ul className="list-unstyled">
         {/* Transit */}
         <li className="mb-3">
@@ -38,7 +37,13 @@ const Sidebar = () => {
               padding: "0.5rem 0",
             }}
           >
-            <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+              }}
+            >
               <IoCubeOutline style={{ fontSize: "1.5rem" }} /> Transit
             </span>
             <span>&rarr;</span>
@@ -60,7 +65,13 @@ const Sidebar = () => {
               padding: "0.5rem 0",
             }}
           >
-            <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+              }}
+            >
               <FaRegHeart style={{ fontSize: "1.5rem" }} /> Fasilitas
             </span>
             <span>&rarr;</span>
@@ -82,8 +93,14 @@ const Sidebar = () => {
               padding: "0.5rem 0",
             }}
           >
-            <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <FaDollarSign style={{ fontSize: "1.5rem" }}/> Harga
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+              }}
+            >
+              <FaDollarSign style={{ fontSize: "1.5rem" }} /> Harga
             </span>
             <span>&rarr;</span>
           </button>

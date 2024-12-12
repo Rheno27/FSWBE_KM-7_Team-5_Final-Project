@@ -27,9 +27,8 @@ function Index() {
   const [selectedFlightId, setSelectedFlightId] = useState(null);
   const loaderRef = useRef(null);
 
-  const {isReturn, arrivalDate, passenger} = useSelector(state=>state.searchQuery);
-  const totalPassenger = passenger ? passenger.adult + passenger.child : 1;
-  const fetchFlightsData = useCallback(async (resetList = false, newDate = null, fromSelected) => {
+  const {isReturn, arrivalDate} = useSelector(state=>state.searchQuery);
+  const fetchFlightsData = useCallback(async (resetList = false, newDate = null) => {
     if (loading) return;
     if (resetList) {
       setHasMore(true);
@@ -74,17 +73,17 @@ function Index() {
         allFlights.map((flight) => [flight.id, flight])
       );
       const uniqueFlights = Array.from(uniqueFlightsMap.values());
-      const availableFlightsSeat = uniqueFlights.filter((flight) => flight["_count"].seat >= totalPassenger);
       // Update state
-      if(isReturn && (!isFromSelected && !fromSelected)) { 
+      if(isReturn && !isFromSelected) { 
         const returnDate = new Date(arrivalDate);
-        const filterFlightsArrive = availableFlightsSeat.filter((flight) => new Date(flight.arrivalDate) < returnDate);
+        const filterFlightsArrive = uniqueFlights.filter((flight) => new Date(flight.arrivalDate) < returnDate);
+        
         setFlights(filterFlightsArrive);
         setFilteredFlights(filterFlightsArrive);
       }
       else{
-        setFlights(availableFlightsSeat);
-        setFilteredFlights(availableFlightsSeat);
+        setFlights(uniqueFlights);
+        setFilteredFlights(uniqueFlights);
       }
       setCursorId(
         newFlights.length > 0 ? newFlights[newFlights.length - 1].id : null
@@ -173,8 +172,10 @@ function Index() {
       <h5
         className="fw-bold row justify-content-center"
         style={{
-          marginTop: "40px",
+          fontSize: "24px",
           fontFamily: "Poppins",
+          marginTop: "40px",
+          marginBottom: "20px",
         }}
       >
         <div className="col-12 col-md-9 text-start">Pilih Penerbangan</div>

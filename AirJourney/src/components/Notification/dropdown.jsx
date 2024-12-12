@@ -5,39 +5,47 @@ import { useSelector } from "react-redux";
 import { NotificationsNone as NotificationIcon } from "@mui/icons-material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Nav } from "react-bootstrap";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 
 const NotificationDropdown = () => {
   const [showNotifications, setShowNotifications] = useState(false);
-  const navigate = useNavigate();
-
   const { token } = useSelector((state) => state.auth);
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["notifications"], 
+  const { data: notifications, isLoading, isError, refetch } = useQuery({
+    queryKey: ["notifications"],
     queryFn: async () => {
-      if (!token) {
-        throw new Error("No token found. Please log in.");
-      }
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/notifications`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        return response.data.data || []; 
-      } catch (err) {
-        console.error(err);
-        throw new Error("Failed to fetch notifications.");
-      }
+      if (!token) throw new Error("No token found. Please log in.");
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/notifications`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data.data || [];
     },
     refetchOnWindowFocus: false,
   });
 
-  const unreadNotifications = data?.filter((notif) => !notif.isRead) || [];
+  const unreadNotifications = notifications?.filter((notif) => !notif.isRead) || [];
 
+  const markAllAsRead = async () => {
+    try {
+      await axios.put(`${import.meta.env.VITE_API_URL}/notifications`, null, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      refetch();
+    } catch (err) {
+      console.error("Failed to mark notifications as read:", err);
+    }
+  };
+
+  // Show notifications dropdown
   const handleMouseEnter = () => setShowNotifications(true);
   const handleMouseLeave = () => setShowNotifications(false);
+
+  // Mark as read when clicking the icon
+  const handleIconClick = () => {
+    if (unreadNotifications.length > 0) {
+      markAllAsRead();
+    }
+  };
 
   return (
     <div
@@ -45,7 +53,8 @@ const NotificationDropdown = () => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Nav.Link as={Link} to="/notification">
+      {/* Notification Icon */}
+      <Nav.Link as={Link} to="/notification" onClick={handleIconClick}>
         <NotificationIcon style={{ marginRight: "8px", cursor: "pointer" }} />
         {unreadNotifications.length > 0 && (
           <span
@@ -90,19 +99,19 @@ const NotificationDropdown = () => {
             <p>Loading...</p>
           ) : isError ? (
             <p>Error fetching notifications</p>
-          ) : data && data.length > 0 ? (
-            data.map((notification) => (
-              <div
+          ) : notifications && notifications.length > 0 ? (
+            notifications.map((notification) => (
+              <Link
+                to="/notification"
                 key={notification.id}
                 style={{
-                  padding: "12px",
-                  borderBottom: "1px solid #f2f2f2",
-                  cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
-                  gap: "12px",
+                  padding: "12px",
+                  borderBottom: "1px solid #f2f2f2",
+                  textDecoration: "none",
+                  color: "inherit",
                 }}
-                onClick={() => navigate({ to: "/notification" })}
               >
                 <div
                   style={{
@@ -113,12 +122,11 @@ const NotificationDropdown = () => {
                     height: "30px",
                     borderRadius: "50%",
                     backgroundColor: "#A06ECE",
-                    marginBottom: "20px",
                   }}
                 >
                   <NotificationsIcon style={{ color: "#f3f1fc", fontSize: "20px" }} />
                 </div>
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1, marginLeft: "12px" }}>
                   <div
                     style={{
                       display: "flex",
@@ -131,7 +139,6 @@ const NotificationDropdown = () => {
                       style={{
                         fontSize: "14px",
                         fontWeight: "bold",
-                        color: "#333",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
@@ -141,15 +148,14 @@ const NotificationDropdown = () => {
                       {notification.title}
                     </span>
                     <div>
-                      <span>{new Date(notification.createdAt).toLocaleString(
-                         "id-ID",
-                         {
-                            day: "numeric",
-                            month: "short",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                         }
-                      )}</span>
+                      <span>
+                        {new Date(notification.createdAt).toLocaleString("id-ID", {
+                          day: "numeric",
+                          month: "short",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
                       <span
                         style={{
                           display: "inline-block",
@@ -167,13 +173,12 @@ const NotificationDropdown = () => {
                       margin: 0,
                       fontSize: "14px",
                       color: "#555",
-                      wordWrap: "break-word",
                     }}
                   >
                     {notification.message}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
             <p style={{ padding: "10px 15px", color: "#888", textAlign: "center" }}>
