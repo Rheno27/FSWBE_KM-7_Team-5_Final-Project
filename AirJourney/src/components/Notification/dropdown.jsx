@@ -36,11 +36,9 @@ const NotificationDropdown = () => {
     }
   };
 
-  // Show notifications dropdown
   const handleMouseEnter = () => setShowNotifications(true);
   const handleMouseLeave = () => setShowNotifications(false);
 
-  // Mark as read when clicking the icon
   const handleIconClick = () => {
     if (unreadNotifications.length > 0) {
       markAllAsRead();
@@ -53,7 +51,6 @@ const NotificationDropdown = () => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Notification Icon */}
       <Nav.Link as={Link} to="/notification" onClick={handleIconClick}>
         <NotificationIcon style={{ marginRight: "8px", cursor: "pointer" }} />
         {unreadNotifications.length > 0 && (

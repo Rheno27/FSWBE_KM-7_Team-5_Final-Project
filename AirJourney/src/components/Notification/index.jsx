@@ -221,7 +221,6 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
                 />
               </div>
         
-              {/* Notification content */}
               <div style={{ flex: 1 }}>
                 <h4
                   style={{
