@@ -1,8 +1,44 @@
-import React from "react";
+import { React, useState } from 'react';
 import { Row, Col, Card } from "react-bootstrap";
 import "./style.css";
+import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import { getFlightByID } from "../../services/flight";
 
-const SeatPicker = ({ maxRow, maxCol }) => {
+const SeatPicker = () => {
+    const { flightId } = useSelector((state) => state.searchQuery);
+    const { passenger } = useSelector((state) => state.searchQuery);
+    const [selectedSeats, setSelectedSeats] = useState([]);
+
+    console.log("passenger", passenger);
+
+    const { data: detailFlight, isLoading, isError, error } = useQuery({
+        queryKey: ['flight', flightId],
+        queryFn: async () => {
+            const response = await getFlightByID(flightId);
+            return response;
+        },
+        enabled: !!flightId,
+        retry: 1,
+    });
+
+    const totalPassengers = (passenger?.adult || 0) + (passenger?.child || 0);
+
+    console.log("totalPassengers", totalPassengers);
+
+    const handleSeatSelection = (seatId) => {
+        if (selectedSeats.includes(seatId)) {
+            // Deselect seat
+            setSelectedSeats((prev) => prev.filter((s) => s !== seatId));
+        } else if (selectedSeats.length < totalPassengers) {
+            // Select seat if limit is not reached
+            setSelectedSeats((prev) => [...prev, seatId]);
+        }
+    };
+
+    console.log("selectedSeats", selectedSeats);
+    console.log("seat", detailFlight?.departureFlight?.seat);
+
     return (
         <Card>
             <Card.Body>
@@ -13,10 +49,7 @@ const SeatPicker = ({ maxRow, maxCol }) => {
                         backgroundColor: '#4978d0',
                         color: '#fff',
                         padding: '10px 15px',
-                        borderTopLeftRadius: '4px',
-                        borderTopRightRadius: '4px',
-                        borderBottomLeftRadius: '4px',
-                        borderBottomRightRadius: '4px',
+                        borderRadius: '4px',
                         fontSize: '18px',
                         fontWeight: 'bold',
                         textAlign: 'center',
@@ -28,39 +61,26 @@ const SeatPicker = ({ maxRow, maxCol }) => {
                     <Col lg={12} className="p-4">
                         <div className="plane">
                             <ol className="cabin fuselage">
-                                {[...Array(maxRow)].map((_, row) => (
-                                    <li key={row} className={`row row--${row + 1}`}>
-                                        <ol className="seats">
-                                            {/* Bagian kiri kursi */}
-                                            {["1", "2", "3", "4", "5"]
-                                                .slice(0, Math.ceil(maxCol / 2))
-                                                .map((seat) => (
-                                                    <li key={`L-${seat}`} className="seat">
-                                                        <input type="checkbox" id={`${row + 1}${seat}`} />
-                                                        <label htmlFor={`${row + 1}${seat}`}>
-                                                            {row + 1}
-                                                            -
-                                                            {seat}
-                                                        </label>
-                                                    </li>
-                                                ))}
-                                            {/* Spacer untuk memisahkan kiri dan kanan */}
-                                            <li className="aisle-space"></li>
-                                            {/* Bagian kanan kursi */}
-                                            {["6", "7", "8", "9", "10"]
-                                                .slice(0, Math.floor(maxCol / 2))
-                                                .map((seat) => (
-                                                    <li key={`R-${seat}`} className="seat">
-                                                        <input type="checkbox" id={`${row + 1}${seat}`} />
-                                                        <label htmlFor={`${row + 1}${seat}`}>
-                                                            {row + 1}
-                                                            -
-                                                            {seat}
-                                                        </label>
-                                                    </li>
-                                                ))}
-                                        </ol>
-                                    </li>
+                                {[...Array(detailFlight?.departureFlight?.aeroplane?.maxRow)].map((_, rowIndex) => (
+                                <li key={rowIndex} className={`row row--${rowIndex + 1}`}>
+                                    <ol className="seats" type="A">
+                                    {detailFlight?.departureFlight?.seat
+                                        ?.filter((seat) => seat.row === rowIndex + 1)
+                                        .sort((a, b) => a.column - b.column) // Pastikan kursi diurutkan berdasarkan kolom
+                                        .map((seat) => (
+                                        <li key={seat.id} className="seat">
+                                            <input
+                                            type="checkbox"
+                                            id={seat.id}
+                                            checked={selectedSeats.includes(seat.id)}
+                                            disabled={seat.status !== "AVAILABLE" || (!selectedSeats.includes(seat.id) && selectedSeats.length >= totalPassengers)}
+                                            onChange={() => handleSeatSelection(seat.id)}
+                                            />
+                                            <label htmlFor={seat.id}>{String.fromCharCode(64 + seat.column)}{seat.row}</label>
+                                        </li>
+                                        ))}
+                                    </ol>
+                                </li>
                                 ))}
                             </ol>
                         </div>

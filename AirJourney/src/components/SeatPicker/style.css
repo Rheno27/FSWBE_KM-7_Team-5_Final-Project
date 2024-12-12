@@ -5,11 +5,12 @@
 
 /* Plane Container */
 .plane {
-    margin: 20px auto;
-    max-width: 600px; /* Memperbesar lebar maksimal plane */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    gap: 10px;
+    justify-content: center;
 }
 
-/* Cockpit Section */
 .cockpit {
     height: 250px;
     position: relative;
@@ -74,12 +75,10 @@ ol {
     margin: 0;
 }
 
-/* Seats Layout */
 .row {
     display: flex;
     justify-content: center;
-    flex-wrap: nowrap; /* Hindari elemen turun */
-    gap: 10px;
+    margin-bottom: 10px;
 }
 
 .seats {

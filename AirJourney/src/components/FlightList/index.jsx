@@ -27,7 +27,35 @@ function CustomToggle({ eventKey }) {
   );
 }
 
+<<<<<<< Updated upstream
 const FlightList = ({ filteredFlights }) => {
+=======
+const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelectedFlightId,selectedFlightId,fetchFlightsData }) => {
+  const dispatch = useDispatch();
+  const returnDate = useSelector((state) => state.searchQuery.arrivalDate) || new Date();
+  const navigate = useNavigate();
+  const isReturn = useSelector(state=>state.searchQuery.isReturn);
+  const clickHandler = (flightId) =>  {
+    if(isReturn && !isFromSelected){
+      setIsFromSelected(true);
+      setSelectedFlightId(flightId);
+      dispatch(setFlightIdRedux(flightId));
+      fetchFlightsData(true,returnDate);
+      return;
+    }
+    else {
+      if(isReturn && isFromSelected){
+        dispatch(setReturnFlightIdRedux(flightId));
+        dispatch(setFlightIdRedux(selectedFlightId));
+      }
+      else{
+        dispatch(setFlightIdRedux(flightId))};
+      navigate({to:`/users/private/checkout`});
+    }
+
+  }
+  
+>>>>>>> Stashed changes
   // No Flights Data
   if (!Array.isArray(filteredFlights) || filteredFlights.length === 0) {
     return (
