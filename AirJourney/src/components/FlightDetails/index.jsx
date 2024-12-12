@@ -1,9 +1,52 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import Thumbnail from '../../assets/img/Thumbnail.png';
+import { useSelector } from 'react-redux';
+import { useQuery } from '@tanstack/react-query';
+import { getFlightByID } from '../../services/flight';
+
 
 function FlightDetails() {
+    const { flightId } = useSelector((state) => state.searchQuery);
+    const { returnFlightId } = useSelector((state) => state.searchQuery);
+    const { passenger } = useSelector((state) => state.searchQuery);
+    const [flight, setFlight] = useState(null);
+    
+    // Debug logs
+    console.log('Current passenger:', passenger);
+
+    const { data: detailFlight, isLoading, isError, error } = useQuery({
+        queryKey: ['flight', flightId],
+        queryFn: async () => {
+            if (!flightId) {
+                throw new Error('Flight ID not available');
+            }
+            const response = await getFlightByID(flightId);
+            console.log('API Response:', response);
+            return response;
+        },
+        enabled: !!flightId,
+        retry: 1,
+    });
+
+    const adultPrice = flight?.departureFlight?.price * passenger.adult;
+    const childPrice = flight?.departureFlight?.price * passenger.child;
+    const babyPrice = flight?.departureFlight?.price * passenger.baby;
+    const tax = (adultPrice + babyPrice + childPrice) * 0.1;
+    const totalPrice = adultPrice + babyPrice + childPrice + tax;
+
+    useEffect(() => {
+        if (detailFlight) {
+            setFlight(detailFlight);
+        }
+    }, [detailFlight]);
+
+    if (isLoading) return <div>Loading flight details...</div>;
+    if (isError) return <div>Error: {error?.message}</div>;
+    if (!flight) return <div>No flight data available</div>;
+
     return (
+        <>
         <Card className="shadow-sm">
             <Card.Body>
                 <h3 className="mb-3">Detail Penerbangan</h3>
@@ -16,12 +59,12 @@ function FlightDetails() {
                                 fontWeight: 'bold',
                             }}
                         >
-                            07:00
+                            {flight?.departureFlight?.departureTime}
                         </div>
                         <div className="flight-details">
                             <div className="departure mb-3">
-                            <div className="date">3 Maret 2023</div>
-                                <div className="airport">Soekarno Hatta <br /> Terminal 1A Domestik</div>
+                            <div className="date">{flight?.departureFlight?.departureDate}</div>
+                                <div className="airport">{flight?.departureFlight?.airportFrom?.name}</div>
                             </div>  
                         </div>
                     </Col>
@@ -35,7 +78,7 @@ function FlightDetails() {
                                 textAlign: 'right',
                             }}
                         >
-                            Keberangkatan
+                            {flight?.arrivalFlight?.airportTo?.name}
                         </div>
                     </Col>
                 </Row>
@@ -65,14 +108,14 @@ function FlightDetails() {
                                     fontSize: '14px',
                                     fontWeight: 'bold',
                                 }}
-                            >Jet Air - Economy</div>
+                            >{flight?.departureFlight?.airline?.name} - {flight?.departureFlight?.class}</div>
                             <div 
                                 className="flight-number mb-4"
                                 style={{
                                     fontSize: '14px',
                                     fontWeight: 'bold',
                                 }}
-                            >JT - 203</div>
+                            >{flight?.departureFlight?.airline?.code}</div>
                             
                             <div className="info-box">
                                 <h6>Informasi:</h6>
@@ -96,12 +139,12 @@ function FlightDetails() {
                                 fontWeight: 'bold',
                             }}
                         >
-                            11:00
+                            {flight?.departureFlight?.arrivalTime}
                         </div>
                         <div className="flight-details">
                             <div className="departure mb-2">
-                            <div className="date">3 Maret 2023</div>
-                                <div className="airport">Melbourne International Airport</div>
+                            <div className="date">{flight?.departureFlight?.arrivalDate}</div>
+                                <div className="airport">{flight?.departureFlight?.airportTo?.name}</div>
                             </div>  
                         </div>
                     </Col>
@@ -119,11 +162,11 @@ function FlightDetails() {
                         </div>
                     </Col>
                 </Row>
-
-                <hr />
-
-                {/* Price Details Section */}
-                <Row>
+            </Card.Body>
+        </Card>
+        <Card className="mt-3">
+            <Card.Body>
+            <Row>
                     <Col lg={8}>
                         <div 
                             className="time"
@@ -136,21 +179,44 @@ function FlightDetails() {
                         </div>
                         <div className="flight-details">
                             <div className="departure ">
-                                <div className="passenger">1 Adult</div>
+                                <div className="passenger">{passenger.adult} Adult</div>
+                                <div className="passenger">{passenger.child} Child</div>
+                                <div className="passenger">{passenger.baby} Baby</div>
                                 <div className="tax">Tax</div>
                             </div>  
                         </div>
                     </Col>
                     <Col lg={4}>
                         <div 
-                            className="price"
+                            className="priceadult"
                             style={{
                                 marginTop: '30px',
+                                marginLeft: '20px',
                             }}
                         >
-                            Rp 1.000.000
+                            Rp {adultPrice}
                         </div>
-                        <div className="tax">Rp 100.000</div>
+                            <div 
+                                className="pricechild"
+                                style={{
+                                    marginLeft: '20px',
+                                }}
+                            >
+                                Rp {childPrice}
+                            </div>
+                        <div 
+                            className="pricebaby"
+                            style={{
+                                marginLeft: '20px',
+                            }}
+                        >
+                            Rp {babyPrice}
+                        </div>
+                        <div className="tax"
+                            style={{
+                                marginLeft: '20px',
+                            }}
+                        >Rp {tax}</div>
                     </Col>
                 </Row>
                 <hr />
@@ -176,12 +242,13 @@ function FlightDetails() {
                                 textAlign: 'right',
                             }}
                         >
-                            Rp 1.100.000
+                            Rp {totalPrice}
                         </div>
                     </Col>
                 </Row>
             </Card.Body>
         </Card>
+        </>
     );
 }
 

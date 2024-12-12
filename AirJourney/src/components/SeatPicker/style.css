@@ -1,11 +1,16 @@
+/* Global Box-Sizing */
 *, *:before, *:after {
     box-sizing: border-box;
 }
 
+/* Plane Container */
 .plane {
-    margin: 20px auto;
-    max-width: 300px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    gap: 10px;
+    justify-content: center;
 }
+
 .cockpit {
     height: 250px;
     position: relative;
@@ -29,6 +34,8 @@
     width: 60%;
     margin: 100px auto 35px auto;
 }
+
+/* Exit Markers */
 .exit:before,
 .exit:after {
     content: "EXIT";
@@ -49,31 +56,55 @@
 .exit:after {
     right: 0;
 }
+
+/* Fuselage (Body) */
 .fuselage {
     border-right: 5px solid #d8d8d8;
     border-left: 5px solid #d8d8d8;
+    margin: 0 auto;
+    max-width: 100%; 
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
 }
+
+/* Reset List Styles */
 ol {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
+.row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
 .seats {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
+    justify-content: space-between; /* Beri jarak antar kursi */
+    gap: 5px; /* Jarak antar kursi dalam satu baris */
 }
+
 .seat {
     display: flex;
-    flex: 0 0 14.28571428571429%;
+    flex: 0 0 calc(100% / 10 - 10px); /* 10 kursi per baris */
+    max-width: 70px;  /* Batas lebar maksimal setiap kursi */
     padding: 5px;
     position: relative;
 }
-.seat:nth-child(3) {
-    margin-right: 14.28571428571429%;
+
+/* Aisle Space */
+.seat:nth-child(5) {
+    margin-right: 20px; /* Jarak lebih besar untuk lorong tengah */
 }
+.seat:nth-child(6) {
+    margin-left: 20px; /* Tambah jarak kiri untuk lorong tengah */
+}
+
+/* Seat Input and Labels */
 .seat input[type="checkbox"] {
     position: absolute;
     opacity: 0;
