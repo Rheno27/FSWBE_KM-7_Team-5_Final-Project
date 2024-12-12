@@ -20,9 +20,7 @@ export const Route = createLazyFileRoute("/notification")({
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
-      );
-
+        });
       if (response.status === 404) {
         throw new Error("Notifications not found.");
       }

@@ -5,39 +5,45 @@ import { useSelector } from "react-redux";
 import { NotificationsNone as NotificationIcon } from "@mui/icons-material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Nav } from "react-bootstrap";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 
 const NotificationDropdown = () => {
   const [showNotifications, setShowNotifications] = useState(false);
-  const navigate = useNavigate();
-
   const { token } = useSelector((state) => state.auth);
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["notifications"], 
+  const { data: notifications, isLoading, isError, refetch } = useQuery({
+    queryKey: ["notifications"],
     queryFn: async () => {
-      if (!token) {
-        throw new Error("No token found. Please log in.");
-      }
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/notifications`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        return response.data.data || []; 
-      } catch (err) {
-        console.error(err);
-        throw new Error("Failed to fetch notifications.");
-      }
+      if (!token) throw new Error("No token found. Please log in.");
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/notifications`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data.data || [];
     },
     refetchOnWindowFocus: false,
   });
 
-  const unreadNotifications = data?.filter((notif) => !notif.isRead) || [];
+  const unreadNotifications = notifications?.filter((notif) => !notif.isRead) || [];
+
+  const markAllAsRead = async () => {
+    try {
+      await axios.put(`${import.meta.env.VITE_API_URL}/notifications`, null, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      refetch(); 
+    } catch (err) {
+      console.error("Failed to mark notifications as read:", err);
+    }
+  };
 
   const handleMouseEnter = () => setShowNotifications(true);
   const handleMouseLeave = () => setShowNotifications(false);
+
+  const handleIconClick = () => {
+    if (unreadNotifications.length > 0) {
+      markAllAsRead();
+    }
+  };
 
   return (
     <div
@@ -45,7 +51,7 @@ const NotificationDropdown = () => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Nav.Link as={Link} to="/notification">
+      <Nav.Link as={Link} to="/notification" onClick={handleIconClick}>
         <NotificationIcon style={{ marginRight: "8px", cursor: "pointer" }} />
         {unreadNotifications.length > 0 && (
           <span
@@ -90,8 +96,8 @@ const NotificationDropdown = () => {
             <p>Loading...</p>
           ) : isError ? (
             <p>Error fetching notifications</p>
-          ) : data && data.length > 0 ? (
-            data.map((notification) => (
+          ) : notifications && notifications.length > 0 ? (
+            notifications.map((notification) => (
               <div
                 key={notification.id}
                 style={{
@@ -102,7 +108,7 @@ const NotificationDropdown = () => {
                   alignItems: "center",
                   gap: "12px",
                 }}
-                onClick={() => navigate({ to: "/notification" })}
+               as={Link} to="/notification"
               >
                 <div
                   style={{
