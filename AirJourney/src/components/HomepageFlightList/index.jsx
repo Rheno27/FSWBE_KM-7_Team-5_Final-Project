@@ -39,11 +39,14 @@ const HomepageFlightList = () => {
         axios
             .get(`${import.meta.env.VITE_API_URL}/flights`, { params })
             .then((res) => {
+                const newFlights = res.data.data.filter((flight) => {
+                    return !destinationList.find((existingFlight) => existingFlight.id === flight.id);
+                });
                 isDestinationChanged
                     ? setDestinationList(res.data.data)
                     : setDestinationList([
                           ...destinationList,
-                          ...res.data.data,
+                          ...newFlights,
                       ]);
                 if (res.data.data.length < 3) {
                     setIsHasMore(false);
@@ -88,9 +91,9 @@ const HomepageFlightList = () => {
                     console.log("from infinite");
                 }}
                 hasMore={isHasMore}
-                loader={loadersCount.map((count) => (
+                loader={loadersCount.map((count,index) => (
                     <div
-                        key={count?.id}
+                        key={index}
                         className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2 w-72 animate-pulse sm:w-52"
                     >
                         <div className="rounded-md overflow-hidden w-full h-28 bg-darkblue1"></div>
