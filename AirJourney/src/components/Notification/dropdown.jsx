@@ -36,11 +36,9 @@ const NotificationDropdown = () => {
     }
   };
 
-  // Show notifications dropdown
   const handleMouseEnter = () => setShowNotifications(true);
   const handleMouseLeave = () => setShowNotifications(false);
 
-  // Mark as read when clicking the icon
   const handleIconClick = () => {
     if (unreadNotifications.length > 0) {
       markAllAsRead();
