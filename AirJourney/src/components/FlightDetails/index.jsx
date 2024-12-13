@@ -11,9 +11,6 @@ function FlightDetails() {
     const { returnFlightId } = useSelector((state) => state.searchQuery);
     const { passenger } = useSelector((state) => state.searchQuery);
     const [flight, setFlight] = useState(null);
-    
-    // Debug logs
-    console.log('Current passenger:', passenger);
 
     const { data: detailFlight, isLoading, isError, error } = useQuery({
         queryKey: ['flight', flightId],
@@ -22,7 +19,6 @@ function FlightDetails() {
                 throw new Error('Flight ID not available');
             }
             const response = await getFlightByID(flightId);
-            console.log('API Response:', response);
             return response;
         },
         enabled: !!flightId,

@@ -1,11 +1,9 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { Form, Card } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
 
-const PassengerForm = ({ passengerData, handleChange, index }) => {
+const PassengerForm = ({ passengerData, handleChange }) => {
     const { passenger } = useSelector((state) => state.searchQuery);
-    const dispatch = useDispatch();
 
     const totalPassengers = (passenger?.adult || 0) + (passenger?.child || 0) + (passenger?.baby || 0);
 
@@ -45,7 +43,7 @@ const PassengerForm = ({ passengerData, handleChange, index }) => {
                                 textAlign: 'left',
                             }}
                         >
-                            <div className="">Data Diri Penumpang {index + 1} - {passengerType}</div>
+                            <div>Data Diri Penumpang {index + 1} - {passengerType}</div>
                         </Card.Header>
 
                         {/* Title */}

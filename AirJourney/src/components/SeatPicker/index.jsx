@@ -10,8 +10,6 @@ const SeatPicker = () => {
     const { passenger } = useSelector((state) => state.searchQuery);
     const [selectedSeats, setSelectedSeats] = useState([]);
 
-    console.log("passenger", passenger);
-
     const { data: detailFlight, isLoading, isError, error } = useQuery({
         queryKey: ['flight', flightId],
         queryFn: async () => {
@@ -23,21 +21,14 @@ const SeatPicker = () => {
     });
 
     const totalPassengers = (passenger?.adult || 0) + (passenger?.child || 0);
-
-    console.log("totalPassengers", totalPassengers);
-
     const handleSeatSelection = (seatId) => {
         if (selectedSeats.includes(seatId)) {
-            // Deselect seat
             setSelectedSeats((prev) => prev.filter((s) => s !== seatId));
         } else if (selectedSeats.length < totalPassengers) {
-            // Select seat if limit is not reached
             setSelectedSeats((prev) => [...prev, seatId]);
         }
     };
 
-    console.log("selectedSeats", selectedSeats);
-    console.log("seat", detailFlight?.departureFlight?.seat);
 
     return (
         <Card>
