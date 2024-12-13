@@ -116,7 +116,7 @@ export const HeaderNav = () => {
                 <FilterAlt fontSize="medium" className="me-1" />
                 Filter
             </Button>
-            <Search
+            {/* <Search
             ref={buttonRef}
             onClick={handleSearchModalShow}
                 fontSize="large"
@@ -125,7 +125,7 @@ export const HeaderNav = () => {
                   cursor: "pointer",
                   marginTop: "5px",
                 }}
-              />
+              /> */}
           </Col>
 
           {/* Date Filter Modal */}

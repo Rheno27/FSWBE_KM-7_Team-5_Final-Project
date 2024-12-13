@@ -4,9 +4,12 @@ import Close from "@mui/icons-material/Close";
 import "react-day-picker/dist/style.css";
 import "./style.css"; 
 
-const DateFilterModal = ({isOpen, onClose, position}) => {
+const DateFilterModal = ({isOpen, onClose, position, transactions}) => {
   if (!isOpen) return null;
 
+  const allTransactions = transactions?.data || [];
+  const [filteredTransactions, setFilteredTransactions] = useState(allTransactions);
+  const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
   // Handle date selection
@@ -14,11 +17,33 @@ const DateFilterModal = ({isOpen, onClose, position}) => {
     setSelectedDate(date);
   };
 
+  const filterTransactions = () => {
+    if (!selectedDate) {
+      setFilteredTransactions(allTransactions);
+      return;
+    }
+
+    const isRange = Array.isArray(selectedDate);
+    const filtered = allTransactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.createdAt);
+
+      if (isRange) {
+        const [startDate, endDate] = selectedDate.map((date) => new Date(date));
+        return transactionDate >= startDate && transactionDate <= endDate;
+      } else {
+        const filterDate = new Date(selectedDate);
+        return transactionDate.toDateString() === filterDate.toDateString();
+      }
+    });
+
+    setFilteredTransactions(filtered);
+  };
+
   // Handle save action
   const handleSave = () => {
     if (selectedDate) {
       console.log("Selected Date: ", selectedDate);
-      // You can handle the date or filter logic here
+      filterTransactions();
     }
     onClose(); // Close the modal after saving
   };
