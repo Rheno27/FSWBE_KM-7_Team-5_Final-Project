@@ -56,9 +56,9 @@ const HomepageTicketSearch = () => {
     );
     const [passenger, setPassenger] = useState(
         useSelector((state) => state.searchQuery.passenger) || {
-            adult: 1,
-            child: 0,
-            baby: 0,
+            ADULT: 1,
+            CHILD: 0,
+            INFANT: 0,
         }
     );
     const [classType, setClassType] = useState(
@@ -121,12 +121,12 @@ const HomepageTicketSearch = () => {
     };
 
     useEffect(() => {
-        if (isReturn && searchDate.to) {
+        if (isReturn && searchDate.to && fromDestinationId && toDestinationId) {
             setIsReturnFilled(true);
-        } else if (isReturn && !searchDate.to) {
+        } else if (isReturn && !searchDate.to && !fromDestinationId && !toDestinationId) {
             setIsReturnFilled(false);
         }
-    }, [searchDate, isReturn]);
+    }, [searchDate, isReturn, fromDestinationId, toDestinationId]);
 
     return (
         <div className="w-full h-64 flex justify-center relative">
@@ -308,9 +308,9 @@ const HomepageTicketSearch = () => {
                                                 setShowPassengerModal(true)
                                             }
                                         >
-                                            {passenger?.adult +
-                                                passenger?.child +
-                                                passenger?.baby}{" "}
+                                            {passenger?.ADULT +
+                                                passenger?.CHILD +
+                                                passenger?.INFANT}{" "}
                                             Penumpang
                                         </button>
                                         {showPassengerModal && (

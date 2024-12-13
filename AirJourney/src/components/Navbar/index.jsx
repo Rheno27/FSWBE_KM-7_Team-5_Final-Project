@@ -46,21 +46,6 @@ const NavigationBar = () => {
 
     const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
-    const onSubmit = async (e) => {
-        e.preventDefault();
-        const body = {
-            email,
-            password
-        }
-        const result = await login(body);
-        if (result.success) {
-            dispatch(setUser(result.data.token));
-            navigate("/");
-            return;
-        }
-        alert(result.message);
-    }
-
     return (
         <>
             {shuoldShowNavbar && (
@@ -109,9 +94,7 @@ const NavigationBar = () => {
                                                 style={{ marginRight: '8px' }}
                                             />
                                         </Nav.Link>
-                                        <NotificationDropdown 
-                                            as={Link}
-                                            to="/notification"/>
+                                        <NotificationDropdown/>
                                         <Nav.Link as={Link} to="/users/private/profile/">
                                             <ProfileIcon
                                                 style={{ marginRight: '8px' }}

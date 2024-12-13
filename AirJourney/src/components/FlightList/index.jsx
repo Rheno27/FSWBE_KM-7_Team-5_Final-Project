@@ -1,5 +1,5 @@
 import React from "react";
-import "./FlightList.css";
+import "./style.css";
 import { Accordion, Button, Row, Col, Container } from "react-bootstrap";
 import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 import Card from 'react-bootstrap/Card';
@@ -42,7 +42,6 @@ const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelect
       setIsFromSelected(true);
       setSelectedFlightId(flightId);
       fetchFlightsData(true,returnDate,true);
-      toast.info("Pilih penerbangan kembali",{position:"bottom-center", autoClose:5000});
       return;
     }
     else {

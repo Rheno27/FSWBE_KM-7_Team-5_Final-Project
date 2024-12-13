@@ -30,7 +30,7 @@ const NotificationDropdown = () => {
       await axios.put(`${import.meta.env.VITE_API_URL}/notifications`, null, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      refetch();
+      refetch(); 
     } catch (err) {
       console.error("Failed to mark notifications as read:", err);
     }
@@ -51,7 +51,6 @@ const NotificationDropdown = () => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Notification Icon */}
       <Nav.Link as={Link} to="/notification" onClick={handleIconClick}>
         <NotificationIcon style={{ marginRight: "8px", cursor: "pointer" }} />
         {unreadNotifications.length > 0 && (
@@ -99,17 +98,17 @@ const NotificationDropdown = () => {
             <p>Error fetching notifications</p>
           ) : notifications && notifications.length > 0 ? (
             notifications.map((notification) => (
-              <Link
-                to="/notification"
+              <div
                 key={notification.id}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
                   padding: "12px",
                   borderBottom: "1px solid #f2f2f2",
-                  textDecoration: "none",
-                  color: "inherit",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
                 }}
+               as={Link} to="/notification"
               >
                 <div
                   style={{
@@ -120,11 +119,12 @@ const NotificationDropdown = () => {
                     height: "30px",
                     borderRadius: "50%",
                     backgroundColor: "#A06ECE",
+                    marginBottom: "20px",
                   }}
                 >
                   <NotificationsIcon style={{ color: "#f3f1fc", fontSize: "20px" }} />
                 </div>
-                <div style={{ flex: 1, marginLeft: "12px" }}>
+                <div style={{ flex: 1 }}>
                   <div
                     style={{
                       display: "flex",
@@ -137,6 +137,7 @@ const NotificationDropdown = () => {
                       style={{
                         fontSize: "14px",
                         fontWeight: "bold",
+                        color: "#333",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
@@ -146,14 +147,15 @@ const NotificationDropdown = () => {
                       {notification.title}
                     </span>
                     <div>
-                      <span>
-                        {new Date(notification.createdAt).toLocaleString("id-ID", {
-                          day: "numeric",
-                          month: "short",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </span>
+                      <span>{new Date(notification.createdAt).toLocaleString(
+                         "id-ID",
+                         {
+                            day: "numeric",
+                            month: "short",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                         }
+                      )}</span>
                       <span
                         style={{
                           display: "inline-block",
@@ -171,12 +173,13 @@ const NotificationDropdown = () => {
                       margin: 0,
                       fontSize: "14px",
                       color: "#555",
+                      wordWrap: "break-word",
                     }}
                   >
                     {notification.message}
                   </p>
                 </div>
-              </Link>
+              </div>
             ))
           ) : (
             <p style={{ padding: "10px 15px", color: "#888", textAlign: "center" }}>
