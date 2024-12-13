@@ -308,9 +308,9 @@ const HomepageTicketSearch = () => {
                                                 setShowPassengerModal(true)
                                             }
                                         >
-                                            {passenger?.adult +
-                                                passenger?.child +
-                                                passenger?.infant}{" "}
+                                            {passenger?.ADULT +
+                                                passenger?.CHILD +
+                                                passenger?.INFANT}{" "}
                                             Penumpang
                                         </button>
                                         {showPassengerModal && (

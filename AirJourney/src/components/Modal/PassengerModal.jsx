@@ -8,12 +8,12 @@ import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
 
 const PassengerModal = ({ setShowPassengerModal, passenger, setPassenger }) => {
-    const [adult, setAdult] = useState(passenger?.adult || 0);
-    const [child, setChild] = useState(passenger?.child || 0);
-    const [infant, setInfant] = useState(passenger?.infant || 0);
+    const [adult, setAdult] = useState(passenger?.ADULT || 0);
+    const [child, setChild] = useState(passenger?.CHILD || 0);
+    const [infant, setInfant] = useState(passenger?.INFANT || 0);
 
     useEffect(() => {
-        setPassenger({ adult, child, infant });
+        setPassenger({ ADULT:adult, CHILD:child, INFANT:infant });
     }, [adult, child, infant]);
     
     return (

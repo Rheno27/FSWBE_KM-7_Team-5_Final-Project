@@ -23,25 +23,34 @@ const DestinationModal = ({
         JSON.parse(localStorage.getItem("destination_history")) || []
     );
 
-    const {
-        data: airportList,
-        isSuccess,
-    } = useQuery({
+    const [filteredSearch, setFilteredSearch] = useState([]);
+
+    const { data: airportList, isSuccess } = useQuery({
         queryKey: ["airports"],
         queryFn: () => axios.get(`${import.meta.env.VITE_API_URL}/airports`),
     });
 
     useEffect(() => {
-        if(isSuccess){
-            setDestinationHistory([...airportList.data.data])
+        if (isSuccess) {
+            setDestinationHistory([...airportList.data.data]);
         }
     }, [isSuccess]);
-    
-    useEffect(()=>{
-        console.log(destinationHistory)
-    },[destinationHistory])
 
-    const destinationClickHandler = (name,id) => {
+    useEffect(() => {
+        if (isSuccess && destinationHistory && search) {
+            setFilteredSearch(
+                destinationHistory.filter((item) =>
+                    item.name.toLowerCase().includes(search.toLowerCase())
+                )
+            );
+        }
+    }, [destinationHistory, search]);
+
+    useEffect(() => {
+        console.log(destinationHistory);
+    }, [destinationHistory]);
+
+    const destinationClickHandler = (name, id) => {
         if (isFromModal) {
             setFromDestination(name);
             setFromDestinationId(id);
@@ -69,10 +78,6 @@ const DestinationModal = ({
         }
     };
 
-    const deleteHandler = () => {
-        localStorage.removeItem("destination_history");
-        setDestinationHistory([]);
-    };
     return (
         <div className="absolute md:inset-12 z-2 w-full max-w-3xl mx-auto h-80 rounded-xl p-4 bg-white">
             <div className="flex items-center justify-between gap-2">
@@ -83,12 +88,24 @@ const DestinationModal = ({
                         name=""
                         id=""
                         value={search}
-                        className="focus:outline-none w-full"
+                        className="focus:outline-none w-full relative"
                         placeholder="Masukkan Kota atau Negara"
                         onChange={(e) => setSearch(e.target.value)}
                         onKeyDown={onKeyDownHandler}
-                        disabled
                     />
+                    {search && (
+                        <div className="absolute flex flex-col items-start w-full h-fit p-2 px-4 -inset-x-0 inset-y-20 bg-white border-b-4 border-darkblue5">
+                            {filteredSearch.map((item) => (
+                                <button
+                                    key={item.id}
+                                    className="w-full text-start py-2 px-4 border-b text-darkblue4 font-semibold"
+                                    onClick={()=>{destinationClickHandler(item.name, item.id)}}
+                                >
+                                    {item.name}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
                 <CloseIcon
                     onClick={() => {
@@ -104,12 +121,6 @@ const DestinationModal = ({
                     <span className="font-semibold text-lg">
                         Pencarian terkini
                     </span>
-                    <span
-                        className="font-semibold text-base text-red-500 cursor-pointer active:text-red-700"
-                        onClick={deleteHandler}
-                    >
-                        Hapus
-                    </span>
                 </div>
                 <div className="flex flex-col flex-1 gap-3 py-3 overflow-auto">
                     {destinationHistory.map((data) => (
@@ -120,16 +131,11 @@ const DestinationModal = ({
                             <span
                                 className="cursor-pointer"
                                 onClick={() => {
-                                    destinationClickHandler(data.name,data.id);
+                                    destinationClickHandler(data.name, data.id);
                                 }}
                             >
                                 {data.name}
                             </span>
-                            <CloseIcon
-                                color="disabled"
-                                className="cursor-pointer"
-                                onClick={() => {}}
-                            />
                         </div>
                     ))}
                 </div>
@@ -146,7 +152,7 @@ DestinationModal.propTypes = {
     isFromModal: PropTypes.bool,
     fromDestination: PropTypes.string,
     toDestination: PropTypes.string,
-    setFromDestinationId:PropTypes.any,
-    setToDestinationId:PropTypes.any
+    setFromDestinationId: PropTypes.any,
+    setToDestinationId: PropTypes.any,
 };
 export default DestinationModal;

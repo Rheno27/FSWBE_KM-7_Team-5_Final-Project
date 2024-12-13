@@ -23,41 +23,6 @@ export const Route = createLazyFileRoute('/users/private/checkout/')({
     component: Checkout,
 });
 
-/*constoh data yg akan di post
-    {
-    "departureFlightId": "0193a5f2-1b37-7ab2-8afc-57a42ae7641c",
-    "passengers": [
-        {
-        "birthday": "1990-01-15T00:00:00.000Z",
-        "departureSeatId": "0193a5f2-1b41-7d83-94f8-c72eb672ad82",
-        "expiredAt": "2030-01-15T00:00:00Z",
-        "familyName": "Doe",
-        "firstName": "John",
-        "nationality": "Indonesia",
-        "nikKtp": "3174012345678901",
-        "nikPaspor": "P12345672",
-        "returnSeatId": "0193a5f2-1b94-77b1-87e5-8b614648d3b3",
-        "title": "Mr",
-        "type": "ADULT"
-        },
-        {
-        "birthday": "1990-01-15T00:00:00.000Z",
-        "departureSeatId": "0193a5f2-1b41-7d83-94f8-c73c6ad6ee44",
-        "expiredAt": "2030-01-15T00:00:00Z",
-        "familyName": "Doe",
-        "firstName": "John",
-        "nationality": "Indonesia",
-        "nikKtp": "3174012345678901",
-        "nikPaspor": "P12345672",
-        "returnSeatId": "0193a5f2-1b94-77b1-87e5-8b70415b327a",
-        "title": "Mr",
-        "type": "ADULT"
-        }
-    ],
-    "returnFlightId": "0193a5f2-1b37-7ab2-8afc-57d700508d92"
-}
-*/
-
 function Checkout() {
     const navigate = useNavigate();
     const { token } = useSelector((state) => state.auth);
@@ -68,16 +33,14 @@ function Checkout() {
     const [selectedSeats, setSelectedSeats] = useState([]);
 
     const [birthDay, setBirthDay] = useState("");
-    const [departureSeat, setDepartureSeat] = useState("");
     const [expiredAt, setExpiredAt] = useState("");
     const [familyName, setFamilyName] = useState("");
     const [firstName, setFirstName] = useState("");
     const [nationality, setNationality] = useState("");
-    const [nikKtp, setNikKtp] = useState("");
-    const [nikPaspor, setNikPaspor] = useState("");
-    const [returnSeat, setReturnSeat] = useState("");
+    const [identityNumber, setIdentityNumber] = useState("");
+    const [originCountry, setOriginCountry] = useState("");
     const [title, setTitle] = useState("");
-    const [type, setType] = useState("");
+    const [passengerTypes, setPassengerTypes] = useState([]);
 
     const { data: user, isLoading, error } = useQuery({
         queryKey: ['user'],
@@ -119,6 +82,16 @@ function Checkout() {
         }
     };
 
+    const setPassengerType = (index, type) => {
+        setPassengerTypes((prevTypes) => {
+            const updatedTypes = [...prevTypes];
+            updatedTypes[index] = type;
+            return updatedTypes;
+        });
+        console.log("passengerTypes", passengerTypes);
+    };
+
+
     //seat
     const totalPassengerSeat = (passenger?.ADULT || 0) + (passenger?.CHILD || 0);
     const handleSeatSelection = (seatId) => {
@@ -153,27 +126,37 @@ function Checkout() {
     //submit
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const passengers = Array.from({ length: totalPassengers }).map((_, index) => {
+            const passenger = {
+                birthday: birthDay[index] || "",
+                departureSeatId: selectedSeats[index],
+                expiredAt: expiredAt[index] || "",
+                familyName: familyName[index] || "",
+                firstName: firstName[index] || "",
+                nationality: nationality[index] || "",
+                identityNumber: identityNumber[index] || "",
+                originCountry: originCountry[index] || "",
+                title: title[index] || "",
+                type: passengerTypes[index] || getPassengerType(index),
+            };
+                if (selectedSeats[index + 1]) {
+                passenger.returnSeatId = selectedSeats[index + 1];
+            }
+    
+            return passenger;
+        });
+        
         const data = {
             departureFlightId: flightId,
-            passengers: [
-                {
-                    birthday: birthDay,
-                    departureSeatId: selectedSeats[0],
-                    expiredAt: expiredAt,
-                    familyName: familyName,
-                    firstName: firstName,
-                    nationality: nationality,
-                    nikKtp: nikKtp,
-                    nikPaspor: nikPaspor,
-                    returnSeatId: selectedSeats[1],
-                    title: title,
-                    type: type,
-                }
-            ],
+            passengers,
             returnFlightId: returnFlightId,
         }
-        console.log("data", data);
-        postTransaction(data);
+        if (success) {
+            postTransaction(data);
+            navigate(`users/private/payment`);
+        } else {
+            toast.error("Gagal membuat pemesanan");
+        }
     };
 
     return (
@@ -322,11 +305,13 @@ function Checkout() {
                                                     setTitle(e.target.value);
                                                     console.log("Selected Title:", e.target.value); // Debugging
                                                 }}
+                                                placeholder="Pilih Title"
                                                 style={{
                                                     borderRadius: '8px',
                                                     boxShadow: '0 0 5px rgba(0,0,0,0.1)',
                                                 }}
                                             >
+                                                <option disabled value="" >Pilih Title</option>
                                                 <option value="Mr">Mr.</option>
                                                 <option value="Mrs">Mrs.</option>
                                             </Form.Select>
@@ -428,34 +413,12 @@ function Checkout() {
                                                     color: '#4B1979',
                                                 }}
                                             >
-                                                Nik KTP
+                                                No. KTP/Paspor
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
-                                                onChange={(e) => setNikKtp(e.target.value)}
-                                                placeholder="Masukkan No. KTP"
-                                                style={{
-                                                    borderRadius: '8px',
-                                                    boxShadow: '0 0 5px rgba(0,0,0,0.1)',
-                                                }}
-                                            />
-                                        </Form.Group>
-
-                                        {/* Paspor */}
-                                        <Form.Group className="mt-3">
-                                            <Form.Label
-                                                style={{
-                                                    fontSize: '14px',
-                                                    fontWeight: 'bold',
-                                                    color: '#4B1979',
-                                                }}
-                                            >
-                                                No. Paspor
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                onChange={(e) => setNikPaspor(e.target.value)}
-                                                placeholder="Masukkan No. Paspor"
+                                                onChange={(e) => setIdentityNumber(e.target.value)}
+                                                placeholder="Masukkan No. KTP/Paspor"
                                                 style={{
                                                     borderRadius: '8px',
                                                     boxShadow: '0 0 5px rgba(0,0,0,0.1)',
@@ -477,6 +440,29 @@ function Checkout() {
                                             <Form.Control
                                                 type="date"
                                                 onChange={(e) => setExpiredAt(e.target.value)}
+                                                style={{
+                                                    borderRadius: '8px',
+                                                    boxShadow: '0 0 5px rgba(0,0,0,0.1)',
+                                                }}
+                                            />
+                                        </Form.Group>
+
+                                        
+                                        {/* origin country */}
+                                        <Form.Group className="mt-3">
+                                            <Form.Label
+                                                style={{
+                                                    fontSize: '14px',
+                                                    fontWeight: 'bold',
+                                                    color: '#4B1979',
+                                                }}
+                                            >
+                                                Asal Negara
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                onChange={(e) => setOriginCountry(e.target.value)}
+                                                placeholder="Masukkan Asal Negara"
                                                 style={{
                                                     borderRadius: '8px',
                                                     boxShadow: '0 0 5px rgba(0,0,0,0.1)',
