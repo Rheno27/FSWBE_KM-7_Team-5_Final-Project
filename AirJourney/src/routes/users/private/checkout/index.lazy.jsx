@@ -32,13 +32,13 @@ function Checkout() {
     const [flight, setFlight] = useState(null);
     const [selectedSeats, setSelectedSeats] = useState([]);
 
-    const [birthDay, setBirthDay] = useState("");
-    const [expiredAt, setExpiredAt] = useState("");
-    const [familyName, setFamilyName] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [nationality, setNationality] = useState("");
-    const [identityNumber, setIdentityNumber] = useState("");
-    const [originCountry, setOriginCountry] = useState("");
+    const [birthDays, setBirthDays] = useState([]);
+    const [expiredAt, setExpiredAt] = useState([]);
+    const [familyNames, setFamilyNames] = useState([]);
+    const [firstNames, setFirstNames] = useState([]);
+    const [nationalities, setNationalities] = useState([]);
+    const [identityNumbers, setIdentityNumbers] = useState([]);
+    const [originCountries, setOriginCountries] = useState([]);
     const [title, setTitle] = useState("");
     const [passengerTypes, setPassengerTypes] = useState([]);
 
@@ -62,7 +62,7 @@ function Checkout() {
     const { mutate: postTransaction } = useMutation({
         mutationFn: (data) => createTransaction(data),
         onSuccess: () => {
-            navigate(`users/private/payment`);
+            navigate({to: `/users/private/payment`});
         },
         onError: (error) => {
             console.log("error", error);
@@ -81,15 +81,19 @@ function Checkout() {
             return 'INFANT';
         }
     };
-
-    const setPassengerType = (index, type) => {
-        setPassengerTypes((prevTypes) => {
-            const updatedTypes = [...prevTypes];
-            updatedTypes[index] = type;
-            return updatedTypes;
-        });
-        console.log("passengerTypes", passengerTypes);
-    };
+    
+    useEffect(() => {
+        if (passenger) {
+            const total = (passenger?.ADULT || 0) + (passenger?.CHILD || 0) + (passenger?.INFANT || 0);
+            setBirthDays(Array(total).fill(""));
+            setFamilyNames(Array(total).fill(""));
+            setFirstNames(Array(total).fill(""));
+            setNationalities(Array(total).fill(""));
+            setIdentityNumbers(Array(total).fill(""));
+            setOriginCountries(Array(total).fill(""));
+            setPassengerTypes(Array(total).fill("")); // assuming default type
+        }
+    }, [passenger]);
 
 
     //seat
@@ -111,53 +115,96 @@ function Checkout() {
     };
 
     //price
-    const adultPrice = flight?.departureFlight?.price * passenger.ADULT;
-    const childPrice = flight?.departureFlight?.price * passenger.CHILD;
-    const infantPrice = flight?.departureFlight?.price * passenger.INFANT;
+    const adultPrice = detailFlight?.departureFlight?.price * passenger.ADULT;
+    const childPrice = detailFlight?.departureFlight?.price * passenger.CHILD;
+    const infantPrice = detailFlight?.departureFlight?.price * passenger.INFANT;
     const tax = (adultPrice + infantPrice + childPrice) * 0.1;
     const totalPrice = adultPrice + infantPrice + childPrice + tax;
 
-    useEffect(() => {
-        if (detailFlight) {
-            setFlight(detailFlight);
+    const handleInputChange = (index, field, value) => {
+        if (field === 'birthday') {
+            setBirthDays(prev => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === 'familyName') {
+            setFamilyNames(prev => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === 'firstName') {
+            setFirstNames(prev => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === 'nationality') {
+            setNationalities(prev => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === 'identityNumber') {
+            setIdentityNumbers(prev => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === 'expiredAt') {
+            setExpiredAt(prev => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === 'originCountry') {
+            setOriginCountries(prev => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === 'passengerType') {
+            setPassengerTypes(prev => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
         }
-    }, [detailFlight]);
+    };
 
     //submit
     const handleSubmit = async (e) => {
         e.preventDefault();
         const passengers = Array.from({ length: totalPassengers }).map((_, index) => {
             const passenger = {
-                birthday: birthDay[index] || "",
+                birthday: birthDays[index] || "",
                 departureSeatId: selectedSeats[index],
                 expiredAt: expiredAt[index] || "",
-                familyName: familyName[index] || "",
-                firstName: firstName[index] || "",
-                nationality: nationality[index] || "",
-                identityNumber: identityNumber[index] || "",
-                originCountry: originCountry[index] || "",
-                title: title[index] || "",
+                familyName: familyNames[index] || "",
+                firstName: firstNames[index] || "",
+                nationality: nationalities[index] || "",
+                identityNumber: identityNumbers[index] || "",
+                originCountry: originCountries[index] || "",
+                title: title || "",
                 type: passengerTypes[index] || getPassengerType(index),
             };
-                if (selectedSeats[index + 1]) {
+            if (returnFlightId && selectedSeats[index + 1]) {
                 passenger.returnSeatId = selectedSeats[index + 1];
             }
-    
             return passenger;
         });
-        
         const data = {
             departureFlightId: flightId,
             passengers,
-            returnFlightId: returnFlightId,
+        };
+        if (returnFlightId) {
+            data.returnFlightId = returnFlightId;
         }
-        if (success) {
-            postTransaction(data);
-            navigate(`users/private/payment`);
-        } else {
-            toast.error("Gagal membuat pemesanan");
-        }
+        postTransaction(data);
     };
+
+    
 
     return (
         <>
@@ -330,7 +377,7 @@ function Checkout() {
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
-                                                onChange={(e) => setFirstName(e.target.value)}
+                                                onChange={(e) => handleInputChange(index, 'firstName', e.target.value)}
                                                 placeholder="Masukkan Nama Lengkap"
                                                 style={{
                                                     borderRadius: '8px',
@@ -352,7 +399,7 @@ function Checkout() {
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
-                                                onChange={(e) => setFamilyName(e.target.value)}
+                                                onChange={(e) => handleInputChange(index, 'familyName', e.target.value)}
                                                 placeholder="Masukkan Nama Keluarga"
                                                 style={{
                                                     borderRadius: '8px',
@@ -374,7 +421,7 @@ function Checkout() {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                onChange={(e) => setBirthDay(e.target.value)}
+                                                onChange={(e) => handleInputChange(index, 'birthday', e.target.value)}
                                                 style={{
                                                     borderRadius: '8px',
                                                     boxShadow: '0 0 5px rgba(0,0,0,0.1)',
@@ -395,7 +442,7 @@ function Checkout() {
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
-                                                onChange={(e) => setNationality(e.target.value)}
+                                                onChange={(e) => handleInputChange(index, 'nationality', e.target.value)}
                                                 placeholder="Masukkan Kewarganegaraan"
                                                 style={{
                                                     borderRadius: '8px',
@@ -417,7 +464,7 @@ function Checkout() {
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
-                                                onChange={(e) => setIdentityNumber(e.target.value)}
+                                                onChange={(e) => handleInputChange(index, 'identityNumber', e.target.value)}
                                                 placeholder="Masukkan No. KTP/Paspor"
                                                 style={{
                                                     borderRadius: '8px',
@@ -439,7 +486,7 @@ function Checkout() {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                onChange={(e) => setExpiredAt(e.target.value)}
+                                                onChange={(e) => handleInputChange(index, 'expiredAt', e.target.value)}
                                                 style={{
                                                     borderRadius: '8px',
                                                     boxShadow: '0 0 5px rgba(0,0,0,0.1)',
@@ -461,7 +508,7 @@ function Checkout() {
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
-                                                onChange={(e) => setOriginCountry(e.target.value)}
+                                                onChange={(e) => handleInputChange(index, 'originCountry', e.target.value)}
                                                 placeholder="Masukkan Asal Negara"
                                                 style={{
                                                     borderRadius: '8px',
