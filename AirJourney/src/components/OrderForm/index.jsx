@@ -4,7 +4,7 @@ import { getUser } from '../../services/user';
 import { useQuery } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
 
-const OrderForm = ({ orderData }) => {
+const OrderForm = () => {
     const { token } = useSelector((state) => state.auth);
     const { data: user, isLoading, error } = useQuery({
         queryKey: ['user'],

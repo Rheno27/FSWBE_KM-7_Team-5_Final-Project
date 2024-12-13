@@ -6,10 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getFlightByID } from '../../services/flight';
 
 
-function FlightDetails() {
-    const { flightId } = useSelector((state) => state.searchQuery);
-    const { returnFlightId } = useSelector((state) => state.searchQuery);
-    const { passenger } = useSelector((state) => state.searchQuery);
+function FlightDetails({flightId, returnFlightId, passenger}) {
     const [flight, setFlight] = useState(null);
 
     const { data: detailFlight, isLoading, isError, error } = useQuery({

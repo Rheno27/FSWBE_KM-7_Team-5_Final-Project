@@ -2,7 +2,7 @@ import { React, useState, useEffect } from 'react';
 import { Form, Card } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-const PassengerForm = ({ passengerData, handleChange }) => {
+const PassengerForm = ({ passengerData, handleChange, passengerType }) => {
     const { passenger } = useSelector((state) => state.searchQuery);
 
     const totalPassengers = (passenger?.adult || 0) + (passenger?.child || 0) + (passenger?.baby || 0);

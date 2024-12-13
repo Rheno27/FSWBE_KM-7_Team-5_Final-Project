@@ -2,9 +2,8 @@ export const createTransaction = async (transactions) => {
     const token = localStorage.getItem("token");
     const requestData = {
         departureFlightId: transactions.departureFlightId,
+        passengers: transactions.passengers,
         returnFlightId: transactions.returnFlightId,
-        passenger: transactions.passenger,
-        seats: transactions.seats,
     }
     const response = await fetch(
         `${import.meta.env.VITE_API_URL}/transactions`, {
