@@ -9,7 +9,7 @@ const initialState = {
     arrivalDate: null,
     flightId:null,
     returnFlightId:null,
-    passenger: null,
+    passenger: {adult: 1, child: 0, infant: 0},
     classType: null,
     isReturn: false,
 };

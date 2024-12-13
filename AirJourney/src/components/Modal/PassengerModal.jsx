@@ -10,11 +10,11 @@ import { useEffect, useState } from "react";
 const PassengerModal = ({ setShowPassengerModal, passenger, setPassenger }) => {
     const [adult, setAdult] = useState(passenger?.adult || 0);
     const [child, setChild] = useState(passenger?.child || 0);
-    const [baby, setBaby] = useState(passenger?.baby || 0);
+    const [infant, setInfant] = useState(passenger?.infant || 0);
 
     useEffect(() => {
-        setPassenger({ adult, child, baby });
-    }, [adult, child, baby]);
+        setPassenger({ adult, child, infant });
+    }, [adult, child, infant]);
     
     return (
         <div className="absolute -inset-x-1/2 md:inset-x-0 md:inset-y-16 z-2 w-fit md:mx-auto h-fit rounded-xl p-4 bg-white">
@@ -106,7 +106,7 @@ const PassengerModal = ({ setShowPassengerModal, passenger, setPassenger }) => {
                     <div className="flex gap-1 h-fit w-fit">
                         <button
                             className="border-1 border-darkblue4 p-2 rounded-lg"
-                            onClick={() => baby > 0 && setBaby(baby - 1)}
+                            onClick={() => infant > 0 && setInfant(infant - 1)}
                         >
                             <RemoveIcon
                                 fontSize="medium"
@@ -114,11 +114,11 @@ const PassengerModal = ({ setShowPassengerModal, passenger, setPassenger }) => {
                             />
                         </button>
                         <div className="border-1 border-darkblue2 rounded-lg w-14 flex items-center justify-center text-lg">
-                            {baby}
+                            {infant}
                         </div>
                         <button
                             className="border-1 border-darkblue4 p-2 rounded-lg"
-                            onClick={() => setBaby(baby + 1)}
+                            onClick={() => setInfant(infant + 1)}
                         >
                             <AddIcon
                                 fontSize="medium"
