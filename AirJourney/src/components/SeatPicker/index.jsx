@@ -1,14 +1,13 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import { Row, Col, Card } from "react-bootstrap";
 import "./style.css";
 import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { getFlightByID } from "../../services/flight";
 
-const SeatPicker = () => {
+const SeatPicker = ({selectedSeats, setSelectedSeats}) => {
     const { flightId } = useSelector((state) => state.searchQuery);
     const { passenger } = useSelector((state) => state.searchQuery);
-    const [selectedSeats, setSelectedSeats] = useState([]);
 
     const { data: detailFlight, isLoading, isError, error } = useQuery({
         queryKey: ['flight', flightId],
@@ -28,7 +27,6 @@ const SeatPicker = () => {
             setSelectedSeats((prev) => [...prev, seatId]);
         }
     };
-
 
     return (
         <Card>

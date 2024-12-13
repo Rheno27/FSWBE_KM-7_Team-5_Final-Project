@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState,useEffect} from 'react';
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { 
     Container, 
@@ -28,6 +28,8 @@ function Checkout() {
     const { token } = useSelector((state) => state.auth);
     const { passenger } = useSelector((state) => state.searchQuery);
 
+    const [selectedSeats, setSelectedSeats] = useState([]);
+
     const { data: user, isLoading, error } = useQuery({
         queryKey: ['user'],
         queryFn: getUser,
@@ -49,7 +51,7 @@ function Checkout() {
 
     return (
         <>
-            <Container className="checkout-page">
+            <Container className="checkout-page" style={{maxWidth:"1024px"}}>
                 {/* Progress Bar */}
                 <ProgressBar />
                 {/* Checkout Content */}
@@ -150,7 +152,7 @@ function Checkout() {
 
                         {/* Passenger Form */}
                         {Array.from({ length: totalPassengers }).map((_, index) => (
-                            <Card className="shadow-sm mb-4" style={{ borderRadius: '8px' }}>
+                            <Card className="shadow-sm mb-4" key={index} style={{ borderRadius: '8px' }}>
                                 <Card.Body>
                                     <h4>Data Diri Penumpang </h4>
                                     <div
@@ -334,7 +336,7 @@ function Checkout() {
                         ))}
 
                         {/* Seat Picker */}
-                        <SeatPicker/>
+                        <SeatPicker selectedSeats={selectedSeats} setSelectedSeats={setSelectedSeats} />
                     </Col>
 
                     {/* Right Side: Detail Penerbangan */}
@@ -346,7 +348,7 @@ function Checkout() {
                                 backgroundColor: "#FF0000",
                                 borderColor: "#FF0000",
                             }}
-                            onClick={() => navigate(`users/private/payment`)}
+                            onClick={() => {navigate(`users/private/payment`);console.log(selectedSeats)}}
                         >
                             Lanjutkan Pembayaran
                         </Button>
