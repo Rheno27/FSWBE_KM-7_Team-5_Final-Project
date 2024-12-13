@@ -1,8 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoCubeOutline } from "react-icons/io5";
 import { FaRegHeart, FaDollarSign } from "react-icons/fa";
 
 const Sidebar = () => {
+  const [classFilter, setClassFilter] = useState([]);
+  const [sortBy, setSortBy] = useState([]);
+  const [sortOrder, setSortOrder] = useState("");
+
+  // Handle checkbox change for class
+  const handleClassChange = (event) => {
+    const value = event.target.value;
+    setClassFilter((prev) =>
+      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
+    );
+  };
+
+  // Handle checkbox change for sortBy
+  const handleSortByChange = (event) => {
+    const value = event.target.value;
+    setSortBy((prev) =>
+      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
+    );
+  };
+
+  // Handle radio change for sortOrder
+  const handleSortOrderChange = (event) => {
+    setSortOrder(event.target.value);
+  };
+
   return (
     <div
       style={{
@@ -22,7 +47,7 @@ const Sidebar = () => {
     >
       <h5 className="fw-bold mb-3">Filter</h5>
       <ul className="list-unstyled">
-        {/* Transit */}
+        {/* Class */}
         <li className="mb-3">
           <button
             style={{
@@ -44,13 +69,53 @@ const Sidebar = () => {
                 gap: "10px",
               }}
             >
-              <IoCubeOutline style={{ fontSize: "1.5rem" }} /> Transit
+              <IoCubeOutline style={{ fontSize: "1.5rem" }} /> Class
             </span>
-            <span>&rarr;</span>
           </button>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                value="BUSINESS"
+                checked={classFilter.includes("BUSINESS")}
+                onChange={handleClassChange}
+              />
+              BUSINESS
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                value="PREMIUM_ECONOMY"
+                checked={classFilter.includes("PREMIUM_ECONOMY")}
+                onChange={handleClassChange}
+              />
+              PREMIUM ECONOMY
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                value="ECONOMY"
+                checked={classFilter.includes("ECONOMY")}
+                onChange={handleClassChange}
+              />
+              ECONOMY
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                value="FIRST_CLASS"
+                checked={classFilter.includes("FIRST_CLASS")}
+                onChange={handleClassChange}
+              />
+              FIRST CLASS
+            </label>
+          </div>
         </li>
         <hr />
-        {/* Fasilitas */}
+        {/* Sort By */}
         <li className="mb-3">
           <button
             style={{
@@ -72,13 +137,53 @@ const Sidebar = () => {
                 gap: "10px",
               }}
             >
-              <FaRegHeart style={{ fontSize: "1.5rem" }} /> Fasilitas
+              <FaRegHeart style={{ fontSize: "1.5rem" }} /> Sort By
             </span>
-            <span>&rarr;</span>
           </button>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                value="price"
+                checked={sortBy.includes("price")}
+                onChange={handleSortByChange}
+              />
+              Price
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                value="duration"
+                checked={sortBy.includes("duration")}
+                onChange={handleSortByChange}
+              />
+              Duration
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                value="departureDate"
+                checked={sortBy.includes("departureDate")}
+                onChange={handleSortByChange}
+              />
+              Departure Date
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                value="arrivalDate"
+                checked={sortBy.includes("arrivalDate")}
+                onChange={handleSortByChange}
+              />
+              Arrival Date
+            </label>
+          </div>
         </li>
         <hr />
-        {/* Harga */}
+        {/* Sort Order */}
         <li>
           <button
             style={{
@@ -100,10 +205,30 @@ const Sidebar = () => {
                 gap: "10px",
               }}
             >
-              <FaDollarSign style={{ fontSize: "1.5rem" }} /> Harga
+              <FaDollarSign style={{ fontSize: "1.5rem" }} /> Sort Order
             </span>
-            <span>&rarr;</span>
           </button>
+          <div>
+            <label>
+              <input
+                type="radio"
+                value="asc"
+                checked={sortOrder === "asc"}
+                onChange={handleSortOrderChange}
+              />
+              Ascending
+            </label>
+            <br />
+            <label>
+              <input
+                type="radio"
+                value="desc"
+                checked={sortOrder === "desc"}
+                onChange={handleSortOrderChange}
+              />
+              Descending
+            </label>
+          </div>
         </li>
       </ul>
     </div>

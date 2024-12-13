@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate, useLocation } from "@tanstack/react-router";
 import FlightList from "../../../components/FlightList";
 import Sidebar from "../../../components/Sidebar";
 import Header from "../../../components/Header";
@@ -15,6 +15,7 @@ export const Route = createLazyFileRoute("/users/public/detailPenerbangan")({
 
 function Index() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [flights, setFlights] = useState([]);
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,6 +23,7 @@ function Index() {
   const [cursorId, setCursorId] = useState(null);
   const [hasMore, setHasMore] = useState(true);
   const [selectedSort, setSelectedSort] = useState("Harga - Termurah");
+  const [selectedClass, setSelectedClass] = useState('');
   const [isSoldOut, setIsSoldOut] = useState(false);
   const [isFromSelected, setIsFromSelected] = useState(false);
   const [selectedFlightId, setSelectedFlightId] = useState(null);
@@ -37,19 +39,17 @@ function Index() {
     setLoading(true);
     setError("");
     try {
-      // Params
-      const params = new URLSearchParams(window.location.search);
+      // Get query params from URL (including class, sortBy, sortOrder)
+      const params = new URLSearchParams(location.search);
       if (resetList) {
         params.delete('cursorId');
         if (newDate) params.set('departureDate', newDate);
-        navigate({
-          to: `/users/public/detailPenerbangan?${params.toString()}`,
-        });
+        navigate(`/users/public/detailPenerbangan?${params.toString()}`);
       } else if (cursorId) {
         params.set('cursorId', cursorId);
       }
 
-      // Fetch
+      // Fetch flights with the URL params (class, sortBy, sortOrder)
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/flights?${params.toString()}`
       );
@@ -59,35 +59,30 @@ function Index() {
       }
 
       const result = await response.json();
-      const newFlights = Array.isArray(result) 
-        ? result 
-        : Array.isArray(result.data) 
-          ? result.data 
-          : [];
+      const newFlights = Array.isArray(result)
+        ? result
+        : Array.isArray(result.data)
+        ? result.data
+        : [];
 
-      const allFlights = resetList 
-        ? newFlights 
-        : [...flights, ...newFlights];
-      
-      const uniqueFlightsMap = new Map(
-        allFlights.map((flight) => [flight.id, flight])
-      );
+      const allFlights = resetList ? newFlights : [...flights, ...newFlights];
+      const uniqueFlightsMap = new Map(allFlights.map((flight) => [flight.id, flight]));
       const uniqueFlights = Array.from(uniqueFlightsMap.values());
-      // Update state
-      if(isReturn && !isFromSelected) { 
+
+      // Handle return logic for flights
+      if (isReturn && !isFromSelected) {
         const returnDate = new Date(arrivalDate);
-        const filterFlightsArrive = uniqueFlights.filter((flight) => new Date(flight.arrivalDate) < returnDate);
-        
+        const filterFlightsArrive = uniqueFlights.filter(
+          (flight) => new Date(flight.arrivalDate) < returnDate
+        );
         setFlights(filterFlightsArrive);
         setFilteredFlights(filterFlightsArrive);
-      }
-      else{
+      } else {
         setFlights(uniqueFlights);
         setFilteredFlights(uniqueFlights);
       }
-      setCursorId(
-        newFlights.length > 0 ? newFlights[newFlights.length - 1].id : null
-      );
+
+      setCursorId(newFlights.length > 0 ? newFlights[newFlights.length - 1].id : null);
       setHasMore(newFlights.length > 0);
     } catch (err) {
       setError("Failed to fetch data. Please try again later.");
@@ -95,24 +90,37 @@ function Index() {
     } finally {
       setLoading(false);
     }
-  }, [loading, hasMore, cursorId, flights, isReturn, isFromSelected, navigate, arrivalDate]);
+  }, [loading, hasMore, cursorId, flights, isReturn, isFromSelected, navigate, arrivalDate, location]);
 
   const handleSortChange = useCallback((option) => {
     setSelectedSort(option.label);
-    
+  
     const sortedFlights = [...filteredFlights].sort((a, b) => {
-      switch(option.label) {
-        case "Harga - Termurah":
-          return a.price - b.price;
-        case "Harga - Termahal":
-          return b.price - a.price;
-        default:
-          return 0;
+      if (option.label === "Harga - Termurah") {
+        return a.price - b.price;
+      } else if (option.label === "Harga - Termahal") {
+        return b.price - a.price;
       }
+      return 0;
     });
-
+  
     setFilteredFlights(sortedFlights);
-  }, [filteredFlights]);
+  
+    const params = new URLSearchParams(location.search);
+    params.set("sortBy", "price");
+    params.set("sortOrder", option.label === "Harga - Termurah" ? "asc" : "desc");
+    navigate(`/users/public/detailPenerbangan?${params.toString()}`);
+  }, [filteredFlights, location, navigate]);
+  
+
+  const handleClassChange = useCallback(
+    (newClass) => {
+      const params = new URLSearchParams(location.search);
+      params.set("class", newClass);
+      navigate(`/users/public/detailPenerbangan?${params.toString()}`);
+    },
+    [location, navigate]
+  );
 
   const checkIfLoadMore = useCallback(() => {
     if (loaderRef.current) {
@@ -126,7 +134,7 @@ function Index() {
   //initiate
   useEffect(() => {
     fetchFlightsData();
-  }, []);
+  }, [fetchFlightsData,location.search,cursorId]);
 
   // useEffect(() => {
   //   const soldOut = flights.length > 0 && flights.every((flight) => flight?.seats === 0);

@@ -12,6 +12,7 @@ import { useNavigate } from "@tanstack/react-router";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import {setFlightIdRedux,setReturnFlightIdRedux} from "../../redux/slices/searchQuery";
+import { toast } from "react-toastify";
 
 function CustomToggle({ eventKey }) {
   const [isAccordionOpen, setIsAccordionOpen] = React.useState(false);
@@ -40,7 +41,8 @@ const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelect
     if(isReturn && !isFromSelected){
       setIsFromSelected(true);
       setSelectedFlightId(flightId);
-      fetchFlightsData(true,returnDate);
+      fetchFlightsData(true,returnDate,true);
+      toast.info("Pilih penerbangan kembali",{position:"bottom-center", autoClose:5000});
       return;
     }
     else {
