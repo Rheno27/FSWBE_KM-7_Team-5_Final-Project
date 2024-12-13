@@ -26,7 +26,7 @@ function Checkout() {
                 <Col lg={7}>
                     <OrderForm />
                     <PassengerForm />
-                    <SeatPicker />
+                    <SeatPicker maxRow={45} maxCol={10} />
                     <Button 
                         className="mt-3 w-100 mb-4"
                         style={{
