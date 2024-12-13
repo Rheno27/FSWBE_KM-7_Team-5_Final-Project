@@ -40,7 +40,7 @@ const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelect
     if(isReturn && !isFromSelected){
       setIsFromSelected(true);
       setSelectedFlightId(flightId);
-      fetchFlightsData(true,returnDate);
+      fetchFlightsData(true,returnDate,true);
       return;
     }
     else {

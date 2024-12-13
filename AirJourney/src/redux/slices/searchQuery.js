@@ -7,9 +7,9 @@ const initialState = {
     toDestinationId: null,
     departureDate: null,
     arrivalDate: null,
-    flightId: null,
-    returnFlightId: null,
-    passenger: { adult: 1, child: 0, baby: 0 },
+    flightId:null,
+    returnFlightId:null,
+    passenger: {ADULT: 1, CHILD: 0, INFANT: 0},
     classType: null,
     isReturn: false,
 };

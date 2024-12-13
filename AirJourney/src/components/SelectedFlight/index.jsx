@@ -16,7 +16,7 @@ export const SelectedFlight = ({selectedFlightId, setSelectedFlightId,setIsFromS
     const clickHandler = () =>{
       setIsFromSelected(false);
       setSelectedFlightId(null);
-      fetchFlightsData(true,returnDate);
+      fetchFlightsData(true,returnDate,true);
     }
 
     return (

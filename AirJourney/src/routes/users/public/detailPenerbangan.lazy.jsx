@@ -28,7 +28,7 @@ function Index() {
   const loaderRef = useRef(null);
 
   const {isReturn, arrivalDate} = useSelector(state=>state.searchQuery);
-  const fetchFlightsData = useCallback(async (resetList = false, newDate = null) => {
+  const fetchFlightsData = useCallback(async (resetList = false, newDate = null, fromSelected) => {
     if (loading) return;
     if (resetList) {
       setHasMore(true);
@@ -42,6 +42,13 @@ function Index() {
       if (resetList) {
         params.delete('cursorId');
         if (newDate) params.set('departureDate', newDate);
+        if (fromSelected){
+          const from = params.get('airportIdFrom');
+          const to = params.get('airportIdTo');
+          console.log("tes",from,to)
+          params.set('airportIdFrom', to);
+          params.set('airportIdTo', from);
+        } 
         navigate({
           to: `/users/public/detailPenerbangan?${params.toString()}`,
         });
@@ -245,5 +252,3 @@ function Index() {
     </div>
   );
 }
-
-export default Index;

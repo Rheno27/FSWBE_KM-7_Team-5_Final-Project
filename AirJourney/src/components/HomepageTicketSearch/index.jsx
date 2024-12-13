@@ -121,12 +121,12 @@ const HomepageTicketSearch = () => {
     };
 
     useEffect(() => {
-        if (isReturn && searchDate.to) {
+        if (isReturn && searchDate.to && fromDestinationId && toDestinationId) {
             setIsReturnFilled(true);
-        } else if (isReturn && !searchDate.to) {
+        } else if (isReturn && !searchDate.to && !fromDestinationId && !toDestinationId) {
             setIsReturnFilled(false);
         }
-    }, [searchDate, isReturn]);
+    }, [searchDate, isReturn, fromDestinationId, toDestinationId]);
 
     return (
         <div className="w-full h-64 flex justify-center relative">
@@ -310,7 +310,7 @@ const HomepageTicketSearch = () => {
                                         >
                                             {passenger?.adult +
                                                 passenger?.child +
-                                                passenger?.baby}{" "}
+                                                passenger?.infant}{" "}
                                             Penumpang
                                         </button>
                                         {showPassengerModal && (

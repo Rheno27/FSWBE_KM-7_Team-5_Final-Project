@@ -318,7 +318,10 @@ function Checkout() {
                                             </Form.Label>
                                             <Form.Select
                                                 value={title}
-                                                onChange={(e) => setTitle(e.target.value)}
+                                                onChange={(e) => {
+                                                    setTitle(e.target.value);
+                                                    console.log("Selected Title:", e.target.value); // Debugging
+                                                }}
                                                 style={{
                                                     borderRadius: '8px',
                                                     boxShadow: '0 0 5px rgba(0,0,0,0.1)',

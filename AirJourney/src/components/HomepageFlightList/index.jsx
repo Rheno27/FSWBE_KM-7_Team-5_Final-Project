@@ -88,9 +88,9 @@ const HomepageFlightList = () => {
                     console.log("from infinite");
                 }}
                 hasMore={isHasMore}
-                loader={loadersCount.map((count) => (
+                loader={loadersCount.map((count,index) => (
                     <div
-                        key={count?.id}
+                        key={index}
                         className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2 w-72 animate-pulse sm:w-52"
                     >
                         <div className="rounded-md overflow-hidden w-full h-28 bg-darkblue1"></div>
