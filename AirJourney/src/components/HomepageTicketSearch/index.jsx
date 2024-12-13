@@ -56,9 +56,9 @@ const HomepageTicketSearch = () => {
     );
     const [passenger, setPassenger] = useState(
         useSelector((state) => state.searchQuery.passenger) || {
-            adult: 1,
-            child: 0,
-            infant: 0,
+            ADULT: 1,
+            CHILD: 0,
+            INFANT: 0,
         }
     );
     const [classType, setClassType] = useState(
@@ -308,9 +308,9 @@ const HomepageTicketSearch = () => {
                                                 setShowPassengerModal(true)
                                             }
                                         >
-                                            {passenger?.adult +
-                                                passenger?.child +
-                                                passenger?.infant}{" "}
+                                            {passenger?.ADULT +
+                                                passenger?.CHILD +
+                                                passenger?.INFANT}{" "}
                                             Penumpang
                                         </button>
                                         {showPassengerModal && (
