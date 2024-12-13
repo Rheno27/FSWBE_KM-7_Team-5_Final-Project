@@ -108,19 +108,19 @@ function Checkout() {
     });
 
     //passenger
-    const totalPassengers = (passenger?.adult || 0) + (passenger?.child || 0) + (passenger?.baby || 0);
+    const totalPassengers = (passenger?.ADULT || 0) + (passenger?.CHILD || 0) + (passenger?.INFANT || 0);
     const getPassengerType = (index) => {
-        if (index < passenger?.adult) {
-            return 'Adult';
-        } else if (index < passenger?.adult + passenger?.child) {
-            return 'Child';
+        if (index < passenger?.ADULT) {
+            return 'ADULT';
+        } else if (index < passenger?.ADULT + passenger?.CHILD) {
+            return 'CHILD';
         } else {
-            return 'Baby';
+            return 'INFANT';
         }
     };
 
     //seat
-    const totalPassengerSeat = (passenger?.adult || 0) + (passenger?.child || 0);
+    const totalPassengerSeat = (passenger?.ADULT || 0) + (passenger?.CHILD || 0);
     const handleSeatSelection = (seatId) => {
         if (selectedSeats.includes(seatId)) {
             setSelectedSeats((prev) => {
@@ -138,11 +138,11 @@ function Checkout() {
     };
 
     //price
-    const adultPrice = flight?.departureFlight?.price * passenger.adult;
-    const childPrice = flight?.departureFlight?.price * passenger.child;
-    const babyPrice = flight?.departureFlight?.price * passenger.baby;
-    const tax = (adultPrice + babyPrice + childPrice) * 0.1;
-    const totalPrice = adultPrice + babyPrice + childPrice + tax;
+    const adultPrice = flight?.departureFlight?.price * passenger.ADULT;
+    const childPrice = flight?.departureFlight?.price * passenger.CHILD;
+    const infantPrice = flight?.departureFlight?.price * passenger.INFANT;
+    const tax = (adultPrice + infantPrice + childPrice) * 0.1;
+    const totalPrice = adultPrice + infantPrice + childPrice + tax;
 
     useEffect(() => {
         if (detailFlight) {
@@ -324,8 +324,8 @@ function Checkout() {
                                                     boxShadow: '0 0 5px rgba(0,0,0,0.1)',
                                                 }}
                                             >
-                                                <option value="Mr.">Mr.</option>
-                                                <option value="Mrs.">Mrs.</option>
+                                                <option value="Mr">Mr.</option>
+                                                <option value="Mrs">Mrs.</option>
                                             </Form.Select>
                                         </Form.Group>
 
@@ -670,9 +670,9 @@ function Checkout() {
                                         </div>
                                         <div className="flight-details">
                                             <div className="departure ">
-                                                <div className="passenger">{passenger.adult} Adult</div>
-                                                <div className="passenger">{passenger.child} Child</div>
-                                                <div className="passenger">{passenger.baby} Baby</div>
+                                                <div className="passenger">{passenger.ADULT} Adult</div>
+                                                <div className="passenger">{passenger.CHILD} Child</div>
+                                                <div className="passenger">{passenger.INFANT} Infant</div>
                                                 <div className="tax">Tax</div>
                                             </div>  
                                         </div>
@@ -701,7 +701,7 @@ function Checkout() {
                                                 marginLeft: '20px',
                                             }}
                                         >
-                                            Rp {babyPrice}
+                                            Rp {infantPrice}
                                         </div>
                                         <div className="tax"
                                             style={{
