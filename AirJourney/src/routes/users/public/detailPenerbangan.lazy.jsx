@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createLazyFileRoute, useNavigate, useLocation } from "@tanstack/react-router";
+import { debounce } from 'lodash';
 import FlightList from "../../../components/FlightList";
 import Sidebar from "../../../components/Sidebar";
 import Header from "../../../components/Header";
@@ -18,13 +19,14 @@ function Index() {
   const location = useLocation();
 
   const [flights, setFlights] = useState([]);
-  const [filteredFlights, setFilteredFlights] = useState([]);
+  const [filteredFlights, setFilteredFlights] = useState(flights);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [cursorId, setCursorId] = useState(null);
   const [hasMore, setHasMore] = useState(true);
-  const [selectedSort, setSelectedSort] = useState("Harga - Termurah");
-  const [selectedClass, setSelectedClass] = useState('');
+  const [classFilter, setClassFilter] = useState([]);
+  const [sortBy, setSortBy] = useState([]);
+  const [sortOrder, setSortOrder] = useState("");
   const [isSoldOut, setIsSoldOut] = useState(false);
   const [isFromSelected, setIsFromSelected] = useState(false);
   const [selectedFlightId, setSelectedFlightId] = useState(null);
@@ -32,16 +34,20 @@ function Index() {
 
   const {isReturn, arrivalDate} = useSelector(state=>state.searchQuery);
   const fetchFlightsData = useCallback(
-    async (resetList = false, newDate = null, fromSelected) => {
-      if (loading) return;
-      if (resetList) {
-        setHasMore(true);
-      } else if (!hasMore) return;
-  
+    async (resetList = false, newDate = null, fromSelected) => {    
       setLoading(true);
       setError("");
+
       try {
         const params = new URLSearchParams(location.search);
+        
+        if (classFilter.length > 0) params.set("class", classFilter.join(","));
+        if (sortBy.length > 0) params.set("sortBy", sortBy[0]); 
+        if (sortOrder) params.set("sortOrder", sortOrder);
+        if (classFilter.length === 0 && sortBy.length === 0 && !sortOrder) {
+          ["class", "sortBy", "sortOrder"].forEach(param => params.delete(param));
+        }
+
         if (resetList) {
           params.delete("cursorId");
           if (newDate) params.set("departureDate", newDate);
@@ -51,58 +57,51 @@ function Index() {
             params.set("airportIdFrom", to);
             params.set("airportIdTo", from);
           }
-          navigate({
-            to: `/users/public/detailPenerbangan?${params.toString()}`,
-          });
+          navigate(`/users/public/detailPenerbangan?${params.toString()}`);
         } else if (cursorId) {
           params.set("cursorId", cursorId);
         }
-  
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/flights?${params.toString()}`
-        );
+
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/flights?${params.toString()}`);
+        
         if (!response.ok) {
-          throw new Error("Failed to fetch flights data.");
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-  
+
         const result = await response.json();
-        const newFlights = Array.isArray(result)
-          ? result
-          : Array.isArray(result.data)
-          ? result.data
-          : [];
-  
-        const allFlights = resetList ? newFlights : [...flights, ...newFlights];
-        const uniqueFlightsMap = new Map(allFlights.map((flight) => [flight.id, flight]));
-        const uniqueFlights = Array.from(uniqueFlightsMap.values());
-  
+        const newFlights = Array.isArray(result) ? result : Array.isArray(result.data) ? result.data : [];
+
+        let updatedFlights = resetList ? newFlights : [...flights, ...newFlights];
+
+        const uniqueFlightsMap = new Map(updatedFlights.map((flight) => [flight.id, flight]));
+        updatedFlights = Array.from(uniqueFlightsMap.values());
+
+        // Filter for return flights if necessary
+        let filteredFlightsList = updatedFlights;
         if (isReturn && !isFromSelected) {
           const returnDate = new Date(arrivalDate);
-          const filterFlightsArrive = uniqueFlights.filter(
-            (flight) => new Date(flight.arrivalDate) < returnDate
-          );
-          setFlights(filterFlightsArrive);
-          setFilteredFlights(filterFlightsArrive);
-        } else {
-          setFlights(uniqueFlights);
-          setFilteredFlights(uniqueFlights);
+          filteredFlightsList = updatedFlights.filter((flight) => new Date(flight.arrivalDate) < returnDate);
         }
-  
+        setFilteredFlights(filteredFlights);
+
+        console.log("New flights count:", updatedFlights.length);
+        setFlights(updatedFlights);
+        setFilteredFlights(updatedFlights);
+
         setCursorId(newFlights.length > 0 ? newFlights[newFlights.length - 1].id : null);
         setHasMore(newFlights.length > 0);
-  
-        // Handle sold-out flights logic
-        const soldOut = uniqueFlights.every((flight) => flight._count.seat === 0);
-        setIsSoldOut(soldOut);
+
+        setIsSoldOut(updatedFlights.every((flight) => flight._count.seat === 0));
       } catch (err) {
-        setError("Failed to fetch data. Please try again later.");
-        console.error(err);
+        setError(err.message);
+        console.error("Error fetching flights:", err);
       } finally {
         setLoading(false);
       }
     },
-    [loading, hasMore, cursorId, flights, isReturn, isFromSelected, navigate, arrivalDate, location]
+    [loading, hasMore, cursorId, flights, isReturn, isFromSelected, navigate, arrivalDate, location, classFilter, sortBy, sortOrder]
   );
+
   
   const checkIfLoadMore = () => {
     const bottom = loaderRef.current?.getBoundingClientRect().bottom;
@@ -111,70 +110,93 @@ function Index() {
     }
   };
   
-  const handleSortChange = useCallback((option) => {
-    setSelectedSort(option.label);
+  // const handleSortChange = useCallback((option) => {
+  //   const sortedFlights = [...filteredFlights].sort((a, b) => {
+  //     if (option.label === "Harga - Termurah") {
+  //       return a.price - b.price;
+  //     } else if (option.label === "Harga - Termahal") {
+  //       return b.price - a.price;
+  //     }  
+  //     return 0;
+  //   });
   
-    const sortedFlights = [...filteredFlights].sort((a, b) => {
-      if (option.label === "Harga - Termurah") {
-        return a.price - b.price;
-      } else if (option.label === "Harga - Termahal") {
-        return b.price - a.price;
+  //   setFilteredFlights(sortedFlights);
+  
+  //   // Update the API sorting params
+  //   const params = new URLSearchParams(location.search);
+  //   params.set("sortBy", "price");  
+  //   params.set("sortOrder", option.label === "Harga - Termurah" ? "asc" : "desc");
+  
+  //   fetchFlightsData(true); 
+  //   navigate(`/users/public/detailPenerbangan?${params.toString()}`);
+  // }, [filteredFlights, location, navigate, fetchFlightsData]);
+
+// Filter handlers
+const handleClassChange = useCallback(
+  (newClass) => {
+    setClassFilter((prevClass) => {
+      const updatedClass = prevClass.includes(newClass)
+        ? prevClass.filter((item) => item !== newClass)
+        : [...prevClass, newClass];
+      const params = new URLSearchParams(location.search);
+      if (updatedClass.length > 0) {
+        params.set("class", updatedClass.join(","));
+      } else {
+        params.delete("class");
       }
-      return 0;
+      navigate(`/users/public/detailPenerbangan?${params.toString()}`);
+      return updatedClass;
     });
-  
-    setFilteredFlights(sortedFlights);
-  
+  },
+  [location, navigate]
+);
+
+const handleSortByChange = useCallback(
+  (newSortBy) => {
+    setSortBy(newSortBy);
     const params = new URLSearchParams(location.search);
-    params.set("sortBy", "price");
-    params.set("sortOrder", option.label === "Harga - Termurah" ? "asc" : "desc");
+    params.set("sortBy", newSortBy.join(","));
     navigate(`/users/public/detailPenerbangan?${params.toString()}`);
-  }, [filteredFlights, location, navigate]);
-  
-  const handleClassChange = useCallback(
-    (newClass) => {
-      setSelectedClass((prevClass) => {
-        const updatedClass = prevClass.includes(newClass)
-          ? prevClass.filter((item) => item !== newClass)
-          : [...prevClass, newClass];
-        const params = new URLSearchParams(location.search);
-        if (updatedClass.length > 0) {
-          params.set("class", updatedClass.join(","));
-        } else {
-          params.delete("class");
-        }
-        navigate(`/users/public/detailPenerbangan?${params.toString()}`);
-        return updatedClass;
-      });
-    },
-    [location, navigate]
-  );
+  },
+  [location, navigate]
+);
 
-  //initiate
+const handleSortOrderChange = useCallback(
+  (newSortOrder) => {
+    setSortOrder(newSortOrder);
+    const params = new URLSearchParams(location.search);
+    params.set("sortOrder", newSortOrder);
+    navigate(`/users/public/detailPenerbangan?${params.toString()}`);
+  },
+  [location, navigate]
+);
+
+const applyFilters = useCallback(debounce((filters) => {
+  setClassFilter(filters.classFilter || []);
+  setSortBy(filters.sortBy || []);
+  setSortOrder(filters.sortOrder || "");
+
+  fetchFlightsData(true); 
+}, 300), [setClassFilter, setSortBy, setSortOrder, fetchFlightsData]);
+
   useEffect(() => {
-    if (!loading && flights.length === 0) {
-      fetchFlightsData();  // Initial fetch
-    }
-  }, [flights, loading]);
-
-  // useEffect(() => {
-  //   const soldOut = flights.length > 0 && flights.every((flight) => flight?.seats === 0);
-  //   setIsSoldOut(soldOut);
-  // }, [flights]);
-
-  // Add scroll event listener
+    fetchFlightsData(true);
+  }, [classFilter, sortBy, sortOrder]);
   
   useEffect(() => {
     const onScroll = () => {
       checkIfLoadMore();
     };
-  
     window.addEventListener("scroll", onScroll);
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [loading, hasMore])
-  
+  }, [loading, hasMore]);
+
+  // useEffect(() => {
+  //   const soldOut = flights.length > 0 && flights.every((flight) => flight?.seats === 0);
+  //   setIsSoldOut(soldOut);
+  // }, [flights]);
 
   if (error && flights.length === 0) {
     return <div>{error}</div>;
@@ -222,16 +244,20 @@ function Index() {
       <div className="container mt-4">
         <div className="row mb-3">
           <div className="col-12 d-flex justify-content-end">
-            <SortingButton
-              selectedSort={selectedSort}
-              onSortChange={handleSortChange}
-            />
           </div>
         </div>
 
         <div className="row d-flex justify-content-center">
           <div className="col-12 col-md-4 mb-4 mb-md-0 gap-5">
-            <Sidebar  onClassChange={handleClassChange} selectedClass={selectedClass} />
+            <Sidebar 
+              onClassChange={handleClassChange}
+              onSortByChange={handleSortByChange}
+              onSortOrderChange={handleSortOrderChange}
+              selectedClass={classFilter}
+              selectedSortBy={sortBy}
+              selectedSortOrder={sortOrder}
+              applyFilters={applyFilters}
+            />
             {isFromSelected && (
               <SelectedFlight
                 selectedFlightId={selectedFlightId}
@@ -257,6 +283,7 @@ function Index() {
             ) : (
               <>
                 <FlightList
+                key={JSON.stringify({ classFilter, sortBy, sortOrder })}
                   filteredFlights={filteredFlights}
                   isFromSelected={isFromSelected}
                   setIsFromSelected={setIsFromSelected}

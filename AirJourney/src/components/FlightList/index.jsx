@@ -37,6 +37,7 @@ const FlightList = ({ filteredFlights,isFromSelected,setIsFromSelected,setSelect
   const returnDate = useSelector((state) => state.searchQuery.arrivalDate) || new Date();
   const navigate = useNavigate();
   const isReturn = useSelector(state=>state.searchQuery.isReturn);
+  
   const clickHandler = (flightId) =>  {
     if(isReturn && !isFromSelected){
       setIsFromSelected(true);
