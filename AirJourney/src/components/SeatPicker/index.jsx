@@ -1,16 +1,16 @@
-import { React, useEffect, useState } from 'react';
 import { Row, Col, Card } from "react-bootstrap";
 import "./style.css";
 import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { getFlightByID } from "../../services/flight";
+import PropTypes from "prop-types";
 
-const SeatPicker = ({selectedSeats, setSelectedSeats}) => {
+const SeatPicker = ({ selectedSeats, setSelectedSeats, totalPassengers }) => {
     const { flightId } = useSelector((state) => state.searchQuery);
     const { passenger } = useSelector((state) => state.searchQuery);
 
-    const { data: detailFlight, isLoading, isError, error } = useQuery({
-        queryKey: ['flight', flightId],
+    const { data: detailFlight } = useQuery({
+        queryKey: ["flight", flightId],
         queryFn: async () => {
             const response = await getFlightByID(flightId);
             return response;
@@ -19,12 +19,22 @@ const SeatPicker = ({selectedSeats, setSelectedSeats}) => {
         retry: 1,
     });
 
-    const totalPassengers = (passenger?.adult || 0) + (passenger?.child || 0);
+    //seat
+    const totalPassengerSeat =
+        (passenger?.ADULT || 0) + (passenger?.CHILD || 0);
     const handleSeatSelection = (seatId) => {
         if (selectedSeats.includes(seatId)) {
-            setSelectedSeats((prev) => prev.filter((s) => s !== seatId));
-        } else if (selectedSeats.length < totalPassengers) {
-            setSelectedSeats((prev) => [...prev, seatId]);
+            setSelectedSeats((prev) => {
+                const updatedSeats = prev.filter((s) => s !== seatId);
+                console.log("selectedSeats after removal:", updatedSeats);
+                return updatedSeats;
+            });
+        } else if (selectedSeats.length < totalPassengerSeat) {
+            setSelectedSeats((prev) => {
+                const updatedSeats = [...prev, seatId];
+                console.log("selectedSeats after addition:", updatedSeats);
+                return updatedSeats;
+            });
         }
     };
 
@@ -35,13 +45,13 @@ const SeatPicker = ({selectedSeats, setSelectedSeats}) => {
                 <Card.Header
                     className="form-header"
                     style={{
-                        backgroundColor: '#4978d0',
-                        color: '#fff',
-                        padding: '10px 15px',
-                        borderRadius: '4px',
-                        fontSize: '18px',
-                        fontWeight: 'bold',
-                        textAlign: 'center',
+                        backgroundColor: "#4978d0",
+                        color: "#fff",
+                        padding: "10px 15px",
+                        borderRadius: "4px",
+                        fontSize: "18px",
+                        fontWeight: "bold",
+                        textAlign: "center",
                     }}
                 >
                     <div className="class-seat">Bisnis Class</div>
@@ -50,26 +60,65 @@ const SeatPicker = ({selectedSeats, setSelectedSeats}) => {
                     <Col lg={12} className="p-4">
                         <div className="plane">
                             <ol className="cabin fuselage">
-                                {[...Array(detailFlight?.departureFlight?.aeroplane?.maxRow)].map((_, rowIndex) => (
-                                <li key={rowIndex} className={`row row--${rowIndex + 1}`}>
-                                    <ol className="seats" type="A">
-                                    {detailFlight?.departureFlight?.seat
-                                        ?.filter((seat) => seat.row === rowIndex + 1)
-                                        .sort((a, b) => a.column - b.column) // Pastikan kursi diurutkan berdasarkan kolom
-                                        .map((seat) => (
-                                        <li key={seat.id} className="seat">
-                                            <input
-                                            type="checkbox"
-                                            id={seat.id}
-                                            checked={selectedSeats.includes(seat.id)}
-                                            disabled={seat.status !== "AVAILABLE" || (!selectedSeats.includes(seat.id) && selectedSeats.length >= totalPassengers)}
-                                            onChange={() => handleSeatSelection(seat.id)}
-                                            />
-                                            <label htmlFor={seat.id}>{String.fromCharCode(64 + seat.column)}{seat.row}</label>
-                                        </li>
-                                        ))}
-                                    </ol>
-                                </li>
+                                {[
+                                    ...Array(
+                                        detailFlight?.departureFlight?.aeroplane
+                                            ?.maxRow
+                                    ),
+                                ].map((_, rowIndex) => (
+                                    <li
+                                        key={rowIndex}
+                                        className={`row row--${rowIndex + 1}`}
+                                    >
+                                        <ol className="seats" type="A">
+                                            {detailFlight?.departureFlight?.seat
+                                                ?.filter(
+                                                    (seat) =>
+                                                        seat.row ===
+                                                        rowIndex + 1
+                                                )
+                                                .sort(
+                                                    (a, b) =>
+                                                        a.column - b.column
+                                                )
+                                                .map((seat) => (
+                                                    <li
+                                                        key={seat.id}
+                                                        className="seat"
+                                                    >
+                                                        <input
+                                                            type="checkbox"
+                                                            id={seat.id}
+                                                            checked={selectedSeats.includes(
+                                                                seat.id
+                                                            )}
+                                                            disabled={
+                                                                seat.status !==
+                                                                    "AVAILABLE" ||
+                                                                (!selectedSeats.includes(
+                                                                    seat.id
+                                                                ) &&
+                                                                    selectedSeats.length >=
+                                                                        totalPassengers)
+                                                            }
+                                                            onChange={() =>
+                                                                handleSeatSelection(
+                                                                    seat.id
+                                                                )
+                                                            }
+                                                        />
+                                                        <label
+                                                            htmlFor={seat.id}
+                                                        >
+                                                            {String.fromCharCode(
+                                                                64 + seat.column
+                                                            )}
+                                                            {seat.row}
+                                                        </label>
+                                                    </li>
+                                                ))}
+                                        </ol>
+                                    </li>
                                 ))}
                             </ol>
                         </div>
@@ -80,6 +129,9 @@ const SeatPicker = ({selectedSeats, setSelectedSeats}) => {
     );
 };
 
+SeatPicker.propTypes = {
+    selectedSeats: PropTypes.any,
+    setSelectedSeats: PropTypes.any,
+    totalPassengers: PropTypes.number,
+};
 export default SeatPicker;
-
-
