@@ -13,6 +13,8 @@ const PassengerForm = ({
     handleInputChange,
     selectedSeats,
     setSelectedSeats,
+    selectedReturnSeats,
+    setSelectedReturnSeats,
 }) => {
     const token = useSelector((state) => state.auth.token);
     const { data: user } = useQuery({
@@ -393,6 +395,8 @@ const PassengerForm = ({
                 selectedSeats={selectedSeats}
                 setSelectedSeats={setSelectedSeats}
                 totalPassengers={totalPassengers}
+                setSelectedReturnSeats={setSelectedReturnSeats}
+                selectedReturnSeats={selectedReturnSeats}
             />
         </Col>
     );
@@ -406,6 +410,8 @@ PassengerForm.propTypes = {
     handleInputChange: PropTypes.any,
     selectedSeats: PropTypes.any,
     setSelectedSeats: PropTypes.any,
+    selectedReturnSeats:PropTypes.any,
+    setSelectedReturnSeats:PropTypes.any
 };
 
 export default PassengerForm;

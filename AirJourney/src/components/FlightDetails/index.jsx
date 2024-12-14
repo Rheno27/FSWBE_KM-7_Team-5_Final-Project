@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getFlightByID } from "../../services/flight";
 import PropTypes from "prop-types";
 
-function FlightDetails({ handleSubmit, passenger, flightId }) {
+function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
     const { data: detailFlight } = useQuery({
         queryKey: ["flight", flightId],
         queryFn: async () => {
@@ -15,10 +15,31 @@ function FlightDetails({ handleSubmit, passenger, flightId }) {
         enabled: !!flightId,
         retry: 1,
     });
+
+    const { data: returnDetailFlight } = useQuery({
+        queryKey: ["flight", returnFlightId],
+        queryFn: async () => {
+            const response = await getFlightByID(returnFlightId);
+            console.log("response", response);
+            return response;
+        },
+        enabled: !!returnFlightId,
+        retry: 1,
+    });
+
     //price
-    const adultPrice = detailFlight?.departureFlight?.price * passenger.ADULT;
-    const childPrice = detailFlight?.departureFlight?.price * passenger.CHILD;
-    const infantPrice = detailFlight?.departureFlight?.price * passenger.INFANT;
+    const adultPrice = returnFlightId
+        ? detailFlight?.departureFlight?.price * passenger.ADULT +
+          returnDetailFlight?.departureFlight?.price * passenger.ADULT
+        : detailFlight?.departureFlight?.price * passenger.ADULT;
+    const childPrice = returnFlightId
+        ? detailFlight?.departureFlight?.price * passenger.CHILD +
+          returnDetailFlight?.departureFlight?.price * passenger.CHILD
+        : detailFlight?.departureFlight?.price * passenger.CHILD;
+    const infantPrice = returnFlightId
+        ? detailFlight?.departureFlight?.price * passenger.INFANT +
+          returnDetailFlight?.departureFlight?.price * passenger.INFANT
+        : detailFlight?.departureFlight?.price * passenger.INFANT;
     const tax = (adultPrice + infantPrice + childPrice) * 0.1;
     const totalPrice = adultPrice + infantPrice + childPrice + tax;
 
@@ -284,6 +305,7 @@ FlightDetails.propTypes = {
     handleSubmit: PropTypes.any,
     passenger: PropTypes.any,
     flightId: PropTypes.any,
+    returnFlightId: PropTypes.any,
 };
 
 export default FlightDetails;

@@ -21,6 +21,7 @@ function Checkout() {
     const { flightId } = useSelector((state) => state.searchQuery);
     const { returnFlightId } = useSelector((state) => state.searchQuery);
     const [selectedSeats, setSelectedSeats] = useState([]);
+    const [selectedReturnSeats, setSelectedReturnSeats] = useState([]);
 
     const [birthDays, setBirthDays] = useState([]);
     const [expiredAt, setExpiredAt] = useState([]);
@@ -143,8 +144,8 @@ function Checkout() {
                     title: title || "",
                     type: passengerTypes[index] || getPassengerType(index),
                 };
-                if (returnFlightId && selectedSeats[index + 1]) {
-                    passenger.returnSeatId = selectedSeats[index + 1];
+                if (returnFlightId && selectedReturnSeats) {
+                    passenger.returnSeatId = selectedReturnSeats[index];
                 }
                 return passenger;
             }
@@ -175,12 +176,15 @@ function Checkout() {
                         handleInputChange={handleInputChange}
                         selectedSeats={selectedSeats}
                         setSelectedSeats={setSelectedSeats}
+                        selectedReturnSeats={selectedReturnSeats}
+                        setSelectedReturnSeats={setSelectedReturnSeats}
                     />
                     {/* Right Side: Detail Penerbangan */}
                     <FlightDetails
                         handleSubmit={handleSubmit}
                         passenger={passenger}
                         flightId={flightId}
+                        returnFlightId={returnFlightId}
                     />
                 </Row>
             </Container>
