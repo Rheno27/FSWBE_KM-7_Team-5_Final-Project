@@ -80,8 +80,8 @@ ol {
     padding: 5px;
     position: relative;
 }
-.seat:nth-child(3) {
-    margin-right: 14.28571428571429%;
+.seat:nth-child(n) {
+    margin-right: 0;
 }
 .seat input[type="checkbox"] {
     position: absolute;

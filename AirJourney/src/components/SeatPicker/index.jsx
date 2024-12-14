@@ -4,8 +4,15 @@ import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { getFlightByID } from "../../services/flight";
 import PropTypes from "prop-types";
+import { useEffect } from "react";
 
-const SeatPicker = ({ selectedSeats, setSelectedSeats, totalPassengers,selectedReturnSeats,setSelectedReturnSeats }) => {
+const SeatPicker = ({
+    selectedSeats,
+    setSelectedSeats,
+    totalPassengers,
+    selectedReturnSeats,
+    setSelectedReturnSeats,
+}) => {
     const { flightId, returnFlightId } = useSelector(
         (state) => state.searchQuery
     );
@@ -20,7 +27,6 @@ const SeatPicker = ({ selectedSeats, setSelectedSeats, totalPassengers,selectedR
         enabled: !!flightId,
         retry: 1,
     });
-
     const { data: returnDetailFlight, isSuccess } = useQuery({
         queryKey: ["flight", returnFlightId],
         queryFn: async () => {
@@ -30,7 +36,13 @@ const SeatPicker = ({ selectedSeats, setSelectedSeats, totalPassengers,selectedR
         enabled: !!returnFlightId,
         retry: 1,
     });
-
+    useEffect(() => {
+        console.log(
+            "detail",
+            detailFlight,
+            detailFlight?.departureFlight?.aeroplane?.maxColumn / 2
+        );
+    }, [detailFlight]);
     //seat
     const totalPassengerSeat =
         (passenger?.ADULT || 0) + (passenger?.CHILD || 0);
@@ -59,7 +71,10 @@ const SeatPicker = ({ selectedSeats, setSelectedSeats, totalPassengers,selectedR
         } else if (selectedReturnSeats.length < totalPassengerSeat) {
             setSelectedReturnSeats((prev) => {
                 const updatedSeats = [...prev, seatId];
-                console.log("selectedReturnSeats after addition:", updatedSeats);
+                console.log(
+                    "selectedReturnSeats after addition:",
+                    updatedSeats
+                );
                 return updatedSeats;
             });
         }
@@ -109,10 +124,24 @@ const SeatPicker = ({ selectedSeats, setSelectedSeats, totalPassengers,selectedR
                                                         (a, b) =>
                                                             a.column - b.column
                                                     )
-                                                    .map((seat) => (
+                                                    .map((seat,colIndex) => (
                                                         <li
                                                             key={seat.id}
                                                             className="seat"
+                                                            style={{
+                                                                marginRight:
+                                                                    colIndex +
+                                                                        1 ===
+                                                                    Math.floor(
+                                                                        detailFlight
+                                                                            ?.departureFlight
+                                                                            ?.aeroplane
+                                                                            ?.maxColumn /
+                                                                            2
+                                                                    )
+                                                                        ? "14%"
+                                                                        : "0px",
+                                                            }}
                                                         >
                                                             <input
                                                                 type="checkbox"
@@ -181,8 +210,9 @@ const SeatPicker = ({ selectedSeats, setSelectedSeats, totalPassengers,selectedR
                                     <ol className="cabin fuselage">
                                         {[
                                             ...Array(
-                                                returnDetailFlight?.departureFlight
-                                                    ?.aeroplane?.maxRow
+                                                returnDetailFlight
+                                                    ?.departureFlight?.aeroplane
+                                                    ?.maxRow
                                             ),
                                         ].map((_, rowIndex) => (
                                             <li
@@ -205,6 +235,20 @@ const SeatPicker = ({ selectedSeats, setSelectedSeats, totalPassengers,selectedR
                                                             <li
                                                                 key={seat.id}
                                                                 className="seat"
+                                                                style={{
+                                                                    marginRight:
+                                                                        rowIndex +
+                                                                            1 ===
+                                                                        Math.floor(
+                                                                            returnDetailFlight
+                                                                                ?.departureFlight
+                                                                                ?.aeroplane
+                                                                                ?.maxColumn /
+                                                                                2
+                                                                        )
+                                                                            ? "30px"
+                                                                            : "0px",
+                                                                }}
                                                             >
                                                                 <input
                                                                     type="checkbox"
@@ -258,7 +302,7 @@ SeatPicker.propTypes = {
     selectedSeats: PropTypes.any,
     setSelectedSeats: PropTypes.any,
     totalPassengers: PropTypes.number,
-    selectedReturnSeats:PropTypes.any,
-    setSelectedReturnSeats:PropTypes.any,
+    selectedReturnSeats: PropTypes.any,
+    setSelectedReturnSeats: PropTypes.any,
 };
 export default SeatPicker;
