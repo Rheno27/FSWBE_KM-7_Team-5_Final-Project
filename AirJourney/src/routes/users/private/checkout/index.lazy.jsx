@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { Container, Row } from "react-bootstrap";
 import "./style.css";
 import ProgressBar from "../../../../components/ProgresBar";
-import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { createTransaction } from "../../../../services/transaction";
@@ -37,6 +36,7 @@ function Checkout() {
         mutationFn: (data) => createTransaction(data),
         onSuccess: () => {
             navigate({ to: `/users/private/payment` });
+            return;
         },
         onError: (error) => {
             console.log("error", error);

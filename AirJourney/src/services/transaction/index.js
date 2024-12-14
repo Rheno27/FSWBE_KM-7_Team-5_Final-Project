@@ -9,19 +9,14 @@ export const createTransaction = async (transactions) => {
     if (transactions.returnFlightId) {
         requestData.returnFlightId = transactions.returnFlightId;
     }
-    console.log(requestData, "data");
-    const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/transactions`,
-        requestData,
-        {
+    const response = await axios
+        .post(`${import.meta.env.VITE_API_URL}/transactions`, requestData, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-        }
-    );
-    const result = await response.json();
-    if (!response.ok) {
-        throw new Error(result?.message);
-    }
-    return result?.data;
+        })
+        .catch((err) => {
+            throw new Error(err?.response?.data?.message);
+        });
+    return response?.data;
 };

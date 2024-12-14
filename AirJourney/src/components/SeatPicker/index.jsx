@@ -36,13 +36,7 @@ const SeatPicker = ({
         enabled: !!returnFlightId,
         retry: 1,
     });
-    useEffect(() => {
-        console.log(
-            "detail",
-            detailFlight,
-            detailFlight?.departureFlight?.aeroplane?.maxColumn / 2
-        );
-    }, [detailFlight]);
+
     //seat
     const totalPassengerSeat =
         (passenger?.ADULT || 0) + (passenger?.CHILD || 0);
@@ -231,13 +225,13 @@ const SeatPicker = ({
                                                                 a.column -
                                                                 b.column
                                                         )
-                                                        .map((seat) => (
+                                                        .map((seat,colIndex) => (
                                                             <li
                                                                 key={seat.id}
                                                                 className="seat"
                                                                 style={{
                                                                     marginRight:
-                                                                        rowIndex +
+                                                                        colIndex +
                                                                             1 ===
                                                                         Math.floor(
                                                                             returnDetailFlight
