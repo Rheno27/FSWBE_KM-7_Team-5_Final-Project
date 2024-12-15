@@ -77,7 +77,7 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromS
 
       selectedDayDate = date;
       setSelectedDate(selectedDayDate);
-      fetchFlightsData(true,selectedDayDate); 
+      fetchFlightsData(true,selectedDayDate, false ,true); 
     }
 
     // const newFilteredFlights = flights.filter((flight) => {

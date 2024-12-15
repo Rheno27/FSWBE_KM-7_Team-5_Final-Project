@@ -1,15 +1,20 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { createLazyFileRoute, useNavigate, useLocation } from "@tanstack/react-router";
-import { debounce } from 'lodash';
+import { useState, useRef, useCallback } from "react";
+import {
+  createLazyFileRoute,
+  useNavigate,
+  useLocation,
+} from "@tanstack/react-router";
+import { debounce } from "lodash";
 import FlightList from "../../../components/FlightList";
 import Sidebar from "../../../components/Sidebar";
 import Header from "../../../components/Header";
-import SoldOutImage from "../../../assets/img/soldout.png";
+//import SoldOutImage from "../../../assets/img/soldout.png";
 import loadingImage from "../../../assets/img/search-loading.png";
-import SortingButton from "../../../components/FilterFlight/index";
+import loadingImage2 from "../../../assets/img/search-loading2.png";
+//import SortingButton from "../../../components/FilterFlight/index";
 import { SelectedFlight } from "../../../components/SelectedFlight";
 import { useSelector } from "react-redux";
-import { useInfiniteQuery,useMutation, useQuery } from "@tanstack/react-query";
+import {useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 export const Route = createLazyFileRoute("/users/public/detailPenerbangan")({
@@ -33,8 +38,11 @@ function Index() {
   const [isFromSelected, setIsFromSelected] = useState(false);
   const [selectedFlightId, setSelectedFlightId] = useState(null);
   const loaderRef = useRef(null);
-  const [searchParams,setParams] = useState(new URLSearchParams(window.location.search).toString() || "");
-  const {isReturn, arrivalDate} = useSelector(state=>state.searchQuery);
+  const [searchParams] = useState(
+    new URLSearchParams(window.location.search).toString() || ""
+  );
+  const { isReturn, arrivalDate } = useSelector((state) => state.searchQuery);
+  const loadingImg = [loadingImage, loadingImage2];
 
   const fetchFlights = useCallback(async (params) => {
     const response = await axios
@@ -45,21 +53,25 @@ function Index() {
     return response.data.data;
   }, []);
 
-  const { data: flightsData, isSuccess } = useQuery({
+  useQuery({
     queryKey: ["flights", searchParams],
-    queryFn: () => fetchFlightsData(false,false,false,true),
+    queryFn: () => fetchFlightsData(false, false, false, true),
     enabled: !!searchParams,
   });
 
-
   const fetchFlightsData = useCallback(
-    async (resetList = false, newDate = null, fromSelected, fromScroll) => {    
+    async (
+      resetList = false,
+      newDate = null,
+      fromSelected,
+      unchangedFilter
+    ) => {
       setLoading(true);
       setError("");
 
       try {
         const params = new URLSearchParams(location.search);
-        if (!fromScroll) {
+        if (!unchangedFilter) {
           if (classFilter.length > 0)
             params.set("class", classFilter.join(","));
           if (sortBy.length > 0) params.set("sortBy", sortBy[0]);
@@ -80,24 +92,34 @@ function Index() {
             params.set("airportIdFrom", to);
             params.set("airportIdTo", from);
           }
-          navigate(`/users/public/detailPenerbangan?${params.toString()}`);
+          navigate({
+            to: `/users/public/detailPenerbangan?${params.toString()}`,
+          });
         } else if (cursorId) {
           params.set("cursorId", cursorId);
         }
-        console.log(params.toString(), "parans")
+        console.log(params.toString(), "parans");
         const result = await fetchFlights(params.toString());
-        const newFlights = Array.isArray(result) ? result : Array.isArray(result.data) ? result.data : [];
-
-        let updatedFlights = resetList ? newFlights : [...flights, ...newFlights];
-
-        const uniqueFlightsMap = new Map(updatedFlights.map((flight) => [flight.id, flight]));
+        const newFlights = Array.isArray(result)
+          ? result
+          : Array.isArray(result.data)
+            ? result.data
+            : [];
+        let updatedFlights = resetList
+          ? newFlights
+          : [...flights, ...newFlights];
+        const uniqueFlightsMap = new Map(
+          updatedFlights.map((flight) => [flight.id, flight])
+        );
         updatedFlights = Array.from(uniqueFlightsMap.values());
 
         // Filter for return flights if necessary
         let filteredFlightsList = updatedFlights;
         if (isReturn && !isFromSelected) {
           const returnDate = new Date(arrivalDate);
-          filteredFlightsList = updatedFlights.filter((flight) => new Date(flight.arrivalDate) < returnDate);
+          filteredFlightsList = updatedFlights.filter(
+            (flight) => new Date(flight.arrivalDate) < returnDate
+          );
         }
         setFilteredFlights(filteredFlightsList);
 
@@ -105,10 +127,14 @@ function Index() {
         setFlights(updatedFlights);
         setFilteredFlights(updatedFlights);
 
-        setCursorId(newFlights.length > 0 ? newFlights[newFlights.length - 1].id : null);
+        setCursorId(
+          newFlights.length > 0 ? newFlights[newFlights.length - 1].id : null
+        );
         setHasMore(newFlights.length > 0);
 
-        setIsSoldOut(updatedFlights.every((flight) => flight._count.seat === 0));
+        setIsSoldOut(
+          updatedFlights.every((flight) => flight._count.seat === 0)
+        );
       } catch (err) {
         setError(err.message);
         console.error("Error fetching flights:", err);
@@ -116,78 +142,82 @@ function Index() {
         setLoading(false);
       }
     },
-    [loading, hasMore, cursorId, flights, isReturn, isFromSelected, navigate, arrivalDate, location, classFilter, sortBy, sortOrder]
+    [location.search, cursorId, fetchFlights, flights, isReturn, isFromSelected, classFilter, sortBy, sortOrder, navigate, arrivalDate]
   );
 
-  
   // const handleSortChange = useCallback((option) => {
   //   const sortedFlights = [...filteredFlights].sort((a, b) => {
   //     if (option.label === "Harga - Termurah") {
   //       return a.price - b.price;
   //     } else if (option.label === "Harga - Termahal") {
   //       return b.price - a.price;
-  //     }  
+  //     }
   //     return 0;
   //   });
-  
+
   //   setFilteredFlights(sortedFlights);
-  
+
   //   // Update the API sorting params
   //   const params = new URLSearchParams(location.search);
-  //   params.set("sortBy", "price");  
+  //   params.set("sortBy", "price");
   //   params.set("sortOrder", option.label === "Harga - Termurah" ? "asc" : "desc");
-  
-  //   fetchFlightsData(true); 
+
+  //   fetchFlightsData(true);
   //   navigate(`/users/public/detailPenerbangan?${params.toString()}`);
   // }, [filteredFlights, location, navigate, fetchFlightsData]);
 
-// Filter handlers
-const handleClassChange = useCallback(
-  (newClass) => {
-    setClassFilter((prevClass) => {
-      const updatedClass = prevClass.includes(newClass)
-        ? prevClass.filter((item) => item !== newClass)
-        : [...prevClass, newClass];
+  // Filter handlers
+  const handleClassChange = useCallback(
+    (newClass) => {
+      setClassFilter((prevClass) => {
+        const updatedClass = prevClass.includes(newClass)
+          ? prevClass.filter((item) => item !== newClass)
+          : [...prevClass, newClass];
+        const params = new URLSearchParams(location.search);
+        if (updatedClass.length > 0) {
+          params.set("class", updatedClass.join(","));
+        } else {
+          params.delete("class");
+        }
+        navigate({
+          to: `/users/public/detailPenerbangan?${params.toString()}`,
+        });
+        return updatedClass;
+      });
+    },
+    [location, navigate]
+  );
+
+  const handleSortByChange = useCallback(
+    (newSortBy) => {
+      setSortBy(newSortBy);
       const params = new URLSearchParams(location.search);
-      if (updatedClass.length > 0) {
-        params.set("class", updatedClass.join(","));
-      } else {
-        params.delete("class");
-      }
-      navigate(`/users/public/detailPenerbangan?${params.toString()}`);
-      return updatedClass;
-    });
-  },
-  [location, navigate]
-);
+      params.set("sortBy", newSortBy.join(","));
+      navigate({ to: `/users/public/detailPenerbangan?${params.toString()}` });
+    },
+    [location, navigate]
+  );
 
-const handleSortByChange = useCallback(
-  (newSortBy) => {
-    setSortBy(newSortBy);
-    const params = new URLSearchParams(location.search);
-    params.set("sortBy", newSortBy.join(","));
-    navigate(`/users/public/detailPenerbangan?${params.toString()}`);
-  },
-  [location, navigate]
-);
+  const handleSortOrderChange = useCallback(
+    (newSortOrder) => {
+      setSortOrder(newSortOrder);
+      const params = new URLSearchParams(location.search);
+      params.set("sortOrder", newSortOrder);
+      navigate({ to: `/users/public/detailPenerbangan?${params.toString()}` });
+    },
+    [location, navigate]
+  );
 
-const handleSortOrderChange = useCallback(
-  (newSortOrder) => {
-    setSortOrder(newSortOrder);
-    const params = new URLSearchParams(location.search);
-    params.set("sortOrder", newSortOrder);
-    navigate(`/users/public/detailPenerbangan?${params.toString()}`);
-  },
-  [location, navigate]
-);
+  const applyFilters = useCallback(
+    debounce((filters) => {
+      setClassFilter(filters.classFilter || []);
+      setSortBy(filters.sortBy || []);
+      setSortOrder(filters.sortOrder || "");
 
-const applyFilters = useCallback(debounce((filters) => {
-  setClassFilter(filters.classFilter || []);
-  setSortBy(filters.sortBy || []);
-  setSortOrder(filters.sortOrder || "");
-
-  fetchFlightsData(true); 
-}, 300), [setClassFilter, setSortBy, setSortOrder, fetchFlightsData]);
+      fetchFlightsData(true);
+    }, 300),
+    [setClassFilter, setSortBy, setSortOrder, fetchFlightsData]
+  );
 
   // useEffect(() => {
   //   fetchFlightsData(true);
@@ -243,21 +273,11 @@ const applyFilters = useCallback(debounce((filters) => {
 
       <div className="container mt-4">
         <div className="row mb-3">
-          <div className="col-12 d-flex justify-content-end">
-          </div>
+          <div className="col-12 d-flex justify-content-end"></div>
         </div>
 
         <div className="row d-flex justify-content-center">
           <div className="col-12 col-md-4 mb-4 mb-md-0 gap-5">
-            <Sidebar 
-              onClassChange={handleClassChange}
-              onSortByChange={handleSortByChange}
-              onSortOrderChange={handleSortOrderChange}
-              selectedClass={classFilter}
-              selectedSortBy={sortBy}
-              selectedSortOrder={sortOrder}
-              applyFilters={applyFilters}
-            />
             {isFromSelected && (
               <SelectedFlight
                 selectedFlightId={selectedFlightId}
@@ -266,6 +286,15 @@ const applyFilters = useCallback(debounce((filters) => {
                 fetchFlightsData={fetchFlightsData}
               />
             )}
+            <Sidebar
+              onClassChange={handleClassChange}
+              onSortByChange={handleSortByChange}
+              onSortOrderChange={handleSortOrderChange}
+              selectedClass={classFilter}
+              selectedSortBy={sortBy}
+              selectedSortOrder={sortOrder}
+              applyFilters={applyFilters}
+            />
           </div>
 
           <div className="col-12 col-md-8">
@@ -275,7 +304,7 @@ const applyFilters = useCallback(debounce((filters) => {
                   Mencari Penerbangan Terbaik ...
                 </h5>
                 <img
-                  src={loadingImage}
+                  src={loadingImg[Math.floor(Math.random() * loadingImg.length)]}
                   alt="loading..."
                   style={{ maxWidth: "400px", height: "auto" }}
                 />
@@ -283,7 +312,7 @@ const applyFilters = useCallback(debounce((filters) => {
             ) : (
               <>
                 <FlightList
-                key={JSON.stringify({ classFilter, sortBy, sortOrder })}
+                  key={JSON.stringify({ classFilter, sortBy, sortOrder })}
                   filteredFlights={filteredFlights}
                   isFromSelected={isFromSelected}
                   setIsFromSelected={setIsFromSelected}

@@ -6,6 +6,7 @@ import Card from "react-bootstrap/Card";
 import logo from "../../assets/img/Thumbnail.png";
 import koper from "../../assets/img/koper.png";
 import noDataImage from "../../assets/img/notfound.png";
+import noDataImage2 from "../../assets/img/notfound2.png";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useNavigate } from "@tanstack/react-router";
@@ -51,6 +52,7 @@ const FlightList = ({
     useSelector((state) => state.searchQuery.arrivalDate) || new Date();
   const navigate = useNavigate();
   const isReturn = useSelector((state) => state.searchQuery.isReturn);
+  const noDataImg = [noDataImage, noDataImage2];
 
   const clickHandler = (flightId) => {
     if (isReturn && !isFromSelected) {
@@ -74,7 +76,7 @@ const FlightList = ({
     return (
       <div className="d-flex flex-column align-items-center no-data-container text-center">
         <img
-          src={noDataImage}
+          src={noDataImg[Math.floor(Math.random()*noDataImg.length)]}
           alt="No Flights Found"
           className="no-data-image img-fluid"
           style={{ maxWidth: "400px", height: "auto", marginBottom: "20px" }}
