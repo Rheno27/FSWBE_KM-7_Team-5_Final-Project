@@ -255,10 +255,10 @@ function Index() {
       <h5
         className="fw-bold row justify-content-center"
         style={{
-          fontSize: "24px",
-          fontFamily: "Poppins",
-          marginTop: "40px",
-          marginBottom: "20px",
+        fontSize: "clamp(20px, 5vw, 24px)",
+        fontFamily: "Poppins",
+        marginTop: "40px",
+        marginBottom: "20px",
         }}
       >
         <div className="col-12 col-md-9 text-start">Pilih Penerbangan</div>
@@ -277,7 +277,7 @@ function Index() {
         </div>
 
         <div className="row d-flex justify-content-center">
-          <div className="col-12 col-md-4 mb-4 mb-md-0 gap-5">
+          <div className="col-12 col-md-4 mb-4 mb-md-0 order-2 order-md-1">
             {isFromSelected && (
               <SelectedFlight
                 selectedFlightId={selectedFlightId}
@@ -297,7 +297,7 @@ function Index() {
             />
           </div>
 
-          <div className="col-12 col-md-8">
+          <div className="col-12 col-md-8 order-1 order-md-2">
             {loading && flights.length === 0 ? (
               <div className="d-flex flex-column align-items-center justify-content-center">
                 <h5 className="text-center mb-4">

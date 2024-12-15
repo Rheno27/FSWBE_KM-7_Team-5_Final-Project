@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -18,6 +18,7 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromS
   const departureDateFrom = useSelector(state=>state.searchQuery.departureDate);
   const arrivalDate = useSelector(state=>state.searchQuery.arrivalDate);
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const getDaysWithDates = () => {
     if (!departureDate) return [];
@@ -97,10 +98,16 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromS
   //   }
   // }, [filteredFlights, onFilteredFlightsChange]);
 
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <header
       style={{
-        padding: "1rem",
+        padding: isMobile ? "0.5rem" : "1rem",
         backgroundColor: "white",
         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
         borderRadius: "8px",
@@ -114,44 +121,43 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromS
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(12, 1fr)",
+          gridTemplateColumns: isMobile ? "1fr" : "repeat(12, 1fr)",
           gap: "1rem",
           alignItems: "center",
         }}
       >
-        {/* Empty columns 1-2 */}
-        <div style={{ gridColumn: "1 / 3" }}></div>
+        {/* Empty columns for spacing, only on larger screens */}
+        {!isMobile && <div style={{ gridColumn: "1 / 3" }}></div>}
 
-        {/* Back Button (columns 3-6) */}
+        {/* Back Button */}
         <button
           style={{
             backgroundColor: "#A06ECE",
             color: "white",
             border: "none",
             borderRadius: "10px",
-            padding: "0.7rem 1.5rem",
+            padding: isMobile ? "0.5rem 1rem" : "0.7rem 1.5rem",
             fontWeight: "bold",
-            gridColumn: "3 / 9", 
+            gridColumn: isMobile ? "1 / -1" : "3 / 9", 
             display: "flex",
             justifyContent: "flex-start",
             alignItems: "center",
-            fontSize: "1rem", 
+            fontSize: isMobile ? "0.9rem" : "1rem", 
           }}
         >
-          <ArrowBackIcon style={{ marginRight: "10px" }} />
-          JKT <ArrowForwardIosIcon style={{ fontSize: "14px", marginTop: "6px", marginLeft: "5px" }} /> MLB • 2 Penumpang • Economy
+        <ArrowBackIcon style={{ marginRight: "10px" }} />
+            JKT <ArrowForwardIosIcon style={{ fontSize: "14px", marginTop: "6px", marginLeft: "5px" }} /> MLB • 2 Penumpang • Economy
         </button>
-
-        {/* Search Button (columns 7-9) */}
+        {/* Search Button */}
         <button
           style={{
             backgroundColor: "#73CA5C",
             color: "white",
             border: "none",
             borderRadius: "12px",
-            padding: "0.7rem 1.5rem",
+            padding: isMobile ? "0.5rem 1rem" : "0.7rem 1.5rem",
             fontWeight: "bold",
-            gridColumn: "9 / 11", 
+            gridColumn: isMobile ? "1 / -1" : "9 / 11", 
             transition: "background-color 0.3s ease",
           }}
           onClick={() => navigate({ to: "/" })}
@@ -159,10 +165,8 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromS
           Ubah Pencarian
         </button>
 
-        {/* Empty columns 10-12 */}
-        <div style={{ gridColumn: "11 / 13" }}></div>
-        {/* Empty columns 10-12 */}
-        <div style={{ gridColumn: "11 / 13" }}></div>
+        {/* Empty columns for spacing, only on larger screens */}
+        {!isMobile && <div style={{ gridColumn: "11 / 13" }}></div>}
       </div>
 
       {/* Row 2: Date Selector */}
@@ -172,6 +176,8 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromS
           justifyContent: "center",
           gap: "0.5rem",
           flexWrap: "wrap",
+          overflowX: "auto",
+          WebkitOverflowScrolling: "touch",
         }}
       >
         {daysWithDates.map((dayObj, index) => (
@@ -195,7 +201,7 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromS
             }}
           >
             <div style={{ fontWeight: "bold" }}>{dayObj.day}</div>
-            <small>{dayObj.date}</small> {/* Show the corresponding date */}
+            <small>{dayObj.date}</small>
           </button>
         ))}
       </div>
