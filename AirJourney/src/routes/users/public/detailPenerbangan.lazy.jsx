@@ -55,8 +55,7 @@ function Index() {
 
   useQuery({
     queryKey: ["flights", searchParams],
-    queryFn: () => fetchFlightsData(false, false, false, true),
-    enabled: !!searchParams,
+    queryFn: () => fetchFlightsData(false, false, false, true)
   });
 
   const fetchFlightsData = useCallback(
