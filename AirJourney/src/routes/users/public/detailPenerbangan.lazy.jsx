@@ -9,6 +9,8 @@ import loadingImage from "../../../assets/img/search-loading.png";
 import SortingButton from "../../../components/FilterFlight/index";
 import { SelectedFlight } from "../../../components/SelectedFlight";
 import { useSelector } from "react-redux";
+import { useInfiniteQuery,useMutation, useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 export const Route = createLazyFileRoute("/users/public/detailPenerbangan")({
   component: Index,
@@ -31,21 +33,42 @@ function Index() {
   const [isFromSelected, setIsFromSelected] = useState(false);
   const [selectedFlightId, setSelectedFlightId] = useState(null);
   const loaderRef = useRef(null);
-
+  const [searchParams,setParams] = useState(new URLSearchParams(window.location.search).toString() || "");
   const {isReturn, arrivalDate} = useSelector(state=>state.searchQuery);
+
+  const fetchFlights = useCallback(async (params) => {
+    const response = await axios
+      .get(`${import.meta.env.VITE_API_URL}/flights?${params}`)
+      .catch((err) => {
+        throw new Error(err);
+      });
+    return response.data.data;
+  }, []);
+
+  const { data: flightsData, isSuccess } = useQuery({
+    queryKey: ["flights", searchParams],
+    queryFn: () => fetchFlightsData(false,false,false,true),
+    enabled: !!searchParams,
+  });
+
+
   const fetchFlightsData = useCallback(
-    async (resetList = false, newDate = null, fromSelected) => {    
+    async (resetList = false, newDate = null, fromSelected, fromScroll) => {    
       setLoading(true);
       setError("");
 
       try {
         const params = new URLSearchParams(location.search);
-        
-        if (classFilter.length > 0) params.set("class", classFilter.join(","));
-        if (sortBy.length > 0) params.set("sortBy", sortBy[0]); 
-        if (sortOrder) params.set("sortOrder", sortOrder);
-        if (classFilter.length === 0 && sortBy.length === 0 && !sortOrder) {
-          ["class", "sortBy", "sortOrder"].forEach(param => params.delete(param));
+        if (!fromScroll) {
+          if (classFilter.length > 0)
+            params.set("class", classFilter.join(","));
+          if (sortBy.length > 0) params.set("sortBy", sortBy[0]);
+          if (sortOrder) params.set("sortOrder", sortOrder);
+          if (classFilter.length === 0 && sortBy.length === 0 && !sortOrder) {
+            ["class", "sortBy", "sortOrder"].forEach((param) =>
+              params.delete(param)
+            );
+          }
         }
 
         if (resetList) {
@@ -61,14 +84,8 @@ function Index() {
         } else if (cursorId) {
           params.set("cursorId", cursorId);
         }
-
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/flights?${params.toString()}`);
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
+        console.log(params.toString(), "parans")
+        const result = await fetchFlights(params.toString());
         const newFlights = Array.isArray(result) ? result : Array.isArray(result.data) ? result.data : [];
 
         let updatedFlights = resetList ? newFlights : [...flights, ...newFlights];
@@ -82,7 +99,7 @@ function Index() {
           const returnDate = new Date(arrivalDate);
           filteredFlightsList = updatedFlights.filter((flight) => new Date(flight.arrivalDate) < returnDate);
         }
-        setFilteredFlights(filteredFlights);
+        setFilteredFlights(filteredFlightsList);
 
         console.log("New flights count:", updatedFlights.length);
         setFlights(updatedFlights);
@@ -102,13 +119,6 @@ function Index() {
     [loading, hasMore, cursorId, flights, isReturn, isFromSelected, navigate, arrivalDate, location, classFilter, sortBy, sortOrder]
   );
 
-  
-  const checkIfLoadMore = () => {
-    const bottom = loaderRef.current?.getBoundingClientRect().bottom;
-    if (bottom && bottom <= window.innerHeight && hasMore && !loading) {
-      fetchFlightsData();
-    }
-  };
   
   // const handleSortChange = useCallback((option) => {
   //   const sortedFlights = [...filteredFlights].sort((a, b) => {
@@ -179,19 +189,9 @@ const applyFilters = useCallback(debounce((filters) => {
   fetchFlightsData(true); 
 }, 300), [setClassFilter, setSortBy, setSortOrder, fetchFlightsData]);
 
-  useEffect(() => {
-    fetchFlightsData(true);
-  }, [classFilter, sortBy, sortOrder]);
-  
-  useEffect(() => {
-    const onScroll = () => {
-      checkIfLoadMore();
-    };
-    window.addEventListener("scroll", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, [loading, hasMore]);
+  // useEffect(() => {
+  //   fetchFlightsData(true);
+  // }, [classFilter, sortBy, sortOrder]);
 
   // useEffect(() => {
   //   const soldOut = flights.length > 0 && flights.every((flight) => flight?.seats === 0);
@@ -290,6 +290,7 @@ const applyFilters = useCallback(debounce((filters) => {
                   setSelectedFlightId={setSelectedFlightId}
                   selectedFlightId={selectedFlightId}
                   fetchFlightsData={fetchFlightsData}
+                  hasMore={hasMore}
                 />
                 {loading && (
                   <div className="text-center mt-3">
