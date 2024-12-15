@@ -32,7 +32,7 @@ const Sidebar = ({ applyFilters}) => {
     setClassFilter([]);
     setSortBy([]);
     setSortOrder("");
-    applyFilters({}); 
+    applyFilters({classFilter:[],sortBy:[],sortOrder:""}); 
   };
 
   return (
@@ -48,22 +48,22 @@ const Sidebar = ({ applyFilters}) => {
           </button>
           <div>
             <label>
-              <input type="checkbox" value="BUSINESS" checked={classFilter.includes("BUSINESS")} onChange={handleClassChange} />
+              <input type="checkbox" value="BUSINESS" checked={classFilter.includes("BUSINESS")} onChange={handleClassChange} style={{ marginRight: "5px" }}/>
               BUSINESS
             </label>
             <br />
             <label>
-              <input type="checkbox" value="PREMIUM_ECONOMY" checked={classFilter.includes("PREMIUM_ECONOMY")} onChange={handleClassChange} />
+              <input type="checkbox" value="PREMIUM_ECONOMY" checked={classFilter.includes("PREMIUM_ECONOMY")} onChange={handleClassChange} style={{ marginRight: "5px" }}/>
               PREMIUM ECONOMY
             </label>
             <br />
             <label>
-              <input type="checkbox" value="ECONOMY" checked={classFilter === "ECONOMY"} onChange={handleClassChange} />
+              <input type="checkbox" value="ECONOMY" checked={classFilter === "ECONOMY"} onChange={handleClassChange} style={{ marginRight: "5px" }}/>
               ECONOMY
             </label>
             <br />
             <label>
-              <input type="checkbox" value="FIRST_CLASS" checked={classFilter.includes("FIRST_CLASS")} onChange={handleClassChange} />
+              <input type="checkbox" value="FIRST_CLASS" checked={classFilter.includes("FIRST_CLASS")} onChange={handleClassChange} style={{ marginRight: "5px" }}/>
               FIRST CLASS
             </label>
           </div>
@@ -78,22 +78,22 @@ const Sidebar = ({ applyFilters}) => {
           </button>
           <div>
             <label>
-              <input type="checkbox" value="price" checked={sortBy.includes("price")} onChange={handleSortByChange} />
+              <input type="checkbox" value="price" checked={sortBy.includes("price")} onChange={handleSortByChange} style={{ marginRight: "5px" }}/>
               Price
             </label>
             <br />
             <label>
-              <input type="checkbox" value="duration" checked={sortBy.includes("duration")} onChange={handleSortByChange} />
+              <input type="checkbox" value="duration" checked={sortBy.includes("duration")} onChange={handleSortByChange} style={{ marginRight: "5px" }}/>
               Duration
             </label>
             <br />
             <label>
-              <input type="checkbox" value="departureDate" checked={sortBy.includes("departureDate")} onChange={handleSortByChange} />
+              <input type="checkbox" value="departureDate" checked={sortBy.includes("departureDate")} onChange={handleSortByChange} style={{ marginRight: "5px" }}/>
               Departure Date
             </label>
             <br />
             <label>
-              <input type="checkbox" value="arrivalDate" checked={sortBy.includes("arrivalDate")} onChange={handleSortByChange} />
+              <input type="checkbox" value="arrivalDate" checked={sortBy.includes("arrivalDate")} onChange={handleSortByChange} style={{ marginRight: "5px" }}/>
               Arrival Date
             </label>
           </div>
@@ -108,18 +108,18 @@ const Sidebar = ({ applyFilters}) => {
           </button>
           <div>
             <label>
-              <input type="radio" value="asc" checked={sortOrder === "asc"} onChange={handleSortOrderChange} />
+              <input type="radio" value="asc" checked={sortOrder === "asc"} onChange={handleSortOrderChange} style={{ marginRight: "5px" }}/>
               Low
             </label>
             <br />
             <label>
-              <input type="radio" value="desc" checked={sortOrder === "desc"} onChange={handleSortOrderChange} />
+              <input type="radio" value="desc" checked={sortOrder === "desc"} onChange={handleSortOrderChange} style={{ marginRight: "5px" }}/>
               High
             </label>
           </div>
         </li>
-        <button onClick={handleApplyFilters} className="sort-apply-button" style={{ width: "100%", alignItems: "center", textAlign: "center" }} disabled={!isSortOrderChecked}>Apply Filters</button>
-        <button onClick={() => { setClassFilter([]); setSortBy([]); setSortOrder("asc"); clearFilters({}); }} className="sort-apply-button" style={{ width: "100%", marginTop: "1rem", textAlign: "center" }}>Clear Filters</button>
+        <button onClick={handleApplyFilters} className="sort-apply-button btn btn-primary" style={{ width: "100%", alignItems: "center", textAlign: "center", marginTop: "1rem" }} disabled={!isSortOrderChecked}>Apply Filters</button>
+        <button onClick={() => { setClassFilter([]); setSortBy([]); setSortOrder("asc"); clearFilters({}); }} className="sort-apply-button btn btn-danger" style={{ width: "100%", marginTop: "1rem", textAlign: "center" }}>Clear Filters</button>
       </ul>
     </div>
   );
