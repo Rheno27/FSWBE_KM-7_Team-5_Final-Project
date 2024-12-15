@@ -2,17 +2,15 @@ import React, { useState } from "react";
 import FlightClassIcon from '@mui/icons-material/FlightClass';
 import SortIcon from '@mui/icons-material/Sort';
 
-
-const Sidebar = ({ applyFilters}) => {
+const Sidebar = ({ applyFilters }) => {
   const [classFilter, setClassFilter] = useState([]);
   const [sortBy, setSortBy] = useState([]);
   const [sortOrder, setSortOrder] = useState("");
+  const [isSortOrderChecked, setIsSortOrderChecked] = useState(false);
 
   const handleClassChange = (event) => {
     const value = event.target.value;
-    setClassFilter((prev) =>
-      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
-    );
+    setClassFilter(value === classFilter ? "" : value); // Toggle selection
   };
 
   const handleSortByChange = (event) => {
@@ -21,21 +19,22 @@ const Sidebar = ({ applyFilters}) => {
   };
 
   const handleSortOrderChange = (event) => {
+    setIsSortOrderChecked(true);
     setSortOrder(event.target.value);
   };
 
   const handleApplyFilters = () => {
-    applyFilters({ classFilter, sortBy, sortOrder });
+    applyFilters({ classFilter: classFilter ? [classFilter] : [], sortBy, sortOrder });
   };
 
   const clearFilters = () => {
     setClassFilter([]);
     setSortBy([]);
     setSortOrder("");
-    applyFilters({}); 
+    applyFilters({ classFilter: [], sortBy: [], sortOrder: "" }); 
   };
 
-  const isClassSelected = (className) => classFilter.includes(className);
+  const isClassSelected = (className) => classFilter === className;
 
   return (
     <div style={{ backgroundColor: "#fff", padding: "1rem", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", width: "60%", height: "auto", marginLeft: "auto", marginRight: "auto" }}>
@@ -59,7 +58,7 @@ const Sidebar = ({ applyFilters}) => {
                 }}>
                   <input type="checkbox" 
                     value={classType} 
-                    checked={classFilter.includes(classType)} 
+                    checked={isClassSelected(classType)} 
                     onChange={handleClassChange} 
                     style={{ marginRight: "5px" }}
                   />
@@ -138,7 +137,7 @@ const Sidebar = ({ applyFilters}) => {
           </div>
         </li>
         <button onClick={handleApplyFilters} className="sort-apply-button" 
-        style={{ width: "100%",marginTop: "20px", alignItems: "center", textAlign: "center",backgroundColor: "#7126b5", color: "#fff", border: "none", borderRadius: "5px", padding: "10px 20px", cursor: "pointer" }}>
+        style={{ width: "100%",marginTop: "20px", alignItems: "center", textAlign: "center",backgroundColor: "#7126b5", color: "#fff", border: "none", borderRadius: "5px", padding: "10px 20px", cursor: "pointer" }} disabled={!isSortOrderChecked}>
           Apply Filters</button>
         <button onClick={() => { setClassFilter([]); setSortBy([]); setSortOrder("asc"); clearFilters({}); }} className="sort-apply-button" 
         style={{ width: "100%", marginTop: "10px", textAlign: "center", backgroundColor: "#7126b5", color: "#fff", border: "none", borderRadius: "5px", padding: "10px 20px", cursor: "pointer" }}>

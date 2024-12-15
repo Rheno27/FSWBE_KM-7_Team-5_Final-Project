@@ -55,8 +55,7 @@ function Index() {
 
   useQuery({
     queryKey: ["flights", searchParams],
-    queryFn: () => fetchFlightsData(false, false, false, true),
-    enabled: !!searchParams,
+    queryFn: () => fetchFlightsData(false, false, false, true)
   });
 
   const fetchFlightsData = useCallback(
@@ -64,7 +63,8 @@ function Index() {
       resetList = false,
       newDate = null,
       fromSelected,
-      unchangedFilter
+      unchangedFilter,
+      filter
     ) => {
       setLoading(true);
       setError("");
@@ -72,11 +72,11 @@ function Index() {
       try {
         const params = new URLSearchParams(location.search);
         if (!unchangedFilter) {
-          if (classFilter.length > 0)
-            params.set("class", classFilter.join(","));
-          if (sortBy.length > 0) params.set("sortBy", sortBy[0]);
-          if (sortOrder) params.set("sortOrder", sortOrder);
-          if (classFilter.length === 0 && sortBy.length === 0 && !sortOrder) {
+          if (filter.classFilter.length > 0)
+            params.set("class", filter.classFilter);
+          if (filter.sortBy.length > 0) params.set("sortBy", filter.sortBy[0]);
+          if (filter.sortOrder) params.set("sortOrder", filter.sortOrder);
+          if (filter.classFilter.length === 0 && filter.sortBy.length === 0 && !filter.sortOrder) {
             ["class", "sortBy", "sortOrder"].forEach((param) =>
               params.delete(param)
             );
@@ -169,20 +169,11 @@ function Index() {
   // Filter handlers
   const handleClassChange = useCallback(
     (newClass) => {
-      setClassFilter((prevClass) => {
-        const updatedClass = prevClass.includes(newClass)
-          ? prevClass.filter((item) => item !== newClass)
-          : [...prevClass, newClass];
-        const params = new URLSearchParams(location.search);
-        if (updatedClass.length > 0) {
-          params.set("class", updatedClass.join(","));
-        } else {
-          params.delete("class");
-        }
-        navigate({
-          to: `/users/public/detailPenerbangan?${params.toString()}`,
-        });
-        return updatedClass;
+      setClassFilter(newClass)
+      const params = new URLSearchParams(location.search);
+      params.set("class", newClass);
+      navigate({
+        to: `/users/public/detailPenerbangan?${params.toString()}`,
       });
     },
     [location, navigate]
@@ -213,8 +204,8 @@ function Index() {
       setClassFilter(filters.classFilter || []);
       setSortBy(filters.sortBy || []);
       setSortOrder(filters.sortOrder || "");
-
-      fetchFlightsData(true);
+      console.log(filters)
+      fetchFlightsData(true,null,false,false,filters);
     }, 300),
     [setClassFilter, setSortBy, setSortOrder, fetchFlightsData]
   );
