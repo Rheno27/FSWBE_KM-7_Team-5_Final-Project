@@ -7,12 +7,11 @@ const Sidebar = ({ applyFilters}) => {
   const [classFilter, setClassFilter] = useState([]);
   const [sortBy, setSortBy] = useState([]);
   const [sortOrder, setSortOrder] = useState("");
+  const [isSortOrderChecked,setIsSortOrderChecked] = useState(false);
 
   const handleClassChange = (event) => {
     const value = event.target.value;
-    setClassFilter((prev) =>
-      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
-    );
+    setClassFilter(value)
   };
 
   const handleSortByChange = (event) => {
@@ -21,6 +20,7 @@ const Sidebar = ({ applyFilters}) => {
   };
 
   const handleSortOrderChange = (event) => {
+    setIsSortOrderChecked(true);
     setSortOrder(event.target.value);
   };
 
@@ -58,7 +58,7 @@ const Sidebar = ({ applyFilters}) => {
             </label>
             <br />
             <label>
-              <input type="checkbox" value="ECONOMY" checked={classFilter.includes("ECONOMY")} onChange={handleClassChange} />
+              <input type="checkbox" value="ECONOMY" checked={classFilter === "ECONOMY"} onChange={handleClassChange} />
               ECONOMY
             </label>
             <br />
@@ -118,7 +118,7 @@ const Sidebar = ({ applyFilters}) => {
             </label>
           </div>
         </li>
-        <button onClick={handleApplyFilters} className="sort-apply-button" style={{ width: "100%", alignItems: "center", textAlign: "center" }}>Apply Filters</button>
+        <button onClick={handleApplyFilters} className="sort-apply-button" style={{ width: "100%", alignItems: "center", textAlign: "center" }} disabled={!isSortOrderChecked}>Apply Filters</button>
         <button onClick={() => { setClassFilter([]); setSortBy([]); setSortOrder("asc"); clearFilters({}); }} className="sort-apply-button" style={{ width: "100%", marginTop: "1rem", textAlign: "center" }}>Clear Filters</button>
       </ul>
     </div>
