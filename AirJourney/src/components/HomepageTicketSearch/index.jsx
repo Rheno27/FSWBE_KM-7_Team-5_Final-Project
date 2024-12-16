@@ -223,7 +223,7 @@ const HomepageTicketSearch = () => {
                                             Departure
                                         </span>
                                         <button
-                                            className="flex-1 text-lg text-start font-semibold"
+                                            className="flex-1 text-lg text-start font-semibold overflow-hidden whitespace-nowrap text-ellipsis"
                                             onClick={() =>
                                                 setShowDateModal(true)
                                             }
@@ -258,7 +258,7 @@ const HomepageTicketSearch = () => {
                                             }
                                         >
                                             <span
-                                                className={`${isReturn ? "text-darkblue4" : "text-darkblue2"}`}
+                                                className={`${isReturn ? "text-darkblue4" : "text-darkblue2"} overflow-hidden whitespace-nowrap text-ellipsis`}
                                             >
                                                 {isReturn && searchDate.to > 1
                                                     ? `${searchDate.to.getDate()} - ${MONTH[searchDate.to.getMonth()]} - ${searchDate.to.getFullYear()}`
@@ -374,7 +374,7 @@ const HomepageTicketSearch = () => {
                 <button
                     className="py-2.5 bg-darkblue4 disabled:bg-darkblue2 text-white font-semibold rounded-b-xl"
                     onClick={searchClickHandler}
-                    disabled={isReturn && !isReturnFilled}
+                    disabled={isReturn && !isReturnFilled || (toDestination ? (fromDestination ? false : true) : false)}
                 >
                     Cari Penerbangan
                 </button>
