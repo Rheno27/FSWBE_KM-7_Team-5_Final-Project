@@ -4,7 +4,7 @@ import { getUser } from '../../services/user';
 import { useQuery } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
 
-const OrderForm = ({ orderData }) => {
+const OrderForm = () => {
     const { token } = useSelector((state) => state.auth);
     const { data: user, isLoading, error } = useQuery({
         queryKey: ['user'],
@@ -52,6 +52,7 @@ const OrderForm = ({ orderData }) => {
                         <Form.Control
                             value={user?.name}
                             type="text"
+                            disabled
                             placeholder="Masukkan Nama Lengkap"
                             style={{
                                 borderRadius: '8px',
@@ -59,26 +60,6 @@ const OrderForm = ({ orderData }) => {
                             }}
                         />
                     </Form.Group>
-
-                    {/* Nama Keluarga */}
-                    {/* <Form.Group className="mt-3">
-                        <Form.Label
-                            style={{
-                                fontSize: '14px',
-                                fontWeight: 'bold',
-                                color: '#4B1979',
-                            }}
-                        >Nama Keluarga (Optional)</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Masukkan Nama Keluarga"
-                            style={{
-                                borderRadius: '8px',
-                                boxShadow: '0 0 5px rgba(0,0,0,0.1)',
-                            }}
-                        />
-                    </Form.Group> */}
-
                     {/* Nomor Telepon */}
                     <Form.Group className="mt-3">
                         <Form.Label
@@ -91,6 +72,7 @@ const OrderForm = ({ orderData }) => {
                         <Form.Control
                             value={user?.phoneNumber}
                             type="text"
+                            disabled
                             placeholder="Masukkan Nomor Telepon"
                             style={{
                                 borderRadius: '8px',
@@ -111,6 +93,7 @@ const OrderForm = ({ orderData }) => {
                         <Form.Control
                             value={user?.email}
                             type="email"
+                            disabled
                             placeholder="Masukkan Email"
                             style={{
                                 borderRadius: '8px',
