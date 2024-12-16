@@ -3,7 +3,6 @@ import { ArrowBack, FilterAlt, Search } from "@mui/icons-material";
 import { Row, Col, Button } from "react-bootstrap";
 import { Link } from "@tanstack/react-router";
 import DateFilterModal from "../Modal/DateFilterModal";
-import SearchModal from "../Modal/SearchModal"
  
 export const HeaderNav = () => {
   // State for modals visibility
@@ -13,28 +12,28 @@ export const HeaderNav = () => {
   const buttonRef = useRef(null);
 
   // Handlers to show modals
-  const handleSearchModalShow = () => {
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      const isSmallScreen = window.innerWidth <= 768; // Define breakpoint for small screens
+  // const handleSearchModalShow = () => {
+  //   if (buttonRef.current) {
+  //     const rect = buttonRef.current.getBoundingClientRect();
+  //     const isSmallScreen = window.innerWidth <= 768; // Define breakpoint for small screens
     
-      if (isSmallScreen) {
-        // Center modal on smaller screens
-        setPosition({
-          top: window.innerHeight / 2.45 - 150, // Vertically centered (assuming modal height is 300px)
-          left: window.innerWidth / 2 - 150, // Horizontally centered (assuming modal width is 300px)
-        });
-      } else {
-        // Position relative to button for larger screens
-        setPosition({
-          top: rect.bottom + window.scrollY + 10, // Offset below the button
-          left: rect.left + rect.width / 2 - 300, // Centered (assuming modal width is 300px)
-        });
-      }
-    }
+  //     if (isSmallScreen) {
+  //       // Center modal on smaller screens
+  //       setPosition({
+  //         top: window.innerHeight / 2.45 - 150, // Vertically centered (assuming modal height is 300px)
+  //         left: window.innerWidth / 2 - 150, // Horizontally centered (assuming modal width is 300px)
+  //       });
+  //     } else {
+  //       // Position relative to button for larger screens
+  //       setPosition({
+  //         top: rect.bottom + window.scrollY + 10, // Offset below the button
+  //         left: rect.left + rect.width / 2 - 300, // Centered (assuming modal width is 300px)
+  //       });
+  //     }
+  //   }
     
-    setSearchModalOpen(!isSearchModalOpen)
-  };
+  //   setSearchModalOpen(!isSearchModalOpen)
+  // };
   const handleDateModalShow = () => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
@@ -60,7 +59,7 @@ export const HeaderNav = () => {
 
   // Handlers to hide modals
   const dateModalClose = () => setDateModalOpen(false);
-  const searchModalClose = () => setSearchModalOpen(false);
+  // const searchModalClose = () => setSearchModalOpen(false);
 
   const filterBtn = {
     padding: '8px 10px',
@@ -138,11 +137,11 @@ export const HeaderNav = () => {
             }}
           />
 
-          {/* Search Modal */}
+          {/* // Search Modal
           <SearchModal isOpen={isSearchModalOpen} onClose={searchModalClose} position={{
               top: `${position.top}px`,
               left: `${position.left}px`,
-            }} />
+            }} /> */}
         </Row>
       </Col>
     </Row>

@@ -95,7 +95,10 @@ export const OrderDetailCard = ({ transactionId }) => {
     const toggleText = () => setIsExpanded(!isExpanded);
 
     return (
-      <span onClick={toggleText} style={{ cursor: "pointer", color: "blue" }}>
+      <span
+        onClick={toggleText}
+        style={{ cursor: "pointer", color: "#7126B5", fontWeight: "bold" }}
+      >
         {isExpanded ? text : `${text.slice(0, maxLength)}...`}
       </span>
     );
@@ -114,12 +117,12 @@ export const OrderDetailCard = ({ transactionId }) => {
         </div>
         {/* ))} */}
         <h6>
-          Booking Code: <a href="#">{transaction?.data?.id}</a>
+          Booking Code:{" "}
+          <TruncatableText text={transaction?.data?.id} maxLength={15} />
         </h6>
-
         <div className="mt-4">
           <Row>
-            <Col xs={8}>
+            <Col xs={7}>
               <div>
                 <span>
                   <strong>
@@ -127,11 +130,17 @@ export const OrderDetailCard = ({ transactionId }) => {
                   </strong>
                 </span>
                 <br />
-                <span>{transaction?.data?.departureFlight?.departureDate}</span>
+                <span>
+                  {formatDate(
+                    transaction?.data?.departureFlight?.departureDate
+                  )}
+                </span>
               </div>
             </Col>
-            <Col xs={4} className="text-end align-self-start">
-              <p className="text-muted">Keberangkatan</p>
+            <Col xs={5} className="text-end align-self-start">
+              <p style={{ color: "#7126B5", fontWeight: "bold" }}>
+                Keberangkatan
+              </p>
             </Col>
             <span>{transaction?.data?.departureFlight?.airportFrom?.name}</span>
           </Row>
@@ -147,11 +156,27 @@ export const OrderDetailCard = ({ transactionId }) => {
               <p>
                 <strong>
                   {transaction?.data?.departureFlight?.airline?.name} -{" "}
-                  {transaction?.data?.departureFlight?.class}
+                  {capitalizeFirstLetter(
+                    transaction?.data?.departureFlight?.class || "Not found"
+                  )}
                 </strong>{" "}
                 <br />
-                {transaction?.data?.departureFlight?.airline?.Code}
+                {transaction?.data?.departureFlight?.airline?.code}
               </p>
+              <span>Informasi :</span>
+              <div>
+                {transaction?.data?.passenger?.length > 0 ? (
+                  transaction.data.passenger.map((passenger, index) => (
+                    <div key={passenger.id}>
+                      <p>Penumpang {index + 1}:</p>
+                      <p>Name: {passenger.name}</p>
+                      <p>ID: {passenger.id}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p>No passengers available.</p>
+                )}
+              </div>
             </Col>
           </Row>
           <hr />
@@ -164,55 +189,68 @@ export const OrderDetailCard = ({ transactionId }) => {
                   </strong>
                 </span>
                 <br />
-                <span>{transaction?.data?.departureFlight?.arrivalDate}</span>
+                <span>
+                  {formatDate(transaction?.data?.departureFlight?.arrivalDate)}
+                </span>
               </div>
             </Col>
             <Col xs={4} className="text-end align-self-start">
-              <p className="text-muted">Kedatangan</p>
+              <p style={{ color: "#7126B5", fontWeight: "bold" }}>Kedatangan</p>
             </Col>
             <span>{transaction?.data?.departureFlight?.airportTo?.name}</span>
           </Row>
           <hr />
         </div>
 
-        <div className="mt-4">
+        <Row className="my-2">
           {/* {Object.entries(passengerCounts).map(([type, { count, totalPrice }]) => (
       <div key={type}>
         <span>{count} {type} {totalPrice}<br /></span>
     </div>
 ))} */}
-          {Object.entries(passengerCounts).map(([type, count]) => (
-            <div key={type}>
-              <span>
-                {count} {type}
-                <br />
-              </span>
+          <Col xs={7}>
+            {Object.entries(passengerCounts).map(([type, count]) => (
+              <div key={type}>
+                <span>
+                  {count} {type}
+                  <br />
+                </span>
+              </div>
+            ))}
+            Tax
+          </Col>
+          <Col xs={5} className="text-end align-self-start">
+            <div className="d-flex flex-column">
+              {passengerCounts.ADULT > 0 && <span>IDR {adultTotalPrice}</span>}
+              {passengerCounts.CHILD > 0 && <span>IDR {childTotalPrice}</span>}
+              {passengerCounts.INFANT > 0 && (
+                <span>IDR {infantTotalPrice}</span>
+              )}
+              <span>IDR {totalTax}</span>
             </div>
-          ))}
-          Tax
-          <div>
-            {passengerCounts.ADULT > 0 && <span>IDR{adultTotalPrice}</span>}
-            <br />
-            {passengerCounts.CHILD > 0 && <span>IDR{childTotalPrice}</span>}
-            <br />
-            {passengerCounts.INFANT > 0 && <span>IDR{infantTotalPrice}</span>}
-            <br />
-            <span>IDR{totalTax}</span>
-          </div>
-          <hr />
-          <h5>
-            Total <span>IDR{totalPrice}</span>
-          </h5>
-        </div>
+          </Col>
+        </Row>
+        <hr />
+        <Row className="my-2 justify-content-between">
+          <Col>
+            <h5>Total :</h5>
+          </Col>
+          <Col className="text-end align-self-start">
+            <h5 style={{ color: "#7126B5", fontWeight: "bold" }}>
+              IDR {totalPrice}
+            </h5>
+          </Col>
+        </Row>
         <Button
           type="submit"
           // disabled={isPending}
           style={{
             backgroundColor: "#7126B5",
             border: "none",
-            borderRadius: "10px",
+            borderRadius: "8px",
             boxShadow: "4px 4px 10px 2px rgba(0, 0, 0, 0.2)",
             width: "100%",
+            padding: "10px 0",
           }}
         >
           {/* {isPending ? "Memproses..." : "Cetak Tiket"} */}
