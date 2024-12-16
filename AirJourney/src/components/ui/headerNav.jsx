@@ -4,12 +4,34 @@ import { Row, Col, Button } from "react-bootstrap";
 import { Link } from "@tanstack/react-router";
 import DateFilterModal from "../Modal/DateFilterModal";
  
-export const HeaderNav = () => {
+export const HeaderNav = ({ selectedRange, setSelectedRange, onFilter }) => {
   // State for modals visibility
   const [isDateModalOpen, setDateModalOpen] = useState(false);
-  const [isSearchModalOpen, setSearchModalOpen] = useState(false);
+  // const [isSearchModalOpen, setSearchModalOpen] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const buttonRef = useRef(null);
+  // const [selectedRange, setSelectedRange] = useState(null);
+  // const [filteredCards, setFilteredCards] = useState(cardData);
+
+  // Filter Logic
+  // const handleFilter = () => {
+  //   if (!selectedRange || !selectedRange.from) {
+  //     setFilteredCards(cardData); // Show all cards if no filter is applied
+  //     return;
+  //   }
+
+  //   const { from, to } = selectedRange;
+
+  //   const filtered = cardData.filter((card) => {
+  //     const createdAtDate = new Date(card.createdAt);
+  //     return (
+  //       createdAtDate >= new Date(from) &&
+  //       (!to || createdAtDate <= new Date(to))
+  //     );
+  //   });
+
+  //   setFilteredCards(filtered);
+  // };
 
   // Handlers to show modals
   // const handleSearchModalShow = () => {
@@ -135,6 +157,9 @@ export const HeaderNav = () => {
               top: `${position.top}px`,
               left: `${position.left}px`,
             }}
+            onFilter={onFilter} // Pass the filter logic to DateFilter
+            selectedRange={selectedRange}
+            setSelectedRange={setSelectedRange}
           />
 
           {/* // Search Modal

@@ -17,6 +17,15 @@ export const Route = createLazyFileRoute("/users/private/order-history/")({
 function OrderHistory() {
   const navigate = useNavigate();
   const [selectedTransactionId, setSelectedTransactionId] = useState(null); // Track the selected card
+  // State for the selected date range
+  const [selectedRange, setSelectedRange] = useState(null);
+
+  // State for filtered cards
+  const [filteredCards, setFilteredCards] = useState([]);
+
+  const handleFilter = (range) => {
+    setSelectedRange(range); // Update the selectedRange state with the new date range
+  };
 
   const {
     data: transactions,
@@ -74,13 +83,44 @@ function OrderHistory() {
     }, {});
   }
 
-  const groupedTransactions = groupHistoriesByMonth(transactionsArray);
+  // const handleFilter = (selectedRange) => {
+  //   setSelectedRange(selectedRange);
+
+  //   if (selectedRange) {
+  //     const filtered = transactions?.data?.filter((transaction) => {
+  //       const createdAt = new Date(transaction.createdAt); // Assume createdAt is the field to filter
+  //       return (
+  //         createdAt >= new Date(selectedRange.from) &&
+  //         createdAt <= new Date(selectedRange.to)
+  //       );
+  //     }) || [];
+
+  //     setFilteredCards(filtered);
+  //   } else {
+  //     setFilteredCards(transactions); // If no date range selected, show all cards
+  //   }
+  // };
+
+  // Filter transactions based on the selected date range
+  const filteredTransactions = selectedRange
+  ? transactionsArray.filter((transaction) => {
+      const createdAt = new Date(transaction.createdAt);
+      return (
+        createdAt >= new Date(selectedRange.from) &&
+        createdAt <= new Date(selectedRange.to)
+      );
+    })
+  : transactionsArray; // Show all transactions if no date range is selected
+
+  const groupedFilteredTransactions = groupHistoriesByMonth(filteredTransactions);
+
   // console.log('groupedTransactions', groupedTransactions);
   console.log("After function:");
   // console.log("Transactions data:", transactions, typeof transactions);
   console.log("Is Array:", Array.isArray(transactions));
   console.log("Type:", typeof transactions);
   console.log("Data:", transactions);
+  console.log("isArray:", transactions)
 
   const statusBadge = {
     fontFamily: "Poppins, sans-serif",
@@ -139,13 +179,17 @@ function OrderHistory() {
 
   return (
     <div>
-      <HeaderNav />
+      <HeaderNav
+      selectedRange={selectedRange}
+      setSelectedRange={setSelectedRange}
+      onFilter={handleFilter} 
+      />
       <Container>
       {isAvailable ? (
         <Container>
           <Row className="justify-content-center gap-1 my-4">
             <Col lg={6} md={6}>
-              {Object.entries(groupedTransactions).map(
+              {Object.entries(groupedFilteredTransactions).map(
                 ([yearMonth, transactions]) => (
                   <div key={yearMonth} style={{ marginBottom: "20px" }}>
                     <h5 className="mb-2 fw-bold">

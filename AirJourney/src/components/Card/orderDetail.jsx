@@ -184,7 +184,7 @@ export const OrderDetailCard = ({ transactionId }) => {
               </span>
             </Col>
           </Row>
-          <hr style={{ height: '3px', backgroundColor: '#000', border: 'none' }}/>
+          <hr style={{ height: '2px', backgroundColor: '#000000', border: 'none' }}/>
           {/* End of departure flight section */}
 
           {/* Return Flight Section */}
@@ -240,7 +240,7 @@ export const OrderDetailCard = ({ transactionId }) => {
                 </span>
               </Col>
             </Row>
-          <hr style={{ height: '3px', backgroundColor: '#000', border: 'none' }} />
+          <hr style={{ height: '2px', backgroundColor: '#000000', border: 'none' }} />
           </>
           )}
           {/* End of return flight section */}
