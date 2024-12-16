@@ -1,15 +1,59 @@
-import React from 'react'
+import { React, useEffect } from 'react'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Row, Col, Card, Form, Button, Container } from 'react-bootstrap'
 import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
 import { AlertBox } from '../../../../components/ui/alertBox.jsx'
 import styles from './payment.module.css'
+import { useQuery } from '@tanstack/react-query'
+import { getDetailTransaction } from '../../../../services/transaction/index.js'
 
-export const Route = createLazyFileRoute('/users/private/payment/')({
+export const Route = createLazyFileRoute('/users/private/payment/$id')({
   component: Payment,
 })
 
 function Payment() {
+  const { id } = Route.useParams()
+
+  const { data, isSuccess } = useQuery({
+    queryKey: ['payment', id],
+    queryFn: () => getDetailTransaction(id),
+    enabled: !!id,
+  })
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
+    script.setAttribute('data-client-key', import.meta.env.VITE_MIDTRANS_CLIENT_KEY);
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isSuccess && data?.data?.payment?.snapToken) {
+      const snapToken = data.data.payment.snapToken;
+      if (!document.getElementById('snap-container').hasChildNodes()) {
+        window.snap.embed(snapToken, {
+          embedId: 'snap-container',
+          onSuccess: function (result) {
+            alert('Payment success!');
+          },
+          onPending: function (result) {
+            alert('Waiting for payment!');
+          },
+          onError: function (result) {
+            alert('Payment failed!');
+          },
+          onClose: function () {
+            alert('You closed the popup without finishing the payment');
+          },
+        });
+      }
+    }
+  }, [isSuccess, data]);
+
   return (
     <div className="payment-page">
       <Row className="justify-content-center mt-2 mb-4 py-3 shadow-sm">
@@ -30,64 +74,14 @@ function Payment() {
       <Container>
         <Row className="justify-content-center my-4">
           <Col lg={6} md={6} className="mb-4">
-            <Card.Body>
-              <h5>Isi Data Pembayaran</h5>
-              <div className="payment-method">
-                <Form.Select className="mb-3">
-                  <option>Gopay</option>
-                </Form.Select>
-                <Form.Select className="mb-3">
-                  <option>Virtual Account</option>
-                </Form.Select>
-                <Form.Select className="mb-3">
-                  <option>Credit Card</option>
-                </Form.Select>
-              </div>
-
-              <img
-                src="https://via.placeholder.com/200x40" // Replace with real image if needed
-                alt="Credit Card Logos"
-                className="d-block mb-3"
-              />
-
-              <Form>
-                <Form.Group controlId="cardNumber" className="mb-3">
-                  <Form.Label>Card Number</Form.Label>
-                  <Form.Control type="text" placeholder="4480 0000 0000 0000" />
-                </Form.Group>
-
-                <Form.Group controlId="cardHolderName" className="mb-3">
-                  <Form.Label>Card Holder Name</Form.Label>
-                  <Form.Control type="text" placeholder="John Doe" />
-                </Form.Group>
-
-                <Row>
-                  <Col md={6}>
-                    <Form.Group controlId="cvv" className="mb-3">
-                      <Form.Label>CVV</Form.Label>
-                      <Form.Control type="text" placeholder="000" />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group controlId="expiryDate" className="mb-3">
-                      <Form.Label>Expiry Date</Form.Label>
-                      <Form.Control type="text" placeholder="07/24" />
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                <Button variant="primary" className="w-100">
-                  Bayar
-                </Button>
-              </Form>
-            </Card.Body>
+            <div id="snap-container"></div>
           </Col>
 
           <Col lg={4} md={5}>
             <h6>
               Booking Code:{' '}
               <a href="#" className="booking-code">
-                6723y2GHK
+                {data?. data?.payment?.id}
               </a>
             </h6>
 
@@ -96,7 +90,7 @@ function Payment() {
                 <Col xs={8}>
                   <div>
                     <span>
-                      <strong>07:00</strong>
+                      <strong>07:00</strong>  
                     </span>
                     <br />
                     <span>3 Maret 2023</span>
