@@ -39,37 +39,3 @@ export const getAllTransactions = async () => {
     );
   }
 };
-
-export const getAllPayments = async () => {
-  const token = localStorage.getItem("token");
-  let url = `${import.meta.env.VITE_API_URL}/payments`;
-
-  try {
-    const response = await axios.get(url, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.log("error.response?.data? :", error.response?.data);
-    throw new Error(error.response?.data?.message || "Something went wrong");
-  }
-};
-
-export const getPaymentById = async () => {
-  const token = localStorage.getItem("token");
-  let url = `${import.meta.env.VITE_API_URL}/payments`;
-
-  try {
-    const response = await axios.get(url, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.log("error.response?.data? :", error.response?.data);
-    throw new Error(error.response?.data?.message || "Something went wrong");
-  }
-};

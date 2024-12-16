@@ -3,7 +3,7 @@ import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Row, Col, Button, Container } from 'react-bootstrap'
 import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
 import { AlertBox } from '../../../../components/ui/alertBox.jsx'
-import paymentSuccess from '../../../../assets/img/empty-illust.png'
+import paymentSuccess from '../../../../assets/img/payment-success.png'
 
 export const Route = createLazyFileRoute('/users/private/payment/success')({
   component: PaymentSuccess,
@@ -28,51 +28,46 @@ function PaymentSuccess() {
         </Col>
       </Row>
       <Container className="py-5">
-        <Row className="justify-content-center">
-          <Col xs="auto">
-            {' '}
-            {/* Shrink the column wisth to fit the content */}
+        <div className="d-flex flex-column align-items-center">
+          <Col xs={9} sm={8} md={5} lg={4} className="text-center mt-2">
             <img
               src={paymentSuccess}
-              alt="Payment Success"
-              className="img-fluid mb-3 ms-5"
+              alt="payment success"
+              className="img-fluid mb-2 mx-auto w-75"
             />
             <p
-              style={{ color: '#a06ece', textAlign: 'center', fontWeight: 500 }}
+              style={{ color: '#a06ece', fontWeight: 500 }}
             >
               Selamat! <br />
-              <span className="text-dark my-2">
+              <span className="text-dark mt-2">
                 Transaksi pembayaran tiket anda berhasil
               </span>
             </p>
           </Col>
-        </Row>
-        <Row className="justify-content-center mt-4">
-          <Col xs={10} sm={8} md={5} lg={4} className="text-center">
+          <Col xs={10} sm={8} md={5} lg={4}>
             <Button
               as={Link}
-              href={`#`}
+              href={`/`}
               style={{
                 backgroundColor: '#7126B5',
                 borderRadius: '14px',
+                border: 'none',
                 color: 'white',
                 boxShadow: '2px 2px 5px 1px rgba(0, 0, 0, 0.1)',
                 width: '100%',
                 padding: '10px 0',
+                margin: '15px 0',
               }}
             >
               Terbitkan Tiket
             </Button>
-          </Col>
-        </Row>
-        <Row className="justify-content-center mt-3">
-          <Col xs={10} sm={8} md={5} lg={4} className="text-center">
             <Button
               as={Link}
-              href={`#`}
+              href={`/`}
               style={{
                 backgroundColor: '#d0b7e6',
                 borderRadius: '14px',
+                border: 'none',
                 color: 'white',
                 boxShadow: '2px 2px 5px 1px rgba(0, 0, 0, 0.1)',
                 width: '100%',
@@ -82,7 +77,7 @@ function PaymentSuccess() {
               Cari Penerbangan Lain
             </Button>
           </Col>
-        </Row>
+        </div>
       </Container>
     </div>
   )

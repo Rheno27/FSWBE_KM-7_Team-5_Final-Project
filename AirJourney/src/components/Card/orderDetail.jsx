@@ -1,16 +1,11 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Row, Col, Button, Card, Alert, Form } from "react-bootstrap";
-// import { Link, useParams } from '@tanstack/react-router'
 import { useState } from "react";
-import dummy from "../../data/dummy.json";
-import {
-  getTransactionById,
-  getPaymentById,
-} from "../../services/order-history/index";
+import { getTransactionById } from "../../services/order-history/index";
+import { Link } from "@tanstack/react-router";
 
 export const OrderDetailCard = ({ transactionId }) => {
-  const [payments, setPayments] = useState(dummy.payment);
 
   const [transactions, setTransactions] = useState(null);
 
@@ -65,13 +60,12 @@ export const OrderDetailCard = ({ transactionId }) => {
     adultTotalPrice + childTotalPrice + infantTotalPrice + totalTax;
 
   const statusBadge = {
-    backgroundColor: "grey",
     fontFamily: "Poppins, sans-serif",
     fontSize: "0.9rem",
-    color: "white",
     textAlign: "center",
     borderRadius: "20px",
-    padding: "4px 10px",
+    border: "none",
+    padding: "5px 10px",
     width: "fit-content",
   };
 
@@ -104,110 +98,177 @@ export const OrderDetailCard = ({ transactionId }) => {
     );
   };
 
+  function getPaymentStatus(status) {
+    switch (status.toUpperCase()) {
+      case 'SUCCESS':
+        return 'success';
+      case 'CANCELLED':
+        return 'secondary';
+      case 'PENDING':
+        return 'warning';
+      default:
+        return 'danger';
+    }
+  }
+
+  const paymentStatus = transaction?.data?.payment?.status || 'untracked';
+
   return (
-    <Card className="p-3 shadow-sm rounded-3 mt-1 w-100">
+    <Card className="p-3 shadow-sm rounded-3 mt-1 w-100" style={{border: '1px solid #7126B5'}}>
       <Form>
-        {/* {payments.map((payment) => ( */}
-        {/* <div key={payment.id}> */}
-        <div>
-          <Alert variant="filled" style={statusBadge}>
-            {/* {capitalizeFirstLetter(payment.status || 'Untracked')} */}
-            Untracked
-          </Alert>
-        </div>
-        {/* ))} */}
+        <Row className="justify-content-between align-items-start">
+          <Col>
+            <h5>Detail Pesanan</h5>
+          </Col>
+          <Col xs='auto' className="text-end align-self-start">
+            <Alert
+              className={`bg-${getPaymentStatus(transaction?.data?.payment?.status || 'untracked')} text-white`}
+              style={statusBadge}
+            >
+              {capitalizeFirstLetter(transaction?.data?.payment?.status || 'Untracked')}
+            </Alert>
+          </Col>
+        </Row>
         <h6>
-          Booking Code:{" "}
-          <TruncatableText text={transaction?.data?.id} maxLength={15} />
+          Booking Code : {/* <TruncatableText text={transaction?.data?.id} maxLength={15} /> */}
         </h6>
-        <div className="mt-4">
-          <Row>
-            <Col xs={7}>
-              <div>
-                <span>
-                  <strong>
-                    {transaction?.data?.departureFlight?.departureTime}
-                  </strong>
-                </span>
-                <br />
-                <span>
-                  {formatDate(
-                    transaction?.data?.departureFlight?.departureDate
-                  )}
-                </span>
-              </div>
+        <div className="mt-3">
+          {/* Departure Flight Section */}
+          <Row className="d-flex justify-content-between">
+            <h6 className="text-center text-muted" style={{fontSize:'0.9rem'}}>--- Departure Flight ---</h6>
+            <Col xs={6} className="d-flex flex-column">
+              <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Origin :</span>
+              <span>
+                <strong>
+                  {transaction?.data?.departureFlight?.departureTime}
+                </strong>
+              </span>
+              <span className="mb-1">
+                {formatDate(
+                  transaction?.data?.departureFlight?.departureDate
+                )}
+              </span>
+              <span style={{color:'#7126B5', fontSize:'0.95rem'}}>{transaction?.data?.departureFlight?.airportFrom?.name}</span>
             </Col>
-            <Col xs={5} className="text-end align-self-start">
-              <p style={{ color: "#7126B5", fontWeight: "bold" }}>
-                Keberangkatan
-              </p>
+            <Col xs={6} className="d-flex flex-column align-items-end">
+              <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Destination :</span>
+              <span>
+                <strong>
+                  {transaction?.data?.departureFlight?.arrivalTime}
+                </strong>
+              </span>
+              <span className="mb-1">
+                {formatDate(transaction?.data?.departureFlight?.arrivalDate)}
+              </span>
+              <span style={{color:'#7126B5', fontSize:'0.95rem'}}>{transaction?.data?.departureFlight?.airportTo?.name}</span>
             </Col>
-            <span>{transaction?.data?.departureFlight?.airportFrom?.name}</span>
           </Row>
-          <hr />
-          <Row>
+          <Row className="mt-2">
+            <span className="text-center text-muted" style={{fontSize:'0.9rem'}}>------ Airline ------</span>
             <Col xs={2}>
               <img
                 src={transaction?.data?.departureFlight?.airline?.image}
-                alt="airline-logo"
+                alt=""
               />
             </Col>
             <Col xs={10}>
-              <p>
-                <strong>
+              <span style={{fontSize:'0.95rem'}}>
+                <b>
                   {transaction?.data?.departureFlight?.airline?.name} -{" "}
                   {capitalizeFirstLetter(
                     transaction?.data?.departureFlight?.class || "Not found"
                   )}
-                </strong>{" "}
+                </b>
                 <br />
                 {transaction?.data?.departureFlight?.airline?.code}
-              </p>
-              <span>Informasi :</span>
+              </span>
+            </Col>
+          </Row>
+          <hr style={{ height: '3px', backgroundColor: '#000', border: 'none' }}/>
+          {/* End of departure flight section */}
+
+          {/* Return Flight Section */}
+          {transaction?.data?.returnFlight && (
+          <>
+            <Row className="d-flex justify-content-between">
+              <h6 className="text-center text-muted" style={{fontSize:'0.9rem'}}>--- Return Flight ---</h6>
+              <Col xs={6} className="d-flex flex-column">
+                <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Origin :</span>
+                <span>
+                  <strong>
+                    {transaction?.data?.returnFlight?.departureTime}
+                  </strong>
+                </span>
+                <span className="mb-1">
+                  {formatDate(
+                    transaction?.data?.returnFlight?.departureDate
+                  )}
+                </span>
+                <span style={{color:'#7126B5', fontSize:'0.95rem'}}>{transaction?.data?.returnFlight?.airportFrom?.name}</span>
+              </Col>
+              <Col xs={6} className="d-flex flex-column align-items-end">
+                <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Destination :</span>
+                <span>
+                  <strong>
+                    {transaction?.data?.returnFlight?.arrivalTime}
+                  </strong>
+                </span>
+                <span className="mb-1">
+                  {formatDate(transaction?.data?.returnFlight?.arrivalDate)}
+                </span>
+                <span style={{color:'#7126B5', fontSize:'0.95rem'}}>{transaction?.data?.returnFlight?.airportTo?.name}</span>
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <span className="text-center text-muted" style={{fontSize:'0.9rem'}}>------ Airline ------</span>
+              <Col xs={2}>
+                <img
+                  src={transaction?.data?.returnFlight?.airline?.image}
+                  alt=""
+                />
+              </Col>
+              <Col xs={10}>
+                <span style={{fontSize:'0.95rem'}}>
+                    <b>
+                    {transaction?.data?.returnFlight?.airline?.name} -{" "}
+                    {capitalizeFirstLetter(
+                      transaction?.data?.returnFlight?.class || "Not found"
+                    )}
+                    </b>
+                  <br />
+                  {transaction?.data?.returnFlight?.airline?.code}
+                </span>
+              </Col>
+            </Row>
+          <hr style={{ height: '3px', backgroundColor: '#000', border: 'none' }} />
+          </>
+          )}
+          {/* End of return flight section */}
+
+          <Row>
+            <span>Penumpang :</span>
               <div>
                 {transaction?.data?.passenger?.length > 0 ? (
                   transaction.data.passenger.map((passenger, index) => (
-                    <div key={passenger.id}>
-                      <p>Penumpang {index + 1}:</p>
-                      <p>Name: {passenger.name}</p>
-                      <p>ID: {passenger.id}</p>
+                    <div key={passenger.id} className="d-flex flex-column">
+                      <span style={{color: "#7126B5"}}>{index + 1} : {passenger.title} {passenger.firstName} {passenger.familyName} | ui9752H</span>
+                      {/* <span>ID : <TruncatableText text={passenger.id} maxLength={15} /></span> */}
                     </div>
                   ))
                 ) : (
                   <p>No passengers available.</p>
                 )}
               </div>
-            </Col>
-          </Row>
-          <hr />
-          <Row>
-            <Col xs={8}>
-              <div>
-                <span>
-                  <strong>
-                    {transaction?.data?.departureFlight?.arrivalTime}
-                  </strong>
-                </span>
-                <br />
-                <span>
-                  {formatDate(transaction?.data?.departureFlight?.arrivalDate)}
-                </span>
-              </div>
-            </Col>
-            <Col xs={4} className="text-end align-self-start">
-              <p style={{ color: "#7126B5", fontWeight: "bold" }}>Kedatangan</p>
-            </Col>
-            <span>{transaction?.data?.departureFlight?.airportTo?.name}</span>
           </Row>
           <hr />
         </div>
 
         <Row className="my-2">
           {/* {Object.entries(passengerCounts).map(([type, { count, totalPrice }]) => (
-      <div key={type}>
-        <span>{count} {type} {totalPrice}<br /></span>
-    </div>
-))} */}
+                    <div key={type}>
+                      <span>{count} {type} {totalPrice}<br /></span>
+                  </div>
+              ))} */}
           <Col xs={7}>
             {Object.entries(passengerCounts).map(([type, count]) => (
               <div key={type}>
@@ -231,7 +292,7 @@ export const OrderDetailCard = ({ transactionId }) => {
           </Col>
         </Row>
         <hr />
-        <Row className="my-2 justify-content-between">
+        <Row className="mt-2 justify-content-between">
           <Col>
             <h5>Total :</h5>
           </Col>
@@ -241,54 +302,46 @@ export const OrderDetailCard = ({ transactionId }) => {
             </h5>
           </Col>
         </Row>
-        <Button
-          type="submit"
-          // disabled={isPending}
-          style={{
-            backgroundColor: "#7126B5",
-            border: "none",
-            borderRadius: "8px",
-            boxShadow: "4px 4px 10px 2px rgba(0, 0, 0, 0.2)",
-            width: "100%",
-            padding: "10px 0",
-          }}
-        >
-          {/* {isPending ? "Memproses..." : "Cetak Tiket"} */}
-          Cetak Tiket
-        </Button>
-        {/* {paymentStatus === "SUCCESS" && (
-  <Button
-    type="submit"
-    style={{
-      backgroundColor: "#7126B5",
-      border: "none",
-      borderRadius: "10px",
-      boxShadow: "4px 4px 10px 2px rgba(0, 0, 0, 0.2)",
-      width: "100%",
-    }}
-  >
-    Cetak Tiket
-  </Button>
-)}
+            {paymentStatus === "SUCCESS" && (
+              <Button
+                type="submit"
+                // disabled={isPending}
+                style={{
+                  backgroundColor: "#7126B5",
+                  border: "none",
+                  borderRadius: "8px",
+                  width: "100%",
+                  padding: "10px 0",
+                  fontSize: "1.15rem",
+                  marginTop: "5px",
+                }}
+              >
+                {/* {isPending ? "Memproses..." : "Cetak Tiket"} */}
+                Cetak Tiket
+              </Button>
+            )}
 
-{paymentStatus === "PENDING" && (
-  <Button
-    type="button"
-    style={{
-      backgroundColor: "#FFA500",
-      border: "none",
-      borderRadius: "10px",
-      boxShadow: "4px 4px 10px 2px rgba(0, 0, 0, 0.2)",
-      width: "100%",
-    }}
-    onClick={handlePayment} // Optional: Add a function for payment flow
-  >
-    Lanjut Bayar
-  </Button>
-)}
+            {paymentStatus === "PENDING" && (
+              <Button
+                as={Link}
+                href={`/users/private/payment/`}
+                type="button"
+                style={{
+                  backgroundColor: "#FFA500",
+                  border: "none",
+                  borderRadius: "8px",
+                  width: "100%",
+                  padding: "10px 0",
+                  fontSize: "1.1rem",
+                  marginTop: "5px",
+                }}
+              >
+                Lanjut Bayar
+              </Button>
+            )}
 
-{paymentStatus === "CANCELLED" && null}
-{!["SUCCESS", "PENDING", "CANCELLED"].includes(paymentStatus) && null} */}
+            {paymentStatus === "CANCELLED" && null}
+            {!["SUCCESS", "PENDING", "CANCELLED"].includes(paymentStatus) && null}
       </Form>
     </Card>
   );
