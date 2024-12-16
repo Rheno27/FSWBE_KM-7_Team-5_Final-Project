@@ -2,11 +2,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import HomepageFlightClick from "../HomepageFlightClick";
 
 const HomepageFlightList = () => {
     const [isHasMore, setIsHasMore] = useState(true);
     const [isInitialized, setIsInitialized] = useState(false);
     const loadersCount = [1, 2, 3, 4];
+    const [cursorId, setCursorId] = useState("");
+    const [isShowModal, setIsShowModal] = useState(false);
+    const [selectedFlight, setSelectedFlight] = useState(null);
 
     //for search value
     const [destination, setDestination] = useState("ALL");
@@ -33,7 +37,7 @@ const HomepageFlightList = () => {
         if (isDestinationChanged) {
             setDestinationList([]);
         } else if (destinationList.length > 0) {
-            params.cursorId = destinationList[destinationList.length - 1].id;
+            params.cursorId = cursorId;
         }
 
         axios
@@ -45,6 +49,7 @@ const HomepageFlightList = () => {
                           ...destinationList,
                           ...res.data.data,
                       ]);
+                setCursorId(res.data.meta.cursorId);
                 if (res.data.data.length < 3) {
                     setIsHasMore(false);
                 }
@@ -60,7 +65,7 @@ const HomepageFlightList = () => {
     }, [destination]);
 
     return (
-        <div className="w-full max-w-5xl flex flex-col px-8 pt-96 mt-16 gap-4 phone:mt-0 sm:pt-24 lg:pt-0 lg:mt-0">
+        <div className="w-full max-w-5xl flex flex-col px-8 pt-96 mt-16 gap-4 sm:mt-0 sm:pt-24 lg:pt-0 lg:mt-0">
             {/* query */}
             <div className="flex flex-col gap-3">
                 <span className="font-bold text-lg">Destinasi Favorit</span>
@@ -88,7 +93,7 @@ const HomepageFlightList = () => {
                     console.log("from infinite");
                 }}
                 hasMore={isHasMore}
-                loader={loadersCount.map((count,index) => (
+                loader={loadersCount.map((count, index) => (
                     <div
                         key={index}
                         className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2 w-72 animate-pulse sm:w-52"
@@ -113,7 +118,11 @@ const HomepageFlightList = () => {
                     destinationList.map((data) => (
                         <div
                             key={data?.id}
-                            className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2 w-72 sm:w-52"
+                            className="flex flex-col rounded-xl overflow-hidden border-1 shadow-sm p-3 gap-2 w-72 sm:w-52 cursor-pointer"
+                            onClick={() => {
+                                setIsShowModal(true);
+                                setSelectedFlight(data);
+                            }}
                         >
                             <img
                                 src={data?.picture}
@@ -143,6 +152,15 @@ const HomepageFlightList = () => {
                         </div>
                     ))}
             </InfiniteScroll>
+            {isShowModal && (
+                <div className="fixed z-0 w-full h-full inset-0 flex overflow-hidden items-center justify-center">
+                    <HomepageFlightClick setIsShowModal={setIsShowModal} selectedFlight={selectedFlight} />
+                    <div
+                        className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
+                        onClick={() => setIsShowModal(false)}
+                    ></div>
+                </div>
+            )}
         </div>
     );
 };
