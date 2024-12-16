@@ -1,0 +1,4560 @@
+{
+    "data": {
+        "aeroplane": {
+            "code": "B777",
+            "createdAt": "2024-12-03T14:46:37.681Z",
+            "id": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "maxColumn": 10,
+            "maxRow": 45,
+            "name": "Boeing 777",
+            "type": "Wide-body",
+            "updatedAt": "2024-12-03T14:46:37.681Z"
+        },
+        "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+        "airline": {
+            "code": "GA",
+            "createdAt": "2024-12-03T14:46:37.639Z",
+            "id": "01938cfc-cb47-7323-8de8-06d064986918",
+            "image": null,
+            "name": "Garuda Indonesia",
+            "updatedAt": "2024-12-03T14:46:37.639Z"
+        },
+        "airlineId": "01938cfc-cb47-7323-8de8-06d064986918",
+        "airportFrom": {
+            "city": "Tangerang",
+            "code": "CGK",
+            "continent": "ASIA",
+            "country": "Indonesia",
+            "createdAt": "2024-12-03T14:46:37.551Z",
+            "id": "01938cfc-caef-7722-bd6d-cb610c59dd8f",
+            "name": "Soekarno-Hatta International Airport",
+            "updatedAt": "2024-12-03T14:46:37.551Z"
+        },
+        "airportIdFrom": "01938cfc-caef-7722-bd6d-cb610c59dd8f",
+        "airportIdTo": "01938cfc-cb32-7213-9140-d32608d12c47",
+        "airportTo": {
+            "city": "Los Angeles",
+            "code": "LAX",
+            "continent": "NORTH_AMERICA",
+            "country": "United States",
+            "createdAt": "2024-12-03T14:46:37.619Z",
+            "id": "01938cfc-cb32-7213-9140-d32608d12c47",
+            "name": "Los Angeles International Airport",
+            "updatedAt": "2024-12-03T14:46:37.619Z"
+        },
+        "arrivalDate": "2024-12-09T14:46:37.695Z",
+        "arrivalTime": "12:00",
+        "class": "PREMIUM_ECONOMY",
+        "createdAt": "2024-12-03T14:46:37.698Z",
+        "departureDate": "2024-12-08T14:46:37.695Z",
+        "departureTime": "10:00",
+        "description": "Flight from Jakarta to Los Angeles",
+        "duration": 120,
+        "id": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+        "price": 300,
+        "seat": [
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-12a70d04678a",
+            "row": 1,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-12b89cd24606",
+            "row": 1,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-12c6bc07d31b",
+            "row": 1,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-12dd0209c1ed",
+            "row": 1,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-12e8dc1408b7",
+            "row": 1,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-12fded9657f4",
+            "row": 1,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-130f19e367d8",
+            "row": 1,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-131edab5eb17",
+            "row": 1,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-1326b3372d14",
+            "row": 1,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-133e166e5210",
+            "row": 1,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-13458c77a458",
+            "row": 2,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-13525115f2e9",
+            "row": 2,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-13679ef35ce4",
+            "row": 2,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-137aa305ab20",
+            "row": 2,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-1381281a7d60",
+            "row": 2,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-139bf2872744",
+            "row": 2,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-13ae77966f48",
+            "row": 2,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-13b3f0d10fe5",
+            "row": 2,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-13c88090301b",
+            "row": 2,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-13d2a8dd2f2b",
+            "row": 2,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-13eef649a6d6",
+            "row": 3,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-13f29d249ea7",
+            "row": 3,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-1408568bf753",
+            "row": 3,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-1415489c7389",
+            "row": 3,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-14296da1fa8f",
+            "row": 3,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-143b26e8db79",
+            "row": 3,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-144871e8ac96",
+            "row": 3,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-145863f83265",
+            "row": 3,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-14693d753902",
+            "row": 3,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-147f798d95ea",
+            "row": 3,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-1488ad584192",
+            "row": 4,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-149b1e18de63",
+            "row": 4,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-14afd17a6f1f",
+            "row": 4,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-14b3369a4bf6",
+            "row": 4,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-14c54f4d0aed",
+            "row": 4,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-14d159493028",
+            "row": 4,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-14e821c7afd8",
+            "row": 4,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-14f0bc4f0207",
+            "row": 4,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-150723831490",
+            "row": 4,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-151399e22bc6",
+            "row": 4,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-152ae49af105",
+            "row": 5,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-153e197b683a",
+            "row": 5,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-154e073cbe13",
+            "row": 5,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-1559401e926f",
+            "row": 5,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-15619e90396c",
+            "row": 5,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-157d4f11d2d8",
+            "row": 5,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-15840a4cc69b",
+            "row": 5,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-159095b6d372",
+            "row": 5,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-15af5e7cd625",
+            "row": 5,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-15b85e672cd5",
+            "row": 5,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-15ca6fbd08bd",
+            "row": 6,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-15def389fbfc",
+            "row": 6,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-15effcb63c50",
+            "row": 6,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-15f035d6820f",
+            "row": 6,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-160fb25dee91",
+            "row": 6,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-16114481b169",
+            "row": 6,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-162b96577861",
+            "row": 6,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-163f7c5b88f1",
+            "row": 6,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-1645d1c26ed6",
+            "row": 6,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-1651438f7d98",
+            "row": 6,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-166a0e05b3bd",
+            "row": 7,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-167209384088",
+            "row": 7,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-16899eb803db",
+            "row": 7,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-169292979bdc",
+            "row": 7,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-16a38b2d14ff",
+            "row": 7,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-16bcf1602534",
+            "row": 7,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-16ca952089a0",
+            "row": 7,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-16d3d64e8c09",
+            "row": 7,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-16e3f67b47c4",
+            "row": 7,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-16f70c35f898",
+            "row": 7,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-1701828c9b1c",
+            "row": 8,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-1711768c2634",
+            "row": 8,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-172ec808fd43",
+            "row": 8,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-1737dda944fd",
+            "row": 8,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-174975bda488",
+            "row": 8,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-1752e8662d1e",
+            "row": 8,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd4-7713-a2a5-1763d23adaea",
+            "row": 8,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-71ce9133a67d",
+            "row": 8,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-71df212d3138",
+            "row": 8,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-71e8219b3d93",
+            "row": 8,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-71f06c0af811",
+            "row": 9,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-7208e415e307",
+            "row": 9,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-72184ad0d44a",
+            "row": 9,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-7223cc4a65c8",
+            "row": 9,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-7233290c8967",
+            "row": 9,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-72492b4a79ef",
+            "row": 9,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-725333243c64",
+            "row": 9,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-72641cf791cb",
+            "row": 9,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-727c192d2776",
+            "row": 9,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-7285905668a2",
+            "row": 9,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-7298dbeac88e",
+            "row": 10,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-72a6aa28c062",
+            "row": 10,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-72bd207b9f6d",
+            "row": 10,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-72c6edd72069",
+            "row": 10,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-72d733ee2b82",
+            "row": 10,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-72e733d0eaeb",
+            "row": 10,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-72f6042987b7",
+            "row": 10,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-730f1adac71e",
+            "row": 10,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-731a7d1fa15c",
+            "row": 10,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-732dcfe532aa",
+            "row": 10,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-7336c6211d6a",
+            "row": 11,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-73494cf86b8c",
+            "row": 11,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-735336449320",
+            "row": 11,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-7365b9672dd8",
+            "row": 11,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-737e7eda9cef",
+            "row": 11,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-73886d8cd8d6",
+            "row": 11,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-739da1471a00",
+            "row": 11,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-73af27334a2c",
+            "row": 11,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-73b96d1e6491",
+            "row": 11,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-73caea234568",
+            "row": 11,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-73dbe2210ab6",
+            "row": 12,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-73e3cdec1917",
+            "row": 12,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-73f2d7d1df34",
+            "row": 12,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-740fa352e4ee",
+            "row": 12,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-741a64df5698",
+            "row": 12,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-74264bc4f5e3",
+            "row": 12,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-743e6f9f5b99",
+            "row": 12,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-744de1ebb42f",
+            "row": 12,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-745dc7db9cc3",
+            "row": 12,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-74666c7e7b91",
+            "row": 12,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-74741af80835",
+            "row": 13,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-748cc2116881",
+            "row": 13,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-749d88975313",
+            "row": 13,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-74af0d0b5138",
+            "row": 13,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-74bba05c4670",
+            "row": 13,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-74c273e3abe5",
+            "row": 13,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-74dabc9a0233",
+            "row": 13,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-74ecb776a75f",
+            "row": 13,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-74fe72e3cf46",
+            "row": 13,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-75055193d5b8",
+            "row": 13,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-751975c36fe4",
+            "row": 14,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-752fc533d83b",
+            "row": 14,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-7532fc84608f",
+            "row": 14,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-7548f36e41dd",
+            "row": 14,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-7559c0f480e3",
+            "row": 14,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-756a583e4954",
+            "row": 14,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-757dab7bf87a",
+            "row": 14,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-75827413fdab",
+            "row": 14,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd5-7632-af36-759e931523cb",
+            "row": 14,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7e35c0e1e5ac",
+            "row": 14,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7e4e63350eb3",
+            "row": 15,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7e5893266cf9",
+            "row": 15,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7e68287cc978",
+            "row": 15,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7e7b2e5bf40c",
+            "row": 15,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7e880d8df2fe",
+            "row": 15,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7e99edf233dd",
+            "row": 15,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7ead4ac4f788",
+            "row": 15,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7eb59d67392f",
+            "row": 15,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7ecffff2be10",
+            "row": 15,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7ed25a8edbab",
+            "row": 15,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7ee770b30913",
+            "row": 16,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7ef71f0bddaf",
+            "row": 16,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7f0ff0bc0107",
+            "row": 16,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7f16b471f412",
+            "row": 16,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7f2b035db686",
+            "row": 16,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7f395e93e8d1",
+            "row": 16,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7f49fe9a86b4",
+            "row": 16,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7f5e719f3b2e",
+            "row": 16,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7f68fb4f6b01",
+            "row": 16,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7f7c60345525",
+            "row": 16,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7f812aef19ba",
+            "row": 17,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7f96827adc21",
+            "row": 17,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7fae28bd1174",
+            "row": 17,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7fb1aad9aa6d",
+            "row": 17,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7fcf6760122f",
+            "row": 17,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7fd6582eead8",
+            "row": 17,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7fe882a943ab",
+            "row": 17,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-7ff4fecb6b4a",
+            "row": 17,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-800cf047e00e",
+            "row": 17,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-8013b12591c0",
+            "row": 17,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-802e016d9720",
+            "row": 18,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-8039fc9212a4",
+            "row": 18,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-804c6ca383c2",
+            "row": 18,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-8051abf07f42",
+            "row": 18,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-806820c18cf6",
+            "row": 18,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-807cac6e9516",
+            "row": 18,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-808e59823985",
+            "row": 18,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-8094d35e362c",
+            "row": 18,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-80a713d932a3",
+            "row": 18,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-80b8681bc77f",
+            "row": 18,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-80c2c3b1da2b",
+            "row": 19,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-80d03cddbf9f",
+            "row": 19,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-80ed1d1e67ac",
+            "row": 19,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-80f210226388",
+            "row": 19,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-810073cd0115",
+            "row": 19,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-811b766bec67",
+            "row": 19,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-812e8f2ca4d8",
+            "row": 19,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-81355be5902d",
+            "row": 19,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-814906985f8d",
+            "row": 19,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-8151c3702889",
+            "row": 19,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-816f844b4b3f",
+            "row": 20,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-817fbae77b4a",
+            "row": 20,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-818ab86203fa",
+            "row": 20,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-8194abb34283",
+            "row": 20,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-81a97520722b",
+            "row": 20,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-81bac8570c55",
+            "row": 20,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-81cb4315ec55",
+            "row": 20,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-81dbccc015b0",
+            "row": 20,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-81eba553da1c",
+            "row": 20,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd6-72a3-9b3f-81f36054bd72",
+            "row": 20,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-3361c31e041d",
+            "row": 21,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-337f934c0268",
+            "row": 21,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-338bc4ae691f",
+            "row": 21,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-339d570f3fe8",
+            "row": 21,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-33a456e9c67d",
+            "row": 21,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-33b3fa69075b",
+            "row": 21,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-33cf0885ee4e",
+            "row": 21,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-33d35caeb0f5",
+            "row": 21,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-33e38482a0b0",
+            "row": 21,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-33f0141cbdd9",
+            "row": 21,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-3404c7cec14a",
+            "row": 22,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-3418cd41e364",
+            "row": 22,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-3422dea78e4e",
+            "row": 22,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-343408f1727f",
+            "row": 22,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-344ff5136764",
+            "row": 22,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-34592965d715",
+            "row": 22,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-34613a243a67",
+            "row": 22,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-3470f80b4d61",
+            "row": 22,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-348b55588767",
+            "row": 22,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-34950a4902c5",
+            "row": 22,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-34a4da0d5c13",
+            "row": 23,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-34bb48efddf4",
+            "row": 23,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-34cecf4f9d4f",
+            "row": 23,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-34d783c2c7f6",
+            "row": 23,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-34e037554261",
+            "row": 23,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-34f061276180",
+            "row": 23,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-350638aa72bc",
+            "row": 23,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-351a041666ea",
+            "row": 23,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-3526b8c01d8a",
+            "row": 23,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-35393434318b",
+            "row": 23,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-3544faf43ac1",
+            "row": 24,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-355e841dcd06",
+            "row": 24,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-356c702acd32",
+            "row": 24,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-357a0a0a1f56",
+            "row": 24,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-3585f8474296",
+            "row": 24,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-3592421f7eb6",
+            "row": 24,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-35ad33b9cf3f",
+            "row": 24,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-35bb3d1da8f0",
+            "row": 24,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-35c743e225a3",
+            "row": 24,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-35db6797704b",
+            "row": 24,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-35e8a6272990",
+            "row": 25,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-35f0f62d1c67",
+            "row": 25,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-360bc16232cd",
+            "row": 25,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-3614ed175baa",
+            "row": 25,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-362ad3d2d7b0",
+            "row": 25,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-363caf4100be",
+            "row": 25,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-364e671ac302",
+            "row": 25,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-3658f667be62",
+            "row": 25,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-366809c341b3",
+            "row": 25,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-367ab08fd2d4",
+            "row": 25,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-36878dbf10bd",
+            "row": 26,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-36993eae9e79",
+            "row": 26,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-36a5a9571cd8",
+            "row": 26,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-36baeec3dc09",
+            "row": 26,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-36cf37933b85",
+            "row": 26,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-36d4eab96a8c",
+            "row": 26,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-36eed00f26ba",
+            "row": 26,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-36ff00875d16",
+            "row": 26,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-3707db9eb14e",
+            "row": 26,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-371332dba085",
+            "row": 26,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-372caff7249b",
+            "row": 27,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd7-7a60-8c3e-3736e789a6f2",
+            "row": 27,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-83a159b6f0f3",
+            "row": 27,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-83b8140c41cb",
+            "row": 27,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-83cfe335f9d8",
+            "row": 27,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-83d54751c320",
+            "row": 27,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-83e2387dc08c",
+            "row": 27,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-83fdc360704c",
+            "row": 27,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-8405a5619a83",
+            "row": 27,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-8412634c8c46",
+            "row": 27,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-842fbadb469b",
+            "row": 28,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-843ae6fe6ead",
+            "row": 28,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-84401e576584",
+            "row": 28,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-845b065f22cd",
+            "row": 28,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-8468e899962f",
+            "row": 28,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-847508c09837",
+            "row": 28,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-848ae1e05791",
+            "row": 28,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-84969c9f6073",
+            "row": 28,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-84a7bc398f60",
+            "row": 28,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-84bc6c09502d",
+            "row": 28,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-84c905182e5f",
+            "row": 29,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-84dfd71144d0",
+            "row": 29,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-84eeaaa8619b",
+            "row": 29,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-84fbc7d00abd",
+            "row": 29,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-85046235a62f",
+            "row": 29,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-851bc4a9a675",
+            "row": 29,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-852d2fb2e770",
+            "row": 29,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-85316b0e879a",
+            "row": 29,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-85411da1286f",
+            "row": 29,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-85503f63d52b",
+            "row": 29,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-8564c0c6fc3b",
+            "row": 30,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-857536591e89",
+            "row": 30,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-858d9d5b0c1e",
+            "row": 30,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-859548fd6f21",
+            "row": 30,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-85ae26522a85",
+            "row": 30,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-85b2c15c4737",
+            "row": 30,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-85cbba67ef79",
+            "row": 30,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-85de32f2e331",
+            "row": 30,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-85e7422b24c6",
+            "row": 30,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-85f940619bfc",
+            "row": 30,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-860c3b702b7d",
+            "row": 31,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-8614139b5126",
+            "row": 31,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-86286cd53444",
+            "row": 31,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-86341b0cd40c",
+            "row": 31,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-86404ee99309",
+            "row": 31,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-865cbfee4a0c",
+            "row": 31,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-866c10ff9d2c",
+            "row": 31,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-8673f7d41157",
+            "row": 31,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-868b64c583ad",
+            "row": 31,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-869cd4cb5a99",
+            "row": 31,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-86aa86a6ec6f",
+            "row": 32,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-86b3d97f7073",
+            "row": 32,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-86cbefe63dd6",
+            "row": 32,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-86d5ec1a4896",
+            "row": 32,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-86ee780a831e",
+            "row": 32,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-86f596d60c15",
+            "row": 32,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-870fd5c431b6",
+            "row": 32,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-87113fc27d56",
+            "row": 32,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-872cfc856d34",
+            "row": 32,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-8730fc3ee07a",
+            "row": 32,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-8746f4ee774a",
+            "row": 33,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-8752780add25",
+            "row": 33,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-876903158908",
+            "row": 33,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-877186ab0a89",
+            "row": 33,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-8788c50ef98d",
+            "row": 33,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-879cd13f3c27",
+            "row": 33,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-87ad456af35b",
+            "row": 33,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-87b5f4c6f71e",
+            "row": 33,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-87cfdd4ff8f0",
+            "row": 33,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-87d68110342f",
+            "row": 33,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-87e385978bef",
+            "row": 34,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-87f1ae0cf222",
+            "row": 34,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-8806d2d9cd44",
+            "row": 34,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-881b3a8434ed",
+            "row": 34,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-882c16bb55ae",
+            "row": 34,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-883f7c4074b0",
+            "row": 34,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd8-7d32-94f2-884b6119853c",
+            "row": 34,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-973b4273c798",
+            "row": 34,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-974026eff756",
+            "row": 34,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9759e64fc57c",
+            "row": 34,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-976a4d71ba8d",
+            "row": 35,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9776860b368d",
+            "row": 35,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-978e4d1144ed",
+            "row": 35,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-979f448c21e0",
+            "row": 35,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-97ac53b6005f",
+            "row": 35,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-97be367797dd",
+            "row": 35,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-97c53613881a",
+            "row": 35,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-97d8cfdfa758",
+            "row": 35,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-97ec91dea609",
+            "row": 35,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-97f9c7d1e3ec",
+            "row": 35,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9808dce7412a",
+            "row": 36,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-98112d8176a9",
+            "row": 36,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-982ba3adaa5b",
+            "row": 36,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-983b0b229b8f",
+            "row": 36,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-984d4a99b89c",
+            "row": 36,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9854b0706987",
+            "row": 36,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-98642c913e9a",
+            "row": 36,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9879c67d88f7",
+            "row": 36,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9889e1cd63fa",
+            "row": 36,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9897a96cf529",
+            "row": 36,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-98ae048b4f12",
+            "row": 37,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-98b75717d992",
+            "row": 37,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-98c39fdddeec",
+            "row": 37,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-98d8c8c2c384",
+            "row": 37,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-98e54cc1408e",
+            "row": 37,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-98fd4d966d0b",
+            "row": 37,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-990acc16a488",
+            "row": 37,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-991527acdd35",
+            "row": 37,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-99277fc1c3a2",
+            "row": 37,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-993461ff7566",
+            "row": 37,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9941ca4676e3",
+            "row": 38,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-995f96169d17",
+            "row": 38,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9961e3c64e6d",
+            "row": 38,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-997abca9be59",
+            "row": 38,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9985e55856c5",
+            "row": 38,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-99944f42b96b",
+            "row": 38,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-99a7aa3ba8a0",
+            "row": 38,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-99b081119f9d",
+            "row": 38,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-99ccbbefeb57",
+            "row": 38,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-99d818874ed0",
+            "row": 38,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-99eb0a9a9b65",
+            "row": 39,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-99fe25a9589a",
+            "row": 39,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9a00a8625154",
+            "row": 39,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9a1bf04b595c",
+            "row": 39,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9a2e49bf4fe4",
+            "row": 39,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9a3cf2801d21",
+            "row": 39,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9a4f1361f25c",
+            "row": 39,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9a5ec5c3752e",
+            "row": 39,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9a6719d2fa76",
+            "row": 39,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9a791255653c",
+            "row": 39,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9a8c95c5e261",
+            "row": 40,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9a9b76034e0f",
+            "row": 40,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9aa9fbd0fb61",
+            "row": 40,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9ab4daac5df9",
+            "row": 40,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbd9-7552-9352-9acac6384815",
+            "row": 40,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-85447acbe34b",
+            "row": 40,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-8552a9415799",
+            "row": 40,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-856c3bcf28a2",
+            "row": 40,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-85727478a535",
+            "row": 40,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-858c6b472e9a",
+            "row": 40,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-8591e863bdca",
+            "row": 41,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-85a99e8d80fd",
+            "row": 41,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-85bf83a17223",
+            "row": 41,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-85c3cd3e37be",
+            "row": 41,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-85d1380f3b55",
+            "row": 41,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-85ee7e94495d",
+            "row": 41,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-85f8aa5305f5",
+            "row": 41,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-8601f6ea6da8",
+            "row": 41,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-861df68fd011",
+            "row": 41,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-862c90f9dea8",
+            "row": 41,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-86356e62df1b",
+            "row": 42,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-864c62db7193",
+            "row": 42,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-86576fb69645",
+            "row": 42,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-86676e0b1cf4",
+            "row": 42,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-867c9fa49720",
+            "row": 42,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-868f504220f0",
+            "row": 42,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-8699f9ca0ce4",
+            "row": 42,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-86a98a9469f0",
+            "row": 42,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-86b7dbb98894",
+            "row": 42,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-86cc10e16f5e",
+            "row": 42,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-86dfc4ac91ab",
+            "row": 43,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-86edd11f514e",
+            "row": 43,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-86fcb41b01b4",
+            "row": 43,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-8702be2718b1",
+            "row": 43,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-8710557ff53e",
+            "row": 43,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-872538adfbcc",
+            "row": 43,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-8736169a1bb3",
+            "row": 43,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-874c757d2e4e",
+            "row": 43,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-875d7afb4daa",
+            "row": 43,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-876070d4fc5d",
+            "row": 43,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-8774372fcfb5",
+            "row": 44,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-878b5a2f5ce7",
+            "row": 44,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-8799d53b8c10",
+            "row": 44,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-87a66508dff5",
+            "row": 44,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-87bce9c990fc",
+            "row": 44,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-87ce9affd16f",
+            "row": 44,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-87dc04dd4004",
+            "row": 44,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-87eb9fe8ca97",
+            "row": 44,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-87fdc58d6f00",
+            "row": 44,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-8807385ad8f7",
+            "row": 44,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 1,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-881ee3f361bd",
+            "row": 45,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 2,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-882695b25962",
+            "row": 45,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 3,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-88321d4bfa2d",
+            "row": 45,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 4,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-88460da494b9",
+            "row": 45,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 5,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-885b9e036908",
+            "row": 45,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 6,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-886e97032df6",
+            "row": 45,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 7,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-887e71a53565",
+            "row": 45,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 8,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-888723a9f65f",
+            "row": 45,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 9,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-88972d34039f",
+            "row": 45,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            },
+            {
+            "aeroplaneId": "01938cfc-cb70-7c00-9327-51433e30395f",
+            "column": 10,
+            "createdAt": "2024-12-03T14:46:37.777Z",
+            "flightId": "01938cfc-cb82-7291-b66a-acbba1d3a6f6",
+            "id": "01938cfc-cbda-76e3-a6d9-88ac4d7b6d4c",
+            "row": 45,
+            "status": "AVAILABLE",
+            "updatedAt": "2024-12-03T14:46:37.777Z"
+            }
+        ],
+    "updatedAt": "2024-12-03T14:46:37.698Z"
+    },
+    "message": "Successfully get flight"
+}

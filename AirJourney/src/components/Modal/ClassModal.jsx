@@ -4,14 +4,14 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const ClassModal = ({ setShowClassModal, classType, setClassType }) => {
     const classList = [
-        { name: "Economy", price: "IDR 4.950.000" },
-        { name: "Premium Economy", price: "IDR 7.550.000" },
-        { name: "Business", price: "IDR 29.220.000" },
-        { name: "First", price: "IDR 87.620.000" },
+        { name: "Economy" },
+        { name: "Premium Economy" },
+        { name: "Business" },
+        { name: "First Class" },
     ];
 
     return (
-        <div className="absolute inset-y-16 z-2 w-80 mx-auto h-fit rounded-xl p-4 bg-white">
+        <div className="absolute -inset-x-1/2 md:inset-x-0 md:inset-y-16 z-2 w-fit md:mx-auto h-fit rounded-xl p-4 bg-white">
             <div className="flex justify-end mb-4">
                 <CloseIcon
                     className="cursor-pointer"
@@ -26,17 +26,8 @@ const ClassModal = ({ setShowClassModal, classType, setClassType }) => {
                             className={`flex items-center justify-between border-b rounded-lg py-2 px-4 ${classType == item.name ? "bg-darkblue5 text-white" : ""}`}
                             onClick={() => setClassType(item.name)}
                         >
-                            <div className="flex flex-col text-left">
+                            <div className="flex flex-col text-left w-36 sm:w-52">
                                 <span className="font-bold">{item.name}</span>
-                                <span
-                                    className={
-                                        classType == item.name
-                                            ? "text-white"
-                                            : "text-darkblue4"
-                                    }
-                                >
-                                    {item.price}
-                                </span>
                             </div>
                             {classType == item.name && (
                                 <CheckCircleIcon

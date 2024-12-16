@@ -80,8 +80,8 @@ ol {
     padding: 5px;
     position: relative;
 }
-.seat:nth-child(n) {
-    margin-right: 0;
+.seat:nth-child(3) {
+    margin-right: 14.28571428571429%;
 }
 .seat input[type="checkbox"] {
     position: absolute;
@@ -92,7 +92,6 @@ ol {
     animation-name: rubberBand;
     animation-duration: 300ms;
     animation-fill-mode: both;
-    color:white;
 }
 .seat input[type="checkbox"]:disabled + label {
     background: #dddddd;
