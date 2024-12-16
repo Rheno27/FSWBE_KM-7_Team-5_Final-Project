@@ -16,6 +16,7 @@ export const Route = createLazyFileRoute("/users/private/checkout/")({
 
 function Checkout() {
     const navigate = useNavigate();
+    const { token } = useSelector((state) => state.auth);
     const { passenger } = useSelector((state) => state.searchQuery);
     const { flightId } = useSelector((state) => state.searchQuery);
     const { returnFlightId } = useSelector((state) => state.searchQuery);
@@ -32,10 +33,17 @@ function Checkout() {
     const [title, setTitle] = useState("");
     const [passengerTypes, setPassengerTypes] = useState([]);
 
+    useEffect(() => {
+        if (!token) {
+            navigate({ to: `/login` });
+            return;
+        }
+    }, [token]);
+
     const { mutate: postTransaction } = useMutation({
         mutationFn: (data) => createTransaction(data),
-        onSuccess: () => {
-            navigate({ to: `/users/private/payment` });
+        onSuccess: (data) => {
+            navigate({ to: `/users/private/payment/${data.id}` });
             return;
         },
         onError: (error) => {
@@ -158,6 +166,7 @@ function Checkout() {
             data.returnFlightId = returnFlightId;
         }
         postTransaction(data);
+
     };
 
     return (
