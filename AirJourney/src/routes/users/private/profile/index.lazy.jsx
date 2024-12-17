@@ -11,6 +11,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setUser, setToken } from '../../../../redux/slices/auth'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { getUser, updateUser } from '../../../../services/user'
+import { toast } from 'react-toastify'
+import { useQueryClient } from '@tanstack/react-query'
 import ProtectedRoute from '../../../../redux/slices/ProtectedRoute'
 
 export const Route = createLazyFileRoute('/users/private/profile/')({
@@ -19,6 +21,7 @@ export const Route = createLazyFileRoute('/users/private/profile/')({
 
 function EditProfile() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const { token } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
@@ -53,7 +56,8 @@ function EditProfile() {
   const { mutate: userUpdate, isPending: isUpdating } = useMutation({
     mutationFn: updateUser,
     onSuccess: () => {
-      navigate({ to: '/' })
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      toast.success("Profil berhasil diperbarui")
     },
     onError: (error) => {
       toast.error(error.message)
