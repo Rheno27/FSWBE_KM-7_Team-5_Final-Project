@@ -23,12 +23,8 @@ const PassengerForm = ({
         enabled: !!token,
     });
 
-    const refetchData = async () => {
-        await queryClient.invalidateQueries({ queryKey: ["user"] });
-    }
-
     return (
-        <Col lg={7} refetchData={refetchData}>
+        <Col lg={7}>
             <Card className="shadow-sm mb-4" style={{ borderRadius: "8px" }}>
                 <Card.Body>
                     <div 
