@@ -4,8 +4,9 @@ import { Row, Col, Button, Card, Alert, Form } from "react-bootstrap";
 import { useState } from "react";
 import { getTransactionById } from "../../services/order-history/index";
 import { Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 
-export const OrderDetailCard = ({ transactionId }) => {
+export const OrderDetailCard = ({ transactionId, setTotalPrice }) => {
 
   const [transactions, setTransactions] = useState(null);
 
@@ -20,7 +21,6 @@ export const OrderDetailCard = ({ transactionId }) => {
       toast.error("An error occurred while fetching the transaction data");
     },
   });
-  console.log("transaction?.data", transaction?.data);
 
   // Function to count passengers by type
   const countPassengersByType = (passengerArray) => {
@@ -30,34 +30,29 @@ export const OrderDetailCard = ({ transactionId }) => {
     }
     return passengerArray.reduce((counts, passenger) => {
       const type = passenger.type; // Extract type (e.g., ADULT, CHILD)
-      // const price = passenger.totalPrice || 0;
-
-      // Initialize the object for the type if it doesn't exist
-      // if (!result[type]) {
-      //   result[type] = { count: 0, totalPrice: 0 };
-      // }
       // Increment count and accumulate totalPrice for each type
       counts[type] = (counts[type] || 0) + 1;
-      // result[type].totalPrice += price;
       return counts;
-      // return result;
     }, {}); // Initialize result as an empty object
   };
 
-  const flightPrice = transaction?.data?.departureFlight?.price || 0; // Default to 0 if undefined
   const passengerCounts = countPassengersByType(
     transaction?.data?.passenger || []
   );
 
-  console.log(passengerCounts);
+  const flightPrice = (transaction?.data?.departureFlight?.price + transaction?.data?.returnFlight?.price) || 0;
+
   const adultTotalPrice = flightPrice * (passengerCounts.ADULT || 0);
   const childTotalPrice = flightPrice * (passengerCounts.CHILD || 0);
-  const infantTotalPrice = 0;
-  const totalTax = (adultTotalPrice + infantTotalPrice + childTotalPrice) * 0.1;
+  const infantTotalPrice = flightPrice * 0;
+  const totalTax = (adultTotalPrice + childTotalPrice+ infantTotalPrice) * 0.1;
 
   // Calculate total price for the entire transaction
-  const totalPrice =
-    adultTotalPrice + childTotalPrice + infantTotalPrice + totalTax;
+  const totalPrice = adultTotalPrice + childTotalPrice + infantTotalPrice + totalTax;
+
+  useEffect(() => {
+    setTotalPrice(totalPrice);
+  }, [totalPrice, setTotalPrice]);
 
   const statusBadge = {
     fontFamily: "Poppins, sans-serif",
@@ -85,15 +80,18 @@ export const OrderDetailCard = ({ transactionId }) => {
 
   const TruncatableText = ({ text, maxLength = 10 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-
+  
     const toggleText = () => setIsExpanded(!isExpanded);
-
+  
+    // Fallback for undefined or null text
+    const safeText = text || "";
+  
     return (
       <span
         onClick={toggleText}
         style={{ cursor: "pointer", color: "#7126B5", fontWeight: "bold" }}
       >
-        {isExpanded ? text : `${text.slice(0, maxLength)}...`}
+        {isExpanded ? safeText : `${safeText.slice(0, maxLength)}...`}
       </span>
     );
   };
@@ -130,7 +128,7 @@ export const OrderDetailCard = ({ transactionId }) => {
           </Col>
         </Row>
         <h6>
-          Booking Code : {/* <TruncatableText text={transaction?.data?.id} maxLength={15} /> */}
+          Booking Code : <TruncatableText text={transaction?.data?.id || "Not found"} maxLength={15} />
         </h6>
         <div className="mt-3">
           {/* Departure Flight Section */}
@@ -251,8 +249,7 @@ export const OrderDetailCard = ({ transactionId }) => {
                 {transaction?.data?.passenger?.length > 0 ? (
                   transaction.data.passenger.map((passenger, index) => (
                     <div key={passenger.id} className="d-flex flex-column">
-                      <span style={{color: "#7126B5"}}>{index + 1} : {passenger.title} {passenger.firstName} {passenger.familyName} | ui9752H</span>
-                      {/* <span>ID : <TruncatableText text={passenger.id} maxLength={15} /></span> */}
+                      <span style={{color: "#7126B5"}}>{index + 1} : {passenger.title} {passenger.firstName} {passenger.familyName} | <TruncatableText text={passenger.id} maxLength={10} /></span>
                     </div>
                   ))
                 ) : (
@@ -264,17 +261,11 @@ export const OrderDetailCard = ({ transactionId }) => {
         </div>
 
         <Row className="my-2">
-          {/* {Object.entries(passengerCounts).map(([type, { count, totalPrice }]) => (
-                    <div key={type}>
-                      <span>{count} {type} {totalPrice}<br /></span>
-                  </div>
-              ))} */}
           <Col xs={7}>
             {Object.entries(passengerCounts).map(([type, count]) => (
               <div key={type}>
                 <span>
                   {count} {type}
-                  <br />
                 </span>
               </div>
             ))}
@@ -282,11 +273,9 @@ export const OrderDetailCard = ({ transactionId }) => {
           </Col>
           <Col xs={5} className="text-end align-self-start">
             <div className="d-flex flex-column">
-              {passengerCounts.ADULT > 0 && <span>IDR {adultTotalPrice}</span>}
-              {passengerCounts.CHILD > 0 && <span>IDR {childTotalPrice}</span>}
-              {passengerCounts.INFANT > 0 && (
-                <span>IDR {infantTotalPrice}</span>
-              )}
+              {passengerCounts.ADULT > 0 && <span>IDR {new Intl.NumberFormat("id-ID").format(adultTotalPrice)}</span>}
+              {passengerCounts.INFANT > 0 && <span>IDR {new Intl.NumberFormat("id-ID").format(infantTotalPrice)}</span>}
+              {passengerCounts.CHILD > 0 && <span>IDR {new Intl.NumberFormat("id-ID").format(childTotalPrice)}</span>}
               <span>IDR {totalTax}</span>
             </div>
           </Col>

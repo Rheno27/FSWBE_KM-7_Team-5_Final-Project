@@ -7,55 +7,8 @@ import DateFilterModal from "../Modal/DateFilterModal";
 export const HeaderNav = ({ selectedRange, setSelectedRange, onFilter }) => {
   // State for modals visibility
   const [isDateModalOpen, setDateModalOpen] = useState(false);
-  // const [isSearchModalOpen, setSearchModalOpen] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const buttonRef = useRef(null);
-  // const [selectedRange, setSelectedRange] = useState(null);
-  // const [filteredCards, setFilteredCards] = useState(cardData);
-
-  // Filter Logic
-  // const handleFilter = () => {
-  //   if (!selectedRange || !selectedRange.from) {
-  //     setFilteredCards(cardData); // Show all cards if no filter is applied
-  //     return;
-  //   }
-
-  //   const { from, to } = selectedRange;
-
-  //   const filtered = cardData.filter((card) => {
-  //     const createdAtDate = new Date(card.createdAt);
-  //     return (
-  //       createdAtDate >= new Date(from) &&
-  //       (!to || createdAtDate <= new Date(to))
-  //     );
-  //   });
-
-  //   setFilteredCards(filtered);
-  // };
-
-  // Handlers to show modals
-  // const handleSearchModalShow = () => {
-  //   if (buttonRef.current) {
-  //     const rect = buttonRef.current.getBoundingClientRect();
-  //     const isSmallScreen = window.innerWidth <= 768; // Define breakpoint for small screens
-    
-  //     if (isSmallScreen) {
-  //       // Center modal on smaller screens
-  //       setPosition({
-  //         top: window.innerHeight / 2.45 - 150, // Vertically centered (assuming modal height is 300px)
-  //         left: window.innerWidth / 2 - 150, // Horizontally centered (assuming modal width is 300px)
-  //       });
-  //     } else {
-  //       // Position relative to button for larger screens
-  //       setPosition({
-  //         top: rect.bottom + window.scrollY + 10, // Offset below the button
-  //         left: rect.left + rect.width / 2 - 300, // Centered (assuming modal width is 300px)
-  //       });
-  //     }
-  //   }
-    
-  //   setSearchModalOpen(!isSearchModalOpen)
-  // };
   const handleDateModalShow = () => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
@@ -137,16 +90,6 @@ export const HeaderNav = ({ selectedRange, setSelectedRange, onFilter }) => {
                 <FilterAlt fontSize="medium" className="me-1" />
                 Filter
             </Button>
-            {/* <Search
-            ref={buttonRef}
-            onClick={handleSearchModalShow}
-                fontSize="large"
-                sx={{
-                  color: "#7126b4",
-                  cursor: "pointer",
-                  marginTop: "5px",
-                }}
-              /> */}
           </Col>
 
           {/* Date Filter Modal */}
@@ -161,12 +104,6 @@ export const HeaderNav = ({ selectedRange, setSelectedRange, onFilter }) => {
             selectedRange={selectedRange}
             setSelectedRange={setSelectedRange}
           />
-
-          {/* // Search Modal
-          <SearchModal isOpen={isSearchModalOpen} onClose={searchModalClose} position={{
-              top: `${position.top}px`,
-              left: `${position.left}px`,
-            }} /> */}
         </Row>
       </Col>
     </Row>

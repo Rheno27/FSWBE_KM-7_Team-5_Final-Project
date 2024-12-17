@@ -17,11 +17,8 @@ export const Route = createLazyFileRoute("/users/private/order-history/")({
 function OrderHistory() {
   const navigate = useNavigate();
   const [selectedTransactionId, setSelectedTransactionId] = useState(null); // Track the selected card
-  // State for the selected date range
   const [selectedRange, setSelectedRange] = useState(null);
-
-  // State for filtered cards
-  const [filteredCards, setFilteredCards] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const handleFilter = (range) => {
     setSelectedRange(range); // Update the selectedRange state with the new date range
@@ -32,8 +29,17 @@ function OrderHistory() {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["transactions"],
-    queryFn: () => getAllTransactions(), // Fetch all transactions for the user
+    queryKey: [
+      "transactions",
+      {
+        startDate: selectedRange?.from?.toISOString().split("T")[0],
+        endDate: selectedRange?.to?.toISOString().split("T")[0],
+      },
+    ],
+    queryFn: () => getAllTransactions({
+      startDate: selectedRange?.from?.toISOString().split("T")[0],
+      endDate: selectedRange?.to?.toISOString().split("T")[0],
+    }), // Fetch all transactions for the user
     onError: (error) => {
       console.error("Error fetching transaction:", error);
       toast.error(
@@ -43,30 +49,18 @@ function OrderHistory() {
     },
     onSuccess: (transactions) => {
       // Perform the side effects here
-      const grouped = groupOrdersByMonth([transactions]); // Group the transactions by month
-      console.log(grouped);
-      setSelectedTransactionId(transactions); // Set the selected transaction
+      const grouped = groupHistoriesByMonth(transactions.data); 
+      setSelectedTransactionId(transactions.data); // Set the selected transaction
     },
   });
-  const isAvailable = transactions?.data.length > 0;
-  // console.log("Before function:");
-  // console.log("Is Array:", Array.isArray(transactions));
-  // console.log("Type:", typeof transactions);
-  // console.log("Data:", transactions);
 
-  // if (isLoading) return <div>Loading...</div>
-  // Ensure transactions is the array before passing it to the function
-  const transactionsArray = Array.isArray(transactions?.data)
-    ? transactions.data
-    : [];
-  console.log("Transactions before grouping:", transactionsArray);
+  const isAvailable = transactions?.data?.length > 0;
+
+  const transactionsArray = Array.isArray(transactions?.data) ? transactions.data : [];
 
   function groupHistoriesByMonth(transactions = []) {
     return transactions.reduce((grouped, { createdAt, ...rest }) => {
-      //console.log("Transaction:", transaction);
-      // Extract year and month from the created_at timestamp
       const date = new Date(createdAt);
-      console.log("Parsed Date:", date);
       if (isNaN(date)) {
         console.error("Invalid date for transaction:", createdAt);
         return grouped;
@@ -83,44 +77,25 @@ function OrderHistory() {
     }, {});
   }
 
-  // const handleFilter = (selectedRange) => {
-  //   setSelectedRange(selectedRange);
-
-  //   if (selectedRange) {
-  //     const filtered = transactions?.data?.filter((transaction) => {
-  //       const createdAt = new Date(transaction.createdAt); // Assume createdAt is the field to filter
-  //       return (
-  //         createdAt >= new Date(selectedRange.from) &&
-  //         createdAt <= new Date(selectedRange.to)
-  //       );
-  //     }) || [];
-
-  //     setFilteredCards(filtered);
-  //   } else {
-  //     setFilteredCards(transactions); // If no date range selected, show all cards
-  //   }
-  // };
-
   // Filter transactions based on the selected date range
   const filteredTransactions = selectedRange
   ? transactionsArray.filter((transaction) => {
       const createdAt = new Date(transaction.createdAt);
-      return (
-        createdAt >= new Date(selectedRange.from) &&
-        createdAt <= new Date(selectedRange.to)
-      );
+      const fromDate = new Date(selectedRange.from);
+      const toDate = new Date(selectedRange.to);
+
+      // Adjust the comparison logic for single-day ranges
+      if (fromDate.getTime() === toDate.getTime()) {
+        // For a single day range, check if createdAt falls on the selected date
+        return createdAt.setHours(0, 0, 0, 0) === fromDate.setHours(0, 0, 0, 0); // Set hours to 00:00 to compare dates only
+      } else {
+        // For a date range, check if createdAt falls within the range
+        return createdAt >= fromDate && createdAt <= toDate;
+      }
     })
   : transactionsArray; // Show all transactions if no date range is selected
 
   const groupedFilteredTransactions = groupHistoriesByMonth(filteredTransactions);
-
-  // console.log('groupedTransactions', groupedTransactions);
-  console.log("After function:");
-  // console.log("Transactions data:", transactions, typeof transactions);
-  console.log("Is Array:", Array.isArray(transactions));
-  console.log("Type:", typeof transactions);
-  console.log("Data:", transactions);
-  console.log("isArray:", transactions)
 
   const statusBadge = {
     fontFamily: "Poppins, sans-serif",
@@ -185,7 +160,9 @@ function OrderHistory() {
       onFilter={handleFilter} 
       />
       <Container>
-      {isAvailable ? (
+      {isLoading ? (
+          <div>Loading...</div> // Show loading state
+        ) : isAvailable && Object.keys(groupedFilteredTransactions).length > 0 ? (
         <Container>
           <Row className="justify-content-center gap-1 my-4">
             <Col lg={6} md={6}>
@@ -211,20 +188,18 @@ function OrderHistory() {
                         style={transaction.id === selectedTransactionId ? activeCard : { cursor: 'pointer' }}
                       >
                         <Alert
-                          className={`bg-${getPaymentStatus(transaction?.payment?.status || 'untracked')} text-white`}
+                          className={`bg-${getPaymentStatus(transaction?.payment?.status || 'untracked')} text-white mb-0`}
                           style={statusBadge}
                         >
                           {capitalizeFirstLetter(transaction?.payment?.status || 'Untracked')}
                         </Alert>
 
                         {/* Departure flight section */}
-                        <h6 className="mb-2">
-                          Departure Flight - {" "}
-                          {capitalizeFirstLetter(
-                            transaction?.departureFlight?.class || "Not found"
-                          )}
-                        </h6>
                         <Row className="align-items-center fs-8">
+                          <span className="text-center text-muted mb-3" style={{fontSize:'0.9rem'}}>--- Departure Flight {" "}
+                          ({capitalizeFirstLetter(
+                            transaction?.departureFlight?.class || "Not found"
+                          )}) ---</span>
                           <Col xs={1} className="m-0">
                             <Place color="secondary" />
                           </Col>
@@ -300,13 +275,11 @@ function OrderHistory() {
                         {/* Return flight section */}
                         {transaction?.returnFlight && (
                           <>
-                            <h6 className="my-2">
-                              Return Flight - {" "}
-                              {capitalizeFirstLetter(
-                                transaction?.returnFlight?.class || "Not found"
-                              )}
-                            </h6>
                             <Row className="align-items-center fs-8">
+                              <span className="text-center text-muted mb-3" style={{fontSize:'0.9rem'}}>---- Return Flight {" "}
+                              ({capitalizeFirstLetter(
+                                transaction?.returnFlight?.class || "Not found"
+                              )}) ----</span>
                               <Col xs={1} className="m-0">
                                 <Place/>
                               </Col>
@@ -393,13 +366,13 @@ function OrderHistory() {
                               />
                             </span>
                           </Col>
-                          <Col xs={5}>
+                          <Col xs={5} className="text-end">
                             <span>
-                              Total Price : {" "}
-                              <b>
+                              Total : {" "}
+                              <b style={{ color: "#7126B5" }}>
                                 IDR{" "}
                                 {new Intl.NumberFormat("id-ID").format(
-                                  transaction?.amount
+                                  totalPrice
                                 )}
                               </b>
                             </span>
@@ -412,10 +385,11 @@ function OrderHistory() {
               )}
             </Col>
             <Col lg={4} md={5} className="mt-4">
-              {selectedTransactionId && (
-                <OrderDetailCard transactionId={selectedTransactionId} />
-                // <OrderDetailCard />
-              )}
+            {selectedTransactionId ? (
+              <OrderDetailCard transactionId={selectedTransactionId} setTotalPrice={setTotalPrice}/>
+            ) : (
+              <p style={{color:'#7126B5'}} className="text-center my-4">Pilih riwayat untuk menampilkan detail</p>
+            )}
             </Col>
           </Row>
         </Container>
