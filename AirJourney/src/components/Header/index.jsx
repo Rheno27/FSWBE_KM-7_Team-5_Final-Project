@@ -71,7 +71,7 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromS
       if (date === selectedArrivalDate || date < new Date(selectedDate).toLocaleDateString("en-CA")) return;
       selectedDayDate = date;
       setSelectedArrivalDate(date);
-      fetchFlightsData(true,selectedDayDate); 
+      fetchFlightsData(true,selectedDayDate, false, true); 
     }
     else{
       if (date === selectedDate || date < new Date().toLocaleDateString("en-CA")) return;

@@ -58,7 +58,7 @@ const FlightList = ({
     if (isReturn && !isFromSelected) {
       setIsFromSelected(true);
       setSelectedFlightId(flightId);
-      fetchFlightsData(true, returnDate, true);
+      fetchFlightsData(true, returnDate, true, true);
       return;
     } else {
       if (isReturn && isFromSelected) {
