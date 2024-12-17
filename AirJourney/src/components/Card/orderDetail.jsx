@@ -103,9 +103,9 @@ export const OrderDetailCard = ({ transactionId, setTotalPrice }) => {
       case 'CANCELLED':
         return 'secondary';
       case 'PENDING':
-        return 'warning';
-      default:
         return 'danger';
+      default:
+        return 'warning';
     }
   }
 
@@ -276,7 +276,18 @@ export const OrderDetailCard = ({ transactionId, setTotalPrice }) => {
               {passengerCounts.ADULT > 0 && <span>IDR {new Intl.NumberFormat("id-ID").format(adultTotalPrice)}</span>}
               {passengerCounts.INFANT > 0 && <span>IDR {new Intl.NumberFormat("id-ID").format(infantTotalPrice)}</span>}
               {passengerCounts.CHILD > 0 && <span>IDR {new Intl.NumberFormat("id-ID").format(childTotalPrice)}</span>}
-              <span>IDR {totalTax}</span>
+              <span>
+              {paymentStatus === "CANCELLED" ? (
+                <span>--</span>
+              ) : (
+                <span>
+                  IDR{" "}
+                  {new Intl.NumberFormat("id-ID").format(
+                    totalTax
+                  )}
+                </span>
+              )}
+              </span>
             </div>
           </Col>
         </Row>
@@ -286,9 +297,16 @@ export const OrderDetailCard = ({ transactionId, setTotalPrice }) => {
             <h5>Total :</h5>
           </Col>
           <Col className="text-end align-self-start">
-            <h5 style={{ color: "#7126B5", fontWeight: "bold" }}>
-              IDR {totalPrice}
-            </h5>
+            {paymentStatus === "CANCELLED" ? (
+              <span>--</span>
+            ) : (
+              <h5 style={{ color: "#7126B5", fontWeight: "bold" }}>
+                IDR{" "}
+                {new Intl.NumberFormat("id-ID").format(
+                  totalPrice
+                )}
+              </h5>
+            )}
           </Col>
         </Row>
             {paymentStatus === "SUCCESS" && (
@@ -316,7 +334,7 @@ export const OrderDetailCard = ({ transactionId, setTotalPrice }) => {
                 href={`/users/private/payment/`}
                 type="button"
                 style={{
-                  backgroundColor: "#FFA500",
+                  backgroundColor: "#dc3545",
                   border: "none",
                   borderRadius: "8px",
                   width: "100%",

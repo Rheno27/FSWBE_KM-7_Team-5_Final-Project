@@ -9,6 +9,7 @@ import { getAllTransactions } from "../../../../services/order-history";
 import { OrderDetailCard } from "../../../../components/Card/orderDetail";
 import { toast } from "react-toastify";
 import notFound from '../../../../assets/img/notfound.png'
+import { useEffect } from "react";
 
 export const Route = createLazyFileRoute("/users/private/order-history/")({
   component: OrderHistory,
@@ -19,6 +20,7 @@ function OrderHistory() {
   const [selectedTransactionId, setSelectedTransactionId] = useState(null); // Track the selected card
   const [selectedRange, setSelectedRange] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
+  const token = localStorage.getItem("token");
 
   const handleFilter = (range) => {
     setSelectedRange(range); // Update the selectedRange state with the new date range
@@ -146,11 +148,27 @@ function OrderHistory() {
       case 'CANCELLED':
         return 'secondary';
       case 'PENDING':
-        return 'warning';
-      default:
         return 'danger';
+      default:
+        return 'warning';
     }
   }
+
+  useEffect(() => {
+    // Show toast when token is missing or empty
+    if (!token || token.trim() === "") {
+      toast.error("Unauthorized, redirect to homepage" , {
+        position: "bottom-center",  // Toast will appear at the bottom-center
+        autoClose: 6000,  
+      });
+      const timer = setTimeout(() => {
+        navigate({ to: "/" }); // Redirect to the homepage
+      }, 6000);
+  
+      // Cleanup timer when component unmounts or re-renders
+      return () => clearTimeout(timer);
+    }
+  }, [token, navigate]);  
 
   return (
     <div>
@@ -160,7 +178,20 @@ function OrderHistory() {
       onFilter={handleFilter} 
       />
       <Container>
-      {isLoading ? (
+      {!token || token.trim() === "" ? (
+          <div className="d-flex flex-column align-items-center mt-5 py-5">
+            <Col xs={12} sm={10} md={7} lg={6} className="text-center my-2 mt-5">
+              <p
+                style={{ color: '#a06ece', fontWeight: 500 }}
+              >
+                Oops! Kamu belum login! <br />
+                <span className="text-dark my-2">
+                Login untuk bisa mengakses halaman ini
+                </span>
+              </p>
+            </Col>
+          </div>
+        ) : isLoading ? (
           <div>Loading...</div> // Show loading state
         ) : isAvailable && Object.keys(groupedFilteredTransactions).length > 0 ? (
         <Container>
@@ -369,12 +400,16 @@ function OrderHistory() {
                           <Col xs={5} className="text-end">
                             <span>
                               Total : {" "}
-                              <b style={{ color: "#7126B5" }}>
-                                IDR{" "}
-                                {new Intl.NumberFormat("id-ID").format(
-                                  totalPrice
-                                )}
-                              </b>
+                              {transaction?.payment?.status === "CANCELLED" ? (
+                                <span>-</span>
+                              ) : (
+                                <b style={{ color: "#7126B5" }}>
+                                  IDR{" "}
+                                  {new Intl.NumberFormat("id-ID").format(
+                                    totalPrice
+                                  )}
+                                </b>
+                              )}
                             </span>
                           </Col>
                         </Row>
