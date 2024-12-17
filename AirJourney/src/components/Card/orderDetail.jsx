@@ -113,8 +113,10 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
   const paymentStatus = transaction?.data?.payment?.status || 'untracked';
 
   const handlePaymentRedirect = () => {
+    let url = `/users/private/payment/${id}`;
     if (id) {
-      navigate({ to : '/users/private/payment/${id}'});
+      navigate({ to : url});
+      // console.log("navigate to payment page", url);
     } else {
       toast.error("Transaction ID is missing!");
     }
