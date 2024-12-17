@@ -421,7 +421,7 @@ function OrderHistory() {
             </Col>
             <Col lg={4} md={5} className="mt-4">
             {selectedTransactionId ? (
-              <OrderDetailCard transactionId={selectedTransactionId} setTotalPrice={setTotalPrice}/>
+              <OrderDetailCard id={selectedTransactionId} setTotalPrice={setTotalPrice}/>
             ) : (
               <p style={{color:'#7126B5'}} className="text-center my-4">Pilih riwayat untuk menampilkan detail</p>
             )}

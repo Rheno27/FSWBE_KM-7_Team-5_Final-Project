@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const getTransactionById = async (transactionId) => {
+export const getTransactionById = async (id) => {
   const token = localStorage.getItem("token");
-  let url = `${import.meta.env.VITE_API_URL}/transactions/${transactionId}`;
+  let url = `${import.meta.env.VITE_API_URL}/transactions/${id}`;
 
   try {
     const response = await axios.get(url, {

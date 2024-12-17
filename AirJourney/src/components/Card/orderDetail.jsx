@@ -3,17 +3,18 @@ import { useQuery } from "@tanstack/react-query";
 import { Row, Col, Button, Card, Alert, Form } from "react-bootstrap";
 import { useState } from "react";
 import { getTransactionById } from "../../services/order-history/index";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-export const OrderDetailCard = ({ transactionId, setTotalPrice }) => {
+export const OrderDetailCard = ({ id, setTotalPrice }) => {
 
   const [transactions, setTransactions] = useState(null);
+  const navigate = useNavigate();
 
   const { data: transaction } = useQuery({
-    queryKey: ["transaction", transactionId],
-    queryFn: () => getTransactionById(transactionId),
-    enabled: !!transactionId,
+    queryKey: ["transaction", id],
+    queryFn: () => getTransactionById(id),
+    enabled: !!id,
     onSuccess: (transaction) => {
       setTransactions(transaction); // Update state directly when the query succeeds
     },
@@ -110,6 +111,14 @@ export const OrderDetailCard = ({ transactionId, setTotalPrice }) => {
   }
 
   const paymentStatus = transaction?.data?.payment?.status || 'untracked';
+
+  const handlePaymentRedirect = () => {
+    if (id) {
+      navigate({ to : '/users/private/payment/${id}'});
+    } else {
+      toast.error("Transaction ID is missing!");
+    }
+  };
 
   return (
     <Card className="p-3 shadow-sm rounded-3 mt-1 w-100" style={{border: '1px solid #7126B5'}}>
@@ -330,8 +339,7 @@ export const OrderDetailCard = ({ transactionId, setTotalPrice }) => {
 
             {paymentStatus === "PENDING" && (
               <Button
-                as={Link}
-                href={`/users/private/payment/`}
+                onClick={handlePaymentRedirect}
                 type="button"
                 style={{
                   backgroundColor: "#dc3545",
