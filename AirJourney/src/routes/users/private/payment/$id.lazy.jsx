@@ -4,7 +4,6 @@ import { Row, Col, Card, Form, Button, Container } from 'react-bootstrap'
 import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
 import { AlertBox } from '../../../../components/ui/alertBox.jsx'
 import { toast } from "react-toastify";
-import styles from './payment.module.css'
 import { useQuery } from '@tanstack/react-query'
 import { OrderDetailCard } from "../../../../components/PaymentDetails/index.jsx";
 import { getDetailTransaction } from '../../../../services/transaction/index.js'
