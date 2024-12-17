@@ -23,11 +23,22 @@ const PassengerForm = ({
         enabled: !!token,
     });
 
+    const refetchData = async () => {
+        await queryClient.invalidateQueries({ queryKey: ["user"] });
+    }
+
     return (
-        <Col lg={7}>
+        <Col lg={7} refetchData={refetchData}>
             <Card className="shadow-sm mb-4" style={{ borderRadius: "8px" }}>
                 <Card.Body>
-                    <h4>Isi Data Diri Pemesan</h4>
+                    <div 
+                    className="data-passenger-title"
+                    style={{
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        textAlign: "left",
+                    }}
+                    >Isi Data Diri Pemesan</div>
                     <div
                         className="p-3 shadow-sm rounded mb-4"
                         style={{
@@ -131,7 +142,14 @@ const PassengerForm = ({
                     key={index}
                 >
                     <Card.Body>
-                        <h4>Data Diri Penumpang </h4>
+                        <div
+                            className="data-passenger-title"
+                            style={{
+                                fontSize: "20px",
+                                fontWeight: "bold",
+                                textAlign: "left",
+                            }}
+                        >Data Diri Penumpang </div>
                         <div
                             className="p-3 shadow-sm rounded mb-4"
                             style={{

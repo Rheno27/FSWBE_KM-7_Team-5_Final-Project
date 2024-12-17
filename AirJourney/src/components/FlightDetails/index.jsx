@@ -3,10 +3,6 @@ import Thumbnail from "../../assets/img/Thumbnail.png";
 import { useQuery } from "@tanstack/react-query";
 import { getFlightByID } from "../../services/flight";
 import { useSelector } from "react-redux";
-import { 
-    KeyboardDoubleArrowDown as KeyboardDoubleArrowDownIcon,
-    ArrowDownward as ArrowDownwardIcon,
-} from '@mui/icons-material';
 import PropTypes from "prop-types";
 
 function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
@@ -38,9 +34,6 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
     const passengerChild = passenger.CHILD
     const passengerInfant = passenger.INFANT
 
-
-
-
     //price
     const allAdultPrice = returnFlightId
         ? detailFlight?.departureFlight?.price * passenger.ADULT +
@@ -59,7 +52,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
 
     return (
         <>
-            <Col lg={5}>
+            <Col lg={5} className="flight-details">
                 <Card className="shadow-sm">
                     <Card.Body>
                     <div className="mb-3"
