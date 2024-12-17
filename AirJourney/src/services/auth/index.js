@@ -1,21 +1,22 @@
+import axios from 'axios'
+
 export const login = async (body) => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
-        body: JSON.stringify(body),
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        }
-    });
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+    body: JSON.stringify(body),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-    const result = await response.json();
+  const result = await response.json();
 
-    if (!response.ok) {
-        throw new Error(result?.message || 'Unknown error');
-    }
+  if (!response.ok) {
+    throw new Error(result?.message || "Unknown error");
+  }
 
-    return result?.data;
+  return result?.data;
 };
-
 
 export const register = async (request) => {
   const formData = new FormData();
@@ -47,4 +48,17 @@ export const register = async (request) => {
     console.error("Registration error:", error.message);
     throw error;
   }
+};
+
+export const resetPassword = async (data) => {
+  let url = `${import.meta.env.VITE_API_URL}/auth/reset-password`;
+  const { token, newPassword } = data;
+
+  const response = await axios.post(
+    url,
+    { token, newPassword },
+    { headers: { 'Content-Type': 'application/json' }}
+  );
+
+  return response.data;
 };

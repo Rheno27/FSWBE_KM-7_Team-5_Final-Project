@@ -36,12 +36,12 @@ function RouteComponent() {
                 .then((res) => {
                     console.log(res);
                     toast.update(toastId, {
-                        render: "Redirecting...",
+                        render: "OTP Terverifikasi",
                         type: "success",
                         autoClose: 3000,
                         isLoading:false,
                     });
-                    navigate({ to: "/" });
+                    navigate({ to: "/login" });
                 })
                 .catch((err) => {
                     console.log(err);
@@ -151,7 +151,7 @@ function RouteComponent() {
                     <button
                         className="bg-darkblue4 hover:bg-darkblue5 rounded-lg text-white p-2 w-full disabled:bg-darkblue3"
                         type="submit"
-                        disabled={isLoading}
+                        disabled={isLoading || otp.length < 6}
                     >
                         Simpan
                     </button>

@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import tiketkuImage from "../assets/img/tiketku.png";
+import background from "../assets/img/login-illust.png";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/slices/auth";
 import { toast } from "react-toastify";
@@ -87,7 +87,7 @@ function Register() {
   };
   
   return (
-    <section style={{ height: "100vh", backgroundColor: "white" }}>
+    <section style={{ height: "100vh", backgroundColor: "white",backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: "center" }}>
       <Row className="h-100 mx-auto gap-0">
         <Col
           lg={6}
@@ -95,11 +95,6 @@ function Register() {
           className="d-none d-lg-block p-0"
           style={{ position: "relative", overflow: "hidden" }}
         >
-          <img
-            src={tiketkuImage}
-            alt="Tiketku - Your Traveling Partner"
-            style={{ width: "100%", height: "100vh", objectFit: "cover" }}
-          />
         </Col>
 
         <Col
@@ -109,6 +104,7 @@ function Register() {
         >
           <Form
             style={{ width: "100%", maxWidth: "452px", padding: "20px" }}
+            className="bg-white bg-opacity-75 border-1 rounded-xl p-5 shadow-sm"
             onSubmit={onSubmit}
           >
             <h4

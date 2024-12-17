@@ -1,37 +1,47 @@
-import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import PropTypes from "prop-types";
-import dummy from "../../data/dummy.json";
+import { Calendar } from "@/components/ui/calendar";
+import {useState } from "react";
 
 const DateModal = ({
     setShowDateModal,
-    setFromDestination,
-    setToDestination,
-    isFromModal,
-    setIsFromModal,
+    isReturn,
+    searchDate,
+    setSearchDate,
 }) => {
-    const destinationList = dummy.destination_query;
-    const destinationClickHandler = (name) => {
-        if (isFromModal) {
-            setFromDestination(name);
-            setIsFromModal(false);
-        } else {
-            setToDestination(name);
-        }
-        setShowDateModal(false);
-    };
+    const [date, setDate] = useState(searchDate);
     return (
-            <div className="absolute inset-16 z-2 w-full max-w-3xl mx-auto h-80 rounded-xl p-4 bg-white">
-                <CloseIcon className="cursor-pointer" onClick={() => setShowDateModal(false)}/>
+        <div className="absolute -inset-x-8 md:inset-16 z-2 w-fit md:mx-auto h-fit rounded-xl p-4 bg-white">
+            <div className="flex justify-between">
+                <span>Pilih Tanggal</span>
+                <CloseIcon
+                    className="cursor-pointer"
+                    onClick={() => setShowDateModal(false)}
+                />
             </div>
+            <div className="flex">
+                <Calendar
+                    selected={date}
+                    onSelect={(value) => {
+                        if (isReturn && !value) {
+                            return;
+                        }
+                        setDate(value);
+                        setSearchDate(value);
+                    }}
+                    mode={isReturn ? "range" : "single"}
+                    disabled={{ before: new Date() }}
+                    required
+                />
+            </div>
+        </div>
     );
 };
 
 DateModal.propTypes = {
     setShowDateModal: PropTypes.any,
-    setFromDestination: PropTypes.any,
-    setToDestination: PropTypes.any,
-    setIsFromModal: PropTypes.any,
-    isFromModal: PropTypes.bool,
+    isReturn: PropTypes.bool,
+    searchDate: PropTypes.any,
+    setSearchDate: PropTypes.any,
 };
 export default DateModal;

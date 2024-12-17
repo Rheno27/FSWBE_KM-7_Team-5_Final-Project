@@ -1,169 +1,203 @@
-import React, { useState } from 'react';
-import { createLazyFileRoute } from "@tanstack/react-router";
-import {
-    Container,
-    Row,
-    Col,
-    Form,
-    Button,
-    Card
-} from 'react-bootstrap';
-// import ProgressBar from '../../../../components/ProgresBar';
-import {
-    ArrowBack as ArrowBackIcon
-} from "@mui/icons-material";
+import { useState, useEffect } from "react";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { Container, Row } from "react-bootstrap";
+import "./style.css";
+import ProgressBar from "../../../../components/ProgresBar";
+import { useMutation } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
+import { createTransaction } from "../../../../services/transaction";
+import PassengerForm from "../../../../components/PassengerForm";
+import { toast } from "react-toastify";
+import FlightDetails from "../../../../components/FlightDetails";
 
-export const Route = createLazyFileRoute('/users/private/checkout/')({
+export const Route = createLazyFileRoute("/users/private/checkout/")({
     component: Checkout,
 });
 
 function Checkout() {
-    const [seatSelection, setSeatSelection] = useState(null);
+    const navigate = useNavigate();
+    const { token } = useSelector((state) => state.auth);
+    const { passenger } = useSelector((state) => state.searchQuery);
+    const { flightId } = useSelector((state) => state.searchQuery);
+    const { returnFlightId } = useSelector((state) => state.searchQuery);
+    const [selectedSeats, setSelectedSeats] = useState([]);
+    const [selectedReturnSeats, setSelectedReturnSeats] = useState([]);
 
-    const handleSeatSelect = (seat) => {
-        setSeatSelection(seat);
+    const [birthDays, setBirthDays] = useState([]);
+    const [expiredAt, setExpiredAt] = useState([]);
+    const [familyNames, setFamilyNames] = useState([]);
+    const [firstNames, setFirstNames] = useState([]);
+    const [nationalities, setNationalities] = useState([]);
+    const [identityNumbers, setIdentityNumbers] = useState([]);
+    const [originCountries, setOriginCountries] = useState([]);
+    const [title, setTitle] = useState("");
+    const [passengerTypes, setPassengerTypes] = useState([]);
+
+    useEffect(() => {
+        if (!token) {
+            navigate({ to: `/login` });
+            return;
+        }
+    }, [token]);
+
+    const { mutate: postTransaction } = useMutation({
+        mutationFn: (data) => createTransaction(data),
+        onSuccess: (data) => {
+            navigate({ to: `/users/private/payment/${data.id}` });
+            return;
+        },
+        onError: (error) => {
+            console.log("error", error);
+            toast.error("Gagal membuat pemesanan");
+        },
+    });
+
+    //passenger
+    const totalPassengers =
+        (passenger?.ADULT || 0) +
+        (passenger?.CHILD || 0) +
+        (passenger?.INFANT || 0);
+    const getPassengerType = (index) => {
+        if (index < passenger?.ADULT) {
+            return "ADULT";
+        } else if (index < passenger?.ADULT + passenger?.CHILD) {
+            return "CHILD";
+        } else {
+            return "INFANT";
+        }
+    };
+
+    useEffect(() => {
+        if (passenger) {
+            const total =
+                (passenger?.ADULT || 0) +
+                (passenger?.CHILD || 0) +
+                (passenger?.INFANT || 0);
+            setBirthDays(Array(total).fill(""));
+            setFamilyNames(Array(total).fill(""));
+            setFirstNames(Array(total).fill(""));
+            setNationalities(Array(total).fill(""));
+            setIdentityNumbers(Array(total).fill(""));
+            setOriginCountries(Array(total).fill(""));
+            setPassengerTypes(Array(total).fill("")); // assuming default type
+        }
+    }, [passenger]);
+
+    const handleInputChange = (index, field, value) => {
+        if (field === "birthday") {
+            setBirthDays((prev) => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === "familyName") {
+            setFamilyNames((prev) => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === "firstName") {
+            setFirstNames((prev) => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === "nationality") {
+            setNationalities((prev) => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === "identityNumber") {
+            setIdentityNumbers((prev) => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === "expiredAt") {
+            setExpiredAt((prev) => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === "originCountry") {
+            setOriginCountries((prev) => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        } else if (field === "passengerType") {
+            setPassengerTypes((prev) => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
+        }
+    };
+
+    //submit
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const passengers = Array.from({ length: totalPassengers }).map(
+            (_, index) => {
+                const passenger = {
+                    birthday: birthDays[index] || "",
+                    departureSeatId: selectedSeats[index],
+                    expiredAt: expiredAt[index] || "",
+                    familyName: familyNames[index] || "",
+                    firstName: firstNames[index] || "",
+                    nationality: nationalities[index] || "",
+                    identityNumber: identityNumbers[index] || "",
+                    originCountry: originCountries[index] || "",
+                    title: title || "",
+                    type: passengerTypes[index] || getPassengerType(index),
+                };
+                if (returnFlightId && selectedReturnSeats) {
+                    passenger.returnSeatId = selectedReturnSeats[index];
+                }
+                return passenger;
+            }
+        );
+        const data = {
+            departureFlightId: flightId,
+            passengers,
+        };
+        if (returnFlightId) {
+            data.returnFlightId = returnFlightId;
+        }
+        postTransaction(data);
+
     };
 
     return (
-        <Container className="">
-        {/* Progress Bar */}
-        <Container
-                fluid
-                className="pt-4 mb-4"
-                style={{
-                    boxShadow: "0px 10px 10px rgba(0, 0, 0, 0.1)",
-                }}
-            >
-                <div className="progress-bar">
-                    <div className="d-flex flex-column align-items-start">
-                        <div className="progress-steps mb-2">
-                            <span className="">Isi Data Diri</span> &gt; <span className="text-dark">Bayar</span> &gt; <span className="text-dark">Selesai</span>
-                        </div>
-                        <div
-                            className="timer bg-danger text-white px-3 py-2 rounded-pill mx-auto"
-                            style={{
-                                width: '100%',
-                                marginBottom: '20px', // Tambahkan jarak di bawah tombol
-                            }}
-                        >
-                            <div className="d-flex justify-content-center align-items-center">
-                                Selesaikan dalam 00:15:00
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <>
+            <Container className="checkout-page">
+                {/* Progress Bar */}
+                <ProgressBar />
+                {/* Checkout Content */}
+                <Row>
+                    {/* Left Side: Form Data Diri */}
+                    <PassengerForm
+                        totalPassengers={totalPassengers}
+                        getPassengerType={getPassengerType}
+                        title={title}
+                        setTitle={setTitle}
+                        handleInputChange={handleInputChange}
+                        selectedSeats={selectedSeats}
+                        setSelectedSeats={setSelectedSeats}
+                        selectedReturnSeats={selectedReturnSeats}
+                        setSelectedReturnSeats={setSelectedReturnSeats}
+                    />
+                    {/* Right Side: Detail Penerbangan */}
+                    <FlightDetails
+                        handleSubmit={handleSubmit}
+                        passenger={passenger}
+                        flightId={flightId}
+                        returnFlightId={returnFlightId}
+                    />
+                </Row>
             </Container>
-
-            {/* Checkout Content */}
-            <Row>
-                {/* Left Side: Form Data Diri */}
-                <Col lg={8}>
-                {/* Data Pemesan */}
-                <Card className="mb-4 shadow-sm">
-                    <Card.Body>
-                    <h3 className="mb-4">Isi Data Pemesan</h3>
-                    <Form>
-                        <Form.Group controlId="fullName" className="mb-3">
-                        <Form.Label>Nama Lengkap</Form.Label>
-                        <Form.Control type="text" placeholder="Nama Lengkap" />
-                        </Form.Group>
-
-                        <Form.Group controlId="email" className="mb-3">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control type="email" placeholder="Email" />
-                        </Form.Group>
-
-                        <Form.Group controlId="phoneNumber" className="mb-3">
-                        <Form.Label>Nomor Telepon</Form.Label>
-                        <Form.Control type="text" placeholder="Nomor Telepon" />
-                        </Form.Group>
-                    </Form>
-                    </Card.Body>
-                </Card>
-
-                {/* Data Penumpang */}
-                <Card className="mb-4 shadow-sm">
-                    <Card.Body>
-                    <h4>Data Penumpang</h4>
-                    <div className="mt-3">
-                        <h5>Data Penumpang 1 - Adult</h5>
-                        <Form>
-                        <Form.Group controlId="title1" className="mb-3">
-                            <Form.Label>Title</Form.Label>
-                            <Form.Select>
-                            <option>Mr.</option>
-                            <option>Mrs.</option>
-                            <option>Miss</option>
-                            </Form.Select>
-                        </Form.Group>
-                        <Form.Group controlId="fullName1" className="mb-3">
-                            <Form.Label>Nama Lengkap</Form.Label>
-                            <Form.Control type="text" placeholder="Nama Lengkap" />
-                        </Form.Group>
-                        </Form>
-                    </div>
-                    </Card.Body>
-                </Card>
-
-                {/* Pemilihan Kursi */}
-                <Card className="shadow-sm">
-                    <Card.Body>
-                    <h4 className="mb-3">Pilih Kursi</h4>
-                    <div className="seat-selection-container">
-                        <div className="seat-row">
-                        <span>A</span>
-                        <button
-                            className={`seat-btn ${seatSelection === 'A1' ? 'selected' : 'available'}`}
-                            onClick={() => handleSeatSelect('A1')}
-                        >
-                            1
-                        </button>
-                        <button className="seat-btn booked">X</button>
-                        <button
-                            className={`seat-btn ${seatSelection === 'A3' ? 'selected' : 'available'}`}
-                            onClick={() => handleSeatSelect('A3')}
-                        >
-                            3
-                        </button>
-                        </div>
-                        {/* Add more seat rows dynamically */}
-                    </div>
-                    </Card.Body>
-                </Card>
-
-                <Button variant="primary" type="submit" className="mt-4 w-100">
-                    Lanjutkan Pembayaran
-                </Button>
-                </Col>
-
-                {/* Right Side: Detail Penerbangan */}
-                <Col lg={4}>
-                <Card className="shadow-sm">
-                    <Card.Body>
-                    <h4 className="mb-3">Detail Penerbangan</h4>
-                    <div className="flight-info">
-                        <p><strong>Keberangkatan:</strong> 07:00 - 3 Maret 2023</p>
-                        <p>Bandara: Soekarno Hatta - Terminal IA Domestik</p>
-                        <p>Maskapai: Jet Air - Economy</p>
-                        <p><strong>Informasi:</strong> Baggage 20 kg, Cabin baggage 7 kg</p>
-                        <p><strong>Kedatangan:</strong> 11:00 - 3 Maret 2023, Melbourne International Airport</p>
-                    </div>
-
-                    <hr />
-
-                    <div className="price-details-box">
-                        <h4 className="mb-3">Rincian Harga</h4>
-                        <p>2 Adults: IDR 9.550.000</p>
-                        <p>1 Baby: IDR 1.000.000</p>
-                        <p>Tax: IDR 300.000</p>
-                        <hr />
-                        <p><strong>Total: IDR 9.850.000</strong></p>
-                    </div>
-                    </Card.Body>
-                </Card>
-                </Col>
-            </Row>
-        </Container>
+        </>
     );
 }
 
