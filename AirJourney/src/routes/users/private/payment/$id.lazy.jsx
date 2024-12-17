@@ -1,10 +1,12 @@
-import { React, useEffect } from 'react'
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { React, useEffect, useState } from 'react'
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
 import { Row, Col, Card, Form, Button, Container } from 'react-bootstrap'
 import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
 import { AlertBox } from '../../../../components/ui/alertBox.jsx'
+import { toast } from "react-toastify";
 import styles from './payment.module.css'
 import { useQuery } from '@tanstack/react-query'
+import { OrderDetailCard } from "../../../../components/PaymentDetails/index.jsx";
 import { getDetailTransaction } from '../../../../services/transaction/index.js'
 
 export const Route = createLazyFileRoute('/users/private/payment/$id')({
@@ -12,13 +14,38 @@ export const Route = createLazyFileRoute('/users/private/payment/$id')({
 })
 
 function Payment() {
-  const { id } = Route.useParams()
+  const { id } = Route.useParams();
+  console.log("id", id);
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token') ;
 
-  const { data, isSuccess } = useQuery({
-    queryKey: ['payment', id],
+  useEffect(() => {
+    if (!token || token.trim() === "") {
+      toast.error("Unauthorized, redirecting to homepage", {
+        position: "bottom-center", // Toast will appear at the bottom-center
+        autoClose: 4000, // Toast auto-closes after 6 seconds
+      });
+  
+      // Delay the navigation for 6 seconds (same as toast duration)
+      const timer = setTimeout(() => {
+        navigate({ to : '/'}); // Redirect to the homepage
+      }, 4000);
+  
+      // Cleanup timer when component unmounts or re-renders
+      return () => clearTimeout(timer);
+    }
+  }, [token, navigate]);
+  
+  const { data: transaction, isSuccess, isLoading, isError } = useQuery({
+    queryKey: ["transaction", id],
     queryFn: () => getDetailTransaction(id),
     enabled: !!id,
-  })
+    onError: (err) => {
+      toast.error(
+        err.message || "An error occurred while fetching transaction data"
+      );
+    },
+  });
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -32,8 +59,9 @@ function Payment() {
   }, []);
 
   useEffect(() => {
-    if (isSuccess && data?.data?.payment?.snapToken) {
-      const snapToken = data.data.payment.snapToken;
+    if (isSuccess && transaction?.data?.payment?.snapToken) {
+      const snapToken = transaction.data.payment.snapToken;
+      
       if (!document.getElementById('snap-container').hasChildNodes()) {
         window.snap.embed(snapToken, {
           embedId: 'snap-container',
@@ -52,7 +80,7 @@ function Payment() {
         });
       }
     }
-  }, [isSuccess, data]);
+  }, [isSuccess, transaction]);
 
   return (
     <div className="payment-page">
@@ -77,78 +105,12 @@ function Payment() {
             <div id="snap-container"></div>
           </Col>
 
-          <Col lg={4} md={5}>
-            <h6>
-              Booking Code:{' '}
-              <a href="#" className="booking-code">
-                {data?. data?.payment?.id}
-              </a>
-            </h6>
-
-            <div className="flight-info mt-4">
-              <Row>
-                <Col xs={8}>
-                  <div>
-                    <span>
-                      <strong>07:00</strong>  
-                    </span>
-                    <br />
-                    <span>3 Maret 2023</span>
-                  </div>
-                </Col>
-                <Col xs={4} className="text-end align-self-start">
-                  <p className="text-muted">Keberangkatan</p>
-                </Col>
-                <span>Soekarno Hatta - Terminal 1A Domestik</span>
-              </Row>
-              <hr />
-              <Row>
-                <Col xs={2}>
-                  <img src="" alt="airline-logo" />
-                </Col>
-                <Col xs={10}>
-                  <p>
-                    <strong>Jet Air - Economy</strong> <br />
-                    JT - 203
-                  </p>
-                  <p>
-                    <strong>Informasi:</strong> <br />
-                    Baggage 20 kg <br />
-                    Cabin baggage 7 kg <br />
-                    In-Flight Entertainment
-                  </p>
-                </Col>
-              </Row>
-              <hr />
-              <Row>
-                <Col xs={8}>
-                  <div>
-                    <span>
-                      <strong>11:00</strong>
-                    </span>
-                    <br />
-                    <span>3 Maret 2023</span>
-                  </div>
-                </Col>
-                <Col xs={4} className="text-end align-self-start">
-                  <p className="text-muted">Kedatangan</p>
-                </Col>
-                <span>Melbourne International Airport</span>
-              </Row>
-              <hr />
-            </div>
-
-            <div className="price-details mt-4">
-              <p>
-                2 Adults <span className="float-end">IDR 9.550.000</span> <br />
-                1 Baby <span className="float-end">IDR 0</span> <br />
-                Tax <span className="float-end">IDR 300.000</span>
-              </p>
-              <hr />
-              <h5>
-                Total <span className="float-end">IDR 9.850.000</span>
-              </h5>
-            </div>
+          <Col lg={4} md={5} className="mt-4">
+            {id ? (
+              <OrderDetailCard id={id} />
+            ) : (
+              <p className="text-danger">Transaction ID is missing</p>
+            )}
           </Col>
         </Row>
       </Container>
