@@ -30,20 +30,31 @@ const ProgressBar = ({ children }) => {
             <div className="progress-bar">
                 <div className="d-flex flex-column ">
                     <div className="progress-steps mb-2 d-flex flex-collum align-items-start mx-4 ">
-                        <h5
+                        <div
                             className="progress-step"
                             style={{
+                                fontSize: "22px",
                                 color: activeStep === 1 ? "bold" : "gray",
                                 fontWeight: activeStep === 1 ? "bold" : "normal", 
                                 marginRight: "10px",
                             }}
                         >
                             Isi Data Diri
-                        </h5>
+                        </div>
+                        <div className="arrow"
+                        style={{
+                            fontSize: "22px",
+                            color: activeStep === 1 ? "bold" : "gray",
+                            fontWeight: activeStep === 1 ? "bold" : "normal", 
+                            marginRight: "10px",
+                        }}
+                        >
                         &gt;
-                        <h5 
+                        </div>
+                        <div 
                             className="progress-step"
                             style={{
+                                fontSize: "22px",
                                 color: activeStep === 2 ? "bold" : "gray",
                                 fontWeight: activeStep === 2 ? "bold" : "normal", 
                                 marginRight: "10px",
@@ -51,11 +62,21 @@ const ProgressBar = ({ children }) => {
                             }}
                         >
                             Bayar
-                        </h5> 
+                        </div> 
+                        <div className="arrow"
+                        style={{
+                            fontSize: "22px",
+                            color: activeStep === 2 ? "bold" : "gray",
+                            fontWeight: activeStep === 2 ? "bold" : "normal", 
+                            marginRight: "10px",
+                        }}
+                        >
                         &gt; 
-                        <h5 
+                        </div>
+                        <div 
                             className="progress-step"
                             style={{
+                                fontSize: "22px",
                                 color: activeStep === 3 ? "bold" : "gray",
                                 fontWeight: activeStep === 3 ? "bold" : "normal", 
                                 marginLeft: "10px",
@@ -63,7 +84,7 @@ const ProgressBar = ({ children }) => {
                             }}
                         >
                             Selesai
-                        </h5>
+                        </div>
                     </div>
                     <Row>
                         <Col lg={12}>

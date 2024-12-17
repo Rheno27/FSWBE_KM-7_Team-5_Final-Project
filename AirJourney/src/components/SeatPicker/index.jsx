@@ -78,7 +78,15 @@ const SeatPicker = ({
         <>
             <Card>
                 <Card.Body>
-                    <h4>Pilih Kursi</h4>
+                    <div
+                        className="data-passenger-title"
+                        style={{
+                            fontSize: "20px",
+                            fontWeight: "bold",
+                            textAlign: "left",
+                            marginBottom: "15px",
+                        }}
+                    >Pilih Kursi</div>
                     <Card.Header
                         className="form-header"
                         style={{
@@ -91,7 +99,7 @@ const SeatPicker = ({
                             textAlign: "center",
                         }}
                     >
-                        <div className="class-seat">Bisnis Class</div>
+                        <div className="class-seat">{detailFlight?.departureFlight?.class} CLASS</div>
                     </Card.Header>
                     <Row>
                         <Col lg={12} className="p-4">
@@ -181,9 +189,17 @@ const SeatPicker = ({
                 </Card.Body>
             </Card>
             {isSuccess && (
-                <Card>
+                <Card className="shadow-sm mt-4">
                     <Card.Body>
-                        <h4>Pilih Kursi Penerbangan Kembali</h4>
+                        <div
+                            className="data-passenger-title"
+                            style={{
+                                fontSize: "20px",
+                                fontWeight: "bold",
+                                textAlign: "left",
+                                marginBottom: "15px",
+                            }}
+                        >Pilih Kursi Penerbangan Kembali</div>
                         <Card.Header
                             className="form-header"
                             style={{
@@ -196,7 +212,7 @@ const SeatPicker = ({
                                 textAlign: "center",
                             }}
                         >
-                            <div className="class-seat">Bisnis Class</div>
+                            <div className="class-seat">{returnDetailFlight?.departureFlight?.class} CLASS</div>
                         </Card.Header>
                         <Row>
                             <Col lg={12} className="p-4">
@@ -240,7 +256,7 @@ const SeatPicker = ({
                                                                                 ?.maxColumn /
                                                                                 2
                                                                         )
-                                                                            ? "30px"
+                                                                            ? "14%"
                                                                             : "0px",
                                                                 }}
                                                             >
