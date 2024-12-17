@@ -43,11 +43,14 @@ const HomepageFlightList = () => {
         axios
             .get(`${import.meta.env.VITE_API_URL}/flights`, { params })
             .then((res) => {
+                const newFlights = res.data.data.filter((flight) => {
+                    return !destinationList.find((existingFlight) => existingFlight.id === flight.id);
+                });
                 isDestinationChanged
                     ? setDestinationList(res.data.data)
                     : setDestinationList([
                           ...destinationList,
-                          ...res.data.data,
+                          ...newFlights,
                       ]);
                 setCursorId(res.data.meta.cursorId);
                 if (res.data.data.length < 3) {

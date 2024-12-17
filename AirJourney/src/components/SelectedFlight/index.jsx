@@ -16,7 +16,7 @@ export const SelectedFlight = ({selectedFlightId, setSelectedFlightId,setIsFromS
     const clickHandler = () =>{
       setIsFromSelected(false);
       setSelectedFlightId(null);
-      fetchFlightsData(true,returnDate,true);
+      fetchFlightsData(true,returnDate,true,true);
     }
 
     return (
@@ -29,7 +29,7 @@ export const SelectedFlight = ({selectedFlightId, setSelectedFlightId,setIsFromS
                 width: "70%",
                 height: "auto",
                 marginLeft: "5rem",
-                marginTop: "2rem",
+                marginBottom: "2rem",
                 // Responsive design for small screens
                 "@media (max-width: 768px)": {
                     width: "100%",
