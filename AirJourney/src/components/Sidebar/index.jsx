@@ -1,6 +1,6 @@
 import React from "react";
-// Import React Icons
-import { FaCube, FaHeart, FaDollarSign } from "react-icons/fa";
+import { IoCubeOutline } from "react-icons/io5";
+import { FaRegHeart, FaDollarSign } from "react-icons/fa"; 
 
 const Sidebar = () => {
   return (
@@ -13,6 +13,11 @@ const Sidebar = () => {
         width: "70%",
         height: "auto",
         marginLeft: "5rem",
+        // Responsive design for small screens
+        "@media (max-width: 768px)": {
+          width: "100%",
+          marginLeft: "0",
+        },
       }}
     >
       <h5 className="fw-bold mb-3">Filter</h5>
@@ -34,7 +39,7 @@ const Sidebar = () => {
             }}
           >
             <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <FaCube /> Transit
+              <IoCubeOutline style={{ fontSize: "1.5rem" }} /> Transit
             </span>
             <span>&rarr;</span>
           </button>
@@ -56,7 +61,7 @@ const Sidebar = () => {
             }}
           >
             <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <FaHeart /> Fasilitas
+              <FaRegHeart style={{ fontSize: "1.5rem" }} /> Fasilitas
             </span>
             <span>&rarr;</span>
           </button>
@@ -78,7 +83,7 @@ const Sidebar = () => {
             }}
           >
             <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <FaDollarSign /> Harga
+              <FaDollarSign style={{ fontSize: "1.5rem" }}/> Harga
             </span>
             <span>&rarr;</span>
           </button>

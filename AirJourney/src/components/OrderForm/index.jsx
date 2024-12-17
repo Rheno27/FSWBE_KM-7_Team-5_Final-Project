@@ -1,7 +1,17 @@
 import React from 'react';
 import { Form, Card } from 'react-bootstrap';
+import { getUser } from '../../services/user';
+import { useQuery } from '@tanstack/react-query';
+import { useSelector } from 'react-redux';
 
-const OrderForm = ({ orderData, handleChange }) => {
+const OrderForm = () => {
+    const { token } = useSelector((state) => state.auth);
+    const { data: user, isLoading, error } = useQuery({
+        queryKey: ['user'],
+        queryFn: getUser,
+        enabled: !!token,
+    });
+
     return (
         <Card className="shadow-sm mb-4" style={{ borderRadius: '8px' }}>
             <Card.Body>
@@ -40,8 +50,9 @@ const OrderForm = ({ orderData, handleChange }) => {
                             }}
                         >Nama Lengkap</Form.Label>
                         <Form.Control
+                            value={user?.name}
                             type="text"
-                            onChange={(e) => handleChange('fullName', e.target.value)}
+                            disabled
                             placeholder="Masukkan Nama Lengkap"
                             style={{
                                 borderRadius: '8px',
@@ -49,27 +60,6 @@ const OrderForm = ({ orderData, handleChange }) => {
                             }}
                         />
                     </Form.Group>
-
-                    {/* Nama Keluarga */}
-                    <Form.Group className="mt-3">
-                        <Form.Label
-                            style={{
-                                fontSize: '14px',
-                                fontWeight: 'bold',
-                                color: '#4B1979',
-                            }}
-                        >Nama Keluarga (Optional)</Form.Label>
-                        <Form.Control
-                            type="text"
-                            onChange={(e) => handleChange('familyName', e.target.value)}
-                            placeholder="Masukkan Nama Keluarga"
-                            style={{
-                                borderRadius: '8px',
-                                boxShadow: '0 0 5px rgba(0,0,0,0.1)',
-                            }}
-                        />
-                    </Form.Group>
-
                     {/* Nomor Telepon */}
                     <Form.Group className="mt-3">
                         <Form.Label
@@ -80,8 +70,9 @@ const OrderForm = ({ orderData, handleChange }) => {
                             }}
                         >Nomor Telepon</Form.Label>
                         <Form.Control
+                            value={user?.phoneNumber}
                             type="text"
-                            onChange={(e) => handleChange('phoneNumber', e.target.value)}
+                            disabled
                             placeholder="Masukkan Nomor Telepon"
                             style={{
                                 borderRadius: '8px',
@@ -100,8 +91,9 @@ const OrderForm = ({ orderData, handleChange }) => {
                             }}
                         >Email</Form.Label>
                         <Form.Control
+                            value={user?.email}
                             type="email"
-                            onChange={(e) => handleChange('email', e.target.value)}
+                            disabled
                             placeholder="Masukkan Email"
                             style={{
                                 borderRadius: '8px',
