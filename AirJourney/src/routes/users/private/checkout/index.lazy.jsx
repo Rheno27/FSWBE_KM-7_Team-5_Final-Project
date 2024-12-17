@@ -45,7 +45,7 @@ function Checkout() {
     const { mutate: postTransaction } = useMutation({
         mutationFn: (data) => createTransaction(data),
         onSuccess: (data) => {
-            navigate({ to: `/users/private/payment/${data.id}` });
+            navigate({ to: `/users/private/payment/${data.data.id}` });
             return;
         },
         onError: (error) => {
