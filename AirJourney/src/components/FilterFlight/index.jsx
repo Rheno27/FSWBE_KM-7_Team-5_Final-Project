@@ -3,12 +3,12 @@ import { FaSort } from "react-icons/fa";
 import "./sorting.css";
 
 const sortOptions = [
-  { label: "Harga - Termurah", value: "price_asc" },
-  { label: "Durasi - Terpendek", value: "duration_shortest" },
-  { label: "Keberangkatan - Paling Awal", value: "departure_earliest" },
-  { label: "Keberangkatan - Paling Akhir", value: "departure_latest" },
-  { label: "Kedatangan - Paling Awal", value: "arrival_earliest" },
-  { label: "Kedatangan - Paling Akhir", value: "arrival_latest" },
+  { label: "Harga - Termurah" },
+  { label: "Durasi - Terpendek" },
+  { label: "Keberangkatan - Paling Awal" },
+  { label: "Keberangkatan - Paling Akhir" },
+  { label: "Kedatangan - Paling Awal"},
+  { label: "Kedatangan - Paling Akhir"},
 ];
 
 const SortingButton = ({ selectedSort, onSortChange }) => {
