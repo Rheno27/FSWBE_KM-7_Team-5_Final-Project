@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { setToken } from "../../../redux/slices/auth";
 import { toast } from "react-toastify";
+import CircularProgress from "@mui/material/CircularProgress";
+import "../../../index.css";
 
 export const Route = createLazyFileRoute("/users/private/googleAuth")({
     component: RouteComponent,
@@ -20,6 +22,7 @@ function RouteComponent() {
         data: response,
         isSuccess,
         isError,
+        isPending
     } = useQuery({
         queryKey: ["googleAuth"],
         queryFn: () =>
@@ -51,5 +54,20 @@ function RouteComponent() {
         }
     }, [isSuccess, isError]);
 
-    return <></>;
+    return (
+        <div className="h-auto py-60 w-screen flex flex-col items-center justify-center">
+            {isPending && (
+                <div className="flex flex-col items-center justify-center gap-12">
+                    <CircularProgress
+                        disableShrink
+                        size="6rem"
+                        sx={{ color: "#7126B5" }}
+                    />
+                    <p className="font-bold text-xl">
+                        Sedang memverifikasi ...
+                    </p>
+                </div>
+            )}
+        </div>
+    );
 }
