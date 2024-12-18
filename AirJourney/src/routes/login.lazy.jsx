@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, createLazyFileRoute } from "@tanstack/react-router";
 
-import { Row, Col, Form, Button} from "react-bootstrap";
+import { Row, Col, Form, Button } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import background from "../assets/img/login-illust.png"
-
-import { useDispatch, useSelector} from "react-redux";
+import background from "../assets/img/login-illust.png";
+import GoogleIcon from "@mui/icons-material/Google";
+import { useDispatch, useSelector } from "react-redux";
 import { setToken } from "../redux/slices/auth";
 import { login } from "../services/auth";
 import { toast } from "react-toastify";
@@ -16,13 +16,12 @@ export const Route = createLazyFileRoute("/login")({
 });
 
 function Login() {
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const {token} = useSelector((state) => state.auth);
+    const { token } = useSelector((state) => state.auth);
 
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState(""); 
+    const [password, setPassword] = useState("");
 
     // State untuk menampilkan password
     const [showPassword, setShowPassword] = useState(false);
@@ -37,8 +36,8 @@ function Login() {
             navigate({ to: "/" });
         }
     }, [token, navigate]);
-    
-    const {mutate: loginUser} = useMutation({
+
+    const { mutate: loginUser } = useMutation({
         mutationFn: (body) => {
             return login(body);
         },
@@ -47,24 +46,32 @@ function Login() {
             navigate({ to: "/" });
         },
         onError: (error) => {
-        toast.error(error.message);
+            toast.error(error.message);
         },
     });
 
     const onSubmit = async (event) => {
         event.preventDefault();
-    
+
         const body = {
             email,
             password,
         };
-    
+
         //hit api
         loginUser(body);
-    }
+    };
 
     return (
-        <section style={{ height: "100vh", backgroundColor: "white", backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: "center" }}>
+        <section
+            style={{
+                height: "100vh",
+                backgroundColor: "white",
+                backgroundImage: `url(${background})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+            }}
+        >
             <Row className="h-100 mx-auto gap-0">
                 <Col
                     lg={6}
@@ -74,9 +81,7 @@ function Login() {
                         position: "relative",
                         overflow: "hidden",
                     }}
-                >
-                    
-                </Col>
+                ></Col>
                 <Col
                     lg={6}
                     md={12}
@@ -119,6 +124,33 @@ function Login() {
                         <Form.Group controlId="password" className="mb-3">
                             <div className="d-flex justify-content-between align-items-center">
                                 <Form.Label>Password</Form.Label>
+                            </div>
+                            <div style={{ position: "relative" }}>
+                                <Form.Control
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Enter password"
+                                    name="password"
+                                    value={password}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
+                                    style={{
+                                        paddingRight: "3rem",
+                                        borderRadius: "16px",
+                                    }}
+                                />
+                                <div
+                                    style={{
+                                        position: "absolute",
+                                        top: "30%",
+                                        right: "10px",
+                                        transform: "translateY(-50%)",
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={togglePassword}
+                                >
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </div>
                                 <a
                                     href={`/reset-password-request`}
                                     style={{
@@ -128,37 +160,8 @@ function Login() {
                                         textDecoration: "none",
                                     }}
                                 >
-                                    Forget password
+                                    Lupa password
                                 </a>
-                            </div>
-                            <div style={{ position: "relative" }}>
-                                <Form.Control
-                                    type={showPassword ? "text" : "password"}
-                                    placeholder="Enter password"
-                                    name="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    style={{
-                                        paddingRight: "3rem",
-                                        borderRadius: "16px",
-                                    }}
-                                />
-                                <div
-                                    style={{
-                                        position: "absolute",
-                                        top: "50%",
-                                        right: "10px",
-                                        transform: "translateY(-50%)",
-                                        cursor: "pointer",
-                                    }}
-                                    onClick={togglePassword}
-                                >
-                                    {showPassword ? (
-                                        <FaEyeSlash />
-                                    ) : (
-                                        <FaEye />
-                                    )}
-                                </div>
                             </div>
                         </Form.Group>
                         <Button
@@ -168,15 +171,34 @@ function Login() {
                                 backgroundColor: "#7126B5",
                                 borderColor: "#7126B5",
                                 borderRadius: "16px",
+                                marginBottom: "16px",
                             }}
                         >
                             Masuk
                         </Button>
+                        <Button
+                            href={`${import.meta.env.VITE_API_URL}/auth/google`}
+                            className="border-1 border border-1 border-dark w-100 d-flex align-items-center justify-content-center gap-2"
+                            style={{
+                                backgroundColor: "#fff",
+                                borderRadius: "16px",
+                                color: "black",
+                            }}
+                        >
+                            <GoogleIcon />
+                            <span>Login dengan Google</span>
+                        </Button>
                         <div className="text-center mt-3">
                             <span>
-                                Don't have an account?{" "}
-                                <Link to="/register" style={{ color: "#7126B5", fontWeight: "bold" }}>
-                                    Register here
+                                Belum punya akun?{" "}
+                                <Link
+                                    to="/register"
+                                    style={{
+                                        color: "#7126B5",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    Daftar sekarang
                                 </Link>
                             </span>
                         </div>
@@ -184,6 +206,5 @@ function Login() {
                 </Col>
             </Row>
         </section>
-
     );
 }
