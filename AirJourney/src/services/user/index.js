@@ -1,5 +1,6 @@
 export const getUser = async () => {
-    const token = localStorage.getItem("token");
+    try{
+        const token = localStorage.getItem("token");
     const response = await fetch(
         `${import.meta.env.VITE_API_URL}/users/me`,
         {
@@ -14,6 +15,11 @@ export const getUser = async () => {
         throw new Error(result?.message);
     }
     return result?.data;
+    } catch(err){
+        console.log(err);
+        throw new Error(err);
+    }
+    
 }
 
 export const updateUser = async (data) => {

@@ -28,6 +28,9 @@ const IndexLazyImport = createFileRoute('/')()
 const UsersPublicDetailPenerbanganLazyImport = createFileRoute(
   '/users/public/detailPenerbangan',
 )()
+const UsersPrivateGoogleAuthLazyImport = createFileRoute(
+  '/users/private/googleAuth',
+)()
 const UsersPrivateProfileIndexLazyImport = createFileRoute(
   '/users/private/profile/',
 )()
@@ -100,6 +103,16 @@ const UsersPublicDetailPenerbanganLazyRoute =
   } as any).lazy(() =>
     import('./routes/users/public/detailPenerbangan.lazy').then((d) => d.Route),
   )
+
+const UsersPrivateGoogleAuthLazyRoute = UsersPrivateGoogleAuthLazyImport.update(
+  {
+    id: '/users/private/googleAuth',
+    path: '/users/private/googleAuth',
+    getParentRoute: () => rootRoute,
+  } as any,
+).lazy(() =>
+  import('./routes/users/private/googleAuth.lazy').then((d) => d.Route),
+)
 
 const UsersPrivateProfileIndexLazyRoute =
   UsersPrivateProfileIndexLazyImport.update({
@@ -200,6 +213,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRequestLazyImport
       parentRoute: typeof rootRoute
     }
+    '/users/private/googleAuth': {
+      id: '/users/private/googleAuth'
+      path: '/users/private/googleAuth'
+      fullPath: '/users/private/googleAuth'
+      preLoaderRoute: typeof UsersPrivateGoogleAuthLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/users/public/detailPenerbangan': {
       id: '/users/public/detailPenerbangan'
       path: '/users/public/detailPenerbangan'
@@ -255,6 +275,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterLazyRoute
   '/reset-password': typeof ResetPasswordLazyRoute
   '/reset-password-request': typeof ResetPasswordRequestLazyRoute
+  '/users/private/googleAuth': typeof UsersPrivateGoogleAuthLazyRoute
   '/users/public/detailPenerbangan': typeof UsersPublicDetailPenerbanganLazyRoute
   '/users/private/payment/$id': typeof UsersPrivatePaymentIdLazyRoute
   '/users/private/payment/success': typeof UsersPrivatePaymentSuccessLazyRoute
@@ -271,6 +292,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterLazyRoute
   '/reset-password': typeof ResetPasswordLazyRoute
   '/reset-password-request': typeof ResetPasswordRequestLazyRoute
+  '/users/private/googleAuth': typeof UsersPrivateGoogleAuthLazyRoute
   '/users/public/detailPenerbangan': typeof UsersPublicDetailPenerbanganLazyRoute
   '/users/private/payment/$id': typeof UsersPrivatePaymentIdLazyRoute
   '/users/private/payment/success': typeof UsersPrivatePaymentSuccessLazyRoute
@@ -288,6 +310,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterLazyRoute
   '/reset-password': typeof ResetPasswordLazyRoute
   '/reset-password-request': typeof ResetPasswordRequestLazyRoute
+  '/users/private/googleAuth': typeof UsersPrivateGoogleAuthLazyRoute
   '/users/public/detailPenerbangan': typeof UsersPublicDetailPenerbanganLazyRoute
   '/users/private/payment/$id': typeof UsersPrivatePaymentIdLazyRoute
   '/users/private/payment/success': typeof UsersPrivatePaymentSuccessLazyRoute
@@ -306,6 +329,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/reset-password-request'
+    | '/users/private/googleAuth'
     | '/users/public/detailPenerbangan'
     | '/users/private/payment/$id'
     | '/users/private/payment/success'
@@ -321,6 +345,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/reset-password-request'
+    | '/users/private/googleAuth'
     | '/users/public/detailPenerbangan'
     | '/users/private/payment/$id'
     | '/users/private/payment/success'
@@ -336,6 +361,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/reset-password-request'
+    | '/users/private/googleAuth'
     | '/users/public/detailPenerbangan'
     | '/users/private/payment/$id'
     | '/users/private/payment/success'
@@ -353,6 +379,7 @@ export interface RootRouteChildren {
   RegisterLazyRoute: typeof RegisterLazyRoute
   ResetPasswordLazyRoute: typeof ResetPasswordLazyRoute
   ResetPasswordRequestLazyRoute: typeof ResetPasswordRequestLazyRoute
+  UsersPrivateGoogleAuthLazyRoute: typeof UsersPrivateGoogleAuthLazyRoute
   UsersPublicDetailPenerbanganLazyRoute: typeof UsersPublicDetailPenerbanganLazyRoute
   UsersPrivatePaymentIdLazyRoute: typeof UsersPrivatePaymentIdLazyRoute
   UsersPrivatePaymentSuccessLazyRoute: typeof UsersPrivatePaymentSuccessLazyRoute
@@ -369,6 +396,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterLazyRoute: RegisterLazyRoute,
   ResetPasswordLazyRoute: ResetPasswordLazyRoute,
   ResetPasswordRequestLazyRoute: ResetPasswordRequestLazyRoute,
+  UsersPrivateGoogleAuthLazyRoute: UsersPrivateGoogleAuthLazyRoute,
   UsersPublicDetailPenerbanganLazyRoute: UsersPublicDetailPenerbanganLazyRoute,
   UsersPrivatePaymentIdLazyRoute: UsersPrivatePaymentIdLazyRoute,
   UsersPrivatePaymentSuccessLazyRoute: UsersPrivatePaymentSuccessLazyRoute,
@@ -395,6 +423,7 @@ export const routeTree = rootRoute
         "/register",
         "/reset-password",
         "/reset-password-request",
+        "/users/private/googleAuth",
         "/users/public/detailPenerbangan",
         "/users/private/payment/$id",
         "/users/private/payment/success",
@@ -423,6 +452,9 @@ export const routeTree = rootRoute
     },
     "/reset-password-request": {
       "filePath": "reset-password-request.lazy.jsx"
+    },
+    "/users/private/googleAuth": {
+      "filePath": "users/private/googleAuth.lazy.jsx"
     },
     "/users/public/detailPenerbangan": {
       "filePath": "users/public/detailPenerbangan.lazy.jsx"
