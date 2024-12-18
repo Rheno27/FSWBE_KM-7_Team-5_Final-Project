@@ -10,6 +10,7 @@ import { setToken } from "../redux/slices/auth";
 import { login } from "../services/auth";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 export const Route = createLazyFileRoute("/login")({
     component: Login,
@@ -60,6 +61,38 @@ function Login() {
 
         //hit api
         loginUser(body);
+    };
+
+    const handleGoogleLogin = () => {
+        const popup = window.open(
+            `${import.meta.env.VITE_API_URL}/auth/google`,
+            "Google Login",
+            "width=500,height=500"
+        );
+
+        const popupInterval = setInterval(() => {
+            try {
+                const currentUrl = popup.location.href;
+                if (currentUrl.includes("/auth/google/callback")) {
+                    clearInterval(popupInterval);
+                    const urlParams = new URLSearchParams(
+                        new URL(currentUrl).search
+                    );
+                    const token = urlParams.get("token");
+                    dispatch(setToken(token));
+                    localStorage.setItem("token", token);
+                    toast.success("Authentikasi berhasil", { position: "bottom-center" });
+                    navigate({ to: "/" });
+                    popup.close();
+                }
+            } catch (err) {
+                console.log(err);
+            }
+
+            if (popup.closed) {
+                clearInterval(popupInterval);
+            }
+        }, 500);
     };
 
     return (
@@ -178,6 +211,7 @@ function Login() {
                         </Button>
                         <Button
                             href={`${import.meta.env.VITE_API_URL}/auth/google`}
+                            // onClick={handleGoogleLogin}
                             className="border-1 border border-1 border-dark w-100 d-flex align-items-center justify-content-center gap-2"
                             style={{
                                 backgroundColor: "#fff",
