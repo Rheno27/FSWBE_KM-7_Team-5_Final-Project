@@ -12,7 +12,6 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
         queryKey: ["flight", flightId],
         queryFn: async () => {
             const response = await getFlightByID(flightId);
-            console.log("response", response);
             return response;
         },
         enabled: !!flightId,
@@ -23,7 +22,6 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
         queryKey: ["flight", returnFlightId],
         queryFn: async () => {
             const response = await getFlightByID(returnFlightId);
-            console.log("response", response);
             return response;
         },
         enabled: !!returnFlightId,
@@ -33,6 +31,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
     const passengerAdult = passenger.ADULT
     const passengerChild = passenger.CHILD
     const passengerInfant = passenger.INFANT
+    
 
     //price
     const allAdultPrice = returnFlightId
@@ -52,7 +51,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
 
     return (
         <>
-            <Col lg={5} className="flight-details">
+            <Col lg={5} className="flightdetails">
                 <Card className="shadow-sm">
                     <Card.Body>
                     <div className="mb-3"
@@ -103,19 +102,6 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                 }}
                             >
                                 Keberangkatan
-                            </div>
-                        </Col>
-                        <Col lg={6}>
-                            <div
-                                className="keberangkatan"
-                                style={{
-                                    fontSize: "16px",
-                                    fontWeight: "bold",
-                                    color: "#4B1979",
-                                    textAlign: "right",
-                                }}
-                            >
-                                {detailFlight?.arrivalFlight?.airportTo?.name}
                             </div>
                         </Col>
                     </Row>
@@ -447,19 +433,6 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                 Kedatangan
                             </div>
                         </Col>
-                        <Col lg={6}>
-                            <div
-                                className="Kedatangan"
-                                style={{
-                                    fontSize: "16px",
-                                    fontWeight: "bold",
-                                    color: "#4B1979",
-                                    textAlign: "right",
-                                }}
-                            >
-                                {returnDetailFlight?.arrivalFlight?.airportTo?.name}
-                            </div>
-                        </Col>
                     </Row>
                     <hr />
                     <Row className="mt-2 mb-2">
@@ -492,9 +465,9 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
             )}
             <Card className="mt-3">
                 <Card.Body>
+                    {/* Heading */}
                     <Row>
                         <div
-                            className="time"
                             style={{
                                 fontSize: "18px",
                                 fontWeight: "bold",
@@ -504,85 +477,75 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                         </div>
                     </Row>
                     <hr />
+
+                    {/* Rincian Harga */}
                     <Row>
-                    <Col lg={8}>
-                            <div className="departure ">
-                                    <div className="passenger">
-                                        {passengerAdult} Adult
-                                    </div>
-                                    <div className="passenger">
-                                        {passengerChild} Child
-                                    </div>
-                                    <div className="passenger">
-                                        {passengerInfant} Infant
-                                    </div>
-                                    <div className="tax">Tax</div>
-                                </div>
+                        <Col
+                            xs={8}
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                {passengerAdult} Adult
+                            </div>
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                {passengerChild} Child
+                            </div>
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                {passengerInfant} Infant
+                            </div>
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>Tax</div>
                         </Col>
-                        <Col lg={4}>
-                            <div
-                                className="priceadult"
-                                style={{
-                                    marginLeft: "20px",
-                                    textAlign: "right",
-                                }}
-                            >
-                                Rp {allAdultPrice}
+
+                        <Col
+                            xs={4}
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "flex-end",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                Rp {allAdultPrice ?? 0}
                             </div>
-                            <div
-                                className="pricechild"
-                                style={{
-                                    marginLeft: "20px",
-                                    textAlign: "right",
-                                }}
-                            >
-                                Rp {allChildPrice}
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                Rp {allChildPrice ?? 0}
                             </div>
-                            <div
-                                className="pricebaby"
-                                style={{
-                                    marginLeft: "20px",
-                                    textAlign: "right",
-                                }}
-                            >
-                                Rp {allInfantPrice}
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                Rp {allInfantPrice ?? 0}
                             </div>
-                            <div
-                                className="tax"
-                                style={{
-                                    marginLeft: "20px",
-                                    textAlign: "right",
-                                }}
-                            >
-                                Rp {allTax}
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                Rp {allTax ?? 0}
                             </div>
                         </Col>
                     </Row>
                     <hr />
+
+                    {/* Total Harga */}
                     <Row>
-                        <Col lg={8}>
-                            <div
-                                className="time"
-                                style={{
-                                    fontSize: "18px",
-                                    fontWeight: "bold",
-                                }}
-                            >
-                                Total Harga
-                            </div>
+                        <Col
+                            xs={8}
+                            style={{
+                                fontSize: "18px",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Total Harga
                         </Col>
-                        <Col lg={4}>
-                            <div
-                                className="total-price"
-                                style={{
-                                    fontSize: "20px",
-                                    fontWeight: "bold",
-                                    color: "#4B1979",
-                                    textAlign: "right",
-                                }}
-                            >
-                                Rp {allTotalPrice}
-                            </div>
+                        <Col
+                            xs={4}
+                            style={{
+                                fontSize: "20px",
+                                fontWeight: "bold",
+                                color: "#4B1979",
+                                textAlign: "right",
+                            }}
+                        >
+                            Rp {allTotalPrice ?? 0}
                         </Col>
                     </Row>
                 </Card.Body>
@@ -610,3 +573,5 @@ FlightDetails.propTypes = {
 };
 
 export default FlightDetails;
+
+
