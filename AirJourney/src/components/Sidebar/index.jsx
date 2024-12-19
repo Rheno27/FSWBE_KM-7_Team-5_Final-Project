@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import FlightClassIcon from '@mui/icons-material/FlightClass';
 import SortIcon from '@mui/icons-material/Sort';
+import FlightIcon from '@mui/icons-material/Flight';
+import SwapVertIcon from '@mui/icons-material/SwapVert';
 import { Accordion, AccordionSummary, AccordionDetails, Typography, FormControlLabel, FormGroup } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import "../../index.css"
 
 const Sidebar = ({ 
+  applyFilters, 
   onClassChange, 
   onSortByChange, 
   onSortOrderChange, 
@@ -13,10 +16,9 @@ const Sidebar = ({
   selectedClass, 
   selectedSortBy, 
   selectedSortOrder,
-  selectedAirlines,
-  clearFilters
+  selectedAirlines
 }) => {
-  const [expanded, setExpanded] = useState([]); 
+  const [expanded, setExpanded] = useState([]);
 
   const airlines = [
     { id: '0193c390-358e-7be0-92e8-d8075fa07253', name: 'Garuda Indonesia' },
@@ -34,13 +36,17 @@ const Sidebar = ({
   };
 
   const handleClassChange = (event) => {
-    const value = event.target.value;
-    onClassChange(value === selectedClass ? "" : value); // Toggle the selection
+    if (event.target.checked) {
+      const value = event.target.value;
+      onClassChange(value === selectedClass ? "" : value);
+      return;
+    }
+    onClassChange(null); 
   };
 
   const handleSortByChange = (event) => {
     const value = event.target.value;
-    onSortByChange([value]); // Assuming sortBy is always an array with one element
+    onSortByChange([value]); 
   };
 
   const handleSortOrderChange = (event) => {
@@ -48,11 +54,7 @@ const Sidebar = ({
   };
 
   const handleAirlineChange = (event, airlineId) => {
-    if (event.target.checked) {
-      onAirlinesChange(airlineId,true); 
-    } else {
-      onAirlinesChange(airlineId,false); 
-    }
+      onAirlinesChange(airlineId, event.target.checked); 
   };
 
   const handleApplyFilters = () => {
@@ -60,23 +62,22 @@ const Sidebar = ({
       classFilter: selectedClass, 
       sortBy: selectedSortBy, 
       sortOrder: selectedSortOrder, 
-      airlines: selectedAirlines
+      airlines: selectedAirlines || ""
     });
   };
 
-  const clearFilters = () => {
+    const clearFilters = () => {
     onClassChange("");
     onSortByChange([]);
     onSortOrderChange("");
-    onAirlinesChange([]);
-    applyFilters({ classFilter: [], sortBy: [], sortOrder: "", airlines: [] }); 
+    onAirlinesChange("", false); 
+    applyFilters({ classFilter: "", sortBy: [], sortOrder: "", airlines: "" }); 
   };
 
   const isClassSelected = (className) => selectedClass === className;
   return (
     <div style={{ backgroundColor: "#F5EFFF", padding: "1rem", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", width: "70%", height: "auto", marginLeft: "auto", marginRight: "2rem" }}>
       <h5 className="fw-bold mb-3" style={{ fontSize: "1.5rem" }}>Filter</h5>
-      
       <Accordion expanded={expanded.includes('panel1')} onChange={handleChange('panel1')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1d-content" id="panel1d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -111,7 +112,7 @@ const Sidebar = ({
           ))}
         </AccordionDetails>
       </Accordion>
-  
+
       <Accordion expanded={expanded.includes('panel2')} onChange={handleChange('panel2')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2d-content" id="panel2d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -119,87 +120,89 @@ const Sidebar = ({
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          {["price", "duration", "departureDate", "arrivalDate"].map((sortType) => (
-            <div key={sortType}>
+          {["price", "duration", "departureDate", "arrivalDate"].map((classType) => (
+            <div key={classType}>
               <label style={{ 
-                color: selectedSortBy.includes(sortType) ? "black" : "#3C3C3C",  
-                backgroundColor: selectedSortBy.includes(sortType) ? "" : "transparent", 
-                fontWeight: selectedSortBy.includes(sortType) ? "bold" : "normal",
+                color: selectedSortBy.includes(classType) ? "black" : "#3C3C3C",  
+                backgroundColor: selectedSortBy.includes(classType) ? "" : "transparent", 
+                fontWeight: selectedSortBy.includes(classType) ? "bold" : "normal",
                 padding: "5px", 
                 borderRadius: "5px",
                 display: "inline-block",
                 marginBottom: "5px"
               }}>
                 <input type="radio" 
-                  value={sortType} 
-                  checked={selectedSortBy.includes(sortType)} 
+                  value={classType} 
+                  checked={selectedSortBy.includes(classType)} 
                   onChange={handleSortByChange} 
                   style={{ marginRight: "5px" }}
                 />
-                {sortType === "price" ? "Price" 
-                : sortType === "duration" ? "Duration" 
-                : sortType === "departureDate" ? "Departure Date" 
-                : sortType === "arrivalDate" ? "Arrival Date" : sortType.replace("_", " ")}
+                {classType === "price" ? "Price" 
+                : classType === "duration" ? "Duration" 
+                : classType === "departureDate" ? "Departure Date" 
+                : classType === "arrivalDate" ? "Arrival Date" : classType.replace("_", " ")}
               </label>
               <br />
             </div>
           ))}
         </AccordionDetails>
       </Accordion>
-  
+
       <Accordion expanded={expanded.includes('panel3')} onChange={handleChange('panel3')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel3d-content" id="panel3d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <SortIcon /> Sort Order
+            <SwapVertIcon style={{fontSize: "1.8rem" }} /> Sort Order
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          {["asc", "desc"].map((orderType) => (
-            <div key={orderType}>
+          {["asc", "desc"].map((classType) => (
+            <div key={classType}>
               <label style={{ 
-                color: selectedSortOrder === orderType ? "black" : "#3C3C3C", 
-                backgroundColor: selectedSortOrder === orderType ? "" : "transparent", 
-                fontWeight: selectedSortOrder === orderType ? "bold" : "normal",
+                color: selectedSortOrder === classType ? "black" : "#3C3C3C", 
+                backgroundColor: selectedSortOrder === classType ? "" : "transparent", 
+                fontWeight: selectedSortOrder === classType ? "bold" : "normal",
                 padding: "5px", 
                 borderRadius: "5px",
                 display: "inline-block",
                 marginBottom: "5px"
               }}>
                 <input type="radio" 
-                  value={orderType} 
-                  checked={selectedSortOrder === orderType} 
+                  value={classType} 
+                  checked={selectedSortOrder === classType} 
                   onChange={handleSortOrderChange} 
                   style={{ marginRight: "5px" }}
                 />
-                {orderType === "asc" ? "Lowest to Highest" 
-                : orderType === "desc" ? "Highest to Lowest" : orderType.replace("_", " ")}
+                {classType === "asc" ? "Lowest to Highest" 
+                : classType === "desc" ? "Highest to Lowest" : classType.replace("_", " ")}
               </label>
               <br />
             </div>
           ))}
         </AccordionDetails>
       </Accordion>
-  
+
       <Accordion expanded={expanded.includes('panel4')} onChange={handleChange('panel4')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel4d-content" id="panel4d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <SortIcon /> Choose by Airlines
+            <FlightIcon style={{ transform: "rotate(50deg)" }} /> Choose by Airlines
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <FormGroup>
+          <FormGroup style={{padding:"0px 10px"}}>
             {airlines.map(airline => (
               <FormControlLabel
                 key={airline.id}
                 control={
                   <input 
-                    type="checkbox" 
-                    checked={selectedAirlines.includes(airline.id)} 
+                    type="radio" 
+                    checked={selectedAirlines === airline.id} 
                     onChange={(e) => handleAirlineChange(e, airline.id)} 
                     name="airlineSelect"
+                    style={{ marginRight: "5px" }}
                   />
                 }
                 label={airline.name}
+                style={{marginBottom:"5px"}}
               />
             ))}
           </FormGroup>

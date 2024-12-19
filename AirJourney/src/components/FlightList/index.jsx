@@ -45,8 +45,7 @@ const FlightList = ({
   setSelectedFlightId,
   selectedFlightId,
   fetchFlightsData,
-  currentPage,
-  totalPage,
+  hasMore,
 }) => {
   const dispatch = useDispatch();
   const returnDate =
@@ -93,12 +92,9 @@ const FlightList = ({
       className="p-2"
       dataLength={filteredFlights.length}
       next={() => {
-        if (currentPage < totalPage) {
-          setCurrentPage(prevPage => prevPage + 1);
-          fetchFlightsData(false);
-        }
+          fetchFlightsData(false, null, false, true);
       }}
-      hasMore={currentPage < totalPage}
+      hasMore={hasMore}
     >
       {filteredFlights.map((flight, index) => {
         const { airline, airportFrom, airportTo } = flight;
