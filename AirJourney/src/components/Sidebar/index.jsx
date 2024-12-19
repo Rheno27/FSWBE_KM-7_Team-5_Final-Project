@@ -189,7 +189,7 @@ const Sidebar = ({
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <FormGroup>
+          <FormGroup style={{padding:"0px 10px"}}>
             {airlines.map(airline => (
               <FormControlLabel
                 key={airline.id}
@@ -199,9 +199,11 @@ const Sidebar = ({
                     checked={selectedAirlines.includes(airline.id)} 
                     onChange={(e) => handleAirlineChange(e, airline.id)} 
                     name="airlineSelect"
+                    style={{ marginRight: "5px" }}
                   />
                 }
                 label={airline.name}
+                style={{marginBottom:"5px"}}
               />
             ))}
           </FormGroup>
