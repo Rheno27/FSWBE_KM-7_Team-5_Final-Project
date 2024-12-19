@@ -31,6 +31,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
     const passengerAdult = passenger.ADULT
     const passengerChild = passenger.CHILD
     const passengerInfant = passenger.INFANT
+    
 
     //price
     const allAdultPrice = returnFlightId
@@ -50,7 +51,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
 
     return (
         <>
-            <Col lg={5} className="flight-details">
+            <Col lg={5} className="flightdetails">
                 <Card className="shadow-sm">
                     <Card.Body>
                     <div className="mb-3"

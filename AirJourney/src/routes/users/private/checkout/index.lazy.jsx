@@ -79,7 +79,7 @@ function Checkout() {
             setNationalities(Array(total).fill(""));
             setIdentityNumbers(Array(total).fill(""));
             setOriginCountries(Array(total).fill(""));
-            setPassengerTypes(Array(total).fill("")); // assuming default type
+            setPassengerTypes(Array(total).fill(""));
         }
     }, [passenger]);
 

@@ -65,8 +65,11 @@ function Payment() {
   const { mutate: cancelTransactionMutation } = useMutation({
     mutationFn: () => cancelTransaction(id),
     onSuccess: () => {
+      toast.success("Transaction cancelled successfully", {
+        position: "bottom-center",
+        autoClose: 2000,
+      });
       navigate({ to: `/` });
-      handleCancel();
     },
     onError: (err) => {
       console.log("error cancel", err);
@@ -183,9 +186,10 @@ function Payment() {
 
   const handleCancelTransaction = async () => {
     const response = await cancelTransactionMutation();
+    console.log("response", response);
     if (response.status) {
       toast.success("Transaction cancelled successfully");
-      handleCancel();
+      navigate({ to: `/` });
     } else {
         toast.error("Failed to cancel transaction");
     }

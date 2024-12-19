@@ -37,12 +37,21 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
     const passengerChild = allPassenger.filter(passenger => passenger.type === 'CHILD').length
     const passengerInfant = allPassenger.filter(passenger => passenger.type === 'INFANT').length
 
-    //price
+    //price departure
     const allAdultPrice = detailTransaction?.data?.departureFlight?.price * passengerAdult
     const allChildPrice = detailTransaction?.data?.departureFlight?.price * passengerChild
     const allInfantPrice = detailTransaction?.data?.departureFlight?.price * passengerInfant
-    const allTax = (allAdultPrice + allInfantPrice + allChildPrice) * 0.1;
-    const allTotalPrice = allAdultPrice + allInfantPrice + allChildPrice + allTax;
+
+    //price return
+    const allReturnAdultPrice = detailTransaction?.data?.returnFlight?.price * passengerAdult
+    const allReturnChildPrice = detailTransaction?.data?.returnFlight?.price * passengerChild
+    const allReturnInfantPrice = detailTransaction?.data?.returnFlight?.price * passengerInfant
+
+    const allTaxDeparture = (allAdultPrice + allInfantPrice + allChildPrice ) * 0.1;
+    const allTaxReturn = (allReturnAdultPrice + allReturnInfantPrice + allReturnChildPrice ) * 0.1;
+
+    const allTotalPrice = allAdultPrice + allInfantPrice + allChildPrice + allTaxDeparture + allReturnAdultPrice + allReturnInfantPrice + allReturnChildPrice + allTaxReturn;
+
 
     return (
         <>
@@ -251,7 +260,7 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                     </Row>
                 </Card.Body>
             </Card>
-            {detailTransaction?.returnFlight && (
+            {detailTransaction?.returnFlight !== null && (
                 <Card className="shadow-sm mb-3 mt-3 ">
                     <Card.Body>
                     <div className="mb-3"
@@ -472,7 +481,6 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                         </div>
                     </Row>
                     <hr />
-
                     {/* Rincian Harga */}
                     <Row>
                         <Col
@@ -483,6 +491,9 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                                 justifyContent: "space-between",
                             }}
                         >
+                            <div style={{ fontSize: "16px", marginBottom: "5px" , fontWeight: "bold"}}>
+                                Departure
+                            </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
                                 {passengerAdult} Adult
                             </div>
@@ -504,6 +515,9 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                                 justifyContent: "space-between",
                             }}
                         >
+                            <div style={{ fontSize: "16px", marginBottom: "5px" , fontWeight: "bold"}}>
+                                Harga
+                            </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
                                 Rp {allAdultPrice ?? 0}
                             </div>
@@ -514,12 +528,66 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                                 Rp {allInfantPrice ?? 0}
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                Rp {allTax ?? 0}
+                                Rp {allTaxDeparture ?? 0}
                             </div>
                         </Col>
                     </Row>
                     <hr />
+                    {detailTransaction?.returnFlight !== null && (
+                        <>
+                            <Row>
+                                <Col
+                                    xs={8}
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "space-between",
+                                    }}
+                                >
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" , fontWeight: "bold"}}>
+                                        Return
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        {passengerAdult} Adult
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        {passengerChild} Child
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        {passengerInfant} Infant
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>Tax</div>
+                                </Col>
 
+                                <Col
+                                    xs={4}
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "flex-end",
+                                        justifyContent: "space-between",
+                                    }}
+                                >
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" , fontWeight: "bold"}}>
+                                        Harga
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        Rp {allReturnAdultPrice ?? 0}
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        Rp {allReturnChildPrice ?? 0}
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        Rp {allReturnInfantPrice ?? 0}
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        Rp {allTaxReturn ?? 0}
+                                    </div>
+                                </Col>
+                            </Row>
+                            <hr />
+                        </>
+                    )}
                     {/* Total Harga */}
                     <Row>
                         <Col
