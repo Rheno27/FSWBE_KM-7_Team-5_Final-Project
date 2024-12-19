@@ -15,7 +15,7 @@ const Sidebar = ({
   selectedSortOrder,
   selectedAirlines
 }) => {
-  const [expanded, setExpanded] = useState([]); 
+  const [expanded, setExpanded] = useState([]);
 
   const airlines = [
     { id: '0193c390-358e-7be0-92e8-d8075fa07253', name: 'Garuda Indonesia' },
@@ -33,8 +33,12 @@ const Sidebar = ({
   };
 
   const handleClassChange = (event) => {
-    const value = event.target.value;
-    onClassChange(value === selectedClass ? "" : value); 
+    if (event.target.checked) {
+      const value = event.target.value;
+      onClassChange(value === selectedClass ? "" : value);
+      return;
+    }
+    onClassChange(null); 
   };
 
   const handleSortByChange = (event) => {
@@ -56,9 +60,10 @@ const Sidebar = ({
 
   const handleApplyFilters = () => {
     applyFilters({ 
-      classFilter: selectedClass ? [selectedClass] : [], 
+      classFilter: selectedClass, 
       sortBy: selectedSortBy, 
       sortOrder: selectedSortOrder, 
+      airlines: selectedAirlines
     });
   };
 
@@ -191,7 +196,7 @@ const Sidebar = ({
                 control={
                   <input 
                     type="radio" 
-                    checked={Array.isArray(selectedAirlines) && selectedAirlines.includes(airline.id)} 
+                    checked={selectedAirlines.includes(airline.id)} 
                     onChange={(e) => handleAirlineChange(e, airline.id)} 
                     name="airlineSelect"
                   />
@@ -203,7 +208,7 @@ const Sidebar = ({
         </AccordionDetails>
       </Accordion>
       
-      <button onClick={handleApplyFilters} className="sort-apply-button" 
+      <button onClick={handleApplyFilters} className="sort-apply-button" disabled={(selectedSortBy.length > 0 ? (!selectedSortOrder) : false) || (selectedSortOrder ? (selectedSortBy.length == 0):false) }
         style={{ width: "100%", marginTop: "20px", alignItems: "center", textAlign: "center", backgroundColor: "#CDC1FF", color: "black", border: "none", borderRadius: "5px", padding: "10px 20px", cursor: "pointer" }}>
         Apply Filters
       </button>
