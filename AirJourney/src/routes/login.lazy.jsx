@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, createLazyFileRoute } from "@tanstack/react-router";
 
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import background from "../assets/img/login-illust.png";
-
+import GoogleIcon from "@mui/icons-material/Google";
 import { useDispatch, useSelector } from "react-redux";
 import { setToken } from "../redux/slices/auth";
 import { login } from "../services/auth";
@@ -58,7 +58,7 @@ function Login() {
             password,
         };
 
-        // hit api
+        //hit api
         loginUser(body);
     };
 
@@ -72,47 +72,34 @@ function Login() {
                 backgroundPosition: "center",
             }}
         >
-            <Row className="h-100 mx-auto">
-                {/* Left Side */}
+            <Row className="h-100 mx-auto gap-0">
                 <Col
                     lg={6}
                     md={12}
                     className="d-none d-lg-block p-0"
                     style={{
-                        backgroundImage: `url(${background})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
                         position: "relative",
+                        overflow: "hidden",
                     }}
                 ></Col>
-
-                {/* Right Side */}
                 <Col
                     lg={6}
                     md={12}
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: "1rem",
-                    }}
+                    className="d-flex flex-column align-items-center justify-content-center p-5"
                 >
                     <Form
                         style={{
                             width: "100%",
                             maxWidth: "452px",
-                            backgroundColor: "rgba(255, 255, 255, 0.85)",
-                            borderRadius: "16px",
-                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                            padding: "1.5rem",
-                            margin: "0 auto",
+                            padding: "20px",
                         }}
+                        className="bg-white bg-opacity-75 border-1 rounded-xl p-5 shadow-sm"
                         onSubmit={onSubmit}
                     >
                         <h1
+                            className="mb-4"
                             style={{
-                                fontSize: "1.8rem",
+                                fontSize: "2rem",
                                 fontWeight: "bold",
                                 fontFamily: "Poppins, sans-serif",
                                 textAlign: "left",
@@ -122,7 +109,7 @@ function Login() {
                             Masuk
                         </h1>
                         <Form.Group controlId="email" className="mb-3">
-                            <Form.Label style={{ fontSize: "1rem" }}>Email</Form.Label>
+                            <Form.Label>Email</Form.Label>
                             <Form.Control
                                 type="email"
                                 placeholder="Example: johndoe@gmail.com"
@@ -131,31 +118,12 @@ function Login() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 style={{
                                     borderRadius: "16px",
-                                    padding: "0.75rem",
-                                    fontSize: "0.9rem",
                                 }}
                             />
                         </Form.Group>
                         <Form.Group controlId="password" className="mb-3">
-                            <div
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                }}
-                            >
-                                <Form.Label style={{ fontSize: "1rem" }}>Password</Form.Label>
-                                <a
-                                    href="/reset-password-request"
-                                    style={{
-                                        fontSize: "0.875rem",
-                                        fontWeight: "400",
-                                        color: "#7126B5",
-                                        textDecoration: "none",
-                                    }}
-                                >
-                                    Forget password
-                                </a>
+                            <div className="d-flex justify-content-between align-items-center">
+                                <Form.Label>Password</Form.Label>
                             </div>
                             <div style={{ position: "relative" }}>
                                 <Form.Control
@@ -163,17 +131,18 @@ function Login() {
                                     placeholder="Enter password"
                                     name="password"
                                     value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
                                     style={{
+                                        paddingRight: "3rem",
                                         borderRadius: "16px",
-                                        padding: "0.75rem 2.5rem 0.75rem 1rem",
-                                        fontSize: "0.9rem",
                                     }}
                                 />
                                 <div
                                     style={{
                                         position: "absolute",
-                                        top: "50%",
+                                        top: "30%",
                                         right: "10px",
                                         transform: "translateY(-50%)",
                                         cursor: "pointer",
@@ -182,33 +151,54 @@ function Login() {
                                 >
                                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                                 </div>
+                                <a
+                                    href={`/reset-password-request`}
+                                    style={{
+                                        fontSize: "0.875rem",
+                                        fontWeight: "light",
+                                        color: "#7126B5",
+                                        textDecoration: "none",
+                                    }}
+                                >
+                                    Lupa password
+                                </a>
                             </div>
                         </Form.Group>
                         <Button
                             type="submit"
+                            className="w-100"
                             style={{
                                 backgroundColor: "#7126B5",
                                 borderColor: "#7126B5",
                                 borderRadius: "16px",
-                                padding: "0.75rem",
-                                fontSize: "1rem",
+                                marginBottom: "16px",
                             }}
-                            className="w-100"
                         >
                             Masuk
                         </Button>
-                        <div style={{ textAlign: "center", marginTop: "1rem" }}>
-                            <span style={{ fontSize: "0.9rem" }}>
-                                Don't have an account?{" "}
+                        <Button
+                            href={`${import.meta.env.VITE_API_URL}/auth/google`}
+                            className="border-1 border border-1 border-dark w-100 d-flex align-items-center justify-content-center gap-2"
+                            style={{
+                                backgroundColor: "#fff",
+                                borderRadius: "16px",
+                                color: "black",
+                            }}
+                        >
+                            <GoogleIcon />
+                            <span>Login dengan Google</span>
+                        </Button>
+                        <div className="text-center mt-3">
+                            <span>
+                                Belum punya akun?{" "}
                                 <Link
                                     to="/register"
                                     style={{
                                         color: "#7126B5",
-                                        fontWeight: "600",
-                                        textDecoration: "none",
+                                        fontWeight: "bold",
                                     }}
                                 >
-                                    Register here
+                                    Daftar sekarang
                                 </Link>
                             </span>
                         </div>

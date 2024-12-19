@@ -1,9 +1,9 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import logo from '../../assets/img/logoterbangin.png';
-import Form from 'react-bootstrap/Form';
-import { 
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import logo from "../../assets/img/logoterbangin.png";
+import Form from "react-bootstrap/Form";
+import {
     Search as SearchIcon,
     History as HistoryIcon,
     PersonOutline as ProfileIcon,
@@ -12,9 +12,8 @@ import {
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser, setToken } from "../../redux/slices/auth";
-import axios from "axios";
-import NotificationDropdown from "../Notification/dropdown"; 
+import { setUser, setToken } from "../../redux/slices/auth";;
+import NotificationDropdown from "../Notification/dropdown";
 import { useQuery } from "@tanstack/react-query";
 import { getUser } from "../../services/user";
 
@@ -24,7 +23,6 @@ const NavigationBar = () => {
     const location = useLocation();
     const dispatch = useDispatch();
 
-
     const hideNavbarRoutes = [
         "/register",
         "/login",
@@ -32,18 +30,28 @@ const NavigationBar = () => {
         "/reset-password-request",
         "/otp",
     ];
-    const { data: user, isSuccess, isError } = useQuery({
+    const {
+        data: user,
+        isSuccess,
+        isError,
+    } = useQuery({
         queryKey: ["user"],
         queryFn: getUser,
         enabled: !!token,
-        onSuccess: (data) => dispatch(setUser(data.data)),
-        onError: () => {
-            dispatch(setUser(null));
-            dispatch(setToken(null));
-            navigate({ to: "/login" });
-        },
     });
 
+    useEffect(() => {
+        if (isSuccess) {
+            dispatch(setUser(user.data));
+            return;
+        }
+        if (isError) {
+            dispatch(setUser(null));
+            dispatch(setToken(null));
+            localStorage.removeItem("token");
+            return;
+        }
+    }, [isSuccess, isError]);
     const shuoldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
     return (
@@ -57,8 +65,12 @@ const NavigationBar = () => {
                         <Navbar.Toggle aria-controls="navbarScroll" />
                         <Form
                             className="d-flex"
-                            style={{ position: 'relative', marginLeft: '34px', width: '444px' }}
-                            >
+                            style={{
+                                position: "relative",
+                                marginLeft: "34px",
+                                width: "444px",
+                            }}
+                        >
                             <Form.Control
                                 type="search"
                                 placeholder="Search"
@@ -81,23 +93,26 @@ const NavigationBar = () => {
                         <Navbar.Collapse id="navbarScroll">
                             <Nav
                                 className="ms-auto my-2 my-lg-0"
-                                style={{ maxHeight: '100px' }}
+                                style={{ maxHeight: "100px" }}
                                 navbarScroll
                             >
-                                {user ? (
+                                {(user && token) ? (
                                     <>
                                         <Nav.Link
                                             as={Link}
                                             to="users/private/order-history/"
                                         >
                                             <HistoryIcon
-                                                style={{ marginRight: '8px' }}
+                                                style={{ marginRight: "8px" }}
                                             />
                                         </Nav.Link>
-                                        <NotificationDropdown/>
-                                        <Nav.Link as={Link} to="/users/private/profile/">
+                                        <NotificationDropdown />
+                                        <Nav.Link
+                                            as={Link}
+                                            to="/users/private/profile/"
+                                        >
                                             <ProfileIcon
-                                                style={{ marginRight: '8px' }}
+                                                style={{ marginRight: "8px" }}
                                             />
                                         </Nav.Link>
                                     </>
@@ -106,16 +121,16 @@ const NavigationBar = () => {
                                         <Nav.Link
                                             variant="primary"
                                             style={{
-                                                backgroundColor: '#7126B5',
-                                                borderRadius: '12px',
-                                                marginRight: '70px',
-                                                color: 'white',
+                                                backgroundColor: "#7126B5",
+                                                borderRadius: "12px",
+                                                marginRight: "70px",
+                                                color: "white",
                                             }}
                                             as={Link}
                                             to="/login"
                                         >
                                             <LoginIcon
-                                                style={{ marginRight: '8px' }}
+                                                style={{ marginRight: "8px" }}
                                             />
                                             Masuk
                                         </Nav.Link>
