@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect, useRef } from "react";
 import {
   createLazyFileRoute,
@@ -259,20 +260,10 @@ const handleClearFilters = useCallback(() => {
   setSortBy([]); 
   setSortOrder(""); 
   setSelectedAirlines([]); 
-
-  const newParams = new URLSearchParams();
-  newParams.set("page", "1"); 
-  
   navigate({
-    to: `/users/public/detailPenerbangan?${newParams.toString()}`,
+    to: `/users/public/detailPenerbangan`,
   });
-  
-  fetchFlightsData(true, null, false, false, { 
-    classFilter: [], 
-    sortBy: [], 
-    sortOrder: "", 
-    airlines: []
-  });
+  fetchFlightsData(true);
 }, [navigate, fetchFlightsData]);
 
 useEffect(() => {
