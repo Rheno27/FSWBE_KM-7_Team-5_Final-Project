@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { Container, Row, Col } from "react-bootstrap";
-import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
-import { AlertBox } from '../../../../components/ui/alertBox.jsx'
 import "./style.css";
 import ProgressBar from "../../../../components/ProgresBar";
 import { useMutation } from "@tanstack/react-query";
@@ -81,7 +79,7 @@ function Checkout() {
             setNationalities(Array(total).fill(""));
             setIdentityNumbers(Array(total).fill(""));
             setOriginCountries(Array(total).fill(""));
-            setPassengerTypes(Array(total).fill("")); // assuming default type
+            setPassengerTypes(Array(total).fill(""));
         }
     }, [passenger]);
 
@@ -175,21 +173,7 @@ function Checkout() {
         <>
             <Container className="checkout-page">
                 {/* Progress Bar */}
-                <Row className="justify-content-center mt-2 mb-4 py-3 shadow-sm">
-                    <Col lg={9} md={10}>
-                        <BreadcrumbNav
-                            items={[
-                            { label: 'Isi Data Diri', disabled: true, cursor: 'default' },
-                            { label: 'Bayar', disabled: true, cursor: 'default' },
-                            { label: 'Selesai', disabled: true, cursor: 'default' },
-                            ]}
-                        />
-                        <AlertBox
-                            type="warning"
-                            message="Selesaikan Pengisian Data Dalam 15:00"
-                        />
-                    </Col>
-                </Row>
+                <ProgressBar />
                 {/* Checkout Content */}
                 <Row>
                     {/* Left Side: Form Data Diri */}

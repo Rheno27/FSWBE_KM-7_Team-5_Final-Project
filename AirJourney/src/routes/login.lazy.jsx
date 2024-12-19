@@ -78,28 +78,38 @@ function Login() {
                     md={12}
                     className="d-none d-lg-block p-0"
                     style={{
+                        backgroundImage: `url(${background})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
                         position: "relative",
-                        overflow: "hidden",
                     }}
                 ></Col>
                 <Col
                     lg={6}
                     md={12}
-                    className="d-flex flex-column align-items-center justify-content-center p-5"
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "1rem",
+                    }}
                 >
                     <Form
                         style={{
                             width: "100%",
                             maxWidth: "452px",
-                            padding: "20px",
+                            backgroundColor: "rgba(255, 255, 255, 0.85)",
+                            borderRadius: "16px",
+                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                            padding: "1.5rem",
+                            margin: "0 auto",
                         }}
-                        className="bg-white bg-opacity-75 border-1 rounded-xl p-5 shadow-sm"
                         onSubmit={onSubmit}
                     >
                         <h1
-                            className="mb-4"
                             style={{
-                                fontSize: "2rem",
+                                fontSize: "1.8rem",
                                 fontWeight: "bold",
                                 fontFamily: "Poppins, sans-serif",
                                 textAlign: "left",
@@ -109,7 +119,7 @@ function Login() {
                             Masuk
                         </h1>
                         <Form.Group controlId="email" className="mb-3">
-                            <Form.Label>Email</Form.Label>
+                            <Form.Label style={{ fontSize: "1rem" }}>Email</Form.Label>
                             <Form.Control
                                 type="email"
                                 placeholder="Example: johndoe@gmail.com"
@@ -118,6 +128,8 @@ function Login() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 style={{
                                     borderRadius: "16px",
+                                    padding: "0.75rem",
+                                    fontSize: "0.9rem",
                                 }}
                             />
                         </Form.Group>
@@ -152,10 +164,10 @@ function Login() {
                                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                                 </div>
                                 <a
-                                    href={`/reset-password-request`}
+                                    href="/reset-password-request"
                                     style={{
                                         fontSize: "0.875rem",
-                                        fontWeight: "light",
+                                        fontWeight: "400",
                                         color: "#7126B5",
                                         textDecoration: "none",
                                     }}
@@ -166,13 +178,13 @@ function Login() {
                         </Form.Group>
                         <Button
                             type="submit"
-                            className="w-100"
                             style={{
                                 backgroundColor: "#7126B5",
                                 borderColor: "#7126B5",
                                 borderRadius: "16px",
                                 marginBottom: "16px",
                             }}
+                            className="w-100"
                         >
                             Masuk
                         </Button>
