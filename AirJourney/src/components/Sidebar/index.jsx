@@ -5,7 +5,6 @@ import { Accordion, AccordionSummary, AccordionDetails, Typography, FormControlL
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const Sidebar = ({ 
-  applyFilters, 
   onClassChange, 
   onSortByChange, 
   onSortOrderChange, 
@@ -13,7 +12,8 @@ const Sidebar = ({
   selectedClass, 
   selectedSortBy, 
   selectedSortOrder,
-  selectedAirlines
+  selectedAirlines,
+  clearFilters
 }) => {
   const [expanded, setExpanded] = useState([]); 
 
@@ -34,12 +34,12 @@ const Sidebar = ({
 
   const handleClassChange = (event) => {
     const value = event.target.value;
-    onClassChange(value === selectedClass ? "" : value); 
+    onClassChange(value === selectedClass ? "" : value); // Toggle the selection
   };
 
   const handleSortByChange = (event) => {
     const value = event.target.value;
-    onSortByChange([value]); 
+    onSortByChange([value]); // Assuming sortBy is always an array with one element
   };
 
   const handleSortOrderChange = (event) => {
@@ -48,32 +48,17 @@ const Sidebar = ({
 
   const handleAirlineChange = (event, airlineId) => {
     if (event.target.checked) {
-      onAirlinesChange([airlineId]); 
+      onAirlinesChange([airlineId]); // Select only one airline at a time
     } else {
-      onAirlinesChange([]); 
+      onAirlinesChange([]); // Unselect all
     }
-  };
-
-  const handleApplyFilters = () => {
-    applyFilters({ 
-      classFilter: selectedClass ? [selectedClass] : [], 
-      sortBy: selectedSortBy, 
-      sortOrder: selectedSortOrder, 
-    });
-  };
-
-  const clearFilters = () => {
-    onClassChange("");
-    onSortByChange([]);
-    onSortOrderChange("");
-    onAirlinesChange([]);
-    applyFilters({ classFilter: [], sortBy: [], sortOrder: "", airlines: [] }); 
   };
 
   const isClassSelected = (className) => selectedClass === className;
   return (
     <div style={{ backgroundColor: "#F5EFFF", padding: "1rem", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", width: "70%", height: "auto", marginLeft: "auto", marginRight: "2rem" }}>
       <h5 className="fw-bold mb-3" style={{ fontSize: "1.5rem" }}>Filter</h5>
+      
       <Accordion expanded={expanded.includes('panel1')} onChange={handleChange('panel1')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1d-content" id="panel1d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -108,7 +93,7 @@ const Sidebar = ({
           ))}
         </AccordionDetails>
       </Accordion>
-
+  
       <Accordion expanded={expanded.includes('panel2')} onChange={handleChange('panel2')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2d-content" id="panel2d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -116,34 +101,34 @@ const Sidebar = ({
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          {["price", "duration", "departureDate", "arrivalDate"].map((classType) => (
-            <div key={classType}>
+          {["price", "duration", "departureDate", "arrivalDate"].map((sortType) => (
+            <div key={sortType}>
               <label style={{ 
-                color: selectedSortBy.includes(classType) ? "black" : "#3C3C3C",  
-                backgroundColor: selectedSortBy.includes(classType) ? "" : "transparent", 
-                fontWeight: selectedSortBy.includes(classType) ? "bold" : "normal",
+                color: selectedSortBy.includes(sortType) ? "black" : "#3C3C3C",  
+                backgroundColor: selectedSortBy.includes(sortType) ? "" : "transparent", 
+                fontWeight: selectedSortBy.includes(sortType) ? "bold" : "normal",
                 padding: "5px", 
                 borderRadius: "5px",
                 display: "inline-block",
                 marginBottom: "5px"
               }}>
                 <input type="radio" 
-                  value={classType} 
-                  checked={selectedSortBy.includes(classType)} 
+                  value={sortType} 
+                  checked={selectedSortBy.includes(sortType)} 
                   onChange={handleSortByChange} 
                   style={{ marginRight: "5px" }}
                 />
-                {classType === "price" ? "Price" 
-                : classType === "duration" ? "Duration" 
-                : classType === "departureDate" ? "Departure Date" 
-                : classType === "arrivalDate" ? "Arrival Date" : classType.replace("_", " ")}
+                {sortType === "price" ? "Price" 
+                : sortType === "duration" ? "Duration" 
+                : sortType === "departureDate" ? "Departure Date" 
+                : sortType === "arrivalDate" ? "Arrival Date" : sortType.replace("_", " ")}
               </label>
               <br />
             </div>
           ))}
         </AccordionDetails>
       </Accordion>
-
+  
       <Accordion expanded={expanded.includes('panel3')} onChange={handleChange('panel3')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel3d-content" id="panel3d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -151,32 +136,32 @@ const Sidebar = ({
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          {["asc", "desc"].map((classType) => (
-            <div key={classType}>
+          {["asc", "desc"].map((orderType) => (
+            <div key={orderType}>
               <label style={{ 
-                color: selectedSortOrder === classType ? "black" : "#3C3C3C", 
-                backgroundColor: selectedSortOrder === classType ? "" : "transparent", 
-                fontWeight: selectedSortOrder === classType ? "bold" : "normal",
+                color: selectedSortOrder === orderType ? "black" : "#3C3C3C", 
+                backgroundColor: selectedSortOrder === orderType ? "" : "transparent", 
+                fontWeight: selectedSortOrder === orderType ? "bold" : "normal",
                 padding: "5px", 
                 borderRadius: "5px",
                 display: "inline-block",
                 marginBottom: "5px"
               }}>
                 <input type="radio" 
-                  value={classType} 
-                  checked={selectedSortOrder === classType} 
+                  value={orderType} 
+                  checked={selectedSortOrder === orderType} 
                   onChange={handleSortOrderChange} 
                   style={{ marginRight: "5px" }}
                 />
-                {classType === "asc" ? "Lowest to Highest" 
-                : classType === "desc" ? "Highest to Lowest" : classType.replace("_", " ")}
+                {orderType === "asc" ? "Lowest to Highest" 
+                : orderType === "desc" ? "Highest to Lowest" : orderType.replace("_", " ")}
               </label>
               <br />
             </div>
           ))}
         </AccordionDetails>
       </Accordion>
-
+  
       <Accordion expanded={expanded.includes('panel4')} onChange={handleChange('panel4')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel4d-content" id="panel4d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -202,13 +187,9 @@ const Sidebar = ({
           </FormGroup>
         </AccordionDetails>
       </Accordion>
-      
-      <button onClick={handleApplyFilters} className="sort-apply-button" 
-        style={{ width: "100%", marginTop: "20px", alignItems: "center", textAlign: "center", backgroundColor: "#CDC1FF", color: "black", border: "none", borderRadius: "5px", padding: "10px 20px", cursor: "pointer" }}>
-        Apply Filters
-      </button>
-      <button onClick={clearFilters} className="sort-apply-button" 
-        style={{ width: "100%", marginTop: "10px", textAlign: "center", backgroundColor: "#E5D9F2", color: "black", border: "none", borderRadius: "5px", padding: "10px 20px", cursor: "pointer" }}>
+  
+      <button onClick={clearFilters} className="sort-clear-button" 
+        style={{ width: "100%", marginTop: "20px", textAlign: "center", backgroundColor: "#E5D9F2", color: "black", border: "none", borderRadius: "5px", padding: "10px 20px", cursor: "pointer" }}>
         Clear Filters
       </button>
     </div>
