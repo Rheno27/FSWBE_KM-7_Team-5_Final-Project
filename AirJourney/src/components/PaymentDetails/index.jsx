@@ -50,12 +50,12 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
     const allTaxDeparture = (allAdultPrice + allInfantPrice + allChildPrice ) * 0.1;
     const allTaxReturn = (allReturnAdultPrice + allReturnInfantPrice + allReturnChildPrice ) * 0.1;
 
-    const allTotalPrice = allAdultPrice + allInfantPrice + allChildPrice + allTaxDeparture + allReturnAdultPrice + allReturnInfantPrice + allReturnChildPrice + allTaxReturn;
+    const allTotalPrice = allAdultPrice + allInfantPrice + allChildPrice + allTaxDeparture + (detailTransaction?.data?.returnFlight !== null ? allReturnAdultPrice + allReturnInfantPrice + allReturnChildPrice + allTaxReturn : 0);
 
 
     return (
         <>
-            <Col lg={5} className="flight-details my-2">
+            <Col lg={5} className="flightdetails my-2">
                 <Card className="shadow-sm">
                     <Card.Body>
                     <div className="mb-3"
@@ -260,7 +260,7 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                     </Row>
                 </Card.Body>
             </Card>
-            {detailTransaction?.returnFlight !== null && (
+            {detailTransaction?.data?.returnFlight !== null && (
                 <Card className="shadow-sm mb-3 mt-3 ">
                     <Card.Body>
                     <div className="mb-3"
@@ -533,7 +533,7 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                         </Col>
                     </Row>
                     <hr />
-                    {detailTransaction?.returnFlight !== null && (
+                    {detailTransaction?.data?.returnFlight !== null && (
                         <>
                             <Row>
                                 <Col
