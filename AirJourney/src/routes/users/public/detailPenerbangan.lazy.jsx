@@ -11,7 +11,6 @@ import Header from "../../../components/Header";
 //import SoldOutImage from "../../../assets/img/soldout.png";
 import loadingImage from "../../../assets/img/search-loading.png";
 import loadingImage2 from "../../../assets/img/search-loading2.png";
-//import SortingButton from "../../../components/FilterFlight/index";
 import { SelectedFlight } from "../../../components/SelectedFlight";
 import { useSelector } from "react-redux";
 import {useQuery } from "@tanstack/react-query";
@@ -155,26 +154,6 @@ function Index() {
     [location.search, page, fetchFlights, flights, isReturn, isFromSelected, navigate, arrivalDate]
   );
 
-  // const handleSortChange = useCallback((option) => {
-  //   const sortedFlights = [...filteredFlights].sort((a, b) => {
-  //     if (option.label === "Harga - Termurah") {
-  //       return a.price - b.price;
-  //     } else if (option.label === "Harga - Termahal") {
-  //       return b.price - a.price;
-  //     }
-  //     return 0;
-  //   });
-
-  //   setFilteredFlights(sortedFlights);
-
-  //   // Update the API sorting params
-  //   const params = new URLSearchParams(location.search);
-  //   params.set("sortBy", "price");
-  //   params.set("sortOrder", option.label === "Harga - Termurah" ? "asc" : "desc");
-
-  //   fetchFlightsData(true);
-  //   navigate(`/users/public/detailPenerbangan?${params.toString()}`);
-  // }, [filteredFlights, location, navigate, fetchFlightsData]);
 
   // Filter handlers
 const handleClassChange = useCallback(
@@ -216,12 +195,12 @@ const handleClassChange = useCallback(
     []
   );
     
-  const applyFilters = useCallback(
+const applyFilters = useCallback(
     debounce((filters) => {
-        setClassFilter(filters.classFilter || []);
-        setSortBy(filters.sortBy || []);
-        setSortOrder(filters.sortOrder || "");
-        setSelectedAirlines(filters.airlines || []);
+      setClassFilter(filters.classFilter || []);
+      setSortBy(filters.sortBy || []);
+      setSortOrder(filters.sortOrder || "");
+      setSelectedAirlines(filters.airlines || []);
 
         const baseParams = new URLSearchParams(location.search);
         if (filters.classFilter.length > 0)
