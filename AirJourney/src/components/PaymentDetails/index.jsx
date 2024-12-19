@@ -5,314 +5,565 @@ import { useState } from "react";
 import { getDetailTransaction } from "../../services/transaction/index";
 import { Link } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 import Thumbnail from "../../assets/img/Thumbnail.png";
 
-export const OrderDetailCard = ({ id }) => {
-  useEffect(() => {
-    console.log("OrderDetailCard received ID:", id);
-    console.log('expiredAt', transaction?.data?.payment?.expiredAt);
-  }, [id]);
-  
-  const { data: transaction, isLoading, isError } = useQuery({
-    queryKey: ["transaction", id],
-    queryFn: () => getDetailTransaction(id),
-    enabled: !!id,
-    onError: (err) => {
-      toast.error(
-        err.message || "An error occurred while fetching transaction data"
-      );
-    },
-  });
+function OrderDetailCard({ id, handleCancelTransaction }) {
+    const { data: detailTransaction, isLoading, isError } = useQuery({
+        queryKey: ["transaction", id],
+        queryFn: async () => {
+            const response = await getDetailTransaction(id);
+            console.log('response', response);
+            return response;
+        },
+        enabled: !!id,
+        onError: (err) => {
+            toast.error(
+            err.message || "An error occurred while fetching transaction data"
+            );
+        },
+    });
 
-  console.log('expiredAt', transaction?.data?.payment?.expiredAt);
-  if (isLoading) {
-    return <p>Loading order details...</p>;
-  }
-
-  if (isError || !transaction) {
-    return <p>Error loading order details. Please try again.</p>;
-  }
-
-  // Function to count passengers by type
-  const countPassengersByType = (passengerArray) => {
-    if (!Array.isArray(passengerArray)) {
-      console.error("Passenger data is not an array:", passengerArray);
-      return {}; // Return an empty object if the input is invalid
+    if (isLoading) {
+        return <p>Loading order details...</p>;
     }
-    return passengerArray.reduce((counts, passenger) => {
-      const type = passenger.type; // Extract type (e.g., ADULT, CHILD)
-      // Increment count and accumulate totalPrice for each type
-      counts[type] = (counts[type] || 0) + 1;
-      return counts;
-    }, {}); // Initialize result as an empty object
-  };
 
-  const passengerCounts = countPassengersByType(
-    transaction?.data?.passenger || []
-  );
+    if (isError || !detailTransaction) {
+        return <p>Error loading order details. Please try again.</p>;
+    }
+    const allPassenger = detailTransaction?.data?.passenger || []
+    const passengerAdult = allPassenger.filter(passenger => passenger.type === 'ADULT').length
+    const passengerChild = allPassenger.filter(passenger => passenger.type === 'CHILD').length
+    const passengerInfant = allPassenger.filter(passenger => passenger.type === 'INFANT').length
 
-  const flightPrice = transaction?.data?.departureFlight?.price + 
-  (transaction?.data?.returnFlight?.price || 0) || 0;
+    //price
+    const allAdultPrice = detailTransaction?.data?.departureFlight?.price * passengerAdult
+    const allChildPrice = detailTransaction?.data?.departureFlight?.price * passengerChild
+    const allInfantPrice = detailTransaction?.data?.departureFlight?.price * passengerInfant
+    const allTax = (allAdultPrice + allInfantPrice + allChildPrice) * 0.1;
+    const allTotalPrice = allAdultPrice + allInfantPrice + allChildPrice + allTax;
 
-  console.log("transaction", transaction?.data?.departureFlight?.price);
-  const adultTotalPrice = flightPrice * (passengerCounts.ADULT || 0);
-  const childTotalPrice = flightPrice * (passengerCounts.CHILD || 0);
-  const infantTotalPrice = flightPrice * 0;
-  const totalTax = (adultTotalPrice + childTotalPrice+ infantTotalPrice) * 0.1;
-
-  // Calculate total price for the entire transaction
-  const totalPrice = adultTotalPrice + childTotalPrice + infantTotalPrice + totalTax;
-
-  // useEffect(() => {
-  //   setTotalPrice(totalPrice);
-  // }, [totalPrice, setTotalPrice]);
-
-  const statusBadge = {
-    fontFamily: "Poppins, sans-serif",
-    fontSize: "0.9rem",
-    textAlign: "center",
-    borderRadius: "20px",
-    border: "none",
-    padding: "5px 10px",
-    width: "fit-content",
-  };
-
-  const capitalizeFirstLetter = (str) => {
-    if (!str) return str; // Check if the string is empty or null
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(); // Capitalize the first letter and append the rest
-  };
-
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "Not found";
-    return new Intl.DateTimeFormat("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    }).format(new Date(dateStr));
-  };
-
-  const TruncatableText = ({ text, maxLength = 10 }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
-  
-    const toggleText = () => setIsExpanded(!isExpanded);
-  
-    // Fallback for undefined or null text
-    const safeText = text || "";
-  
     return (
-      <span
-        onClick={toggleText}
-        style={{ cursor: "pointer", color: "#7126B5", fontWeight: "bold" }}
-      >
-        {isExpanded ? safeText : `${safeText.slice(0, maxLength)}...`}
-      </span>
-    );
-  };
+        <>
+            <Col lg={5} className="flight-details my-2">
+                <Card className="shadow-sm">
+                    <Card.Body>
+                    <div className="mb-3"
+                    style={{
+                        fontSize: "22px",
+                        fontWeight: "bold",
+                        color: "black",
+                    }}
+                    >Detail Penerbangan</div>
+                    <Row>
+                        <Col lg={7} >
+                            <div
+                                className="time"
+                                style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                }}
+                            >
+                                {detailTransaction?.departureFlight?.departureTime}
+                            </div>
+                            <div className="departure mt-2 mb-2">
+                                <div className="date">
+                                {
+                                    detailTransaction?.data?.departureFlight?.departureDate &&
+                                    new Date(detailTransaction.data.departureFlight.departureDate).toLocaleDateString('id-ID', {
+                                        day: 'numeric',
+                                        month: 'long',
+                                        year: 'numeric',
+                                    })
+                                }
+                                </div>
+                                <div className="airport">
+                                    {
+                                        detailTransaction?.data?.departureFlight
+                                            ?.airportFrom?.name
+                                    }
+                                </div>
+                            </div>
+                        </Col>
+                        <Col lg={5}>
+                            <div
+                                className="keberangkatan"
+                                style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                    color: "#4B1979",
+                                    textAlign: "right",
+                                }}
+                            >
+                                Keberangkatan
+                            </div>
+                        </Col>
+                    </Row>
+                    <hr />
+                    {/* Flight Details Section */}
+                    <Row>
+                        <Col lg={2}>
+                            <div
+                                className="flight-image"
+                                style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                }}
+                            >
+                                <img src={Thumbnail} alt="Flight" />
+                            </div>
+                        </Col>
+                        <Col lg={10}>
+                            <div className="flight-info mb-2 mt-3">
+                                <div
+                                    className="airline"
+                                    style={{
+                                        fontSize: "16px",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    {
+                                        detailTransaction?.data?.departureFlight?.airline
+                                            ?.name
+                                    }{" "}
+                                    - {detailTransaction?.data?.departureFlight?.class}
+                                </div>
+                                <div
+                                    className="flight-number mb-2"
+                                    style={{
+                                        fontSize: "16px",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    {
+                                        detailTransaction?.data?.departureFlight?.airline
+                                            ?.code
+                                    }
+                                </div>
 
-  function getPaymentStatus(status) {
-    switch (status.toUpperCase()) {
-      case 'SUCCESS':
-        return 'success';
-      case 'CANCELLED':
-        return 'secondary';
-      case 'PENDING':
-        return 'danger';
-      default:
-        return 'warning';
-    }
-  }
+                                <div className="info-box">
+                                    <div className="info-title"
+                                    style={{
+                                        fontSize: "14px",
+                                        fontWeight: "bold",
+                                    }}
+                                    >Informasi:</div>
+                                    <ul className="list-unstyled">
+                                        <li>Baggage 20 kg</li>
+                                        <li>Cabin baggage 7 kg</li>
+                                        <li>In Flight Entertainment</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </Col>
+                    </Row>
+                    <hr />
+                    <Row>
+                    <Col lg={7} >
+                            <div
+                                className="time"
+                                style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                }}
+                            >
+                                {
+                                    detailTransaction?.data?.departureFlight
+                                        ?.arrivalTime
+                                }
+                            </div>
+                            <div className="arrival mt-2 mb-2">
+                                <div className="date">
+                                {
+                                    detailTransaction?.data?.departureFlight?.arrivalDate &&
+                                    new Date(detailTransaction.data.departureFlight.arrivalDate).toLocaleDateString('id-ID', {
+                                        day: 'numeric',
+                                        month: 'long',
+                                        year: 'numeric',
+                                    })
+                                }
+                                </div>
+                                <div className="airport">
+                                    {
+                                        detailTransaction?.data?.departureFlight
+                                            ?.airportTo?.name
+                                    }
+                                </div>
+                            </div>
+                        </Col>
+                        <Col lg={5}>
+                            <div
+                                className="Kedatangan"
+                                style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                    color: "#4B1979",
+                                    textAlign: "right",
+                                }}
+                            >
+                                Kedatangan
+                            </div>
+                        </Col>
+                        <Col lg={6}>
+                            <div
+                                className="Kedatangan"
+                                style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                    color: "#4B1979",
+                                    textAlign: "right",
+                                }}
+                            >
+                                {detailTransaction?.data?.departureFlight?.airportTo?.name}
+                            </div>
+                        </Col>
+                    </Row>
+                    <hr />
+                    <Row className="mt-2 mb-2">
+                        <Col lg={8} className="">
+                            <div
+                                className="hargadeparture"
+                                style={{
+                                    fontSize: "18px",
+                                    fontWeight: "bold",
+                                }}
+                            >
+                                Harga
+                            </div>
+                        </Col>
+                        <Col lg={4}>
+                            <div
+                                className="hargadeparture"
+                                style={{
+                                    fontSize: "18px",
+                                    fontWeight: "bold",
+                                    textAlign: "right",
+                                }}
+                            >
+                                Rp {detailTransaction?.data?.departureFlight?.price}
+                            </div>
+                        </Col>
+                    </Row>
+                </Card.Body>
+            </Card>
+            {detailTransaction?.returnFlight && (
+                <Card className="shadow-sm mb-3 mt-3 ">
+                    <Card.Body>
+                    <div className="mb-3"
+                    style={{
+                        fontSize: "22px",
+                        fontWeight: "bold",
+                        color: "black",
+                    }}
+                    >Detail Penerbangan</div>
+                    <Row>
+                        <Col lg={7} >
+                            <div
+                                className="time"
+                                style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                }}
+                            >
+                                {detailTransaction?.data?.returnFlight?.departureTime}
+                            </div>
+                            <div className="departure mt-2 mb-2">
+                                <div className="date">
+                                {
+                                    detailTransaction?.data?.returnFlight?.departureDate &&
+                                    new Date(detailTransaction.data.returnFlight.departureDate).toLocaleDateString('id-ID', {
+                                        day: 'numeric',
+                                        month: 'long',
+                                        year: 'numeric',
+                                    })
+                                }
+                                </div>
+                                <div className="airport">
+                                    {
+                                        detailTransaction?.data?.returnFlight
+                                            ?.airportFrom?.name
+                                    }
+                                </div>
+                            </div>
+                        </Col>
+                        <Col lg={5}>
+                            <div
+                                className="keberangkatan"
+                                style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                    color: "#4B1979",
+                                    textAlign: "right",
+                                }}
+                            >
+                                Keberangkatan
+                            </div>
+                        </Col>
+                        <Col lg={6}>
+                            <div
+                                className="keberangkatan"
+                                style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                    color: "#4B1979",
+                                    textAlign: "right",
+                                }}
+                            >
+                                {detailTransaction?.data?.returnFlight?.airportTo?.name}
+                            </div>
+                        </Col>
+                    </Row>
+                    <hr />
 
-  const paymentStatus = transaction?.data?.payment?.status || 'untracked';
-  
+                    {/* Flight Details Section */}
+                    <Row>
+                        <Col lg={2}>
+                            <div
+                                className="flight-image"
+                                style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                }}
+                            >
+                                <img src={Thumbnail} alt="Flight" />
+                            </div>
+                        </Col>
+                        <Col lg={10}>
+                            <div className="flight-info mb-2 mt-3">
+                                <div
+                                    className="airline"
+                                    style={{
+                                        fontSize: "16px",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    {
+                                        detailTransaction?.data?.returnFlight?.airline
+                                            ?.name
+                                    }{" "}
+                                    - {detailTransaction?.data?.returnFlight?.class}
+                                </div>
+                                <div
+                                    className="flight-number mb-2"
+                                    style={{
+                                        fontSize: "16px",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    {
+                                        detailTransaction?.data?.returnFlight?.airline
+                                            ?.code
+                                    }
+                                </div>
 
-  return (
-    <Card className="p-3 shadow-sm rounded-3 w-100" style={{border: '1px solid #7126B5'}}>
-      <Form>
-        <h6>
-          Booking Code : <TruncatableText text={transaction?.data?.id || "Not found"} maxLength={15} />
-        </h6>
-        <div className="mt-3">
-          {/* Departure Flight Section */}
-          <Row className="d-flex justify-content-between">
-            <h6 className="text-center text-muted" style={{fontSize:'0.9rem'}}>--- Departure Flight ---</h6>
-            <Col xs={6} className="d-flex flex-column">
-              <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Origin :</span>
-              <span>
-                <strong>
-                  {transaction?.data?.departureFlight?.departureTime}
-                </strong>
-              </span>
-              <span className="mb-1">
-                {formatDate(
-                  transaction?.data?.departureFlight?.departureDate
-                )}
-              </span>
-              <span style={{color:'#7126B5', fontSize:'0.95rem'}}>{transaction?.data?.departureFlight?.airportFrom?.name}</span>
-            </Col>
-            <Col xs={6} className="d-flex flex-column align-items-end">
-              <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Destination :</span>
-              <span>
-                <strong>
-                  {transaction?.data?.departureFlight?.arrivalTime}
-                </strong>
-              </span>
-              <span className="mb-1">
-                {formatDate(transaction?.data?.departureFlight?.arrivalDate)}
-              </span>
-              <span style={{color:'#7126B5', fontSize:'0.95rem'}} className="text-end">{transaction?.data?.departureFlight?.airportTo?.name}</span>
-            </Col>
-          </Row>
-          <Row className="mt-2">
-            <span className="text-center text-muted" style={{fontSize:'0.9rem'}}>------ Airline ------</span>
-            <Col xs={2}>
-              <img
-                // src={transaction?.data?.departureFlight?.airline?.image}
-                src={Thumbnail}
-                alt=""
-              />
-            </Col>
-            <Col xs={10}>
-              <span style={{fontSize:'0.95rem'}}>
-                <b>
-                  {transaction?.data?.departureFlight?.airline?.name} -{" "}
-                  {capitalizeFirstLetter(
-                    transaction?.data?.departureFlight?.class || "Not found"
-                  )}
-                </b>
-                <br />
-                {transaction?.data?.departureFlight?.airline?.code}
-              </span>
-            </Col>
-          </Row>
-          <hr style={{ height: '2px', backgroundColor: '#000000', border: 'none' }}/>
-          {/* End of departure flight section */}
-
-          {/* Return Flight Section */}
-          {transaction?.data?.returnFlight && (
-          <>
-            <Row className="d-flex justify-content-between">
-              <h6 className="text-center text-muted" style={{fontSize:'0.9rem'}}>--- Return Flight ---</h6>
-              <Col xs={6} className="d-flex flex-column">
-                <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Origin :</span>
-                <span>
-                  <strong>
-                    {transaction?.data?.returnFlight?.departureTime}
-                  </strong>
-                </span>
-                <span className="mb-1">
-                  {formatDate(
-                    transaction?.data?.returnFlight?.departureDate
-                  )}
-                </span>
-                <span style={{color:'#7126B5', fontSize:'0.95rem'}}>{transaction?.data?.returnFlight?.airportFrom?.name}</span>
-              </Col>
-              <Col xs={6} className="d-flex flex-column align-items-end">
-                <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Destination :</span>
-                <span>
-                  <strong>
-                    {transaction?.data?.returnFlight?.arrivalTime}
-                  </strong>
-                </span>
-                <span className="mb-1">
-                  {formatDate(transaction?.data?.returnFlight?.arrivalDate)}
-                </span>
-                <span style={{color:'#7126B5', fontSize:'0.95rem'}}>{transaction?.data?.returnFlight?.airportTo?.name}</span>
-              </Col>
-            </Row>
-            <Row className="mt-2">
-              <span className="text-center text-muted" style={{fontSize:'0.9rem'}}>------ Airline ------</span>
-              <Col xs={2}>
-                <img
-                  src={transaction?.data?.returnFlight?.airline?.image}
-                  alt=""
-                />
-              </Col>
-              <Col xs={10}>
-                <span style={{fontSize:'0.95rem'}}>
-                    <b>
-                    {transaction?.data?.returnFlight?.airline?.name} -{" "}
-                    {capitalizeFirstLetter(
-                      transaction?.data?.returnFlight?.class || "Not found"
-                    )}
-                    </b>
-                  <br />
-                  {transaction?.data?.returnFlight?.airline?.code}
-                </span>
-              </Col>
-            </Row>
-          <hr style={{ height: '2px', backgroundColor: '#000000', border: 'none' }} />
-          </>
-          )}
-          {/* End of return flight section */}
-
-          {/* <Row>
-            <span>Penumpang :</span>
-              <div>
-                {transaction?.data?.passenger?.length > 0 ? (
-                  transaction.data.passenger.map((passenger, index) => (
-                    <div key={passenger.id} className="d-flex flex-column">
-                      <span style={{color: "#7126B5"}}>{index + 1} : {passenger.title} {passenger.firstName} {passenger.familyName} | <TruncatableText text={passenger.id} maxLength={10} /></span>
-                    </div>
-                  ))
-                ) : (
-                  <p>No passengers available.</p>
-                )}
-              </div>
-          </Row> */}
-          {/* <hr /> */}
-        </div>
-
-        <Row className="my-2">
-          <h6>Rincian Harga</h6>
-          <Col xs={7}>
-            {Object.entries(passengerCounts).map(([type, count]) => (
-              <div key={type}>
-                <span>
-                  {count} {type}
-                </span>
-              </div>
-            ))}
-            Tax
-          </Col>
-          <Col xs={5} className="text-end align-self-start">
-            <div className="d-flex flex-column">
-              {passengerCounts.ADULT > 0 && <span>IDR {new Intl.NumberFormat("id-ID").format(adultTotalPrice)}</span>}
-              {passengerCounts.INFANT > 0 && <span>IDR {new Intl.NumberFormat("id-ID").format(infantTotalPrice)}</span>}
-              {passengerCounts.CHILD > 0 && <span>IDR {new Intl.NumberFormat("id-ID").format(childTotalPrice)}</span>}
-              <span>
-              {paymentStatus === "CANCELLED" ? (
-                <span>--</span>
-              ) : (
-                <span>
-                  IDR{" "}
-                  {new Intl.NumberFormat("id-ID").format(
-                    totalTax
-                  )}
-                </span>
-              )}
-              </span>
-            </div>
-          </Col>
-        </Row>
-        <hr />
-        <Row className="mt-2 justify-content-between">
-          <Col>
-            <h5>Total :</h5>
-          </Col>
-          <Col className="text-end align-self-start">
-            {paymentStatus === "CANCELLED" ? (
-              <span>--</span>
-            ) : (
-              <h5 style={{ color: "#7126B5", fontWeight: "bold" }}>
-                IDR{" "}
-                {new Intl.NumberFormat("id-ID").format(
-                  totalPrice
-                )}
-              </h5>
+                                <div className="info-box">
+                                    <div className="info-title"
+                                    style={{
+                                        fontSize: "14px",
+                                        fontWeight: "bold",
+                                    }}
+                                    >Informasi:</div>
+                                    <ul className="list-unstyled">
+                                        <li>Baggage 20 kg</li>
+                                        <li>Cabin baggage 7 kg</li>
+                                        <li>In Flight Entertainment</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </Col>
+                    </Row>
+                    <hr />
+                    <Row>
+                    <Col lg={7} >
+                            <div
+                                className="time"
+                                style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                }}
+                            >
+                                {
+                                    detailTransaction?.data?.returnFlight
+                                        ?.arrivalTime
+                                }
+                            </div>
+                            <div className="arrival mt-2 mb-2">
+                                <div className="date">
+                                {
+                                    detailTransaction?.data?.returnFlight?.arrivalDate &&
+                                    new Date(detailTransaction.data.returnFlight.arrivalDate).toLocaleDateString('id-ID', {
+                                        day: 'numeric',
+                                        month: 'long',
+                                        year: 'numeric',
+                                    })
+                                }
+                                </div>
+                                <div className="airport">
+                                    {
+                                        detailTransaction?.data?.returnFlight
+                                            ?.airportTo?.name
+                                    }
+                                </div>
+                            </div>
+                        </Col>
+                        <Col lg={5}>
+                            <div
+                                className="Kedatangan"
+                                style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                    color: "#4B1979",
+                                    textAlign: "right",
+                                }}
+                            >
+                                Kedatangan
+                            </div>
+                        </Col>
+                    </Row>
+                    <hr />
+                    <Row className="mt-2 mb-2">
+                        <Col lg={8} className="">
+                            <div
+                                className="hargadeparture"
+                                style={{
+                                    fontSize: "18px",
+                                    fontWeight: "bold",
+                                }}
+                            >
+                                Harga
+                            </div>
+                        </Col>
+                        <Col lg={4}>
+                            <div
+                                className="hargadeparture"
+                                style={{
+                                    fontSize: "18px",
+                                    fontWeight: "bold",
+                                    textAlign: "right",
+                                }}
+                            >
+                                Rp {detailTransaction?.data?.returnFlight?.price}
+                            </div>
+                        </Col>
+                    </Row>
+                </Card.Body>
+            </Card>
             )}
-          </Col>
-        </Row>
-      </Form>
-    </Card>
-  );
+            <Card className="mt-3">
+                <Card.Body>
+                    {/* Heading */}
+                    <Row>
+                        <div
+                            style={{
+                                fontSize: "18px",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Rincian Harga
+                        </div>
+                    </Row>
+                    <hr />
+
+                    {/* Rincian Harga */}
+                    <Row>
+                        <Col
+                            xs={8}
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                {passengerAdult} Adult
+                            </div>
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                {passengerChild} Child
+                            </div>
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                {passengerInfant} Infant
+                            </div>
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>Tax</div>
+                        </Col>
+
+                        <Col
+                            xs={4}
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "flex-end",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                Rp {allAdultPrice ?? 0}
+                            </div>
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                Rp {allChildPrice ?? 0}
+                            </div>
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                Rp {allInfantPrice ?? 0}
+                            </div>
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                Rp {allTax ?? 0}
+                            </div>
+                        </Col>
+                    </Row>
+                    <hr />
+
+                    {/* Total Harga */}
+                    <Row>
+                        <Col
+                            xs={8}
+                            style={{
+                                fontSize: "18px",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Total Harga
+                        </Col>
+                        <Col
+                            xs={4}
+                            style={{
+                                fontSize: "20px",
+                                fontWeight: "bold",
+                                color: "#4B1979",
+                                textAlign: "right",
+                            }}
+                        >
+                            Rp {allTotalPrice ?? 0}
+                        </Col>
+                    </Row>
+                </Card.Body>
+            </Card>
+
+            <Button
+                className="mt-3 w-100 mb-4"
+                style={{
+                    backgroundColor: "#FF0000",
+                    borderColor: "#FF0000",
+                }}
+                onClick={handleCancelTransaction}
+            >
+                Cencel Transaction
+            </Button>
+            </Col>
+        </>
+    );
 };
+
+OrderDetailCard.propTypes = {
+    handleCancelTransaction: PropTypes.any,
+    passenger: PropTypes.any,
+};
+
+export default OrderDetailCard;

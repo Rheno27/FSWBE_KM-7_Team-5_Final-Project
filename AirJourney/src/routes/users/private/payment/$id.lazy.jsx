@@ -5,9 +5,10 @@ import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
 import { AlertBox } from '../../../../components/ui/alertBox.jsx'
 import { toast, ToastContainer } from "react-toastify";
 import { useQuery } from '@tanstack/react-query'
-import { OrderDetailCard } from "../../../../components/PaymentDetails/index.jsx";
-import { getDetailTransaction } from '../../../../services/transaction/index.js'
+import OrderDetailCard from "../../../../components/PaymentDetails";
+import { getDetailTransaction, cancelTransaction } from '../../../../services/transaction/index.js'
 import { useSelector } from 'react-redux'
+import { useMutation } from '@tanstack/react-query'
 import Notification from "../../../../components/Notification/dropdown.jsx"; 
 import axios from 'axios'
 
@@ -17,9 +18,7 @@ export const Route = createLazyFileRoute('/users/private/payment/$id')({
 
 function Payment() {
   const { id } = Route.useParams();
-  console.log("id", id);
   const navigate = useNavigate();
-  // const token = localStorage.getItem('token') ;
   const { token } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -62,6 +61,18 @@ function Payment() {
     );
     return response.data.data || [];
   }});
+
+  const { mutate: cancelTransactionMutation } = useMutation({
+    mutationFn: () => cancelTransaction(id),
+    onSuccess: () => {
+      navigate({ to: `/` });
+      handleCancel();
+    },
+    onError: (err) => {
+      console.log("error cancel", err);
+      toast.error(err.message || "Failed to cancel transaction");
+    },
+  });
 
   const capitalizeFirstLetter = (str) => {
     if (!str) return str; // Check if the string is empty or null
@@ -170,6 +181,16 @@ function Payment() {
     }
   }, [transaction, navigate]);
 
+  const handleCancelTransaction = async () => {
+    const response = await cancelTransactionMutation();
+    if (response.status) {
+      toast.success("Transaction cancelled successfully");
+      handleCancel();
+    } else {
+        toast.error("Failed to cancel transaction");
+    }
+}
+
   return (
     <div className="payment-page">
       <ToastContainer
@@ -195,17 +216,15 @@ function Payment() {
       </Row>
       <Container>
         <Row className="justify-content-center my-4 gap-1">
-          <Col lg={6} md={6} className="my-4">
+          <Col lg={6} md={6} className="my-2">
               <Card id="snap-container" className="p-3 shadow-sm rounded-3 w-100" style={{border: '1px solid #7126B5'}}></Card>
           </Col>
 
-          <Col lg={4} md={5} className="mt-4">
-            {id ? (
-              <OrderDetailCard id={id} />
-            ) : (
-              <p className="text-danger">Transaction ID is missing</p>
-            )}
-          </Col>
+          {id ? (
+            <OrderDetailCard id={id} handleCancelTransaction={handleCancelTransaction} />
+          ) : (
+            <p className="text-danger">Transaction ID is missing</p>
+          )}
         </Row>
       </Container>
     </div>
