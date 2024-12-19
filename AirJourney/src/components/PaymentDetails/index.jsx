@@ -5,10 +5,12 @@ import { useState } from "react";
 import { getDetailTransaction } from "../../services/transaction/index";
 import { Link } from "@tanstack/react-router";
 import { useEffect } from "react";
+import Thumbnail from "../../assets/img/Thumbnail.png";
 
 export const OrderDetailCard = ({ id }) => {
   useEffect(() => {
     console.log("OrderDetailCard received ID:", id);
+    console.log('expiredAt', transaction?.data?.payment?.expiredAt);
   }, [id]);
   
   const { data: transaction, isLoading, isError } = useQuery({
@@ -22,6 +24,7 @@ export const OrderDetailCard = ({ id }) => {
     },
   });
 
+  console.log('expiredAt', transaction?.data?.payment?.expiredAt);
   if (isLoading) {
     return <p>Loading order details...</p>;
   }
@@ -48,8 +51,10 @@ export const OrderDetailCard = ({ id }) => {
     transaction?.data?.passenger || []
   );
 
-  const flightPrice = (transaction?.data?.departureFlight?.price + transaction?.data?.returnFlight?.price) || 0;
+  const flightPrice = transaction?.data?.departureFlight?.price + 
+  (transaction?.data?.returnFlight?.price || 0) || 0;
 
+  console.log("transaction", transaction?.data?.departureFlight?.price);
   const adultTotalPrice = flightPrice * (passengerCounts.ADULT || 0);
   const childTotalPrice = flightPrice * (passengerCounts.CHILD || 0);
   const infantTotalPrice = flightPrice * 0;
@@ -118,9 +123,10 @@ export const OrderDetailCard = ({ id }) => {
   }
 
   const paymentStatus = transaction?.data?.payment?.status || 'untracked';
+  
 
   return (
-    <Card className="p-3 shadow-sm rounded-3 mt-1 w-100" style={{border: '1px solid #7126B5'}}>
+    <Card className="p-3 shadow-sm rounded-3 w-100" style={{border: '1px solid #7126B5'}}>
       <Form>
         <h6>
           Booking Code : <TruncatableText text={transaction?.data?.id || "Not found"} maxLength={15} />
@@ -153,14 +159,15 @@ export const OrderDetailCard = ({ id }) => {
               <span className="mb-1">
                 {formatDate(transaction?.data?.departureFlight?.arrivalDate)}
               </span>
-              <span style={{color:'#7126B5', fontSize:'0.95rem'}}>{transaction?.data?.departureFlight?.airportTo?.name}</span>
+              <span style={{color:'#7126B5', fontSize:'0.95rem'}} className="text-end">{transaction?.data?.departureFlight?.airportTo?.name}</span>
             </Col>
           </Row>
           <Row className="mt-2">
             <span className="text-center text-muted" style={{fontSize:'0.9rem'}}>------ Airline ------</span>
             <Col xs={2}>
               <img
-                src={transaction?.data?.departureFlight?.airline?.image}
+                // src={transaction?.data?.departureFlight?.airline?.image}
+                src={Thumbnail}
                 alt=""
               />
             </Col>
