@@ -3,6 +3,7 @@ import FlightClassIcon from '@mui/icons-material/FlightClass';
 import SortIcon from '@mui/icons-material/Sort';
 import { Accordion, AccordionSummary, AccordionDetails, Typography, FormControlLabel, FormGroup } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import "../../index.css"
 
 const Sidebar = ({ 
   onClassChange, 
@@ -48,10 +49,27 @@ const Sidebar = ({
 
   const handleAirlineChange = (event, airlineId) => {
     if (event.target.checked) {
-      onAirlinesChange([airlineId]); // Select only one airline at a time
+      onAirlinesChange(airlineId,true); 
     } else {
-      onAirlinesChange([]); // Unselect all
+      onAirlinesChange(airlineId,false); 
     }
+  };
+
+  const handleApplyFilters = () => {
+    applyFilters({ 
+      classFilter: selectedClass, 
+      sortBy: selectedSortBy, 
+      sortOrder: selectedSortOrder, 
+      airlines: selectedAirlines
+    });
+  };
+
+  const clearFilters = () => {
+    onClassChange("");
+    onSortByChange([]);
+    onSortOrderChange("");
+    onAirlinesChange([]);
+    applyFilters({ classFilter: [], sortBy: [], sortOrder: "", airlines: [] }); 
   };
 
   const isClassSelected = (className) => selectedClass === className;
@@ -175,8 +193,8 @@ const Sidebar = ({
                 key={airline.id}
                 control={
                   <input 
-                    type="radio" 
-                    checked={Array.isArray(selectedAirlines) && selectedAirlines.includes(airline.id)} 
+                    type="checkbox" 
+                    checked={selectedAirlines.includes(airline.id)} 
                     onChange={(e) => handleAirlineChange(e, airline.id)} 
                     name="airlineSelect"
                   />
@@ -187,9 +205,13 @@ const Sidebar = ({
           </FormGroup>
         </AccordionDetails>
       </Accordion>
-  
-      <button onClick={clearFilters} className="sort-clear-button" 
-        style={{ width: "100%", marginTop: "20px", textAlign: "center", backgroundColor: "#E5D9F2", color: "black", border: "none", borderRadius: "5px", padding: "10px 20px", cursor: "pointer" }}>
+      
+      <button onClick={handleApplyFilters} className="sort-apply-button cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" disabled={(selectedSortBy.length > 0 ? (!selectedSortOrder) : false) || (selectedSortOrder ? (selectedSortBy.length == 0):false) }
+        style={{ width: "100%", marginTop: "20px", alignItems: "center", textAlign: "center", backgroundColor: "#CDC1FF", color: "black", border: "none", borderRadius: "5px", padding: "10px 20px" }}>
+        Apply Filters
+      </button>
+      <button onClick={clearFilters} className="sort-apply-button" 
+        style={{ width: "100%", marginTop: "10px", textAlign: "center", backgroundColor: "#E5D9F2", color: "black", border: "none", borderRadius: "5px", padding: "10px 20px", cursor: "pointer" }}>
         Clear Filters
       </button>
     </div>
