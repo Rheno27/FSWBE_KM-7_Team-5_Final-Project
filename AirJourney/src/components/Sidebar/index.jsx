@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import FlightClassIcon from '@mui/icons-material/FlightClass';
 import SortIcon from '@mui/icons-material/Sort';
+import FlightIcon from '@mui/icons-material/Flight';
+import SwapVertIcon from '@mui/icons-material/SwapVert';
 import { Accordion, AccordionSummary, AccordionDetails, Typography, FormControlLabel, FormGroup } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import "../../index.css"
@@ -52,11 +54,7 @@ const Sidebar = ({
   };
 
   const handleAirlineChange = (event, airlineId) => {
-    if (event.target.checked) {
-      onAirlinesChange(airlineId,true); 
-    } else {
-      onAirlinesChange(airlineId,false); 
-    }
+      onAirlinesChange(airlineId, event.target.checked); 
   };
 
   const handleApplyFilters = () => {
@@ -64,16 +62,16 @@ const Sidebar = ({
       classFilter: selectedClass, 
       sortBy: selectedSortBy, 
       sortOrder: selectedSortOrder, 
-      airlines: selectedAirlines
+      airlines: selectedAirlines || ""
     });
   };
 
-  const clearFilters = () => {
+    const clearFilters = () => {
     onClassChange("");
     onSortByChange([]);
     onSortOrderChange("");
-    onAirlinesChange([]);
-    applyFilters({ classFilter: [], sortBy: [], sortOrder: "", airlines: [] }); 
+    onAirlinesChange("", false); 
+    applyFilters({ classFilter: "", sortBy: [], sortOrder: "", airlines: "" }); 
   };
 
   const isClassSelected = (className) => selectedClass === className;
@@ -153,7 +151,7 @@ const Sidebar = ({
       <Accordion expanded={expanded.includes('panel3')} onChange={handleChange('panel3')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel3d-content" id="panel3d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <SortIcon /> Sort Order
+            <SwapVertIcon style={{fontSize: "1.8rem" }} /> Sort Order
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -186,7 +184,7 @@ const Sidebar = ({
       <Accordion expanded={expanded.includes('panel4')} onChange={handleChange('panel4')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel4d-content" id="panel4d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <SortIcon /> Choose by Airlines
+            <FlightIcon style={{ transform: "rotate(50deg)" }} /> Choose by Airlines
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -196,8 +194,8 @@ const Sidebar = ({
                 key={airline.id}
                 control={
                   <input 
-                    type="checkbox" 
-                    checked={selectedAirlines.includes(airline.id)} 
+                    type="radio" 
+                    checked={selectedAirlines === airline.id} 
                     onChange={(e) => handleAirlineChange(e, airline.id)} 
                     name="airlineSelect"
                     style={{ marginRight: "5px" }}
