@@ -68,7 +68,7 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
         const formData = {
             airportIdFrom: selectedFlight.airportIdFrom,
             airportIdTo: selectedFlight.airportIdTo,
-            departureDate: selectedFlight.departureDate.split("T")[0],
+            departureDate: new Date(selectedFlight.departureDate).toLocaleDateString("en-CA"),
         };
         const formatDate = (date) => {
             const year = date.getFullYear();
@@ -77,7 +77,7 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
             return `${year}-${month}-${day}`;
         }; // toISOString() placeholder since its have a bug;
 
-        if(classType){
+        if (classType) {
             formData.class = classType.toUpperCase().replace(/\s/g, "_");
         }
         if (isReturn) {
@@ -282,7 +282,11 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
                                 setSearchDate(value);
                             }}
                             mode="single"
-                            disabled={{ before: new Date(selectedFlight.departureDate.split("T")[0]) }}
+                            disabled={{
+                                before: new Date(
+                                    selectedFlight.departureDate
+                                ).toLocaleDateString("en-CA"),
+                            }}
                             required
                         />
                     )}
@@ -304,11 +308,9 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
                             <span>
                                 Departure :{" "}
                                 <span className="font-semibold">
-                                    {
-                                        selectedFlight?.departureDate.split(
-                                            "T"
-                                        )[0]
-                                    }
+                                    {new Date(
+                                        selectedFlight?.departureDate
+                                    ).toLocaleDateString("en-CA")}
                                 </span>
                             </span>
                         </div>

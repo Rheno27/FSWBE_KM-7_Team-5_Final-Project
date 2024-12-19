@@ -597,7 +597,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
             >
                 Lanjutkan Pembayaran
             </Button>
-        </Col>
+            </Col>
         </>
     );
 }

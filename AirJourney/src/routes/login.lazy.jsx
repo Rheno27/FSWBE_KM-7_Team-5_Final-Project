@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, createLazyFileRoute } from "@tanstack/react-router";
 
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import background from "../assets/img/login-illust.png";
-
+import GoogleIcon from "@mui/icons-material/Google";
 import { useDispatch, useSelector } from "react-redux";
 import { setToken } from "../redux/slices/auth";
 import { login } from "../services/auth";
@@ -58,7 +58,7 @@ function Login() {
             password,
         };
 
-        // hit api
+        //hit api
         loginUser(body);
     };
 
@@ -72,8 +72,7 @@ function Login() {
                 backgroundPosition: "center",
             }}
         >
-            <Row className="h-100 mx-auto">
-                {/* Left Side */}
+            <Row className="h-100 mx-auto gap-0">
                 <Col
                     lg={6}
                     md={12}
@@ -85,8 +84,6 @@ function Login() {
                         position: "relative",
                     }}
                 ></Col>
-
-                {/* Right Side */}
                 <Col
                     lg={6}
                     md={12}
@@ -137,14 +134,35 @@ function Login() {
                             />
                         </Form.Group>
                         <Form.Group controlId="password" className="mb-3">
-                            <div
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                }}
-                            >
-                                <Form.Label style={{ fontSize: "1rem" }}>Password</Form.Label>
+                            <div className="d-flex justify-content-between align-items-center">
+                                <Form.Label>Password</Form.Label>
+                            </div>
+                            <div style={{ position: "relative" }}>
+                                <Form.Control
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Enter password"
+                                    name="password"
+                                    value={password}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
+                                    style={{
+                                        paddingRight: "3rem",
+                                        borderRadius: "16px",
+                                    }}
+                                />
+                                <div
+                                    style={{
+                                        position: "absolute",
+                                        top: "30%",
+                                        right: "10px",
+                                        transform: "translateY(-50%)",
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={togglePassword}
+                                >
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </div>
                                 <a
                                     href="/reset-password-request"
                                     style={{
@@ -154,34 +172,8 @@ function Login() {
                                         textDecoration: "none",
                                     }}
                                 >
-                                    Forget password
+                                    Lupa password
                                 </a>
-                            </div>
-                            <div style={{ position: "relative" }}>
-                                <Form.Control
-                                    type={showPassword ? "text" : "password"}
-                                    placeholder="Enter password"
-                                    name="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    style={{
-                                        borderRadius: "16px",
-                                        padding: "0.75rem 2.5rem 0.75rem 1rem",
-                                        fontSize: "0.9rem",
-                                    }}
-                                />
-                                <div
-                                    style={{
-                                        position: "absolute",
-                                        top: "50%",
-                                        right: "10px",
-                                        transform: "translateY(-50%)",
-                                        cursor: "pointer",
-                                    }}
-                                    onClick={togglePassword}
-                                >
-                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                                </div>
                             </div>
                         </Form.Group>
                         <Button
@@ -190,25 +182,35 @@ function Login() {
                                 backgroundColor: "#7126B5",
                                 borderColor: "#7126B5",
                                 borderRadius: "16px",
-                                padding: "0.75rem",
-                                fontSize: "1rem",
+                                marginBottom: "16px",
                             }}
                             className="w-100"
                         >
                             Masuk
                         </Button>
-                        <div style={{ textAlign: "center", marginTop: "1rem" }}>
-                            <span style={{ fontSize: "0.9rem" }}>
-                                Don't have an account?{" "}
+                        <Button
+                            href={`${import.meta.env.VITE_API_URL}/auth/google`}
+                            className="border-1 border border-1 border-dark w-100 d-flex align-items-center justify-content-center gap-2"
+                            style={{
+                                backgroundColor: "#fff",
+                                borderRadius: "16px",
+                                color: "black",
+                            }}
+                        >
+                            <GoogleIcon />
+                            <span>Login dengan Google</span>
+                        </Button>
+                        <div className="text-center mt-3">
+                            <span>
+                                Belum punya akun?{" "}
                                 <Link
                                     to="/register"
                                     style={{
                                         color: "#7126B5",
-                                        fontWeight: "600",
-                                        textDecoration: "none",
+                                        fontWeight: "bold",
                                     }}
                                 >
-                                    Register here
+                                    Daftar sekarang
                                 </Link>
                             </span>
                         </div>

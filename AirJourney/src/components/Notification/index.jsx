@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { Col,Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { FaSearch } from "react-icons/fa";
-import { CiFilter } from "react-icons/ci";
-import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
+import { ArrowBack } from "@mui/icons-material";
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import axios from "axios";
 import { Form } from "react-bootstrap";
 
 const Notification = ({ notifications = [], error = "", loading = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const navigate = useNavigate();
   
   const { token } = useSelector((state) => state.auth);
   const [localNotifications, setLocalNotifications] = useState(notifications);
@@ -63,7 +62,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
     );
   }, []);
 
-  const filteredNotifications = localNotifications.filter((notif) =>
+  const searchNotifications = localNotifications.filter((notif) =>
     notif.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     notif.message.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -75,6 +74,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
         width: "100%",
         padding: "20px",
         backgroundColor: "#ffffff",
+        boxSizing: "border-box",
       }}
     >
       <h5
@@ -83,10 +83,8 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
           fontSize: "24px", 
           fontWeight: "bold", 
           marginTop: "10px", 
-          marginLeft: "8rem", 
-          marginBottom: "30px", 
+          marginBottom: "20px", 
           textAlign: "start", 
-          width: "auto",
         }}
       >
         Notifikasi
@@ -95,56 +93,41 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
           gap: "15px",
           borderBottom: "1px solid #eaeaea",
+          marginBottom: "20px",
           padding: "10px 0",
+          flexWrap: "wrap",
         }}
       >
-        <button
-          style={{
-            backgroundColor: "#A06ECE",
-            alignItems: "start",
-            justifyContent: "start",
-            color: "white",
-            border: "none",
-            borderRadius: "10px",
-            padding: "0.7rem 1.5rem",
-            display: "flex",
-            width: "60%",
-          }}
-          onClick={() => navigate({ to: "/" })}
-        >
-          <ArrowBackIcon /> Beranda
-        </button>
-        <button
-          style={{
-            border: "2px solid #7126B5",
-            backgroundColor: "#ffff",
-            padding: "8px 15px",
-            borderRadius: "20px",
-            cursor: "pointer",
-            width: "100px",
-            height: "40px",
-            display: "flex", 
-            alignItems: "center", 
-            justifyContent: "center",
-          }}
-        >
-          <CiFilter
+        <Col lg={10} md={10} xs={8} className="d-flex justify-content-start m-0 responsive-home-btn">
+          <Button
+            as={Link}
+            to={`/`}
             style={{
-              color: "#7126B5",
-              fontSize: "24px",
-              marginRight: "5px",
-              marginLeft: "5px",
+              padding: '8px',
+              borderRadius: '12px',
+              backgroundColor: '#a06ece',
+              borderColor: '#a06ece',
+              color: '#ffffff',
+              marginBottom: '10px',
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+              width: '100%',
+              textAlign: 'left',
             }}
-          />
-          Filter
-        </button>
-         <div
+          >
+            <span>
+              <ArrowBack fontSize="medium" className="me-2 ms-3" />
+              Beranda
+            </span>
+          </Button>
+        </Col>
+
+        <div
           style={{
             display: "flex",
             alignItems: "center",
+            marginBottom: "10px",
             gap: "10px",
             position: "relative",
             cursor: "pointer",
@@ -161,39 +144,39 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
           {isSearchVisible && (
             <Form.Control
               type="text"
-              placeholder="Search notifications"
+              placeholder="Search"
               value={searchQuery}
               onChange={handleSearch}
               style={{
                 position: "absolute",
                 top: "0",
                 left: "40px",
-                width: "200px",
+                width: "110px",
                 padding: "0.5rem",
                 borderRadius: "5px",
                 border: "1px solid #ddd",
                 transition: "opacity 0.3s ease, visibility 0.3s ease",
               }}
-            />
+            />  
           )}
         </div>
       </header>
       <div
         style={{
           marginTop: "20px",
-          width: "60%",
+          width: "100%",
+          maxWidth: "600px", 
           margin: "0 auto",
-          alignItems: "center",
           border: "1px solid #eaeaea",
-        
+          borderRadius: "10px", 
         }}
       >
         {localLoading ? (
-          <p>Loading notifications...</p>
+          <p style={{ textAlign: "center" }}>Loading notifications...</p>
         ) : localError ? (
-          <p>{localError}</p>
-        ) : filteredNotifications.length > 0 ? (
-          filteredNotifications.map((notif) => (
+          <p style={{ textAlign: "center" }}>{localError}</p>
+        ) : searchNotifications.length > 0 ? (
+          searchNotifications.map((notif) => (
             <div
               key={notif.id}
               style={{
@@ -202,6 +185,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
                 padding: "10px",
                 borderBottom: "1px solid #eaeaea",
                 gap: "10px", 
+                minHeight: "70px"
               }}
             >
               <div
@@ -213,7 +197,6 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
                   height: "30px",
                   borderRadius: "50%",
                   backgroundColor: "#A06ECE",
-                  marginBottom: "20px",
                 }}
               >
                 <NotificationsIcon
@@ -227,8 +210,8 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
                     margin: "0",
                     fontSize: "16px",
                     color: "#000",
-                    overflow: "hidden",
                     whiteSpace: "nowrap",
+                    overflow: "hidden",
                     textOverflow: "ellipsis", 
                   }}
                 >
@@ -239,6 +222,9 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
                     margin: "5px 0 0",
                     fontSize: "12px",
                     color: "#8A8A8A",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
                   }}
                 >
                   {notif.message}
@@ -263,7 +249,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
                     minute: "2-digit",
                   }
                 )}</span>
-                <span
+                <div
                   style={{
                     width: "8px",
                     height: "8px",
@@ -271,7 +257,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
                     marginTop: "5px",
                     backgroundColor: notif.isRead ? "#4caf50" : "#e74c3c",
                   }}
-                ></span>
+                ></div>
               </div>
             </div>
           ))

@@ -29,7 +29,9 @@ const HomepageFlightList = () => {
 
     const seedLoader = (destinationQuery, isDestinationChanged) => {
         setIsHasMore(true);
-        const params = {};
+        const params = {
+            favourite: true,
+        };
 
         if (destination != "ALL") {
             params.continent = destinationQuery || destination;
@@ -37,20 +39,23 @@ const HomepageFlightList = () => {
         if (isDestinationChanged) {
             setDestinationList([]);
         } else if (destinationList.length > 0) {
-            params.cursorId = cursorId;
+            params.page = cursorId;
         }
 
         axios
             .get(`${import.meta.env.VITE_API_URL}/flights`, { params })
             .then((res) => {
+                const newFlights = res.data.data.filter((flight) => {
+                    return !destinationList.find((existingFlight) => existingFlight.id === flight.id);
+                });
                 isDestinationChanged
                     ? setDestinationList(res.data.data)
                     : setDestinationList([
                           ...destinationList,
-                          ...res.data.data,
+                          ...newFlights,
                       ]);
-                setCursorId(res.data.meta.cursorId);
-                if (res.data.data.length < 3) {
+                setCursorId(++res.data.meta.page);
+                if (res.data.meta.page > res.data.meta.totalPage) {
                     setIsHasMore(false);
                 }
             });
@@ -139,7 +144,7 @@ const HomepageFlightList = () => {
                                         {data?.airline.name}
                                     </p>
                                     <p className="text-sm">
-                                        {data?.departureDate.split("T")[0]}
+                                        {new Date(data?.departureDate).toLocaleDateString("en-CA")}
                                     </p>
                                     <p className="">
                                         Mulai dari{" "}
@@ -154,7 +159,10 @@ const HomepageFlightList = () => {
             </InfiniteScroll>
             {isShowModal && (
                 <div className="fixed z-0 w-full h-full inset-0 flex overflow-hidden items-center justify-center">
-                    <HomepageFlightClick setIsShowModal={setIsShowModal} selectedFlight={selectedFlight} />
+                    <HomepageFlightClick
+                        setIsShowModal={setIsShowModal}
+                        selectedFlight={selectedFlight}
+                    />
                     <div
                         className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
                         onClick={() => setIsShowModal(false)}
