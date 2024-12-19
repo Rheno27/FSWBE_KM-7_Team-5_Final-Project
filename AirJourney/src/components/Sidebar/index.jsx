@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FlightClassIcon from '@mui/icons-material/FlightClass';
 import SortIcon from '@mui/icons-material/Sort';
 import FlightIcon from '@mui/icons-material/Flight';
@@ -19,14 +19,22 @@ const Sidebar = ({
   selectedAirlines
 }) => {
   const [expanded, setExpanded] = useState([]);
+  const [airlines, setAirlines] = useState([]);
 
-  const airlines = [
-    { id: '0193c390-358e-7be0-92e8-d8075fa07253', name: 'Garuda Indonesia' },
-    { id: '0193c390-3596-7bd2-9a5f-2d728d891d04', name: 'Singapore Airlines' },
-    { id: '0193c390-3599-7451-917a-bdfe16ded050', name: 'British Airways' },
-    { id: '0193c390-359c-7580-a415-689ce667c01a', name: 'American Airlines' },
-    { id: '0193c390-359f-7e42-9cc7-cd2352b4a942', name: 'Qantas' }
-  ];
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/airlines`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.data && Array.isArray(data.data)) {
+          setAirlines(data.data);
+        } else if (Array.isArray(data)) {
+          setAirlines(data);
+        } else {
+          console.error('Unexpected data format from /airlines:', data);
+        }
+      })
+      .catch(error => console.error('Error fetching airlines:', error));
+  }, []); 
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded 
