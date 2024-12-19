@@ -1,5 +1,5 @@
 import React from 'react'
-import { createLazyFileRoute, Link } from '@tanstack/react-router'
+import { createLazyFileRoute, Link, useLocation } from '@tanstack/react-router'
 import { Row, Col, Button, Container } from 'react-bootstrap'
 import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
 import { AlertBox } from '../../../../components/ui/alertBox.jsx'
@@ -10,6 +10,10 @@ export const Route = createLazyFileRoute('/users/private/payment/success')({
 })
 
 function PaymentSuccess() {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const id = queryParams.get('id');
+
   return (
     <div>
       <Row className="justify-content-center mt-2 mb-4 py-3 shadow-sm">
@@ -17,7 +21,7 @@ function PaymentSuccess() {
           <BreadcrumbNav
             items={[
               { label: 'Isi Data Diri', path: '/users/private/checkout' },
-              { label: 'Bayar', path: '/users/private/checkout/payment' },
+              { label: 'Bayar', path: '/users/private/payment/$id' },
               { label: 'Selesai', path: './' },
             ]}
           />
@@ -35,10 +39,8 @@ function PaymentSuccess() {
               alt="payment success"
               className="img-fluid mb-2 mx-auto w-75"
             />
-            <p
-              style={{ color: '#a06ece', fontWeight: 500 }}
-            >
-              Selamat! <br />
+            <p style={{ color: '#a06ece', fontWeight: 500 }}>
+              Selamat!<br />
               <span className="text-dark mt-2">
                 Transaksi pembayaran tiket anda berhasil
               </span>
