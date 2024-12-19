@@ -29,12 +29,12 @@ function Index() {
   const [filteredFlights, setFilteredFlights] = useState(flights);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [cursorId, setCursorId] = useState(null);
+  const [page, setPage] = useState(null);
   const [hasMore, setHasMore] = useState(true);
   const [classFilter, setClassFilter] = useState([]);
   const [sortBy, setSortBy] = useState([]);
   const [sortOrder, setSortOrder] = useState("");
-  const [selectedAirlines, setSelectedAirlines] = useState("");
+  const [selectedAirlines, setSelectedAirlines] = useState([]);
   const [isSoldOut, setIsSoldOut] = useState(false);
   const [isFromSelected, setIsFromSelected] = useState(false);
   const [selectedFlightId, setSelectedFlightId] = useState(null);
@@ -77,12 +77,7 @@ function Index() {
             params.set("class", filter.classFilter);
           if (filter.sortBy.length > 0) params.set("sortBy", filter.sortBy[0]);
           if (filter.sortOrder) params.set("sortOrder", filter.sortOrder);
-          if (filter.airlines){
-            if(filter.airlines.length > 1){
-              filter.airlines.forEach((item) => params.append("airlineIds", item));
-            }else{
-              params.set("airlineIds", filter.airlines[0]);
-            }
+          if (filter.airlines.length > 0){params.set("airlineIds", filter.airlines.join(","));
           };
           if (filter.classFilter.length === 0 && filter.sortBy.length === 0 && !filter.sortOrder && filter.airlines.length === 0) {
             ["class", "sortBy", "sortOrder", "airlineIds"].forEach((param) =>
@@ -103,8 +98,8 @@ function Index() {
           navigate({
             to: `/users/public/detailPenerbangan?${params.toString()}`,
           });
-        } else if (cursorId) {
-          params.set("page", cursorId);
+        } else if (page) {
+          params.set("page", page);
         }
 
         console.log("resultfetch")
@@ -136,7 +131,7 @@ function Index() {
         setFlights(updatedFlights);
         setFilteredFlights(updatedFlights);
 
-        setCursorId(
+        setPage(
           result.meta.page + 1 || null
         );
         setHasMore(result.meta.page < result.meta.totalPage);
@@ -152,7 +147,7 @@ function Index() {
         setLoading(false);
       }
     },
-    [location.search, cursorId, fetchFlights, flights, isReturn, isFromSelected, navigate, arrivalDate]
+    [location.search, page, fetchFlights, flights, isReturn, isFromSelected, navigate, arrivalDate]
   );
 
   // const handleSortChange = useCallback((option) => {
@@ -204,18 +199,19 @@ const handleClassChange = useCallback(
     []
   );
 
-  const handleAirlinesChange = useCallback(
-    (newAirlines) => {
-      setSelectedAirlines(newAirlines);
+  const handleAirlinesChange = 
+    (newAirlines,isChecked) => {
+      if(newAirlines && isChecked){setSelectedAirlines([...selectedAirlines, newAirlines])};
+      if(newAirlines && !isChecked){setSelectedAirlines(selectedAirlines.filter((airline) => airline !== newAirlines))};
+      console.log("selectedAirlines:", [...selectedAirlines], isChecked);
       // const newParams = new URLSearchParams(location.search);
       // if (newAirlines.length > 0) {
       //   newParams.set("airlineIds", newAirlines.join(","));
       // } else {
       //   newParams.delete("airlineIds");
       // }
-    },
-    []
-  );
+    }
+    
   const applyFilters = useCallback(
     debounce((filters) => {
         setClassFilter(filters.classFilter || []);
@@ -228,15 +224,7 @@ const handleClassChange = useCallback(
         if (filters.sortBy.length > 0)
             baseParams.set("sortBy", filters.sortBy[0]);
         if (filters.sortOrder) baseParams.set("sortOrder", filters.sortOrder);
-        if (filters.airlines.length > 1) {
-            filters.airlines.forEach((airline) => {
-                baseParams.append("airlineIds", airline);
-            });
-        }
-        else if(filters.airlines.length === 1) {
-            baseParams.set("airlineIds", filters.airlines[0]);
-        }
-        else(baseParams.delete("airlineIds"));
+        if (filters.airlines.length > 0) baseParams.set("airlineIds", filters.airlines.join(","));
         navigate({
             to: `/users/public/detailPenerbangan?${baseParams.toString()}`,
         });
