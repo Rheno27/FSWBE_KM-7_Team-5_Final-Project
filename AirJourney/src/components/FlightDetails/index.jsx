@@ -552,6 +552,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                 style={{
                     backgroundColor: "#FF0000",
                     borderColor: "#FF0000",
+                    opacity: isPending ? 0.5 : 1,
                 }}
                 onClick={handleSubmit}
                 disabled={isPending}

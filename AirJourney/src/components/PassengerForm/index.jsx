@@ -27,9 +27,6 @@ const PassengerForm = ({
         enabled: !!token,
     });
 
-    const [country, setCountry] = useState("");
-    const [originCountry, setOriginCountry] = useState("");
-
     return (
         <Col lg={7}>
             <Card className="shadow-sm mb-4" style={{ borderRadius: "8px" }}>

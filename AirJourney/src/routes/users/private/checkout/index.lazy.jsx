@@ -33,16 +33,16 @@ function Checkout() {
     const [title, setTitle] = useState("");
     const [passengerTypes, setPassengerTypes] = useState([]);
 
-    // useEffect(() => {
-    //     if (!token) {
-    //         navigate({ to: `/login` });
-    //         return;
-    //     }
-    //     if(!flightId){
-    //         navigate({ to: `/users/public/detailPenerbangan` });
-    //         return;
-    //     }
-    // }, [token,flightId]);
+    useEffect(() => {
+        if (!token) {
+            navigate({ to: `/login` });
+            return;
+        }
+        if(!flightId){
+            navigate({ to: `/` });
+            return;
+        }
+    }, [token,flightId]);
 
     const { mutate: postTransaction, isPending } = useMutation({
         mutationFn: (data) => createTransaction(data),
