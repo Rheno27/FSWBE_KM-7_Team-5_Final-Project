@@ -15,11 +15,9 @@ const DestinationModal = ({
     setFromDestinationId,
     setToDestinationId,
     airportList,
-    isSuccess
+    isSuccess,
 }) => {
-    const [search, setSearch] = useState(
-        isFromModal ? fromDestination : toDestination
-    );
+    const [search, setSearch] = useState("");
     const [destinationHistory, setDestinationHistory] = useState([]);
 
     const [filteredSearch, setFilteredSearch] = useState([]);
@@ -86,7 +84,7 @@ const DestinationModal = ({
                         Pencarian terkini
                     </span>
                 </div>
-                <div className="flex flex-col flex-1 gap-3 py-3 overflow-auto">
+                <div className="flex flex-col flex-1 gap-2 py-3 overflow-auto">
                     {search
                         ? filteredSearch.map((data) => (
                               <div
@@ -142,6 +140,6 @@ DestinationModal.propTypes = {
     setFromDestinationId: PropTypes.any,
     setToDestinationId: PropTypes.any,
     airportList: PropTypes.any,
-    isSuccess: PropTypes.bool
+    isSuccess: PropTypes.bool,
 };
 export default DestinationModal;
