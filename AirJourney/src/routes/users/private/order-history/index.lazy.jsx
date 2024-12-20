@@ -15,6 +15,21 @@ export const Route = createLazyFileRoute("/users/private/order-history/")({
   component: OrderHistory,
 });
 
+// const fetchTransactions = async (page) => {
+//   const token = localStorage.getItem("token");
+//   const url = `${import.meta.env.VITE_API_URL}/transactions?page=${page}&startDate=${filters.startDate}&endDate=${filters.endDate}`;
+//   console.log("Fetching transactions from:", url); // Debug URL
+//   const response = await axios.get(
+//     url,
+//     {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     }
+//   );
+//   return response.data;
+// };
+
 function OrderHistory() {
   const navigate = useNavigate();
   const [selectedTransactionId, setSelectedTransactionId] = useState(null); // Track the selected card
@@ -22,12 +37,21 @@ function OrderHistory() {
   const [totalPrice, setTotalPrice] = useState(0);
   const token = localStorage.getItem("token");
 
+  const [currentPage, setCurrentPage] = useState(1); // Track current page
+
+  // const { data } = useQuery(
+  //   ["transactions", currentPage],
+  //   () => fetchTransactions(currentPage),
+  //   { keepPreviousData: true } // Keep old data while fetching new page
+  // );
+
+
   const handleFilter = (range) => {
     setSelectedRange(range); // Update the selectedRange state with the new date range
   };
 
   const {
-    data: transactions,
+    data : transactions,
     isLoading,
     isError,
   } = useQuery({
@@ -54,7 +78,15 @@ function OrderHistory() {
       const grouped = groupHistoriesByMonth(transactions.data); 
       setSelectedTransactionId(transactions.data); // Set the selected transaction
     },
+    // keepPreviousData: true, // Keep the previous data while fetching new data
   });
+
+  // Destructure meta and transactions safely
+// const { meta, data: transactions } = data || { meta: {}, data: [] };
+// console.log("transactions", transactions)
+
+// // Optional: Default fallback values for `meta`
+// const { page, totalPage } = meta || { page: 1, totalPage: 1 };
 
   const isAvailable = transactions?.data?.length > 0;
 
@@ -464,6 +496,29 @@ function OrderHistory() {
               </Button>
             </Col>
           </div>
+          {/* <Row className="d-flex align-items-center">
+      <div style={{ marginTop: "30px" }}>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span style={{ margin: "0 10px" }}>
+          Page {meta.page} of {meta.totalPage}
+        </span>
+        <button
+          onClick={() =>
+            setCurrentPage((prev) =>
+              prev < meta.totalPage ? prev + 1 : prev
+            )
+          }
+          disabled={currentPage === meta.totalPage}
+        >
+          Next
+        </button>
+      </div>
+      </Row> */}
         </Container>
       )}
       </Container>

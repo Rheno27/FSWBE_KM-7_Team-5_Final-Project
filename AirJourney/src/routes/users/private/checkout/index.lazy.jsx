@@ -9,6 +9,8 @@ import { createTransaction } from "../../../../services/transaction";
 import PassengerForm from "../../../../components/PassengerForm";
 import { toast } from "react-toastify";
 import FlightDetails from "../../../../components/FlightDetails";
+import {BreadcrumbNav} from "../../../../components/ui/BreadcrumbNav";
+import {AlertBox} from "../../../../components/ui/AlertBox";
 
 export const Route = createLazyFileRoute("/users/private/checkout/")({
     component: Checkout,

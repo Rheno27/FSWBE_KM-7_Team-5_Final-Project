@@ -1,10 +1,13 @@
 import * as React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Row, Col, Button, Card, Alert, Form } from "react-bootstrap";
 import { useState } from "react";
 import { getTransactionById } from "../../services/order-history/index";
+import { sendTicket } from "../../services/transaction/index";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 export const OrderDetailCard = ({ id, setTotalPrice }) => {
 
@@ -120,6 +123,73 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
     } else {
       toast.error("Transaction ID is missing!");
     }
+  };
+
+  // Query for sending request link through email
+  // const { data: sendTicket } = useQuery({
+  //   queryKey: ["sendTicket", id, email],
+  //   queryFn: () => sendTicket(id, email),
+  //   onSuccess: () => {
+  //     toast.success('Ticket was sent successfully! Please check your email', {
+  //       position: "bottom-center",
+  //       autoClose: 3000, 
+  //     });
+  //   },
+  //   onError: (error) => {
+  //     if (error.response?.status === 404) {
+  //       toast.error('Your email was not found in our records.', { 
+  //         autoClose: 3000,
+  //       });
+  //     } else {
+  //       toast.error('An unexpected error occured')
+  //     }
+  //   },
+  // });
+
+  const token = localStorage.getItem("token");
+    let url = `${import.meta.env.VITE_API_URL}/transactions/${id}/ticket`;
+
+  // Mutation for sending request link through email
+  const { mutate: sendTicket, isPending } = useMutation({
+    mutationFn: async (email) => 
+      await axios.post(
+        url, 
+        { email }, 
+        { headers: { 
+          Authorization: `Bearer ${token}`,
+      }}
+      ),
+
+    onSuccess: () => {
+      toast.success('Ticket was sent successfully! Please check your email', {
+        autoClose: 4000, 
+        position: "bottom-center",
+      });
+    },
+
+    onError: (error) => {
+      console.log('Error sending ticket:', error);
+      if (error.response?.status === 404) {
+        toast.error('Your email was not found in our records.', { 
+          autoClose: 4000,
+          position: "bottom-center",
+        });
+      } else {
+        toast.error('An unexpected error occured')
+      }
+    },
+  })
+
+  // Form submission handler
+  const handleSendTicket = async () => {
+    const response = sendTicket();
+        console.log("response", response);
+        // if (response.status) {
+        //   toast.success("Transaction cancelled successfully");
+        //   navigate({ to: `/` });
+        // } else {
+        //     toast.error("Failed to cancel transaction");
+        // }
   };
 
   return (
@@ -322,7 +392,8 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
         </Row>
             {paymentStatus === "SUCCESS" && (
               <Button
-                type="submit"
+                type="button"
+                onClick={handleSendTicket}
                 // disabled={isPending}
                 style={{
                   backgroundColor: "#7126B5",
@@ -334,7 +405,7 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
                   marginTop: "5px",
                 }}
               >
-                {/* {isPending ? "Memproses..." : "Cetak Tiket"} */}
+                {/* {isPending ? "Mengirim..." : "Cetak Tiket"} */}
                 Cetak Tiket
               </Button>
             )}
