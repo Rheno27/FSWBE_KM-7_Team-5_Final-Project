@@ -38,7 +38,11 @@ function Checkout() {
             navigate({ to: `/login` });
             return;
         }
-    }, [token]);
+        if(!flightId){
+            navigate({ to: `/users/public/detailPenerbangan` });
+            return;
+        }
+    }, [token,flightId]);
 
     const { mutate: postTransaction } = useMutation({
         mutationFn: (data) => createTransaction(data),
