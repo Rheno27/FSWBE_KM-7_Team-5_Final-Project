@@ -32,7 +32,6 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
     const passengerChild = passenger.CHILD
     const passengerInfant = passenger.INFANT
     
-    //ternyata infant tidak dihitung di price
 
     //price
     const allAdultPrice = returnFlightId
