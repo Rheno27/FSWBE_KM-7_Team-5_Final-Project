@@ -3,6 +3,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import HomepageFlightClick from "../HomepageFlightClick";
+import { useQuery } from "@tanstack/react-query";
 
 const HomepageFlightList = () => {
     const [isHasMore, setIsHasMore] = useState(true);
@@ -46,16 +47,17 @@ const HomepageFlightList = () => {
             .get(`${import.meta.env.VITE_API_URL}/flights`, { params })
             .then((res) => {
                 const newFlights = res.data.data.filter((flight) => {
-                    return !destinationList.find((existingFlight) => existingFlight.id === flight.id);
+                    return (
+                        !destinationList.find(
+                            (existingFlight) => existingFlight.id === flight.id
+                        ) && new Date(flight.departureDate) > new Date()
+                    );
                 });
                 isDestinationChanged
                     ? setDestinationList(res.data.data)
-                    : setDestinationList([
-                          ...destinationList,
-                          ...newFlights,
-                      ]);
+                    : setDestinationList([...destinationList, ...newFlights]);
                 setCursorId(++res.data.meta.page);
-                if (res.data.meta.page > res.data.meta.totalPage) {
+                if (res.data.meta.page >= res.data.meta.totalPage) {
                     setIsHasMore(false);
                 }
             });
@@ -68,6 +70,15 @@ const HomepageFlightList = () => {
             setIsInitialized(true);
         }
     }, [destination]);
+
+    useQuery({
+        queryKey: ["initiateFlights"],
+        queryFn: () => {
+            seedLoader();
+            return null;
+        },
+        refetchOnWindowFocus: false,
+    });
 
     return (
         <div className="w-full max-w-5xl flex flex-col px-8 pt-96 mt-16 gap-4 sm:mt-0 sm:pt-24 lg:pt-0 lg:mt-0">
@@ -95,7 +106,6 @@ const HomepageFlightList = () => {
                 dataLength={destinationList.length}
                 next={() => {
                     seedLoader();
-                    console.log("from infinite");
                 }}
                 hasMore={isHasMore}
                 loader={loadersCount.map((count, index) => (
@@ -130,9 +140,9 @@ const HomepageFlightList = () => {
                             }}
                         >
                             <img
-                                src={data?.picture}
+                                src={data?.image || data?.airline.image}
                                 alt=""
-                                className="rounded-md overflow-hidden w-full h-32"
+                                className="rounded-md overflow-hidden w-full h-32 object-contain"
                             />
                             <div className="flex flex-col flex-initial justify-between h-28">
                                 <p className="font-medium">
@@ -144,7 +154,7 @@ const HomepageFlightList = () => {
                                         {data?.airline.name}
                                     </p>
                                     <p className="text-sm">
-                                        {new Date(data?.departureDate).toLocaleDateString("en-CA")}
+                                        {data?.departureDate.split("T")[0]}
                                     </p>
                                     <p className="">
                                         Mulai dari{" "}
