@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { Container, Row, Col } from "react-bootstrap";
-import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
-import { AlertBox } from '../../../../components/ui/alertBox.jsx'
 import "./style.css";
 import ProgressBar from "../../../../components/ProgresBar";
 import { useMutation } from "@tanstack/react-query";
@@ -81,7 +79,7 @@ function Checkout() {
             setNationalities(Array(total).fill(""));
             setIdentityNumbers(Array(total).fill(""));
             setOriginCountries(Array(total).fill(""));
-            setPassengerTypes(Array(total).fill("")); // assuming default type
+            setPassengerTypes(Array(total).fill(""));
         }
     }, [passenger]);
 

@@ -32,3 +32,17 @@ export const getDetailTransaction = async (id) => {
         });
     return response?.data;
 };
+
+export const cancelTransaction = async (id) => {
+    const token = localStorage.getItem("token");
+    const response = await axios
+        .post(`${import.meta.env.VITE_API_URL}/transactions/${id}/cancel`,{},{
+            headers: { 
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .catch((err) => {
+            throw new Error(err?.response?.data?.message);
+        });
+    return response?.data;
+};
