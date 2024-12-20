@@ -102,7 +102,7 @@ function Checkout() {
                 updated[index] = value;
                 return updated;
             });
-        } else if (field === "nationality") {
+        } else if (field === "nationalities") {
             setNationalities((prev) => {
                 const updated = [...prev];
                 updated[index] = value;
@@ -120,7 +120,7 @@ function Checkout() {
                 updated[index] = value;
                 return updated;
             });
-        } else if (field === "originCountry") {
+        } else if (field === "originCountries") {
             setOriginCountries((prev) => {
                 const updated = [...prev];
                 updated[index] = value;
@@ -165,6 +165,7 @@ function Checkout() {
         if (returnFlightId) {
             data.returnFlightId = returnFlightId;
         }
+        console.log("data yg akan dikirim", data);
         postTransaction(data);
 
     };

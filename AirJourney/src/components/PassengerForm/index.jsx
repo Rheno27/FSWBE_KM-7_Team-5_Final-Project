@@ -1,9 +1,13 @@
+import { useState } from "react";
 import { Form, Card, Col } from "react-bootstrap";
 import SeatPicker from "../SeatPicker";
 import PropTypes from "prop-types";
 import { useQuery } from "@tanstack/react-query";
 import { getUser } from "../../services/user";
 import { useSelector } from "react-redux";
+import { CountrySelect } from "react-country-state-city";
+import "react-country-state-city/dist/react-country-state-city.css";
+
 
 const PassengerForm = ({
     totalPassengers,
@@ -22,6 +26,9 @@ const PassengerForm = ({
         queryFn: getUser,
         enabled: !!token,
     });
+
+    const [country, setCountry] = useState("");
+    const [originCountry, setOriginCountry] = useState("");
 
     return (
         <Col lg={7}>
@@ -300,22 +307,12 @@ const PassengerForm = ({
                                 >
                                     Kewarganegaraan
                                 </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    onChange={(e) =>
-                                        handleInputChange(
-                                            index,
-                                            "nationality",
-                                            e.target.value
-                                        )
-                                    }
-                                    placeholder="Masukkan Kewarganegaraan"
-                                    style={{
-                                        borderRadius: "8px",
-                                        boxShadow: "0 0 5px rgba(0,0,0,0.1)",
-                                    }}
+                                <CountrySelect
+                                    onChange={(e) => handleInputChange(index, "nationalities", e.name)}
+                                    placeHolder="Pilih Kewarganegaraan"
                                 />
                             </Form.Group>
+
 
                             {/* KTP/Paspor */}
                             <Form.Group className="mt-3">
@@ -380,25 +377,13 @@ const PassengerForm = ({
                                         fontWeight: "bold",
                                         color: "#4B1979",
                                     }}
-                                >
-                                    Asal Negara
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    onChange={(e) =>
-                                        handleInputChange(
-                                            index,
-                                            "originCountry",
-                                            e.target.value
-                                        )
-                                    }
-                                    placeholder="Masukkan Asal Negara"
-                                    style={{
-                                        borderRadius: "8px",
-                                        boxShadow: "0 0 5px rgba(0,0,0,0.1)",
-                                    }}
+                                >Asal Negara</Form.Label>
+                                <CountrySelect
+                                    onChange={(e) => handleInputChange(index, "originCountries", e.name)}
+                                    placeHolder="Pilih Asal Negara"
                                 />
                             </Form.Group>
+
                         </div>
                     </Card.Body>
                 </Card>
