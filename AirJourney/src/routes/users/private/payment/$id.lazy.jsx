@@ -111,45 +111,47 @@ function Payment() {
   })
 
   const isPaymentSuccess = transaction?.data?.payment?.status === 'SUCCESS';
+  // post notif bukannya harus admin yk? gk bisa mah pake token user wkwk
+
   // Create notification on page load
-  useEffect(() => {
-    const createNotificationIfNotExist = async () => {
-      try {
-        if (id && notificationsList) {
-          const isNotificationExists = notificationsList.some(
-            (notif) =>
-              notif.message.includes(id)
-          );
+  // useEffect(() => { 
+  //   const createNotificationIfNotExist = async () => {
+  //     try {
+  //       if (id && notificationsList) {
+  //         const isNotificationExists = notificationsList.some(
+  //           (notif) =>
+  //             notif.message.includes(id)
+  //         );
 
-          if (!isNotificationExists) {
-            const shortId = id.slice(0, 5);
-            const notificationPayload = {
-              title: `Status Pembayaran (${capitalizeFirstLetter(transaction?.data?.payment?.status)})`,
-              message: `Selesaikan pembayaran Anda sebelum ${expiredAt} untuk transaksi ${shortId}...`,
-              userId: transaction?.data?.userId, // or another identifier for the user
-            };
+  //         if (!isNotificationExists) {
+  //           const shortId = id.slice(0, 5);
+  //           const notificationPayload = {
+  //             title: `Status Pembayaran (${capitalizeFirstLetter(transaction?.data?.payment?.status)})`,
+  //             message: `Selesaikan pembayaran Anda sebelum ${expiredAt} untuk transaksi ${shortId}...`,
+  //             userId: transaction?.data?.userId, // or another identifier for the user
+  //           };
 
-            await axios.post(
-              `${import.meta.env.VITE_API_URL}/notifications/`,
-              notificationPayload,
-              {
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            );
+  //           await axios.post(
+  //             `${import.meta.env.VITE_API_URL}/notifications/`,
+  //             notificationPayload,
+  //             {
+  //               headers: { Authorization: `Bearer ${token}` },
+  //             }
+  //           );
 
-            setNotification(notificationPayload); // Set notification for frontend display
-            // Optional: Automatically remove notification after some time
-            const timer = setTimeout(() => setNotification(null), 5000);
-            return () => clearTimeout(timer);
-          }
-        }
-      } catch (error) {
-        console.error("Failed to create notification:", error);
-      }
-    };
+  //           setNotification(notificationPayload); // Set notification for frontend display
+  //           // Optional: Automatically remove notification after some time
+  //           const timer = setTimeout(() => setNotification(null), 5000);
+  //           return () => clearTimeout(timer);
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to create notification:", error);
+  //     }
+  //   };
 
-    createNotificationIfNotExist();
-  }, [transaction, id, notificationsList, token])
+  //   createNotificationIfNotExist();
+  // }, [])
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -167,7 +169,7 @@ function Payment() {
       const snapToken = transaction.data.payment.snapToken;
       
       if (!document.getElementById('snap-container').hasChildNodes()) {
-        window.snap.embed(snapToken, {
+        window.snap?.embed(snapToken, {
           embedId: 'snap-container',
           onSuccess: function (result) {
             // alert('Payment success! Redirecting to success page...');
@@ -239,6 +241,7 @@ function Payment() {
         <Row className="justify-content-center my-4 gap-1">
           <Col lg={6} md={6} className="my-2">
               <Card id="snap-container" className="p-3 shadow-sm rounded-3 w-100" style={{border: '1px solid #7126B5'}}></Card>
+              <p className='my-5 text-secondary'>Halaman pembayaran tidak muncul? Silahkan refresh halaman</p>
           </Col>
           <Col lg={4} md={4}>
           {id ? (

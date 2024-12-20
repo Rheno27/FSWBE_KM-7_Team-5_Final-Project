@@ -78,9 +78,6 @@ function Login() {
                     md={12}
                     className="d-none d-lg-block p-0"
                     style={{
-                        backgroundImage: `url(${background})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
                         position: "relative",
                     }}
                 ></Col>
