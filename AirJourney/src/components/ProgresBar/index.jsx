@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useLocation } from '@tanstack/react-router'; 
-
+import Countdown from 'react-countdown';
+import { useNavigate } from '@tanstack/react-router';
+import { toast } from 'react-toastify';
 
 const ProgressBar = ({ children }) => {
     const location = useLocation();
     const [activeStep, setActiveStep] = useState(1); 
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (location.pathname === '/users/private/checkout/') {
@@ -16,6 +19,35 @@ const ProgressBar = ({ children }) => {
             setActiveStep(3);
         }
     }, [location.pathname]); 
+
+    const renderer = ({ hours, minutes, seconds, completed }) => {
+        if (completed) {
+            navigate({ to: `/` });
+        } else {
+            return (
+                <div className="timer"
+                style={{
+                    backgroundColor: "#FF0000",
+                    marginTop: "10px",
+                    borderRadius: "12px",
+                    padding: "10px 20px",
+                    color: "white",
+                    marginBottom: "20px",
+                    textAlign: "center",
+                    position: "relative",
+                    marginLeft: "20px",
+                    marginRight: "20px",
+                }}>                <div
+                className="d-flex justify-content-center align-items-center"
+                style={{
+                width: "100%", // Memastikan elemen di dalam timer ikut penuh
+            }}>
+                Selesaikan dalam {hours}:{minutes}:{seconds}
+            </div></div>
+
+                )
+        }
+        };
 
     return (
         <Container
@@ -88,30 +120,10 @@ const ProgressBar = ({ children }) => {
                     </div>
                     <Row>
                         <Col lg={12}>
-                            <div
-                                className="timer"
-                                style={{
-                                    backgroundColor: "#FF0000",
-                                    marginTop: "10px",
-                                    borderRadius: "12px",
-                                    padding: "10px 20px",
-                                    color: "white",
-                                    marginBottom: "20px",
-                                    textAlign: "center",
-                                    position: "relative",
-                                    marginLeft: "20px",
-                                    marginRight: "20px",
-                                }}
-                            >
-                                <div
-                                    className="d-flex justify-content-center align-items-center"
-                                    style={{
-                                        width: "100%", // Memastikan elemen di dalam timer ikut penuh
-                                    }}
-                                >
-                                    Selesaikan dalam 00:15:00
-                                </div>
-                            </div>
+                            <Countdown
+                                date={Date.now() + 15*60*1000}
+                                renderer={renderer}
+                            />
                         </Col>
                     </Row>
                 </div>
