@@ -10,6 +10,7 @@ import { OrderDetailCard } from "../../../../components/PaymentDetails";
 import { toast } from "react-toastify";
 import notFound from '../../../../assets/img/notfound.png'
 import { useEffect } from "react";
+import axios from "axios";
 
 export const Route = createLazyFileRoute("/users/private/order-history/")({
   component: OrderHistory,
@@ -30,7 +31,7 @@ export const Route = createLazyFileRoute("/users/private/order-history/")({
 //   return response.data;
 // };
 
-function OrderHistory() {
+function OrderHistory({id}) {
   const navigate = useNavigate();
   const [selectedTransactionId, setSelectedTransactionId] = useState(null); // Track the selected card
   const [selectedRange, setSelectedRange] = useState(null);
@@ -203,8 +204,8 @@ function OrderHistory() {
   }, [token, navigate]);  
 
   const handlePaymentRedirect = () => {
-    let url = `/users/private/payment/${id}`;
-    if (id) {
+    let url = `/users/private/payment/${selectedTransactionId}`;
+    if (selectedTransactionId) {
       navigate({ to : url});
       // console.log("navigate to payment page", url);
     } else {
@@ -217,7 +218,7 @@ function OrderHistory() {
 const { mutate: sendTicket, isPending } = useMutation({
   mutationFn: async (email) => 
     await axios.post(
-      `${import.meta.env.VITE_API_URL}/transactions/${id}/ticket`, 
+      `${import.meta.env.VITE_API_URL}/transactions/${selectedTransactionId}/ticket`, 
       { email }, 
       { headers: { 
         Authorization: `Bearer ${token}`,
@@ -248,6 +249,7 @@ const { mutate: sendTicket, isPending } = useMutation({
 const handleSendTicket = async () => {
   const response = sendTicket();
       console.log("response", response);
+      console.log("id", id);
       // if (response.status) {
       //   toast.success("Transaction cancelled successfully");
       //   navigate({ to: `/` });
