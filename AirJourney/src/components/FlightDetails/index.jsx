@@ -32,6 +32,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
     const passengerChild = passenger.CHILD
     const passengerInfant = passenger.INFANT
     
+    //ternyata infant tidak dihitung di price
 
     //price
     const allAdultPrice = returnFlightId
@@ -42,12 +43,8 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
         ? detailFlight?.departureFlight?.price * passenger.CHILD +
           returnDetailFlight?.departureFlight?.price * passenger.CHILD
         : detailFlight?.departureFlight?.price * passenger.CHILD;
-    const allInfantPrice = returnFlightId
-        ? detailFlight?.departureFlight?.price * passenger.INFANT +
-          returnDetailFlight?.departureFlight?.price * passenger.INFANT
-        : detailFlight?.departureFlight?.price * passenger.INFANT;
-    const allTax = (allAdultPrice + allInfantPrice + allChildPrice) * 0.1;
-    const allTotalPrice = allAdultPrice + allInfantPrice + allChildPrice + allTax;
+    const allTax = (allAdultPrice + allChildPrice) * 0.1;
+    const allTotalPrice = allAdultPrice + allChildPrice + allTax;
 
     return (
         <>
@@ -516,7 +513,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                 Rp {allChildPrice ?? 0}
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                Rp {allInfantPrice ?? 0}
+                                Rp {0 ?? 0}
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
                                 Rp {allTax ?? 0}
