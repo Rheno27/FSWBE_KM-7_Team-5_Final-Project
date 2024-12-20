@@ -1,57 +1,61 @@
-import { Card, Row, Col, Button } from "react-bootstrap";
-import Thumbnail from "../../assets/img/Thumbnail.png";
+import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getFlightByID } from "../../services/flight";
-import { useSelector } from "react-redux";
+import { Row, Col, Button, Card, Alert, Form } from "react-bootstrap";
+import { useState } from "react";
+import { getDetailTransaction } from "../../services/transaction/index";
+import { Link } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import Thumbnail from "../../assets/img/Thumbnail.png";
 
-function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
-    const { passengerType } = useSelector(state => state.searchQuery)
-
-    const { data: detailFlight } = useQuery({
-        queryKey: ["flight", flightId],
+function OrderDetailCard({ id, handleCancelTransaction }) {
+    const { data: detailTransaction, isLoading, isError } = useQuery({
+        queryKey: ["transaction", id],
         queryFn: async () => {
-            const response = await getFlightByID(flightId);
+            const response = await getDetailTransaction(id);
+            console.log('response', response);
             return response;
         },
-        enabled: !!flightId,
-        retry: 1,
-    });
-
-    const { data: returnDetailFlight, isSuccess } = useQuery({
-        queryKey: ["flight", returnFlightId],
-        queryFn: async () => {
-            const response = await getFlightByID(returnFlightId);
-            return response;
+        enabled: !!id,
+        onError: (err) => {
+            toast.error(
+            err.message || "An error occurred while fetching transaction data"
+            );
         },
-        enabled: !!returnFlightId,
-        retry: 1,
     });
 
-    const passengerAdult = passenger.ADULT
-    const passengerChild = passenger.CHILD
-    const passengerInfant = passenger.INFANT
-    
+    if (isLoading) {
+        return <p>Loading order details...</p>;
+    }
 
-    //price
-    const allAdultPrice = returnFlightId
-        ? detailFlight?.departureFlight?.price * passenger.ADULT +
-          returnDetailFlight?.departureFlight?.price * passenger.ADULT
-        : detailFlight?.departureFlight?.price * passenger.ADULT;
-    const allChildPrice = returnFlightId
-        ? detailFlight?.departureFlight?.price * passenger.CHILD +
-          returnDetailFlight?.departureFlight?.price * passenger.CHILD
-        : detailFlight?.departureFlight?.price * passenger.CHILD;
-    const allInfantPrice = returnFlightId
-        ? detailFlight?.departureFlight?.price * passenger.INFANT +
-          returnDetailFlight?.departureFlight?.price * passenger.INFANT
-        : detailFlight?.departureFlight?.price * passenger.INFANT;
-    const allTax = (allAdultPrice + allInfantPrice + allChildPrice) * 0.1;
-    const allTotalPrice = allAdultPrice + allInfantPrice + allChildPrice + allTax;
+    if (isError || !detailTransaction) {
+        return <p>Error loading order details. Please try again.</p>;
+    }
+    const allPassenger = detailTransaction?.data?.passenger || []
+    const passengerAdult = allPassenger.filter(passenger => passenger.type === 'ADULT').length
+    const passengerChild = allPassenger.filter(passenger => passenger.type === 'CHILD').length
+    const passengerInfant = allPassenger.filter(passenger => passenger.type === 'INFANT').length
+
+    //price departure
+    const allAdultPrice = detailTransaction?.data?.departureFlight?.price * passengerAdult
+    const allChildPrice = detailTransaction?.data?.departureFlight?.price * passengerChild
+    const allInfantPrice = detailTransaction?.data?.departureFlight?.price * passengerInfant
+
+    //price return
+    const allReturnAdultPrice = detailTransaction?.data?.returnFlight?.price * passengerAdult
+    const allReturnChildPrice = detailTransaction?.data?.returnFlight?.price * passengerChild
+    const allReturnInfantPrice = detailTransaction?.data?.returnFlight?.price * passengerInfant
+
+    const allTaxDeparture = (allAdultPrice + allInfantPrice + allChildPrice ) * 0.1;
+    const allTaxReturn = (allReturnAdultPrice + allReturnInfantPrice + allReturnChildPrice ) * 0.1;
+
+    const allTotalPrice = allAdultPrice + allInfantPrice + allChildPrice + allTaxDeparture + (detailTransaction?.data?.returnFlight !== null ? allReturnAdultPrice + allReturnInfantPrice + allReturnChildPrice + allTaxReturn : 0);
+
 
     return (
         <>
-            <Col lg={5} className="flightdetails">
+            <Col lg={5} className="flightdetails my-2">
                 <Card className="shadow-sm">
                     <Card.Body>
                     <div className="mb-3"
@@ -70,13 +74,13 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                     fontWeight: "bold",
                                 }}
                             >
-                                {detailFlight?.departureFlight?.departureTime}
+                                {detailTransaction?.departureFlight?.departureTime}
                             </div>
                             <div className="departure mt-2 mb-2">
                                 <div className="date">
                                 {
-                                    detailFlight?.departureFlight?.departureDate &&
-                                    new Date(detailFlight.departureFlight.departureDate).toLocaleDateString('id-ID', {
+                                    detailTransaction?.data?.departureFlight?.departureDate &&
+                                    new Date(detailTransaction.data.departureFlight.departureDate).toLocaleDateString('id-ID', {
                                         day: 'numeric',
                                         month: 'long',
                                         year: 'numeric',
@@ -85,7 +89,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                 </div>
                                 <div className="airport">
                                     {
-                                        detailFlight?.departureFlight
+                                        detailTransaction?.data?.departureFlight
                                             ?.airportFrom?.name
                                     }
                                 </div>
@@ -133,10 +137,10 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                     }}
                                 >
                                     {
-                                        detailFlight?.departureFlight?.airline
+                                        detailTransaction?.data?.departureFlight?.airline
                                             ?.name
                                     }{" "}
-                                    - {detailFlight?.departureFlight?.class}
+                                    - {detailTransaction?.data?.departureFlight?.class}
                                 </div>
                                 <div
                                     className="flight-number mb-2"
@@ -146,7 +150,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                     }}
                                 >
                                     {
-                                        detailFlight?.departureFlight?.airline
+                                        detailTransaction?.data?.departureFlight?.airline
                                             ?.code
                                     }
                                 </div>
@@ -178,15 +182,15 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                 }}
                             >
                                 {
-                                    detailFlight?.departureFlight
+                                    detailTransaction?.data?.departureFlight
                                         ?.arrivalTime
                                 }
                             </div>
                             <div className="arrival mt-2 mb-2">
                                 <div className="date">
                                 {
-                                    detailFlight?.departureFlight?.arrivalDate &&
-                                    new Date(detailFlight.departureFlight.arrivalDate).toLocaleDateString('id-ID', {
+                                    detailTransaction?.data?.departureFlight?.arrivalDate &&
+                                    new Date(detailTransaction.data.departureFlight.arrivalDate).toLocaleDateString('id-ID', {
                                         day: 'numeric',
                                         month: 'long',
                                         year: 'numeric',
@@ -195,7 +199,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                 </div>
                                 <div className="airport">
                                     {
-                                        detailFlight?.departureFlight
+                                        detailTransaction?.data?.departureFlight
                                             ?.airportTo?.name
                                     }
                                 </div>
@@ -224,7 +228,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                     textAlign: "right",
                                 }}
                             >
-                                {detailFlight?.arrivalFlight?.airportTo?.name}
+                                {detailTransaction?.data?.departureFlight?.airportTo?.name}
                             </div>
                         </Col>
                     </Row>
@@ -250,13 +254,13 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                     textAlign: "right",
                                 }}
                             >
-                                Rp {detailFlight?.departureFlight?.price}
+                                Rp {detailTransaction?.data?.departureFlight?.price}
                             </div>
                         </Col>
                     </Row>
                 </Card.Body>
             </Card>
-            {isSuccess && (
+            {detailTransaction?.data?.returnFlight !== null && (
                 <Card className="shadow-sm mb-3 mt-3 ">
                     <Card.Body>
                     <div className="mb-3"
@@ -275,13 +279,13 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                     fontWeight: "bold",
                                 }}
                             >
-                                {returnDetailFlight?.departureFlight?.departureTime}
+                                {detailTransaction?.data?.returnFlight?.departureTime}
                             </div>
                             <div className="departure mt-2 mb-2">
                                 <div className="date">
                                 {
-                                    returnDetailFlight?.departureFlight?.departureDate &&
-                                    new Date(returnDetailFlight.departureFlight.departureDate).toLocaleDateString('id-ID', {
+                                    detailTransaction?.data?.returnFlight?.departureDate &&
+                                    new Date(detailTransaction.data.returnFlight.departureDate).toLocaleDateString('id-ID', {
                                         day: 'numeric',
                                         month: 'long',
                                         year: 'numeric',
@@ -290,7 +294,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                 </div>
                                 <div className="airport">
                                     {
-                                        returnDetailFlight?.departureFlight
+                                        detailTransaction?.data?.returnFlight
                                             ?.airportFrom?.name
                                     }
                                 </div>
@@ -319,7 +323,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                     textAlign: "right",
                                 }}
                             >
-                                {returnDetailFlight?.arrivalFlight?.airportTo?.name}
+                                {detailTransaction?.data?.returnFlight?.airportTo?.name}
                             </div>
                         </Col>
                     </Row>
@@ -352,10 +356,10 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                     }}
                                 >
                                     {
-                                        returnDetailFlight?.departureFlight?.airline
+                                        detailTransaction?.data?.returnFlight?.airline
                                             ?.name
                                     }{" "}
-                                    - {returnDetailFlight?.departureFlight?.class}
+                                    - {detailTransaction?.data?.returnFlight?.class}
                                 </div>
                                 <div
                                     className="flight-number mb-2"
@@ -365,7 +369,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                     }}
                                 >
                                     {
-                                        returnDetailFlight?.departureFlight?.airline
+                                        detailTransaction?.data?.returnFlight?.airline
                                             ?.code
                                     }
                                 </div>
@@ -397,15 +401,15 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                 }}
                             >
                                 {
-                                    returnDetailFlight?.departureFlight
+                                    detailTransaction?.data?.returnFlight
                                         ?.arrivalTime
                                 }
                             </div>
                             <div className="arrival mt-2 mb-2">
                                 <div className="date">
                                 {
-                                    returnDetailFlight?.departureFlight?.arrivalDate &&
-                                    new Date(returnDetailFlight.departureFlight.arrivalDate).toLocaleDateString('id-ID', {
+                                    detailTransaction?.data?.returnFlight?.arrivalDate &&
+                                    new Date(detailTransaction.data.returnFlight.arrivalDate).toLocaleDateString('id-ID', {
                                         day: 'numeric',
                                         month: 'long',
                                         year: 'numeric',
@@ -414,7 +418,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                 </div>
                                 <div className="airport">
                                     {
-                                        returnDetailFlight?.departureFlight
+                                        detailTransaction?.data?.returnFlight
                                             ?.airportTo?.name
                                     }
                                 </div>
@@ -456,7 +460,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                     textAlign: "right",
                                 }}
                             >
-                                Rp {returnDetailFlight?.departureFlight?.price}
+                                Rp {detailTransaction?.data?.returnFlight?.price}
                             </div>
                         </Col>
                     </Row>
@@ -477,7 +481,6 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                         </div>
                     </Row>
                     <hr />
-
                     {/* Rincian Harga */}
                     <Row>
                         <Col
@@ -488,6 +491,9 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                 justifyContent: "space-between",
                             }}
                         >
+                            <div style={{ fontSize: "16px", marginBottom: "5px" , fontWeight: "bold"}}>
+                                Departure
+                            </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
                                 {passengerAdult} Adult
                             </div>
@@ -509,6 +515,9 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                 justifyContent: "space-between",
                             }}
                         >
+                            <div style={{ fontSize: "16px", marginBottom: "5px" , fontWeight: "bold"}}>
+                                Harga
+                            </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
                                 Rp {allAdultPrice ?? 0}
                             </div>
@@ -519,12 +528,66 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                 Rp {allInfantPrice ?? 0}
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                Rp {allTax ?? 0}
+                                Rp {allTaxDeparture ?? 0}
                             </div>
                         </Col>
                     </Row>
                     <hr />
+                    {detailTransaction?.data?.returnFlight !== null && (
+                        <>
+                            <Row>
+                                <Col
+                                    xs={8}
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "space-between",
+                                    }}
+                                >
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" , fontWeight: "bold"}}>
+                                        Return
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        {passengerAdult} Adult
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        {passengerChild} Child
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        {passengerInfant} Infant
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>Tax</div>
+                                </Col>
 
+                                <Col
+                                    xs={4}
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "flex-end",
+                                        justifyContent: "space-between",
+                                    }}
+                                >
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" , fontWeight: "bold"}}>
+                                        Harga
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        Rp {allReturnAdultPrice ?? 0}
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        Rp {allReturnChildPrice ?? 0}
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        Rp {allReturnInfantPrice ?? 0}
+                                    </div>
+                                    <div style={{ fontSize: "16px", marginBottom: "5px" }}>
+                                        Rp {allTaxReturn ?? 0}
+                                    </div>
+                                </Col>
+                            </Row>
+                            <hr />
+                        </>
+                    )}
                     {/* Total Harga */}
                     <Row>
                         <Col
@@ -550,28 +613,25 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                     </Row>
                 </Card.Body>
             </Card>
+
             <Button
                 className="mt-3 w-100 mb-4"
                 style={{
                     backgroundColor: "#FF0000",
                     borderColor: "#FF0000",
                 }}
-                onClick={handleSubmit}
+                onClick={handleCancelTransaction}
             >
-                Lanjutkan Pembayaran
+                Cencel Transaction
             </Button>
             </Col>
         </>
     );
-}
-
-FlightDetails.propTypes = {
-    handleSubmit: PropTypes.any,
-    passenger: PropTypes.any,
-    flightId: PropTypes.any,
-    returnFlightId: PropTypes.any,
 };
 
-export default FlightDetails;
+OrderDetailCard.propTypes = {
+    handleCancelTransaction: PropTypes.any,
+    passenger: PropTypes.any,
+};
 
-
+export default OrderDetailCard;

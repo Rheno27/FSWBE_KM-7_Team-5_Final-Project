@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { Container, Row } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import "./style.css";
 import ProgressBar from "../../../../components/ProgresBar";
 import { useMutation } from "@tanstack/react-query";
@@ -38,7 +38,11 @@ function Checkout() {
             navigate({ to: `/login` });
             return;
         }
-    }, [token]);
+        if(!flightId){
+            navigate({ to: `/users/public/detailPenerbangan` });
+            return;
+        }
+    }, [token,flightId]);
 
     const { mutate: postTransaction } = useMutation({
         mutationFn: (data) => createTransaction(data),
@@ -79,7 +83,7 @@ function Checkout() {
             setNationalities(Array(total).fill(""));
             setIdentityNumbers(Array(total).fill(""));
             setOriginCountries(Array(total).fill(""));
-            setPassengerTypes(Array(total).fill("")); // assuming default type
+            setPassengerTypes(Array(total).fill(""));
         }
     }, [passenger]);
 

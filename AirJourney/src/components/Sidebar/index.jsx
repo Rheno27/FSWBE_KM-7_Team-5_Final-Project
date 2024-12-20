@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FlightClassIcon from '@mui/icons-material/FlightClass';
 import SortIcon from '@mui/icons-material/Sort';
+import FlightIcon from '@mui/icons-material/Flight';
+import SwapVertIcon from '@mui/icons-material/SwapVert';
 import { Accordion, AccordionSummary, AccordionDetails, Typography, FormControlLabel, FormGroup } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import "../../index.css"
 
 const Sidebar = ({ 
   applyFilters, 
@@ -15,15 +18,23 @@ const Sidebar = ({
   selectedSortOrder,
   selectedAirlines
 }) => {
-  const [expanded, setExpanded] = useState([]); 
+  const [expanded, setExpanded] = useState([]);
+  const [airlines, setAirlines] = useState([]);
 
-  const airlines = [
-    { id: '0193c390-358e-7be0-92e8-d8075fa07253', name: 'Garuda Indonesia' },
-    { id: '0193c390-3596-7bd2-9a5f-2d728d891d04', name: 'Singapore Airlines' },
-    { id: '0193c390-3599-7451-917a-bdfe16ded050', name: 'British Airways' },
-    { id: '0193c390-359c-7580-a415-689ce667c01a', name: 'American Airlines' },
-    { id: '0193c390-359f-7e42-9cc7-cd2352b4a942', name: 'Qantas' }
-  ];
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/airlines`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.data && Array.isArray(data.data)) {
+          setAirlines(data.data);
+        } else if (Array.isArray(data)) {
+          setAirlines(data);
+        } else {
+          console.error('Unexpected data format from /airlines:', data);
+        }
+      })
+      .catch(error => console.error('Error fetching airlines:', error));
+  }, []); 
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded 
@@ -33,8 +44,12 @@ const Sidebar = ({
   };
 
   const handleClassChange = (event) => {
-    const value = event.target.value;
-    onClassChange(value === selectedClass ? "" : value); 
+    if (event.target.checked) {
+      const value = event.target.value;
+      onClassChange(value === selectedClass ? "" : value);
+      return;
+    }
+    onClassChange(null); 
   };
 
   const handleSortByChange = (event) => {
@@ -47,27 +62,24 @@ const Sidebar = ({
   };
 
   const handleAirlineChange = (event, airlineId) => {
-    if (event.target.checked) {
-      onAirlinesChange([airlineId]); 
-    } else {
-      onAirlinesChange([]); 
-    }
+      onAirlinesChange(airlineId, event.target.checked); 
   };
 
   const handleApplyFilters = () => {
     applyFilters({ 
-      classFilter: selectedClass ? [selectedClass] : [], 
+      classFilter: selectedClass, 
       sortBy: selectedSortBy, 
       sortOrder: selectedSortOrder, 
+      airlines: selectedAirlines || ""
     });
   };
 
-  const clearFilters = () => {
+    const clearFilters = () => {
     onClassChange("");
     onSortByChange([]);
     onSortOrderChange("");
-    onAirlinesChange([]);
-    applyFilters({ classFilter: [], sortBy: [], sortOrder: "", airlines: [] }); 
+    onAirlinesChange("", false); 
+    applyFilters({ classFilter: "", sortBy: [], sortOrder: "", airlines: "" }); 
   };
 
   const isClassSelected = (className) => selectedClass === className;
@@ -147,7 +159,7 @@ const Sidebar = ({
       <Accordion expanded={expanded.includes('panel3')} onChange={handleChange('panel3')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel3d-content" id="panel3d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <SortIcon /> Sort Order
+            <SwapVertIcon style={{fontSize: "1.8rem" }} /> Sort Order
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -180,31 +192,33 @@ const Sidebar = ({
       <Accordion expanded={expanded.includes('panel4')} onChange={handleChange('panel4')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel4d-content" id="panel4d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <SortIcon /> Choose by Airlines
+            <FlightIcon style={{ transform: "rotate(50deg)" }} /> Choose by Airlines
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <FormGroup>
+          <FormGroup style={{padding:"0px 10px"}}>
             {airlines.map(airline => (
               <FormControlLabel
                 key={airline.id}
                 control={
                   <input 
                     type="radio" 
-                    checked={Array.isArray(selectedAirlines) && selectedAirlines.includes(airline.id)} 
+                    checked={selectedAirlines === airline.id} 
                     onChange={(e) => handleAirlineChange(e, airline.id)} 
                     name="airlineSelect"
+                    style={{ marginRight: "5px" }}
                   />
                 }
                 label={airline.name}
+                style={{marginBottom:"5px"}}
               />
             ))}
           </FormGroup>
         </AccordionDetails>
       </Accordion>
       
-      <button onClick={handleApplyFilters} className="sort-apply-button" 
-        style={{ width: "100%", marginTop: "20px", alignItems: "center", textAlign: "center", backgroundColor: "#CDC1FF", color: "black", border: "none", borderRadius: "5px", padding: "10px 20px", cursor: "pointer" }}>
+      <button onClick={handleApplyFilters} className="sort-apply-button cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" disabled={(selectedSortBy.length > 0 ? (!selectedSortOrder) : false) || (selectedSortOrder ? (selectedSortBy.length == 0):false) }
+        style={{ width: "100%", marginTop: "20px", alignItems: "center", textAlign: "center", backgroundColor: "#CDC1FF", color: "black", border: "none", borderRadius: "5px", padding: "10px 20px" }}>
         Apply Filters
       </button>
       <button onClick={clearFilters} className="sort-apply-button" 

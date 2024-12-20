@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useSelector } from "react-redux";
+import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
 import PropTypes from "prop-types"
 
-const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromSelected,loading}) => {
+const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromSelected,loading,totalData}) => {
   //const [filteredFlights, setFilteredFlights] = React.useState(flights); 
   const [selectedDate, setSelectedDate] = React.useState(null); 
   const [selectedArrivalDate, setSelectedArrivalDate] = React.useState(null); 
@@ -144,9 +143,8 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromS
             alignItems: "center",
             fontSize: isMobile ? "0.9rem" : "1rem", 
           }}
-        >
-        <ArrowBackIcon style={{ marginRight: "10px" }} />
-            JKT <ArrowForwardIosIcon style={{ fontSize: "14px", marginTop: "6px", marginLeft: "5px" }} /> MLB • 2 Penumpang • Economy
+        >           
+        <AirplaneTicketIcon/> {totalData || 0} Penerbangan Ditemukan 
         </button>
         {/* Search Button */}
         <button
@@ -214,7 +212,8 @@ Header.propTypes={
   onFilteredFlightsChange:PropTypes.any,
   fetchFlightsData:PropTypes.any,
   isFromSelected:PropTypes.bool,
-  loading:PropTypes.bool
+  loading:PropTypes.bool,
+  totalData: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 }
 
 export default Header;
