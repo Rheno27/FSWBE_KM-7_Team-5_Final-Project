@@ -1,12 +1,12 @@
 import * as React from "react";
 import { createLazyFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Row, Col, Container, Card, Alert, Button } from "react-bootstrap";
 import { Place } from "@mui/icons-material";
 import { useState } from "react";
 import { HeaderNav } from "../../../../components/ui/headerNav";
 import { getAllTransactions } from "../../../../services/order-history";
-import { OrderDetailCard } from "../../../../components/Card/orderDetail";
+import { OrderDetailCard } from "../../../../components/PaymentDetails";
 import { toast } from "react-toastify";
 import notFound from '../../../../assets/img/notfound.png'
 import { useEffect } from "react";
@@ -201,6 +201,60 @@ function OrderHistory() {
       return () => clearTimeout(timer);
     }
   }, [token, navigate]);  
+
+  const handlePaymentRedirect = () => {
+    let url = `/users/private/payment/${id}`;
+    if (id) {
+      navigate({ to : url});
+      // console.log("navigate to payment page", url);
+    } else {
+      toast.error("Transaction ID is missing!");
+    }
+  };
+  // let url = `${import.meta.env.VITE_API_URL}/transactions/${id}/ticket`;
+
+// Mutation for sending request link through email
+const { mutate: sendTicket, isPending } = useMutation({
+  mutationFn: async (email) => 
+    await axios.post(
+      `${import.meta.env.VITE_API_URL}/transactions/${id}/ticket`, 
+      { email }, 
+      { headers: { 
+        Authorization: `Bearer ${token}`,
+    }}
+    ),
+
+  onSuccess: () => {
+    toast.success('Ticket was sent successfully! Please check your email', {
+      autoClose: 4000, 
+      position: "bottom-center",
+    });
+  },
+
+  onError: (error) => {
+    console.log('Error sending ticket:', error);
+    if (error.response?.status === 404) {
+      toast.error('Your email was not found in our records.', { 
+        autoClose: 4000,
+        position: "bottom-center",
+      });
+    } else {
+      toast.error('An unexpected error occured')
+    }
+  },
+})
+
+// Form submission handler
+const handleSendTicket = async () => {
+  const response = sendTicket();
+      console.log("response", response);
+      // if (response.status) {
+      //   toast.success("Transaction cancelled successfully");
+      //   navigate({ to: `/` });
+      // } else {
+      //     toast.error("Failed to cancel transaction");
+      // }
+};
 
   return (
     <div>
@@ -453,7 +507,7 @@ function OrderHistory() {
             </Col>
             <Col lg={4} md={5} className="mt-4">
             {selectedTransactionId ? (
-              <OrderDetailCard id={selectedTransactionId} setTotalPrice={setTotalPrice}/>
+              <OrderDetailCard id={selectedTransactionId} setTotalPrice={setTotalPrice} handlePaymentRedirect={handlePaymentRedirect} handleSendTicket={handleSendTicket}/>
             ) : (
               <p style={{color:'#7126B5'}} className="text-center my-4">Pilih riwayat untuk menampilkan detail</p>
             )}

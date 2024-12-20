@@ -3,11 +3,16 @@ import { useQuery } from "@tanstack/react-query";
 import { Row, Col, Button, Card, Alert, Form } from "react-bootstrap";
 import { useState } from "react";
 import { getDetailTransaction } from "../../services/transaction/index";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect } from "react";
 import Thumbnail from "../../assets/img/Thumbnail.png";
 
-export const OrderDetailCard = ({ id, handleCancelTransaction }) => {
+export const OrderDetailCard = ({ id, handleCancelTransaction, handlePaymentRedirect, handleSendTicket }) => {
+  const location = useLocation();
+
+  // Check if the current page is the order history page
+  const isOrderHistoryPage = location.pathname === "/users/private/order-history";
+
   useEffect(() => {
     console.log("OrderDetailCard received ID:", id);
     console.log("expiredAt", transaction?.data?.payment?.expiredAt);
@@ -540,7 +545,54 @@ export const OrderDetailCard = ({ id, handleCancelTransaction }) => {
             </Col>
           </Row>
           <hr />
-          <Button onClick={handleCancelTransaction} className="btn-danger w-100 my-2 rounded-3">Batalkan Transaksi</Button>
+          {paymentStatus === "SUCCESS" && (
+              <Button
+                type="button"
+                onClick={handleSendTicket}
+                // disabled={isPending}
+                style={{
+                  backgroundColor: "#7126B5",
+                  border: "none",
+                  borderRadius: "8px",
+                  width: "100%",
+                  padding: "10px 0",
+                  fontSize: "1.15rem",
+                  marginTop: "5px",
+                }}
+              >
+                {/* {isPending ? "Mengirim..." : "Cetak Tiket"} */}
+                Cetak Tiket
+              </Button>
+            )}
+
+            {paymentStatus === "PENDING" && (
+              <Button
+                onClick={handlePaymentRedirect}
+                type="button"
+                style={{
+                  backgroundColor: "#dc3545",
+                  border: "none",
+                  borderRadius: "8px",
+                  width: "100%",
+                  padding: "10px 0",
+                  fontSize: "1.1rem",
+                  marginTop: "5px",
+                }}
+              >
+                Lanjut Bayar
+              </Button>
+            )}
+
+            {paymentStatus === "CANCELLED" && null}
+            {!["SUCCESS", "PENDING", "CANCELLED"].includes(paymentStatus) && null}
+          {!isOrderHistoryPage && (
+        <Button
+          onClick={handleCancelTransaction}
+          className="btn-danger w-100 my-2 rounded-3"
+        >
+          Batalkan Transaksi
+        </Button>
+      )}
         </Form>
       </Card>
     </div>
