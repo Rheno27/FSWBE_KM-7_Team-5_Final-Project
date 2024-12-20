@@ -258,7 +258,10 @@ const HomepageTicketSearch = () => {
                                     sx={{ color: "#4B1979" }}
                                     onClick={() => {
                                         const fromTemp = fromDestination;
+                                        const fromIdTemp = fromDestinationId;
                                         setFromDestination(toDestination);
+                                        setFromDestinationId(toDestinationId);
+                                        setToDestinationId(fromIdTemp);
                                         setToDestination(fromTemp);
                                     }}
                                 />

@@ -5,7 +5,7 @@ import { getFlightByID } from "../../services/flight";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
-function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
+function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPending }) {
     const { passengerType } = useSelector(state => state.searchQuery)
 
     const { data: detailFlight } = useQuery({
@@ -42,12 +42,8 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
         ? detailFlight?.departureFlight?.price * passenger.CHILD +
           returnDetailFlight?.departureFlight?.price * passenger.CHILD
         : detailFlight?.departureFlight?.price * passenger.CHILD;
-    const allInfantPrice = returnFlightId
-        ? detailFlight?.departureFlight?.price * passenger.INFANT +
-          returnDetailFlight?.departureFlight?.price * passenger.INFANT
-        : detailFlight?.departureFlight?.price * passenger.INFANT;
-    const allTax = (allAdultPrice + allInfantPrice + allChildPrice) * 0.1;
-    const allTotalPrice = allAdultPrice + allInfantPrice + allChildPrice + allTax;
+    const allTax = (allAdultPrice + allChildPrice) * 0.1;
+    const allTotalPrice = allAdultPrice + allChildPrice + allTax;
 
     return (
         <>
@@ -516,7 +512,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                                 Rp {allChildPrice ?? 0}
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                Rp {allInfantPrice ?? 0}
+                                Rp {0 ?? 0}
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
                                 Rp {allTax ?? 0}
@@ -555,8 +551,10 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                 style={{
                     backgroundColor: "#FF0000",
                     borderColor: "#FF0000",
+                    opacity: isPending ? 0.5 : 1,
                 }}
                 onClick={handleSubmit}
+                disabled={isPending}
             >
                 Lanjutkan Pembayaran
             </Button>
