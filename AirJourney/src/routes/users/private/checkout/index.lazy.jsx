@@ -44,7 +44,7 @@ function Checkout() {
     //     }
     // }, [token,flightId]);
 
-    const { mutate: postTransaction } = useMutation({
+    const { mutate: postTransaction, isPending } = useMutation({
         mutationFn: (data) => createTransaction(data),
         onSuccess: (data) => {
             navigate({ to: `/users/private/payment/${data.data.id}` });
@@ -199,6 +199,7 @@ function Checkout() {
                         passenger={passenger}
                         flightId={flightId}
                         returnFlightId={returnFlightId}
+                        isPending={isPending}
                     />
                 </Row>
             </Container>

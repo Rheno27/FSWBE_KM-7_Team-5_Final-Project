@@ -5,7 +5,7 @@ import { getFlightByID } from "../../services/flight";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
-function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
+function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPending }) {
     const { passengerType } = useSelector(state => state.searchQuery)
 
     const { data: detailFlight } = useQuery({
@@ -554,6 +554,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId }) {
                     borderColor: "#FF0000",
                 }}
                 onClick={handleSubmit}
+                disabled={isPending}
             >
                 Lanjutkan Pembayaran
             </Button>
