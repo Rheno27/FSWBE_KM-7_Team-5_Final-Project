@@ -41,12 +41,12 @@ function Checkout() {
             return;
         }
         if(!flightId){
-            navigate({ to: `/users/public/detailPenerbangan` });
+            navigate({ to: `/` });
             return;
         }
     }, [token,flightId]);
 
-    const { mutate: postTransaction } = useMutation({
+    const { mutate: postTransaction, isPending } = useMutation({
         mutationFn: (data) => createTransaction(data),
         onSuccess: (data) => {
             navigate({ to: `/users/private/payment/${data.data.id}` });
@@ -108,7 +108,7 @@ function Checkout() {
                 updated[index] = value;
                 return updated;
             });
-        } else if (field === "nationality") {
+        } else if (field === "nationalities") {
             setNationalities((prev) => {
                 const updated = [...prev];
                 updated[index] = value;
@@ -126,7 +126,7 @@ function Checkout() {
                 updated[index] = value;
                 return updated;
             });
-        } else if (field === "originCountry") {
+        } else if (field === "originCountries") {
             setOriginCountries((prev) => {
                 const updated = [...prev];
                 updated[index] = value;
@@ -171,6 +171,7 @@ function Checkout() {
         if (returnFlightId) {
             data.returnFlightId = returnFlightId;
         }
+        console.log("data yg akan dikirim", data);
         postTransaction(data);
 
     };
@@ -214,6 +215,7 @@ function Checkout() {
                         passenger={passenger}
                         flightId={flightId}
                         returnFlightId={returnFlightId}
+                        isPending={isPending}
                     />
                 </Row>
             </Container>

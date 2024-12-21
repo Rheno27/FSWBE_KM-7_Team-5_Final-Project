@@ -5,12 +5,13 @@ import { Row, Col, Container, Card, Alert, Button } from "react-bootstrap";
 import { Place } from "@mui/icons-material";
 import { useState } from "react";
 import { HeaderNav } from "../../../../components/ui/headerNav";
-import { getAllTransactions } from "../../../../services/order-history";
+import { fetchTransactions, getAllTransactions } from "../../../../services/order-history";
 import { OrderDetailCard } from "../../../../components/PaymentDetails";
 import { toast } from "react-toastify";
 import notFound from '../../../../assets/img/notfound.png'
 import { useEffect } from "react";
 import axios from "axios";
+import Pagination from "../../../../components/Pagination";
 
 export const Route = createLazyFileRoute("/users/private/order-history/")({
   component: OrderHistory,
@@ -52,46 +53,53 @@ function OrderHistory({id}) {
   };
 
   const {
-    data : transactions,
+    data,
     isLoading,
     isError,
   } = useQuery({
     queryKey: [
       "transactions",
-      {
-        startDate: selectedRange?.from?.toISOString().split("T")[0],
-        endDate: selectedRange?.to?.toISOString().split("T")[0],
-      },
+      currentPage,
+      selectedRange?.from?.toISOString().split("T")[0] || null,
+      selectedRange?.to?.toISOString().split("T")[0] || null,
     ],
-    queryFn: () => getAllTransactions({
-      startDate: selectedRange?.from?.toISOString().split("T")[0],
-      endDate: selectedRange?.to?.toISOString().split("T")[0],
-    }), // Fetch all transactions for the user
+    queryFn: () =>
+      fetchTransactions(currentPage, {
+        startDate: selectedRange?.from
+          ? selectedRange.from.toISOString().split("T")[0]
+          : null,
+        endDate: selectedRange?.to
+          ? selectedRange.to.toISOString().split("T")[0]
+          : null,
+      }),
+    keepPreviousData: true, // Keeps the previous page's data while fetching new data
     onError: (error) => {
-      console.error("Error fetching transaction:", error);
+      console.error("Error fetching transactions:", error);
       toast.error(
         error.response?.data?.message ||
           "An error occurred while fetching the transaction data"
       );
     },
     onSuccess: (transactions) => {
-      // Perform the side effects here
-      const grouped = groupHistoriesByMonth(transactions.data); 
-      setSelectedTransactionId(transactions.data); // Set the selected transaction
+      console.log("Fetched transactions:", transactions);
+      const grouped = groupHistoriesByMonth(transactions.data);
+      setSelectedTransactionId(transactions.data);
     },
-    // keepPreviousData: true, // Keep the previous data while fetching new data
   });
 
-  // Destructure meta and transactions safely
-// const { meta, data: transactions } = data || { meta: {}, data: [] };
-// console.log("transactions", transactions)
 
-// // Optional: Default fallback values for `meta`
-// const { page, totalPage } = meta || { page: 1, totalPage: 1 };
+// Safely destructure the `data` and `meta` from `data` fetched by useQuery
+const { meta = {}, data: transactions = [] } = data || {};
+const totalPages = meta?.totalPages || 1;
 
-  const isAvailable = transactions?.data?.length > 0;
 
-  const transactionsArray = Array.isArray(transactions?.data) ? transactions.data : [];
+
+// Optional: Default fallback values for `meta`
+const { page, totalPage } = meta || { page: 1, totalPage: 1 };
+
+  const isAvailable = transactions.length > 0;
+
+  const transactionsArray = Array.isArray(transactions) ? transactions: [];
 
   function groupHistoriesByMonth(transactions = []) {
     return transactions.reduce((grouped, { createdAt, ...rest }) => {
@@ -114,7 +122,7 @@ function OrderHistory({id}) {
 
   // Filter transactions based on the selected date range
   const filteredTransactions = selectedRange
-  ? transactionsArray.filter((transaction) => {
+  ? transactions.filter((transaction) => {
       const createdAt = new Date(transaction.createdAt);
       const fromDate = new Date(selectedRange.from);
       const toDate = new Date(selectedRange.to);
@@ -128,7 +136,7 @@ function OrderHistory({id}) {
         return createdAt >= fromDate && createdAt <= toDate;
       }
     })
-  : transactionsArray; // Show all transactions if no date range is selected
+  : transactions; // Show all transactions if no date range is selected
 
   const groupedFilteredTransactions = groupHistoriesByMonth(filteredTransactions);
 
@@ -257,7 +265,11 @@ const handleSendTicket = async () => {
       //     toast.error("Failed to cancel transaction");
       // }
 };
-
+const handlePageChange = (page) => {
+  if (page >= 1 && page <= totalPages) {
+    setCurrentPage(page);
+  }
+};
   return (
     <div>
       <HeaderNav
@@ -514,7 +526,37 @@ const handleSendTicket = async () => {
               <p style={{color:'#7126B5'}} className="text-center my-4">Pilih riwayat untuk menampilkan detail</p>
             )}
             </Col>
+            <Row>
+              {/* Pagination */}
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+              {/* <Col className="justify-content-center d-flex my-5">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <span style={{ margin: "0 10px" }}>
+                Page {meta.page} of {meta.totalPage}
+              </span>
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) =>
+                    prev < meta.totalPage ? prev + 1 : prev
+                  )
+                }
+                disabled={currentPage === meta.totalPage}
+              >
+                Next
+              </button>
+              </Col> */}
+            </Row>
           </Row>
+
         </Container>
       ) : (
         <Container className="py-5">
@@ -552,32 +594,13 @@ const handleSendTicket = async () => {
               </Button>
             </Col>
           </div>
-          {/* <Row className="d-flex align-items-center">
-      <div style={{ marginTop: "30px" }}>
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span style={{ margin: "0 10px" }}>
-          Page {meta.page} of {meta.totalPage}
-        </span>
-        <button
-          onClick={() =>
-            setCurrentPage((prev) =>
-              prev < meta.totalPage ? prev + 1 : prev
-            )
-          }
-          disabled={currentPage === meta.totalPage}
-        >
-          Next
-        </button>
-      </div>
-      </Row> */}
         </Container>
       )}
       </Container>
     </div>
   );
+  OrderDetailCard.propTypes = {
+    handleCancelTransaction: PropTypes.any,
+    passenger: PropTypes.any,
+};
 }

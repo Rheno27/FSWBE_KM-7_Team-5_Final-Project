@@ -59,7 +59,7 @@ const NavigationBar = () => {
             {shuoldShowNavbar && (
                 <Navbar expand="lg" className="bg-white">
                     <Container fluid>
-                        <Navbar.Brand href="/" style={{ marginLeft: "128px" }}>
+                        <Navbar.Brand as={Link} to="/" style={{ marginLeft: "128px" }}>
                             <img src={logo} alt="logo" />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="navbarScroll" />

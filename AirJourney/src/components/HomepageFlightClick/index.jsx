@@ -68,7 +68,7 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
         const formData = {
             airportIdFrom: selectedFlight.airportIdFrom,
             airportIdTo: selectedFlight.airportIdTo,
-            departureDate: new Date(selectedFlight.departureDate).toLocaleDateString("en-CA"),
+            departureDate: selectedFlight.departureDate.split("T")[0],
         };
         const formatDate = (date) => {
             const year = date.getFullYear();
@@ -308,9 +308,9 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
                             <span>
                                 Departure :{" "}
                                 <span className="font-semibold">
-                                    {new Date(
+                                    {
                                         selectedFlight?.departureDate
-                                    ).toLocaleDateString("en-CA")}
+                                    .split("T")[0]}
                                 </span>
                             </span>
                         </div>

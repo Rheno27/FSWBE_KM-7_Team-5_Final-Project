@@ -40,22 +40,26 @@ export const getAllTransactions = async () => {
   }
 };
 
-export const fetchTransactions = async (page, filters) => {
+export const fetchTransactions = async (page, filter) => {
   const token = localStorage.getItem("token");
-  const url = `${import.meta.env.VITE_API_URL}/transactions?page=${page}&startDate=${filters.startDate}&endDate=${filters.endDate}`;
-  console.log("Fetching transactions from:", url); // Debug URL
+  const url = new URL(`${import.meta.env.VITE_API_URL}/transactions`);
+  url.searchParams.append("page", page); // Current page
+  if (filter.startDate) {
+    url.searchParams.append("startDate", filter.startDate);
+  }
+  if (filter.endDate) {
+    url.searchParams.append("endDate", filter.endDate);
+  }
 
   try {
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const response = await axios.get(url.toString(), {
+      headers: { Authorization: `Bearer ${token}` },
     });
-    console.log("Response data:", response.data); // Debug response
-    return response.data; // Ensure this matches the expected structure
+    return response.data; // Ensure backend returns data.meta and data.transactions
   } catch (error) {
-    console.error("Error fetching transactions:", error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || "Failed to fetch transactions");
+    throw error;
   }
 };
+
+
 
