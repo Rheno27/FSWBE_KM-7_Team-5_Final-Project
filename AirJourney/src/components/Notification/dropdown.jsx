@@ -53,6 +53,7 @@ const NotificationDropdown = () => {
     >
       <Nav.Link as={Link} to="/notification" onClick={handleIconClick}>
         <NotificationIcon style={{ marginRight: "8px", cursor: "pointer" }} />
+        <span className="d-md-none">Notification</span>
         {unreadNotifications.length > 0 && (
           <span
             style={{
