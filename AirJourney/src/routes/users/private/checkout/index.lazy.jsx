@@ -30,7 +30,7 @@ function Checkout() {
     const [nationalities, setNationalities] = useState([]);
     const [identityNumbers, setIdentityNumbers] = useState([]);
     const [originCountries, setOriginCountries] = useState([]);
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState([]);
     const [passengerTypes, setPassengerTypes] = useState([]);
 
     useEffect(() => {
@@ -51,7 +51,6 @@ function Checkout() {
             return;
         },
         onError: (error) => {
-            console.log("error", error);
             toast.error("Gagal membuat pemesanan");
         },
     });
@@ -84,6 +83,7 @@ function Checkout() {
             setIdentityNumbers(Array(total).fill(""));
             setOriginCountries(Array(total).fill(""));
             setPassengerTypes(Array(total).fill(""));
+            setTitle(Array(total).fill(""));
         }
     }, [passenger]);
 
@@ -136,6 +136,12 @@ function Checkout() {
                 updated[index] = value;
                 return updated;
             });
+        } else if (field === "title") {
+            setTitle((prev) => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
         }
     };
 
@@ -153,7 +159,7 @@ function Checkout() {
                     nationality: nationalities[index] || "",
                     identityNumber: identityNumbers[index] || "",
                     originCountry: originCountries[index] || "",
-                    title: title || "",
+                    title: title[index] || "",
                     type: passengerTypes[index] || getPassengerType(index),
                 };
                 if (returnFlightId && selectedReturnSeats) {
