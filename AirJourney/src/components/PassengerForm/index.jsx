@@ -13,7 +13,6 @@ const PassengerForm = ({
     totalPassengers,
     getPassengerType,
     title,
-    setTitle,
     handleInputChange,
     selectedSeats,
     setSelectedSeats,
@@ -188,13 +187,13 @@ const PassengerForm = ({
                                     Title
                                 </Form.Label>
                                 <Form.Select
-                                    value={title}
+                                    value={title[index]}
                                     onChange={(e) => {
-                                        setTitle(e.target.value);
-                                        console.log(
-                                            "Selected Title:",
+                                        handleInputChange(
+                                            index,
+                                            "title",
                                             e.target.value
-                                        ); // Debugging
+                                        );
                                     }}
                                     placeholder="Pilih Title"
                                     style={{
