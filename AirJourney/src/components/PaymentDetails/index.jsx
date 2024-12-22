@@ -40,18 +40,16 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
     //price departure
     const allAdultPrice = detailTransaction?.data?.departureFlight?.price * passengerAdult
     const allChildPrice = detailTransaction?.data?.departureFlight?.price * passengerChild
-    const allInfantPrice = detailTransaction?.data?.departureFlight?.price * passengerInfant
 
     //price return
     const allReturnAdultPrice = detailTransaction?.data?.returnFlight?.price * passengerAdult
     const allReturnChildPrice = detailTransaction?.data?.returnFlight?.price * passengerChild
-    const allReturnInfantPrice = detailTransaction?.data?.returnFlight?.price * passengerInfant
 
-    const allTaxDeparture = (allAdultPrice + allInfantPrice + allChildPrice ) * 0.1;
-    const allTaxReturn = (allReturnAdultPrice + allReturnInfantPrice + allReturnChildPrice ) * 0.1;
 
-    const allTotalPrice = allAdultPrice + allInfantPrice + allChildPrice + allTaxDeparture + (detailTransaction?.data?.returnFlight !== null ? allReturnAdultPrice + allReturnInfantPrice + allReturnChildPrice + allTaxReturn : 0);
+    const allTaxDeparture = (allAdultPrice + allChildPrice ) * 0.1;
+    const allTaxReturn = (allReturnAdultPrice + allReturnChildPrice ) * 0.1;
 
+    const allTotalPrice = allAdultPrice + allChildPrice + allTaxDeparture + (detailTransaction?.data?.returnFlight !== null ? allReturnAdultPrice + allReturnChildPrice + allTaxReturn : 0);
 
     return (
         <>
@@ -525,7 +523,7 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                                 Rp {allChildPrice ?? 0}
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                Rp {allInfantPrice ?? 0}
+                                Rp {0 ?? 0}
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
                                 Rp {allTaxDeparture ?? 0}
@@ -578,7 +576,7 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                                         Rp {allReturnChildPrice ?? 0}
                                     </div>
                                     <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                        Rp {allReturnInfantPrice ?? 0}
+                                        Rp {0 ?? 0}
                                     </div>
                                     <div style={{ fontSize: "16px", marginBottom: "5px" }}>
                                         Rp {allTaxReturn ?? 0}

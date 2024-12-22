@@ -21,7 +21,7 @@ const showNavbar = !hideNavbar.includes(window.location.pathname);
             )}
             <Outlet />
             <ToastContainer limit={3} />
-            <TanStackRouterDevtools />
+            <TanStackRouterDevtools enabled={import.meta.env.MODE === "development"} />
         </>
     );
 }
