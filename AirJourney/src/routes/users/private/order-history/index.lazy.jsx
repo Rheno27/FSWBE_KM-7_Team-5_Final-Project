@@ -43,7 +43,6 @@ function OrderHistory() {
       endDate: selectedRange?.to?.toISOString().split("T")[0],
     }), // Fetch all transactions for the user
     onError: (error) => {
-      console.error("Error fetching transaction:", error);
       toast.error(
         error.response?.data?.message ||
           "An error occurred while fetching the transaction data"
@@ -64,7 +63,6 @@ function OrderHistory() {
     return transactions.reduce((grouped, { createdAt, ...rest }) => {
       const date = new Date(createdAt);
       if (isNaN(date)) {
-        console.error("Invalid date for transaction:", createdAt);
         return grouped;
       }
       const yearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;

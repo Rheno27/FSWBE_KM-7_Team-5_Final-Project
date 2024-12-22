@@ -26,8 +26,7 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
   // Function to count passengers by type
   const countPassengersByType = (passengerArray) => {
     if (!Array.isArray(passengerArray)) {
-      console.error("Passenger data is not an array:", passengerArray);
-      return {}; // Return an empty object if the input is invalid
+        return {}; // Return an empty object if the input is invalid
     }
     return passengerArray.reduce((counts, passenger) => {
       const type = passenger.type; // Extract type (e.g., ADULT, CHILD)
@@ -116,7 +115,6 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
     let url = `/users/private/payment/${id}`;
     if (id) {
       navigate({ to : url});
-      // console.log("navigate to payment page", url);
     } else {
       toast.error("Transaction ID is missing!");
     }

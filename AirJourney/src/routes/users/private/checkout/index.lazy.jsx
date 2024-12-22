@@ -174,6 +174,14 @@ function Checkout() {
                 };
                 if (returnFlightId && selectedReturnSeats) {
                     passenger.returnSeatId = selectedReturnSeats[index];
+                    if(passenger.returnSeatId === ""){
+                        toast.error("Kursi kembali tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                        return;
+                    }
+                }
+                if(passenger.departureSeatId === ""){
+                    toast.error("Kursi tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
                 }
                 if(title[index] === ""){
                     toast.error("Title tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
@@ -199,12 +207,12 @@ function Checkout() {
                     toast.error("Nomor identitas tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
                     return;
                 }
-                if(originCountries[index] === ""){
-                    toast.error("Asal negara tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
-                    return;
-                }
                 if(expiredAt[index] === ""){
                     toast.error("Tanggal kadaluarsa tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(originCountries[index] === ""){
+                    toast.error("Asal negara tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
                     return;
                 }
                 return passenger;

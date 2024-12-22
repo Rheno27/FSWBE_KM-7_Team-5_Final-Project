@@ -142,7 +142,6 @@ function Index() {
         );
       } catch (err) {
         setError(err.message);
-        console.error("Error fetching flights:", err);
       } finally {
         setLoading(false);
       }
@@ -216,7 +215,6 @@ const applyFilters = useCallback(
 // useEffect(() => {
 //   const params = new URLSearchParams(location.search);
 //   if (selectedAirlines.length > 0) {
-//     console.log(selectedAirlines);
 //     params.set("airlineIds", selectedAirlines.join(","));
 //   } else {
 //     params.delete("airlineIds");
