@@ -51,7 +51,6 @@ function Checkout() {
             return;
         },
         onError: (error) => {
-            console.log("error", error);
             toast.error("Gagal membuat pemesanan");
         },
     });
@@ -176,7 +175,6 @@ function Checkout() {
         if (returnFlightId) {
             data.returnFlightId = returnFlightId;
         }
-        console.log("data yg akan dikirim", data);
         postTransaction(data);
 
     };
