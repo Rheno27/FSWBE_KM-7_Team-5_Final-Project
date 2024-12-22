@@ -1,0 +1,155 @@
+.flight-list {
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  margin-bottom: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flight-card {
+  border: 1px solid #fff;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  padding: 20px; 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.00);
+  width: 100%;
+  max-width: 950px; 
+  transition: all 0.2s ease; 
+}
+
+.flight-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
+}
+
+.flight-header {
+  padding: 15px 0; 
+  display: flex;
+  flex-direction: row; 
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flight-timing {
+  margin: 0;
+}
+
+.flight-timing .row {
+  margin: 0;
+}
+
+.flight-timing .text-center {
+  padding: 10px 0;
+}
+
+.flight-timing .fw-bold {
+  font-size: 18px; 
+}
+
+.flight-timing small {
+  font-size: 14px; 
+  color: #000;
+}
+
+.flight-schedule hr {
+  width: 60px;
+  border: 1px solid #ccc;
+}
+
+.flight-details {
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  padding: 20px;
+}
+
+.text-purple {
+  color: #7126b5;
+}
+
+.button-select {
+  background-color: #7126b5;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  width: 100%;
+  max-width: 120px; 
+  text-align: center;
+  margin-left: auto;
+  margin-bottom: 10px;
+}
+
+.button-select:hover {
+  background-color: #5a32a1;
+}
+
+.flight-logo {
+  max-width: 70px; 
+  height: auto;
+}
+
+.flight-logo-small {
+  max-width: 50px; 
+  height: auto;
+}
+
+.no-data-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.no-data-image {
+  max-width: 100%;
+  height: auto;
+}
+
+
+@media (max-width: 768px) {
+  .flight-card {
+    padding: 10px;
+  }
+
+  .flight-header {
+    flex-direction: column;
+  }
+
+  .flight-timing {
+    text-align: center;
+  }
+
+  .flight-timing .fw-bold {
+    font-size: 14px;
+  }
+
+  .flight-timing small {
+    font-size: 12px;
+  }
+
+  .button-select {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .flight-logo {
+    max-width: 40px;
+  }
+
+  .flight-logo-small {
+    max-width: 30px;
+  }
+
+  .flight-timing .fw-bold {
+    font-size: 12px;
+  }
+
+  .flight-timing small {
+    font-size: 10px;
+  }
+
+  .text-purple {
+    font-size: 14px;
+  }
+}

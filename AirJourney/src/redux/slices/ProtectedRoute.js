@@ -16,22 +16,21 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
       if (
         location.pathname !== "/login" &&
         location.pathname !== "/register" &&
-        location.pathname !== "/" &&
-        location.pathname !== "/cars"
+        location.pathname !== "/"
       ) {
         navigate({ to: "/" });
       }
     } else if (
       !isLoading &&
       allowedRoles &&
-      !allowedRoles.includes(user?.role_id)
+      !allowedRoles.includes(user?.role)
     ) {
       // Redirect to home or a 403 page if user role is not allowed
       navigate({ to: "/" });
     }
   }, [
     token,
-    user?.role_id,
+    user?.role,
     allowedRoles,
     navigate,
     location.pathname,
@@ -43,8 +42,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     if (
       location.pathname !== "/login" &&
       location.pathname !== "/register" &&
-      location.pathname !== "/" &&
-      location.pathname !== "/cars"
+      location.pathname !== "/"
     ) {
       return null; // Render nothing during redirect or loading
     }
@@ -55,7 +53,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
 ProtectedRoute.propTypes = {
   children: PropTypes.node.isRequired,
-  allowedRoles: PropTypes.arrayOf(PropTypes.number),
+  allowedRoles: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default ProtectedRoute;
