@@ -107,16 +107,16 @@ const DestinationModal = ({
                         : destinationHistory.map((data) => (
                               <div
                                   key={data.id}
-                                  className="flex justify-between border-b py-1 text-sm"
+                                  className="flex justify-between border-b py-1 text-sm cursor-pointer"
+                                  onClick={() => {
+                                    destinationClickHandler(
+                                        data.name,
+                                        data.id
+                                    );
+                                }}
                               >
                                   <span
                                       className="cursor-pointer"
-                                      onClick={() => {
-                                          destinationClickHandler(
-                                              data.name,
-                                              data.id
-                                          );
-                                      }}
                                   >
                                       {data.name}
                                   </span>
