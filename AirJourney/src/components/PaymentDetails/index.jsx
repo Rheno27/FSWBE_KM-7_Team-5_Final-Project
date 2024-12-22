@@ -14,7 +14,6 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
         queryKey: ["transaction", id],
         queryFn: async () => {
             const response = await getDetailTransaction(id);
-            console.log('response', response);
             return response;
         },
         enabled: !!id,

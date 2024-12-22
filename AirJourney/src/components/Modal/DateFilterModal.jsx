@@ -10,7 +10,6 @@ const DateFilterModal = ({ isOpen, onClose, position, onFilter }) => {
 
   const handleSave = () => {
     if (selectedRange) {
-      console.log("Selected Date(s): ", selectedRange);
       onFilter(selectedRange);
     }
     onClose();

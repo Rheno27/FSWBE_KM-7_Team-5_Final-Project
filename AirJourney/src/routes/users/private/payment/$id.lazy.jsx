@@ -128,7 +128,6 @@ function Payment() {
   //         }
   //       }
   //     } catch (error) {
-  //       console.error("Failed to create notification:", error);
   //     }
   //   };
 

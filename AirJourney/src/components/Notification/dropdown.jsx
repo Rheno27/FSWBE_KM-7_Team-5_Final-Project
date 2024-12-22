@@ -32,7 +32,6 @@ const NotificationDropdown = () => {
       });
       refetch(); 
     } catch (err) {
-      console.error("Failed to mark notifications as read:", err);
     }
   };
 

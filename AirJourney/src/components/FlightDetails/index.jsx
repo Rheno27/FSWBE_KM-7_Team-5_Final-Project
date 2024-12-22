@@ -47,211 +47,218 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
 
     return (
         <>
-            <Col lg={5} className="flightdetails">
+            <Col 
+                lg={5} 
+                className="flightdetails"
+                style={{
+                    position: "sticky",
+                    top: "100px",
+                }}
+            >
                 <Card className="shadow-sm">
                     <Card.Body>
-                    <div className="mb-3"
-                    style={{
-                        fontSize: "22px",
-                        fontWeight: "bold",
-                        color: "black",
-                    }}
-                    >Detail Penerbangan</div>
-                    <Row>
-                        <Col lg={7} >
-                            <div
-                                className="time"
-                                style={{
-                                    fontSize: "16px",
-                                    fontWeight: "bold",
-                                }}
-                            >
-                                {detailFlight?.departureFlight?.departureTime}
-                            </div>
-                            <div className="departure mt-2 mb-2">
-                                <div className="date">
-                                {
-                                    detailFlight?.departureFlight?.departureDate &&
-                                    new Date(detailFlight.departureFlight.departureDate).toLocaleDateString('id-ID', {
-                                        day: 'numeric',
-                                        month: 'long',
-                                        year: 'numeric',
-                                    })
-                                }
-                                </div>
-                                <div className="airport">
-                                    {
-                                        detailFlight?.departureFlight
-                                            ?.airportFrom?.name
-                                    }
-                                </div>
-                            </div>
-                        </Col>
-                        <Col lg={5}>
-                            <div
-                                className="keberangkatan"
-                                style={{
-                                    fontSize: "16px",
-                                    fontWeight: "bold",
-                                    color: "#4B1979",
-                                    textAlign: "right",
-                                }}
-                            >
-                                Keberangkatan
-                            </div>
-                        </Col>
-                    </Row>
-                    <hr />
-                    {/* Flight Details Section */}
-                    <Row>
-                        <Col lg={2}>
-                            <div
-                                className="flight-image"
-                                style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    objectFit: "cover",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                            >
-                                <img src={Thumbnail} alt="Flight" />
-                            </div>
-                        </Col>
-                        <Col lg={10}>
-                            <div className="flight-info mb-2 mt-3">
+                        <div className="mb-3"
+                        style={{
+                            fontSize: "22px",
+                            fontWeight: "bold",
+                            color: "black",
+                        }}
+                        >Detail Penerbangan</div>
+                        <Row>
+                            <Col lg={7} >
                                 <div
-                                    className="airline"
+                                    className="time"
                                     style={{
                                         fontSize: "16px",
                                         fontWeight: "bold",
                                     }}
                                 >
-                                    {
-                                        detailFlight?.departureFlight?.airline
-                                            ?.name
-                                    }{" "}
-                                    - {detailFlight?.departureFlight?.class}
+                                    {detailFlight?.departureFlight?.departureTime}
                                 </div>
+                                <div className="departure mt-2 mb-2">
+                                    <div className="date">
+                                    {
+                                        detailFlight?.departureFlight?.departureDate &&
+                                        new Date(detailFlight.departureFlight.departureDate).toLocaleDateString('id-ID', {
+                                            day: 'numeric',
+                                            month: 'long',
+                                            year: 'numeric',
+                                        })
+                                    }
+                                    </div>
+                                    <div className="airport">
+                                        {
+                                            detailFlight?.departureFlight
+                                                ?.airportFrom?.name
+                                        }
+                                    </div>
+                                </div>
+                            </Col>
+                            <Col lg={5}>
                                 <div
-                                    className="flight-number mb-2"
+                                    className="keberangkatan"
                                     style={{
                                         fontSize: "16px",
                                         fontWeight: "bold",
+                                        color: "#4B1979",
+                                        textAlign: "right",
                                     }}
                                 >
-                                    {
-                                        detailFlight?.departureFlight?.airline
-                                            ?.code
-                                    }
+                                    Keberangkatan
                                 </div>
+                            </Col>
+                        </Row>
+                        <hr />
+                        {/* Flight Details Section */}
+                        <Row>
+                            <Col lg={2}>
+                                <div
+                                    className="flight-image"
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <img src={Thumbnail} alt="Flight" />
+                                </div>
+                            </Col>
+                            <Col lg={10}>
+                                <div className="flight-info mb-2 mt-3">
+                                    <div
+                                        className="airline"
+                                        style={{
+                                            fontSize: "16px",
+                                            fontWeight: "bold",
+                                        }}
+                                    >
+                                        {
+                                            detailFlight?.departureFlight?.airline
+                                                ?.name
+                                        }{" "}
+                                        - {detailFlight?.departureFlight?.class}
+                                    </div>
+                                    <div
+                                        className="flight-number mb-2"
+                                        style={{
+                                            fontSize: "16px",
+                                            fontWeight: "bold",
+                                        }}
+                                    >
+                                        {
+                                            detailFlight?.departureFlight?.airline
+                                                ?.code
+                                        }
+                                    </div>
 
-                                <div className="info-box">
-                                    <div className="info-title"
+                                    <div className="info-box">
+                                        <div className="info-title"
+                                        style={{
+                                            fontSize: "14px",
+                                            fontWeight: "bold",
+                                        }}
+                                        >Informasi:</div>
+                                        <ul className="list-unstyled">
+                                            <li>Baggage 20 kg</li>
+                                            <li>Cabin baggage 7 kg</li>
+                                            <li>In Flight Entertainment</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </Col>
+                        </Row>
+                        <hr />
+                        <Row>
+                            <Col lg={7} >
+                                <div
+                                    className="time"
                                     style={{
-                                        fontSize: "14px",
+                                        fontSize: "16px",
                                         fontWeight: "bold",
                                     }}
-                                    >Informasi:</div>
-                                    <ul className="list-unstyled">
-                                        <li>Baggage 20 kg</li>
-                                        <li>Cabin baggage 7 kg</li>
-                                        <li>In Flight Entertainment</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-                    <hr />
-                    <Row>
-                    <Col lg={7} >
-                            <div
-                                className="time"
-                                style={{
-                                    fontSize: "16px",
-                                    fontWeight: "bold",
-                                }}
-                            >
-                                {
-                                    detailFlight?.departureFlight
-                                        ?.arrivalTime
-                                }
-                            </div>
-                            <div className="arrival mt-2 mb-2">
-                                <div className="date">
-                                {
-                                    detailFlight?.departureFlight?.arrivalDate &&
-                                    new Date(detailFlight.departureFlight.arrivalDate).toLocaleDateString('id-ID', {
-                                        day: 'numeric',
-                                        month: 'long',
-                                        year: 'numeric',
-                                    })
-                                }
-                                </div>
-                                <div className="airport">
+                                >
                                     {
                                         detailFlight?.departureFlight
-                                            ?.airportTo?.name
+                                            ?.arrivalTime
                                     }
                                 </div>
-                            </div>
-                        </Col>
-                        <Col lg={5}>
-                            <div
-                                className="Kedatangan"
-                                style={{
-                                    fontSize: "16px",
-                                    fontWeight: "bold",
-                                    color: "#4B1979",
-                                    textAlign: "right",
-                                }}
-                            >
-                                Kedatangan
-                            </div>
-                        </Col>
-                        <Col lg={6}>
-                            <div
-                                className="Kedatangan"
-                                style={{
-                                    fontSize: "16px",
-                                    fontWeight: "bold",
-                                    color: "#4B1979",
-                                    textAlign: "right",
-                                }}
-                            >
-                                {detailFlight?.arrivalFlight?.airportTo?.name}
-                            </div>
-                        </Col>
-                    </Row>
-                    <hr />
-                    <Row className="mt-2 mb-2">
-                        <Col lg={8} className="">
-                            <div
-                                className="hargadeparture"
-                                style={{
-                                    fontSize: "18px",
-                                    fontWeight: "bold",
-                                }}
-                            >
-                                Harga
-                            </div>
-                        </Col>
-                        <Col lg={4}>
-                            <div
-                                className="hargadeparture"
-                                style={{
-                                    fontSize: "18px",
-                                    fontWeight: "bold",
-                                    textAlign: "right",
-                                }}
-                            >
-                                Rp {detailFlight?.departureFlight?.price}
-                            </div>
-                        </Col>
-                    </Row>
-                </Card.Body>
-            </Card>
+                                <div className="arrival mt-2 mb-2">
+                                    <div className="date">
+                                    {
+                                        detailFlight?.departureFlight?.arrivalDate &&
+                                        new Date(detailFlight.departureFlight.arrivalDate).toLocaleDateString('id-ID', {
+                                            day: 'numeric',
+                                            month: 'long',
+                                            year: 'numeric',
+                                        })
+                                    }
+                                    </div>
+                                    <div className="airport">
+                                        {
+                                            detailFlight?.departureFlight
+                                                ?.airportTo?.name
+                                        }
+                                    </div>
+                                </div>
+                            </Col>
+                            <Col lg={5}>
+                                <div
+                                    className="Kedatangan"
+                                    style={{
+                                        fontSize: "16px",
+                                        fontWeight: "bold",
+                                        color: "#4B1979",
+                                        textAlign: "right",
+                                    }}
+                                >
+                                    Kedatangan
+                                </div>
+                            </Col>
+                            <Col lg={6}>
+                                <div
+                                    className="Kedatangan"
+                                    style={{
+                                        fontSize: "16px",
+                                        fontWeight: "bold",
+                                        color: "#4B1979",
+                                        textAlign: "right",
+                                    }}
+                                >
+                                    {detailFlight?.arrivalFlight?.airportTo?.name}
+                                </div>
+                            </Col>
+                        </Row>
+                        <hr />
+                        <Row className="mt-2 mb-2">
+                            <Col lg={8} className="">
+                                <div
+                                    className="hargadeparture"
+                                    style={{
+                                        fontSize: "18px",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    Harga
+                                </div>
+                            </Col>
+                            <Col lg={4}>
+                                <div
+                                    className="hargadeparture"
+                                    style={{
+                                        fontSize: "18px",
+                                        fontWeight: "bold",
+                                        textAlign: "right",
+                                    }}
+                                >
+                                    Rp {detailFlight?.departureFlight?.price}
+                                </div>
+                            </Col>
+                        </Row>
+                    </Card.Body>
+                </Card>
             {isSuccess && (
                 <Card className="shadow-sm mb-3 mt-3 ">
                     <Card.Body>
