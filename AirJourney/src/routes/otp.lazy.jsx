@@ -37,7 +37,6 @@ function RouteComponent() {
             axios
                 .post(`${import.meta.env.VITE_API_URL}/auth/otp/verify`, data)
                 .then((res) => {
-                    console.log(res);
                     toast.update(toastId, {
                         render: "OTP Terverifikasi",
                         type: "success",
@@ -48,7 +47,6 @@ function RouteComponent() {
                     navigate({ to: "/login" });
                 })
                 .catch((err) => {
-                    console.log(err);
                     toast.update(toastId, {
                         render: (<span className="text-red-500 font-bold">Kode OTP invalid</span>),
                         type: "error",
@@ -73,12 +71,6 @@ function RouteComponent() {
             .post(`${import.meta.env.VITE_API_URL}/auth/otp`, {
                 email: user?.email,
             })
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
         setCountdownTime(Date.now() + 60000);
         setCountdownKey(countdownKey + 1);
     };
