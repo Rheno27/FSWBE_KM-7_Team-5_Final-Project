@@ -175,6 +175,7 @@ function Checkout() {
         if (returnFlightId) {
             data.returnFlightId = returnFlightId;
         }
+        console.log("data yg akan dikirim", data);
         postTransaction(data);
 
     };
