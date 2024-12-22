@@ -47,7 +47,6 @@ function Payment() {
     },
   });
 
-  console.log("transaction", transaction)
 
   // Fetch existing notifications
   const { data: notificationsList } = useQuery({
@@ -72,7 +71,6 @@ function Payment() {
       navigate({ to: `/` });
     },
     onError: (err) => {
-      console.log("error cancel", err);
       toast.error(err.message || "Failed to cancel transaction");
     },
   });
@@ -95,45 +93,47 @@ function Payment() {
   })
 
   const isPaymentSuccess = transaction?.data?.payment?.status === 'SUCCESS';
+  // post notif bukannya harus admin yk? gk bisa mah pake token user wkwk
+
   // Create notification on page load
-  useEffect(() => {
-    const createNotificationIfNotExist = async () => {
-      try {
-        if (id && notificationsList) {
-          const isNotificationExists = notificationsList.some(
-            (notif) =>
-              notif.message.includes(id)
-          );
+  // useEffect(() => { 
+  //   const createNotificationIfNotExist = async () => {
+  //     try {
+  //       if (id && notificationsList) {
+  //         const isNotificationExists = notificationsList.some(
+  //           (notif) =>
+  //             notif.message.includes(id)
+  //         );
 
-          if (!isNotificationExists) {
-            const shortId = id.slice(0, 5);
-            const notificationPayload = {
-              title: `Status Pembayaran (${capitalizeFirstLetter(transaction?.data?.payment?.status)})`,
-              message: `Selesaikan pembayaran Anda sebelum ${expiredAt} untuk transaksi ${shortId}...`,
-              userId: transaction?.data?.userId, // or another identifier for the user
-            };
+  //         if (!isNotificationExists) {
+  //           const shortId = id.slice(0, 5);
+  //           const notificationPayload = {
+  //             title: `Status Pembayaran (${capitalizeFirstLetter(transaction?.data?.payment?.status)})`,
+  //             message: `Selesaikan pembayaran Anda sebelum ${expiredAt} untuk transaksi ${shortId}...`,
+  //             userId: transaction?.data?.userId, // or another identifier for the user
+  //           };
 
-            await axios.post(
-              `${import.meta.env.VITE_API_URL}/notifications/`,
-              notificationPayload,
-              {
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            );
+  //           await axios.post(
+  //             `${import.meta.env.VITE_API_URL}/notifications/`,
+  //             notificationPayload,
+  //             {
+  //               headers: { Authorization: `Bearer ${token}` },
+  //             }
+  //           );
 
-            setNotification(notificationPayload); // Set notification for frontend display
-            // Optional: Automatically remove notification after some time
-            const timer = setTimeout(() => setNotification(null), 5000);
-            return () => clearTimeout(timer);
-          }
-        }
-      } catch (error) {
-        console.error("Failed to create notification:", error);
-      }
-    };
+  //           setNotification(notificationPayload); // Set notification for frontend display
+  //           // Optional: Automatically remove notification after some time
+  //           const timer = setTimeout(() => setNotification(null), 5000);
+  //           return () => clearTimeout(timer);
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to create notification:", error);
+  //     }
+  //   };
 
-    createNotificationIfNotExist();
-  }, [transaction, id, notificationsList, token])
+  //   createNotificationIfNotExist();
+  // }, [])
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -151,7 +151,7 @@ function Payment() {
       const snapToken = transaction.data.payment.snapToken;
       
       if (!document.getElementById('snap-container').hasChildNodes()) {
-        window.snap.embed(snapToken, {
+        window.snap?.embed(snapToken, {
           embedId: 'snap-container',
           onSuccess: function (result) {
             // alert('Payment success! Redirecting to success page...');
@@ -176,7 +176,6 @@ function Payment() {
     if (isSuccess && isPaymentSuccess) {
       toast.success('Payment success! Redirecting...');
     const timer = setTimeout(() => {
-      console.log("id", id);
       navigate({ to : `/users/private/payment/success?id=${id}`});
     }, 4000);
 
@@ -186,7 +185,6 @@ function Payment() {
 
   const handleCancelTransaction = async () => {
     const response = await cancelTransactionMutation();
-    console.log("response", response);
     if (response.status) {
       toast.success("Transaction cancelled successfully");
       navigate({ to: `/` });
@@ -222,6 +220,7 @@ function Payment() {
         <Row className="justify-content-center my-4 gap-1">
           <Col lg={6} md={6} className="my-2">
               <Card id="snap-container" className="p-3 shadow-sm rounded-3 w-100" style={{border: '1px solid #7126B5'}}></Card>
+              <p className='my-5 text-secondary'>Halaman pembayaran tidak muncul? Silahkan refresh halaman</p>
           </Col>
 
           {id ? (
