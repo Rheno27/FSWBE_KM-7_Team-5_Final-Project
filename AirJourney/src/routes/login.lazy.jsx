@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, createLazyFileRoute } from "@tanstack/react-router";
 
-import { Row, Col, Form, Button} from "react-bootstrap";
+import { Row, Col, Form, Button } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import background from "../assets/img/login-illust.png"
-
-import { useDispatch, useSelector} from "react-redux";
+import background from "../assets/img/login-illust.png";
+import GoogleIcon from "@mui/icons-material/Google";
+import { useDispatch, useSelector } from "react-redux";
 import { setToken } from "../redux/slices/auth";
 import { login } from "../services/auth";
 import { toast } from "react-toastify";
@@ -16,13 +16,12 @@ export const Route = createLazyFileRoute("/login")({
 });
 
 function Login() {
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const {token} = useSelector((state) => state.auth);
+    const { token } = useSelector((state) => state.auth);
 
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState(""); 
+    const [password, setPassword] = useState("");
 
     // State untuk menampilkan password
     const [showPassword, setShowPassword] = useState(false);
@@ -37,8 +36,8 @@ function Login() {
             navigate({ to: "/" });
         }
     }, [token, navigate]);
-    
-    const {mutate: loginUser} = useMutation({
+
+    const { mutate: loginUser } = useMutation({
         mutationFn: (body) => {
             return login(body);
         },
@@ -47,24 +46,32 @@ function Login() {
             navigate({ to: "/" });
         },
         onError: (error) => {
-        toast.error(error.message);
+            toast.error(error.message);
         },
     });
 
     const onSubmit = async (event) => {
         event.preventDefault();
-    
+
         const body = {
             email,
             password,
         };
-    
+
         //hit api
         loginUser(body);
-    }
+    };
 
     return (
-        <section style={{ height: "100vh", backgroundColor: "white", backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: "center" }}>
+        <section
+            style={{
+                height: "100vh",
+                backgroundColor: "white",
+                backgroundImage: `url(${background})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+            }}
+        >
             <Row className="h-100 mx-auto gap-0">
                 <Col
                     lg={6}
@@ -72,29 +79,34 @@ function Login() {
                     className="d-none d-lg-block p-0"
                     style={{
                         position: "relative",
-                        overflow: "hidden",
                     }}
-                >
-                    
-                </Col>
+                ></Col>
                 <Col
                     lg={6}
                     md={12}
-                    className="d-flex flex-column align-items-center justify-content-center p-5"
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "1rem",
+                    }}
                 >
                     <Form
                         style={{
                             width: "100%",
                             maxWidth: "452px",
-                            padding: "20px",
+                            backgroundColor: "rgba(255, 255, 255, 0.85)",
+                            borderRadius: "16px",
+                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                            padding: "1.5rem",
+                            margin: "0 auto",
                         }}
-                        className="bg-white bg-opacity-75 border-1 rounded-xl p-5 shadow-sm"
                         onSubmit={onSubmit}
                     >
                         <h1
-                            className="mb-4"
                             style={{
-                                fontSize: "2rem",
+                                fontSize: "1.8rem",
                                 fontWeight: "bold",
                                 fontFamily: "Poppins, sans-serif",
                                 textAlign: "left",
@@ -104,7 +116,7 @@ function Login() {
                             Masuk
                         </h1>
                         <Form.Group controlId="email" className="mb-3">
-                            <Form.Label>Email</Form.Label>
+                            <Form.Label style={{ fontSize: "1rem" }}>Email</Form.Label>
                             <Form.Control
                                 type="email"
                                 placeholder="Example: johndoe@gmail.com"
@@ -113,23 +125,14 @@ function Login() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 style={{
                                     borderRadius: "16px",
+                                    padding: "0.75rem",
+                                    fontSize: "0.9rem",
                                 }}
                             />
                         </Form.Group>
                         <Form.Group controlId="password" className="mb-3">
                             <div className="d-flex justify-content-between align-items-center">
                                 <Form.Label>Password</Form.Label>
-                                <a
-                                    href={`/reset-password-request`}
-                                    style={{
-                                        fontSize: "0.875rem",
-                                        fontWeight: "light",
-                                        color: "#7126B5",
-                                        textDecoration: "none",
-                                    }}
-                                >
-                                    Forget password
-                                </a>
                             </div>
                             <div style={{ position: "relative" }}>
                                 <Form.Control
@@ -137,7 +140,9 @@ function Login() {
                                     placeholder="Enter password"
                                     name="password"
                                     value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
                                     style={{
                                         paddingRight: "3rem",
                                         borderRadius: "16px",
@@ -146,37 +151,63 @@ function Login() {
                                 <div
                                     style={{
                                         position: "absolute",
-                                        top: "50%",
+                                        top: "30%",
                                         right: "10px",
                                         transform: "translateY(-50%)",
                                         cursor: "pointer",
                                     }}
                                     onClick={togglePassword}
                                 >
-                                    {showPassword ? (
-                                        <FaEyeSlash />
-                                    ) : (
-                                        <FaEye />
-                                    )}
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
                                 </div>
+                                <a
+                                    href="/reset-password-request"
+                                    style={{
+                                        fontSize: "0.875rem",
+                                        fontWeight: "400",
+                                        color: "#7126B5",
+                                        textDecoration: "none",
+                                    }}
+                                >
+                                    Lupa password
+                                </a>
                             </div>
                         </Form.Group>
                         <Button
                             type="submit"
-                            className="w-100"
                             style={{
                                 backgroundColor: "#7126B5",
                                 borderColor: "#7126B5",
                                 borderRadius: "16px",
+                                marginBottom: "16px",
                             }}
+                            className="w-100"
                         >
                             Masuk
                         </Button>
+                        <Button
+                            href={`${import.meta.env.VITE_API_URL}/auth/google`}
+                            className="border-1 border border-1 border-dark w-100 d-flex align-items-center justify-content-center gap-2"
+                            style={{
+                                backgroundColor: "#fff",
+                                borderRadius: "16px",
+                                color: "black",
+                            }}
+                        >
+                            <GoogleIcon />
+                            <span>Login dengan Google</span>
+                        </Button>
                         <div className="text-center mt-3">
                             <span>
-                                Don't have an account?{" "}
-                                <Link to="/register" style={{ color: "#7126B5", fontWeight: "bold" }}>
-                                    Register here
+                                Belum punya akun?{" "}
+                                <Link
+                                    to="/register"
+                                    style={{
+                                        color: "#7126B5",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    Daftar sekarang
                                 </Link>
                             </span>
                         </div>
@@ -184,6 +215,5 @@ function Login() {
                 </Col>
             </Row>
         </section>
-
     );
 }

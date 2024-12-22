@@ -7,12 +7,12 @@ import {
     InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useState } from "react";
-import logo from "../assets/img/logo.png";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Countdown from "react-countdown";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { setUser } from "../redux/slices/auth";
 
 export const Route = createLazyFileRoute("/otp")({
     component: RouteComponent,
@@ -26,7 +26,10 @@ function RouteComponent() {
     const { user } = useSelector((state) => state.auth);
 
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
+    if (!user){
+        navigate({to:"/"})
+    }
     const { mutate: sendOtp } = useMutation({
         mutationFn: (data) => {
             setIsLoading(true);
@@ -34,17 +37,16 @@ function RouteComponent() {
             axios
                 .post(`${import.meta.env.VITE_API_URL}/auth/otp/verify`, data)
                 .then((res) => {
-                    console.log(res);
                     toast.update(toastId, {
                         render: "OTP Terverifikasi",
                         type: "success",
                         autoClose: 3000,
                         isLoading:false,
                     });
+                    dispatch(setUser(null));
                     navigate({ to: "/login" });
                 })
                 .catch((err) => {
-                    console.log(err);
                     toast.update(toastId, {
                         render: (<span className="text-red-500 font-bold">Kode OTP invalid</span>),
                         type: "error",
@@ -69,12 +71,6 @@ function RouteComponent() {
             .post(`${import.meta.env.VITE_API_URL}/auth/otp`, {
                 email: user?.email,
             })
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
         setCountdownTime(Date.now() + 60000);
         setCountdownKey(countdownKey + 1);
     };
@@ -99,11 +95,6 @@ function RouteComponent() {
 
     return (
         <div className="flex h-full w-screen bg-white justify-center">
-            {/* navigation */}
-            <div className="fixed top-0 shadow-md h-16 bg-white text-black w-screen px-24 flex items-center">
-                <img src={logo} onClick={()=>navigate({ to: "/" })}/>
-            </div>
-
             {/* otp */}
             <div className="flex mt-24 w-full max-w-5xl text-black flex-col items-center gap-12 relative">
                 <h1 className="text-2xl w-1/2 font-bold">Masukkan OTP</h1>

@@ -3,9 +3,12 @@
 }
 
 .plane {
-    margin: 20px auto;
-    max-width: 300px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    gap: 10px;
+    justify-content: center;
 }
+
 .cockpit {
     height: 250px;
     position: relative;
@@ -59,6 +62,12 @@ ol {
     margin: 0;
 }
 
+.row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
 .seats {
     display: flex;
     flex-direction: row;
@@ -71,8 +80,8 @@ ol {
     padding: 5px;
     position: relative;
 }
-.seat:nth-child(3) {
-    margin-right: 14.28571428571429%;
+.seat:nth-child(n) {
+    margin-right: 0;
 }
 .seat input[type="checkbox"] {
     position: absolute;
@@ -83,6 +92,7 @@ ol {
     animation-name: rubberBand;
     animation-duration: 300ms;
     animation-fill-mode: both;
+    color:white;
 }
 .seat input[type="checkbox"]:disabled + label {
     background: #dddddd;

@@ -1,23 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useSelector } from "react-redux";
+import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
+import PropTypes from "prop-types"
 
-const Header = ({ flights = [], onFilteredFlightsChange }) => {
-  const [activeDayIndex, setActiveDay] = React.useState(null); 
-  const [filteredFlights, setFilteredFlights] = React.useState(flights); 
+const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromSelected,loading,totalData}) => {
+  //const [filteredFlights, setFilteredFlights] = React.useState(flights); 
   const [selectedDate, setSelectedDate] = React.useState(null); 
+  const [selectedArrivalDate, setSelectedArrivalDate] = React.useState(null); 
   
   const navigate = useNavigate();
 
-  const departureDate = flights?.length > 0 ? flights[0]?.departureDate : null;
+  const urlParams = new URLSearchParams(window.location.search);
+  const isReturn = useSelector(state=>state.searchQuery.isReturn);
+  const departureDate = urlParams.get("departureDate") ? new Date(urlParams.get("departureDate")).toLocaleDateString("en-CA") : (flights?.length ? flights[0]?.departureDate : new Date().toLocaleDateString("en-CA"));
+  const departureDateFrom = useSelector(state=>state.searchQuery.departureDate);
+  const arrivalDate = useSelector(state=>state.searchQuery.arrivalDate);
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const getDaysWithDates = () => {
     if (!departureDate) return [];
+    const getDateIndex = new Date(departureDate).getDay();
     const dateObj = new Date(departureDate);
+    dateObj.setDate(dateObj.getDate() - getDateIndex);
     const daysWithDates = [];
-    
     // Set days with dates
     for (let i = 0; i < 7; i++) {
       const newDate = new Date(dateObj);
@@ -29,44 +36,77 @@ const Header = ({ flights = [], onFilteredFlightsChange }) => {
   };
 
   const daysWithDates = getDaysWithDates();
-
   useEffect(() => {
-    if (departureDate && !selectedDate) {
+    if(isFromSelected){
+      const dateObj = new Date(departureDateFrom);
+      const selectedDateString = dateObj.toLocaleDateString("en-CA");
+      setSelectedDate(selectedDateString);
+      return;
+    }
+    if (departureDate && !selectedDate && !isFromSelected) {
       const dateObj = new Date(departureDate);
       const selectedDateString = dateObj.toLocaleDateString("en-CA");
       setSelectedDate(selectedDateString); 
-      setActiveDay(dateObj.getDay()); 
     }
   }, [departureDate, selectedDate]);
 
-  const handleDateClick = (index) => {
-    if (index === activeDayIndex) return;
-
-    const selectedDayDate = daysWithDates[index].date;
-    setSelectedDate(selectedDayDate); 
-    setActiveDay(index); 
-
-    const newFilteredFlights = flights.filter((flight) => {
-      const flightDate = new Date(flight?.departureDate)?.toLocaleDateString("en-CA");
-      return flightDate === selectedDayDate;
-    });
-
-    setFilteredFlights(newFilteredFlights); 
-    if (onFilteredFlightsChange) {
-      onFilteredFlightsChange(newFilteredFlights);
+  useEffect(() => {
+    if(isFromSelected){
+      const dateObj = new Date(departureDate);
+      const selectedDateString = dateObj.toLocaleDateString("en-CA");
+      setSelectedArrivalDate(selectedDateString);
+      return;
     }
+    if (arrivalDate && !selectedArrivalDate) {
+      const dateObj = new Date(arrivalDate);
+      const selectedDateString = dateObj.toLocaleDateString("en-CA");
+      setSelectedArrivalDate(selectedDateString); 
+    }
+  }, []);
+
+  const handleDateClick = (date) => {
+    let selectedDayDate = null;
+    if(isFromSelected){
+      if (date === selectedArrivalDate || date < new Date(selectedDate).toLocaleDateString("en-CA")) return;
+      selectedDayDate = date;
+      setSelectedArrivalDate(date);
+      fetchFlightsData(true,selectedDayDate, false, true); 
+    }
+    else{
+      if (date === selectedDate || date < new Date().toLocaleDateString("en-CA")) return;
+
+      selectedDayDate = date;
+      setSelectedDate(selectedDayDate);
+      fetchFlightsData(true,selectedDayDate, false ,true); 
+    }
+
+    // const newFilteredFlights = flights.filter((flight) => {
+    //   const flightDate = new Date(flight?.departureDate)?.toLocaleDateString("en-CA");
+    //   return flightDate === selectedDayDate;
+    // });
+
+    // setFilteredFlights(newFilteredFlights); 
+    // if (onFilteredFlightsChange) {
+    //   onFilteredFlightsChange(newFilteredFlights);
+    // }
   };
 
+  // useEffect(() => {
+  //   if (onFilteredFlightsChange) {
+  //     onFilteredFlightsChange(filteredFlights);
+  //   }
+  // }, [filteredFlights, onFilteredFlightsChange]);
+
   useEffect(() => {
-    if (onFilteredFlightsChange) {
-      onFilteredFlightsChange(filteredFlights);
-    }
-  }, [filteredFlights, onFilteredFlightsChange]);
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <header
       style={{
-        padding: "1rem",
+        padding: isMobile ? "0.5rem" : "1rem",
         backgroundColor: "white",
         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
         borderRadius: "8px",
@@ -80,44 +120,42 @@ const Header = ({ flights = [], onFilteredFlightsChange }) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(12, 1fr)",
+          gridTemplateColumns: isMobile ? "1fr" : "repeat(12, 1fr)",
           gap: "1rem",
           alignItems: "center",
         }}
       >
-        {/* Empty columns 1-2 */}
-        <div style={{ gridColumn: "1 / 3" }}></div>
+        {/* Empty columns for spacing, only on larger screens */}
+        {!isMobile && <div style={{ gridColumn: "1 / 3" }}></div>}
 
-        {/* Back Button (columns 3-6) */}
+        {/* Back Button */}
         <button
           style={{
             backgroundColor: "#A06ECE",
             color: "white",
             border: "none",
             borderRadius: "10px",
-            padding: "0.7rem 1.5rem",
+            padding: isMobile ? "0.5rem 1rem" : "0.7rem 1.5rem",
             fontWeight: "bold",
-            gridColumn: "3 / 9", 
+            gridColumn: isMobile ? "1 / -1" : "3 / 9", 
             display: "flex",
             justifyContent: "flex-start",
             alignItems: "center",
-            fontSize: "1rem", 
+            fontSize: isMobile ? "0.9rem" : "1rem", 
           }}
-        >
-          <ArrowBackIcon style={{ marginRight: "10px" }} />
-          JKT <ArrowForwardIosIcon style={{ fontSize: "14px", marginTop: "6px", marginLeft: "5px" }} /> MLB • 2 Penumpang • Economy
+        >           
+        <AirplaneTicketIcon/> {totalData || 0} Penerbangan Ditemukan 
         </button>
-
-        {/* Search Button (columns 7-9) */}
+        {/* Search Button */}
         <button
           style={{
             backgroundColor: "#73CA5C",
             color: "white",
             border: "none",
             borderRadius: "12px",
-            padding: "0.7rem 1.5rem",
+            padding: isMobile ? "0.5rem 1rem" : "0.7rem 1.5rem",
             fontWeight: "bold",
-            gridColumn: "9 / 11", 
+            gridColumn: isMobile ? "1 / -1" : "9 / 11", 
             transition: "background-color 0.3s ease",
           }}
           onClick={() => navigate({ to: "/" })}
@@ -125,10 +163,8 @@ const Header = ({ flights = [], onFilteredFlightsChange }) => {
           Ubah Pencarian
         </button>
 
-        {/* Empty columns 10-12 */}
-        <div style={{ gridColumn: "11 / 13" }}></div>
-        {/* Empty columns 10-12 */}
-        <div style={{ gridColumn: "11 / 13" }}></div>
+        {/* Empty columns for spacing, only on larger screens */}
+        {!isMobile && <div style={{ gridColumn: "11 / 13" }}></div>}
       </div>
 
       {/* Row 2: Date Selector */}
@@ -138,12 +174,15 @@ const Header = ({ flights = [], onFilteredFlightsChange }) => {
           justifyContent: "center",
           gap: "0.5rem",
           flexWrap: "wrap",
+          overflowX: "auto",
+          WebkitOverflowScrolling: "touch",
         }}
       >
         {daysWithDates.map((dayObj, index) => (
           <button
             key={index}
-            onClick={() => handleDateClick(index)} 
+            onClick={() => handleDateClick(dayObj.date)} 
+            disabled={loading}
             style={{
               fontSize: "0.9rem",
               lineHeight: "1.2",
@@ -153,18 +192,28 @@ const Header = ({ flights = [], onFilteredFlightsChange }) => {
               borderRadius: "12px",
               border: "none",
               transition: "all 0.3s ease",
-              backgroundColor: index === activeDayIndex ? "#A06ECE" : "#fff",
-              color: index === activeDayIndex ? "white" : "#343a40",
+              backgroundColor: dayObj.date === selectedDate ? "#A06ECE" : (isReturn && dayObj.date === selectedArrivalDate ? "#73CA5C" : "#fff"),
+              color: dayObj.date === selectedDate ? "white" :( isReturn && dayObj.date === selectedArrivalDate ? "white" : "#343a40"),
               cursor: "pointer",
+              opacity: loading ? 0.5 : 1
             }}
           >
             <div style={{ fontWeight: "bold" }}>{dayObj.day}</div>
-            <small>{dayObj.date}</small> {/* Show the corresponding date */}
+            <small>{dayObj.date}</small>
           </button>
         ))}
       </div>
     </header>
   );
 };
+
+Header.propTypes={
+  flights:PropTypes.array,
+  onFilteredFlightsChange:PropTypes.any,
+  fetchFlightsData:PropTypes.any,
+  isFromSelected:PropTypes.bool,
+  loading:PropTypes.bool,
+  totalData: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+}
 
 export default Header;
