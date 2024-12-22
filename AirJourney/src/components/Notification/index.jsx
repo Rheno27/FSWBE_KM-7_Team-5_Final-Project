@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col,Button } from "react-bootstrap";
+import { Col,Button, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { FaSearch } from "react-icons/fa";
 import { ArrowBack } from "@mui/icons-material";
@@ -68,107 +68,89 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
   );
 
   return (
-    <div
-      style={{
-        fontFamily: "Poppins, sans-serif",
-        width: "100%",
-        padding: "20px",
-        backgroundColor: "#ffffff",
-        boxSizing: "border-box",
-      }}
-    >
-      <h5
-        className="fw-bold"
-        style={{
-          fontSize: "24px", 
-          fontWeight: "bold", 
-          marginTop: "10px", 
-          marginBottom: "20px", 
-          textAlign: "start", 
-        }}
-      >
-        Notifikasi
-      </h5>
-      <header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "15px",
-          borderBottom: "1px solid #eaeaea",
-          marginBottom: "20px",
-          padding: "10px 0",
-          flexWrap: "wrap",
-        }}
-      >
-        <Col lg={10} md={10} xs={8} className="d-flex justify-content-start m-0 responsive-home-btn">
-          <Button
-            as={Link}
-            to={`/`}
+    <>
+      <Row className="justify-content-center mt-2 mb-4 p-3 shadow-sm">
+        <Col lg={10} md={10} sm={12}>
+          <h5
             style={{
-              padding: '8px',
-              borderRadius: '12px',
-              backgroundColor: '#a06ece',
-              borderColor: '#a06ece',
-              color: '#ffffff',
-              marginBottom: '10px',
-              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-              width: '100%',
-              textAlign: 'left',
+              fontWeight: "bold",
+              fontSize: "1.1rem",
+              textAlign: "left",
+              marginBottom: "1rem",
             }}
           >
-            <span>
-              <ArrowBack fontSize="medium" className="me-2 ms-3" />
-              Beranda
-            </span>
-          </Button>
+            Notifikasi
+          </h5>
+  
+          <Row className="justify-content-center align-items-center py-3">
+            {/* Adjust Column Proportions */}
+            <Col xs={8} md={11}>
+              <Button
+                as={Link}
+                to={`/`}
+                style={{
+                  padding: "8px 10px",
+                  borderRadius: "12px",
+                  backgroundColor: "#a06ece",
+                  borderColor: "#a06ece",
+                  color: "#ffffff",
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                  width: "100%",
+                  textAlign: "left",
+                }}
+              >
+                <ArrowBack fontSize="medium" className="me-2" />
+                Beranda
+              </Button>
+            </Col>
+  
+            <Col xs="auto" className="d-flex gap-3">
+              <div
+                style={{
+                  position: "relative",
+                  cursor: "pointer",
+                }}
+              >
+                <FaSearch
+                  style={{
+                    color: "#7126B5",
+                    fontSize: "30px",
+                    cursor: "pointer",
+                  }}
+                  onClick={toggleSearchVisibility}
+                />
+                {isSearchVisible && (
+                  <Form.Control
+                    type="text"
+                    placeholder="Search"
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    style={{
+                      position: "absolute",
+                      top: "0",
+                      left: "40px",
+                      width: "110px",
+                      padding: "0.5rem",
+                      borderRadius: "5px",
+                      border: "1px solid #ddd",
+                      transition: "opacity 0.3s ease, visibility 0.3s ease",
+                    }}
+                  />
+                )}
+              </div>
+            </Col>
+          </Row>
         </Col>
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "10px",
-            gap: "10px",
-            position: "relative",
-            cursor: "pointer",
-          }}
-        >
-          <FaSearch
-            style={{
-              color: "#7126B5",
-              fontSize: "30px",
-              cursor: "pointer",
-            }}
-            onClick={toggleSearchVisibility}
-          />
-          {isSearchVisible && (
-            <Form.Control
-              type="text"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={handleSearch}
-              style={{
-                position: "absolute",
-                top: "0",
-                left: "40px",
-                width: "110px",
-                padding: "0.5rem",
-                borderRadius: "5px",
-                border: "1px solid #ddd",
-                transition: "opacity 0.3s ease, visibility 0.3s ease",
-              }}
-            />  
-          )}
-        </div>
-      </header>
+      </Row>
+  
       <div
         style={{
           marginTop: "20px",
           width: "100%",
-          maxWidth: "600px", 
+          maxWidth: "600px",
           margin: "0 auto",
           border: "1px solid #eaeaea",
-          borderRadius: "10px", 
+          borderRadius: "10px",
         }}
       >
         {localLoading ? (
@@ -184,8 +166,8 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
                 alignItems: "center",
                 padding: "10px",
                 borderBottom: "1px solid #eaeaea",
-                gap: "10px", 
-                minHeight: "70px"
+                gap: "10px",
+                minHeight: "70px",
               }}
             >
               <div
@@ -203,7 +185,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
                   style={{ color: "#f3f1fc", fontSize: "20px" }}
                 />
               </div>
-        
+  
               <div style={{ flex: 1 }}>
                 <h4
                   style={{
@@ -212,7 +194,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
                     color: "#000",
                     whiteSpace: "nowrap",
                     overflow: "hidden",
-                    textOverflow: "ellipsis", 
+                    textOverflow: "ellipsis",
                   }}
                 >
                   {notif.title}
@@ -230,7 +212,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
                   {notif.message}
                 </p>
               </div>
-        
+  
               <div
                 style={{
                   display: "flex",
@@ -267,7 +249,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
           </p>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

@@ -29,7 +29,7 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromS
     for (let i = 0; i < 7; i++) {
       const newDate = new Date(dateObj);
       newDate.setDate(dateObj.getDate() + i);
-      const dateStr = newDate.toLocaleDateString("en-CA");
+      const dateStr = newDate.toISOString().split("T")[0];
       daysWithDates.push({ day: daysOfWeek[i], date: dateStr });
     }
     return daysWithDates;
@@ -38,42 +38,38 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromS
   const daysWithDates = getDaysWithDates();
   useEffect(() => {
     if(isFromSelected){
-      const dateObj = new Date(departureDateFrom);
-      const selectedDateString = dateObj.toLocaleDateString("en-CA");
+      const selectedDateString = departureDateFrom.split("T")[0];
       setSelectedDate(selectedDateString);
       return;
     }
     if (departureDate && !selectedDate && !isFromSelected) {
-      const dateObj = new Date(departureDate);
-      const selectedDateString = dateObj.toLocaleDateString("en-CA");
-      setSelectedDate(selectedDateString); 
+      const selectedDateString = departureDate.split("T")[0];
+      setSelectedDate(selectedDateString);
     }
-  }, [departureDate, selectedDate]);
+  }, [departureDate, selectedDate, departureDateFrom, isFromSelected]);
 
   useEffect(() => {
     if(isFromSelected){
-      const dateObj = new Date(departureDate);
-      const selectedDateString = dateObj.toLocaleDateString("en-CA");
+      const selectedDateString = departureDate.split("T")[0]; 
       setSelectedArrivalDate(selectedDateString);
       return;
     }
     if (arrivalDate && !selectedArrivalDate) {
-      const dateObj = new Date(arrivalDate);
-      const selectedDateString = dateObj.toLocaleDateString("en-CA");
-      setSelectedArrivalDate(selectedDateString); 
+      const selectedDateString = arrivalDate.split("T")[0];
+      setSelectedArrivalDate(selectedDateString);
     }
-  }, []);
+  }, [arrivalDate, selectedArrivalDate, departureDate, isFromSelected]);
 
   const handleDateClick = (date) => {
     let selectedDayDate = null;
     if(isFromSelected){
-      if (date === selectedArrivalDate || date < new Date(selectedDate).toLocaleDateString("en-CA")) return;
+      if (date === selectedArrivalDate || date < selectedDate) return;
       selectedDayDate = date;
       setSelectedArrivalDate(date);
       fetchFlightsData(true,selectedDayDate, false, true); 
     }
     else{
-      if (date === selectedDate || date < new Date().toLocaleDateString("en-CA")) return;
+      if (date === selectedDate || date < new Date().toISOString().split("T")[0]) return;
 
       selectedDayDate = date;
       setSelectedDate(selectedDayDate);
