@@ -101,7 +101,6 @@ function Index() {
           params.set("page", page);
         }
 
-        console.log("resultfetch")
         const result = await fetchFlights(params.toString());
         const newFlights = Array.isArray(result)
           ? result
@@ -130,8 +129,6 @@ function Index() {
           );
         }
         setFilteredFlights(filteredFlightsList);
-
-        console.log("New flights count:", updatedFlights.length);
         setFlights(updatedFlights);
         setFilteredFlights(updatedFlights);
 
@@ -139,7 +136,6 @@ function Index() {
           result.meta.page + 1 || null
         );
         setHasMore(result.meta.page < result.meta.totalPage);
-        console.log(result.meta.page < result.meta.totalPage)
 
         setIsSoldOut(
           updatedFlights.every((flight) => flight._count.seat === 0)
@@ -190,7 +186,6 @@ const handleClassChange = useCallback(
       } else {
         setSelectedAirlines("");
       }
-      console.log("selectedAirlines:", newAirlines, isChecked);
     },
     []
   );

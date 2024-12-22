@@ -47,7 +47,6 @@ function Payment() {
     },
   });
 
-  console.log("transaction", transaction)
 
   // Fetch existing notifications
   const { data: notificationsList } = useQuery({
@@ -72,7 +71,6 @@ function Payment() {
       navigate({ to: `/` });
     },
     onError: (err) => {
-      console.log("error cancel", err);
       toast.error(err.message || "Failed to cancel transaction");
     },
   });
@@ -178,7 +176,6 @@ function Payment() {
     if (isSuccess && isPaymentSuccess) {
       toast.success('Payment success! Redirecting...');
     const timer = setTimeout(() => {
-      console.log("id", id);
       navigate({ to : `/users/private/payment/success?id=${id}`});
     }, 4000);
 
@@ -188,7 +185,6 @@ function Payment() {
 
   const handleCancelTransaction = async () => {
     const response = await cancelTransactionMutation();
-    console.log("response", response);
     if (response.status) {
       toast.success("Transaction cancelled successfully");
       navigate({ to: `/` });
