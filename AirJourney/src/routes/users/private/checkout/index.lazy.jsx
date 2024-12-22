@@ -145,6 +145,16 @@ function Checkout() {
         }
     };
 
+    const passengerType = (index) => {
+        if (index < passenger?.ADULT) {
+            return "Dewasa";
+        } else if (index < passenger?.ADULT + passenger?.CHILD) {
+            return "Anak";
+        } else {
+            return "Bayi";
+        }
+    }
+
     //submit
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -165,6 +175,38 @@ function Checkout() {
                 if (returnFlightId && selectedReturnSeats) {
                     passenger.returnSeatId = selectedReturnSeats[index];
                 }
+                if(title[index] === ""){
+                    toast.error("Title tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(firstNames[index] === ""){
+                    toast.error("Nama depan tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(familyNames[index] === ""){
+                    toast.error("Nama keluarga tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(birthDays[index] === ""){
+                    toast.error("Tanggal lahir tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(nationalities[index] === ""){
+                    toast.error("Kewarganegaraan tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(identityNumbers[index] === ""){
+                    toast.error("Nomor identitas tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(originCountries[index] === ""){
+                    toast.error("Asal negara tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(expiredAt[index] === ""){
+                    toast.error("Tanggal kadaluarsa tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
                 return passenger;
             }
         );
@@ -175,7 +217,6 @@ function Checkout() {
         if (returnFlightId) {
             data.returnFlightId = returnFlightId;
         }
-        console.log("data yg akan dikirim", data);
         postTransaction(data);
 
     };
