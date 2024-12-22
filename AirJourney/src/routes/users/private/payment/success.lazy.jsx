@@ -1,8 +1,8 @@
 import React from 'react'
 import { createLazyFileRoute, Link, useLocation } from '@tanstack/react-router'
 import { Row, Col, Button, Container } from 'react-bootstrap'
-import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
-import { AlertBox } from '../../../../components/ui/alertBox.jsx'
+import { BreadcrumbNav } from '../../../../components/ui/BreadcrumbNav'
+import { AlertBox } from '../../../../components/ui/AlertBox'
 import paymentSuccess from '../../../../assets/img/payment-success.png'
 
 export const Route = createLazyFileRoute('/users/private/payment/success')({

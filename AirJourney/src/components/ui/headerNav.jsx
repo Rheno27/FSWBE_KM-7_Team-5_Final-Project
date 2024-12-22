@@ -4,7 +4,7 @@ import { Row, Col, Button } from "react-bootstrap";
 import { Link } from "@tanstack/react-router";
 import DateFilterModal from "../Modal/DateFilterModal";
  
-export const HeaderNav = ({ selectedRange, setSelectedRange, onFilter }) => {
+export const HeaderNav = ({ selectedRange, setSelectedRange, onFilter, onClear }) => {
   // State for modals visibility
   const [isDateModalOpen, setDateModalOpen] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
@@ -101,6 +101,7 @@ export const HeaderNav = ({ selectedRange, setSelectedRange, onFilter }) => {
               left: `${position.left}px`,
             }}
             onFilter={onFilter} // Pass the filter logic to DateFilter
+            onClear={onClear} // Pass the clear filter logic to DateFilter
             selectedRange={selectedRange}
             setSelectedRange={setSelectedRange}
           />

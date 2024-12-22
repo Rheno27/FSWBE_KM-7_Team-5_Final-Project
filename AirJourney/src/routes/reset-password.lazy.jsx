@@ -26,7 +26,12 @@ function ResetPassword() {
       position: "top-center",
       autoClose: 5000,
     });
-    navigate({ to: "/reset-password-request" });
+    const timer = setTimeout(() => {
+      navigate({ to: "/reset-password-request" });
+    }, 5000);
+
+    // Cleanup timer when component unmounts or re-renders
+    return () => clearTimeout(timer);
     return;
   }
 
@@ -57,11 +62,17 @@ function ResetPassword() {
           setIsTokenValid(true);
         } else {
           setIsTokenValid(false);
-          toast.error("Token has expired or is invalid")
+          toast.error("Token has expired or is invalid", {
+            position: "top-center",
+            autoClose: 5000,
+          })
         }
       } catch (error) {
         setIsTokenValid(false);
-        toast.error(error.message || "An unexpected error occured");
+        toast.error("An unexpected error occured", {
+          position: "top-center",
+          autoClose: 5000,
+        });
       } finally {
         setIsLoading(false); // Set loading to false after validation
       }
@@ -81,17 +92,22 @@ function ResetPassword() {
       return resetPassword(data);
     },
     onSuccess: (response) => {
-      toast.success('Password reset successfull. Redirecting to login page...', {
+      toast.success('Password reset successfull. Redirecting to homepage...', {
         autoClose: 4000, 
       });
-      setTimeout(() => navigate({ to: "/login" }), 4000);
+      setTimeout(() => navigate({ to: "/" }), 4000);
+      setIsTokenValid(false);
     },
 
     onError: (error) => {
       if (error.response?.status === 503) {
-        toast.error('Service unavailable. Please try again later.')
+        toast.error('Service unavailable. Please try again later.', {
+          autoClose: 4000, 
+        })
       } else {
-        toast.error(error.message || "An unexpected error occurred.")
+        toast.error(error.message || "An unexpected error occurred.", {
+          autoClose: 4000, 
+        })
       }
     },
   })
@@ -101,7 +117,10 @@ function ResetPassword() {
     e.preventDefault();
 
     if (!isTokenValid) {
-      toast.error("Token has expired or is invalid.");
+      toast.error("Token has expired or is invalid.", {
+        position: "top-center",
+        autoClose: 5000,
+      });
       return; 
     }
   
@@ -119,7 +138,9 @@ function ResetPassword() {
   
     const passwordError = validatePassword();
     if (passwordError) {
-      toast.warn(passwordError);
+      toast.warn(passwordError, {
+        autoClose: 4000, 
+      });
       return;
     }
 
