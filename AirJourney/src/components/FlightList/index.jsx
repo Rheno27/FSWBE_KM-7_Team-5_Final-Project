@@ -201,9 +201,7 @@ const FlightList = ({
                           {flight.departureTime ?? "00:00"}
                         </h6>
                         <small>
-                          {new Date(flight.departureDate).toLocaleDateString(
-                            "en-CA"
-                          ) ?? "N/A"}
+                          {flight.departureDate.split("T")[0] ?? "N/A"}
                         </small>
                         <br />
                         <small>
@@ -252,9 +250,7 @@ const FlightList = ({
                           {flight.arrivalTime ?? "00:00"}
                         </h6>
                         <small>
-                          {new Date(flight.arrivalDate).toLocaleDateString(
-                            "en-CA"
-                          ) ?? "N/A"}
+                          {flight.arrivalDate.split("T")[0] ?? "N/A"}
                         </small>
                         <br />
                         <small>
