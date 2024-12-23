@@ -16,10 +16,6 @@ export const getUser = async () => {
     }
     return result?.data;
     } catch(err){
-<<<<<<< HEAD
-        console.log(err);
-=======
->>>>>>> 00dbf076d15f86d4fbee782414cbc135cdfb6229
         throw new Error(err);
     }
     
@@ -28,7 +24,6 @@ export const getUser = async () => {
 export const updateUser = async (data) => {
     const token = localStorage.getItem("token");
     
-    // Hanya kirim field yang berubah
     const requestData = {};
     if (data.name) requestData.name = data.name;
     if (data.phoneNumber) requestData.phoneNumber = data.phoneNumber;
