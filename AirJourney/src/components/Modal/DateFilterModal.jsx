@@ -3,7 +3,6 @@ import { DayPicker } from "react-day-picker";
 import Close from "@mui/icons-material/Close";
 import "react-day-picker/dist/style.css";
 import "./style.css";
-import { on } from "events";
 
 const DateFilterModal = ({ isOpen, onClose, position, onFilter, onClear }) => {
   if (!isOpen) return null;

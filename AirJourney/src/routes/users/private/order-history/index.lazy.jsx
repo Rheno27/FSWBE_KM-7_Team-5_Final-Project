@@ -119,6 +119,7 @@ function OrderHistory({ id }) {
   const totalPages = meta?.totalPages || 1;
 
   const isAvailable = transactions.length > 0;
+  console.log("transactions", transactions);
 
   const transactionsArray = Array.isArray(transactions) ? transactions : [];
 
@@ -277,12 +278,20 @@ function OrderHistory({ id }) {
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "Not found";
-    return new Intl.DateTimeFormat("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    }).format(new Date(dateStr));
+  
+    const [year, month, day] = dateStr.split("T")[0].split("-");
+    const indonesianMonthsShort = [
+      "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
+      "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
+    ];
+  
+    // Ensure parsed values are valid
+    if (!year || !month || !day) return "Invalid Date";
+  
+    const monthName = indonesianMonthsShort[parseInt(month, 10) - 1];
+    return `${day} ${monthName} ${year}`;
   };
+  
 
   const TruncatableText = ({ text, maxLength = 10 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -368,7 +377,7 @@ function OrderHistory({ id }) {
                               className="text-center text-muted mb-3"
                               style={{ fontSize: "0.9rem" }}
                             >
-                              --- Departure Flight (
+                              --- Keberangkatan (
                               {capitalizeFirstLetter(
                                 transaction?.departureFlight?.class ||
                                   "Not found"
@@ -400,7 +409,7 @@ function OrderHistory({ id }) {
                             <Col xs={4} className="p-0 text-center mx-auto">
                               <span className="pe-3 text-muted">
                                 {transaction?.departureFlight?.duration
-                                  ? `${Math.floor(transaction.departureFlight?.duration / 60)}h ${transaction.departureFlight.duration % 60}m`
+                                  ? `${Math.floor(transaction.departureFlight?.duration / 60)}j ${transaction.departureFlight.duration % 60}m`
                                   : "Not found"}
                               </span>
                               <br />
@@ -459,7 +468,7 @@ function OrderHistory({ id }) {
                                   className="text-center text-muted mb-3"
                                   style={{ fontSize: "0.9rem" }}
                                 >
-                                  ---- Return Flight (
+                                  ---- Kepulangan (
                                   {capitalizeFirstLetter(
                                     transaction?.returnFlight?.class ||
                                       "Not found"
@@ -494,7 +503,7 @@ function OrderHistory({ id }) {
                                 >
                                   <span className="text-muted">
                                     {transaction?.returnFlight?.duration
-                                      ? `${Math.floor(transaction.returnFlight?.duration / 60)}h ${transaction.returnFlight.duration % 60}m`
+                                      ? `${Math.floor(transaction.returnFlight?.duration / 60)}j ${transaction.returnFlight.duration % 60}m`
                                       : "Not found"}
                                   </span>
                                   <br />
@@ -568,7 +577,7 @@ function OrderHistory({ id }) {
                                   <span>--</span>
                                 ) : (
                                   <b style={{ color: "#7126B5" }}>
-                                    IDR{" "}
+                                    Rp.{" "}
                                     {new Intl.NumberFormat("id-ID").format(
                                       transaction?.amount
                                     )}

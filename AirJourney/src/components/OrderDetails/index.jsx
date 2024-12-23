@@ -6,6 +6,7 @@ import { getDetailTransaction } from "../../services/transaction/index";
 import { useLocation } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import PassengerList from "./passengerList";
 
 const OrderDetailCard = ({
   id,
@@ -190,7 +191,7 @@ const OrderDetailCard = ({
               className="text-center text-muted my-2"
               style={{ fontSize: "0.9rem" }}
             >
-              --- Departure Flight ---
+              --- Keberangkatan ---
             </h6>
             <Col lg={7}>
               <div
@@ -226,7 +227,7 @@ const OrderDetailCard = ({
           <hr />
           {/* Flight Details Section */}
           <Row>
-            <Col lg={3}>
+            <Col lg={3} className="d-flex align-items-center">
               <img
                 src={transaction?.data?.departureFlight?.airline?.image}
                 alt="Flight"
@@ -253,6 +254,19 @@ const OrderDetailCard = ({
                   }}
                 >
                   {transaction?.data?.departureFlight?.airline?.code}
+                </div>
+                <div className="info-box mt-2">
+                  <div className="info-title"
+                  style={{
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                  }}
+                  >Informasi:</div>
+                  <ul className="list-unstyled">
+                      <li>Baggage 20 kg</li>
+                      <li>Cabin baggage 7 kg</li>
+                      <li>In Flight Entertainment</li>
+                  </ul>
                 </div>
               </div>
             </Col>
@@ -314,7 +328,7 @@ const OrderDetailCard = ({
                   textAlign: "right",
                 }}
               >
-                Rp {totalDeparturePrice}
+                Rp. {totalDeparturePrice}
               </div>
             </Col>
           </Row>
@@ -331,7 +345,7 @@ const OrderDetailCard = ({
                 className="text-center text-muted my-1"
                 style={{ fontSize: "0.9rem" }}
               >
-                --- Return Flight ---
+                --- Kepulangan ---
               </h6>
               <Col lg={7}>
                 <div
@@ -371,51 +385,50 @@ const OrderDetailCard = ({
             <hr />
             {/* Flight Details Section */}
             <Row>
-              <Col lg={3}>
-                <img
-                  src={transaction?.data?.returnFlight?.airline?.image}
-                  alt="Flight"
-                  className="w-100 px-0"
-                />
-              </Col>
-              <Col lg={9}>
-                <div className="flight-info">
-                  <div
-                    className="airline"
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {transaction?.data?.returnFlight?.airline?.name} -{" "}
-                    {transaction?.data?.returnFlight?.class}
-                  </div>
-                  <div
-                    className="flight-number mb-2"
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {transaction?.data?.returnFlight?.airline?.code}
-                  </div>
-
-                  {/* <div className="info-box">
-                                        <div className="info-title"
-                                        style={{
-                                            fontSize: "14px",
-                                            fontWeight: "bold",
-                                        }}
-                                        >Informasi:</div>
-                                        <ul className="list-unstyled">
-                                            <li>Baggage 20 kg</li>
-                                            <li>Cabin baggage 7 kg</li>
-                                            <li>In Flight Entertainment</li>
-                                        </ul>
-                                    </div> */}
+            <Col lg={3} className="d-flex align-items-center">
+              <img
+                src={transaction?.data?.returnFlight?.airline?.image}
+                alt="Flight"
+                className="w-100 px-0"
+              />
+            </Col>
+            <Col lg={9}>
+              <div className="flight-info">
+                <div
+                  className="airline"
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {transaction?.data?.returnFlight?.airline?.name} -{" "}
+                  {capitalizeFirstLetter(transaction?.data?.returnFlight?.class)}
                 </div>
-              </Col>
-            </Row>
+                <div
+                  className="flight-number"
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {transaction?.data?.returnFlight?.airline?.code}
+                </div>
+                <div className="info-box mt-2">
+                  <div className="info-title"
+                  style={{
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                  }}
+                  >Informasi:</div>
+                  <ul className="list-unstyled">
+                      <li>Baggage 20 kg</li>
+                      <li>Cabin baggage 7 kg</li>
+                      <li>In Flight Entertainment</li>
+                  </ul>
+                </div>
+              </div>
+            </Col>
+          </Row>
             <hr />
             <Row>
               <Col lg={7}>
@@ -487,7 +500,7 @@ const OrderDetailCard = ({
                     textAlign: "right",
                   }}
                 >
-                  Rp {totalReturnPrice}
+                  Rp. {totalReturnPrice}
                 </div>
               </Col>
             </Row>
@@ -500,7 +513,10 @@ const OrderDetailCard = ({
       >
         <Form>
           <div>
-            <Row>
+          {isInOrderHistoryPage && (
+            <PassengerList transaction={transaction}/>
+          )}
+            {/* <Row>
               <span>Penumpang :</span>
               <div>
                 {transaction?.data?.passenger?.length > 0 ? (
@@ -517,7 +533,7 @@ const OrderDetailCard = ({
                   <p>No passengers available.</p>
                 )}
               </div>
-            </Row>
+            </Row> */}
             <hr />
           </div>
 
@@ -537,17 +553,17 @@ const OrderDetailCard = ({
               <div className="d-flex flex-column">
                 {passengerCounts.ADULT > 0 && (
                   <span>
-                    IDR {new Intl.NumberFormat("id-ID").format(adultTotalPrice)}
+                    Rp. {new Intl.NumberFormat("id-ID").format(adultTotalPrice)}
                   </span>
                 )}
                 {passengerCounts.CHILD > 0 && (
                   <span>
-                    IDR {new Intl.NumberFormat("id-ID").format(childTotalPrice)}
+                    Rp. {new Intl.NumberFormat("id-ID").format(childTotalPrice)}
                   </span>
                 )}
                 {passengerCounts.INFANT > 0 && (
                   <span>
-                    IDR{" "}
+                    Rp.{" "}
                     {new Intl.NumberFormat("id-ID").format(infantTotalPrice)}
                   </span>
                 )}
@@ -556,7 +572,7 @@ const OrderDetailCard = ({
                     <span>--</span>
                   ) : (
                     <span>
-                      IDR {new Intl.NumberFormat("id-ID").format(totalTax)}
+                      Rp. {new Intl.NumberFormat("id-ID").format(totalTax)}
                     </span>
                   )}
                 </span>
@@ -573,7 +589,7 @@ const OrderDetailCard = ({
                 <span>--</span>
               ) : (
                 <h5 style={{ color: "#7126B5", fontWeight: "bold" }}>
-                  IDR {new Intl.NumberFormat("id-ID").format(totalPrice)}
+                  Rp. {new Intl.NumberFormat("id-ID").format(totalPrice)}
                 </h5>
               )}
             </Col>
@@ -624,7 +640,7 @@ const OrderDetailCard = ({
               onClick={handleCancelTransaction}
               className="btn-danger w-100 my-2 py-2 rounded-3"
             >
-              Batalkan Transaksi
+              Batalkan Pembayaran
             </Button>
           )}
         </Form>

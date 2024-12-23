@@ -92,19 +92,19 @@ function Payment() {
       return () => clearTimeout(timer);
     }
 
-    if (id !== transaction?.data?.id) {
-      console.log("transaction", transaction);
-      toast.error("Transaction ID not found. Redirecting ...", {
-        position: "bottom-center", // Toast will appear at the bottom-center
-        autoClose: 4000, 
-      });
+    // if (id !== transaction?.data?.id) {
+    //   console.log("transaction", transaction);
+    //   toast.error("Transaction ID not found. Redirecting ...", {
+    //     position: "bottom-center", // Toast will appear at the bottom-center
+    //     autoClose: 4000, 
+    //   });
   
-      const timer = setTimeout(() => {
-        navigate({ to : '/users/private/order-history'}); // Redirect to the homepage
-      }, 4000);
+    //   const timer = setTimeout(() => {
+    //     navigate({ to : '/users/private/order-history'}); // Redirect to the homepage
+    //   }, 4000);
 
-      return () => clearTimeout(timer);
-    }
+    //   return () => clearTimeout(timer);
+    // }
   }, [id, token, navigate]);
 
   useEffect(() => {
