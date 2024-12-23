@@ -37,6 +37,7 @@ function EditProfile() {
 
   const handleLogout = useCallback(
     (event) => {
+      event.preventDefault()
       localStorage.removeItem('token')
       dispatch(setUser(null))
       dispatch(setToken(null))
@@ -57,10 +58,10 @@ function EditProfile() {
     mutationFn: updateUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      toast.success("Profil berhasil diperbarui")
+      toast.success("Profil berhasil diperbarui", { position: "bottom-center" })
     },
     onError: (error) => {
-      toast.error(error.message)
+      toast.error(error.message, { position: "bottom-center" })
     },
   })
 
@@ -84,24 +85,18 @@ function EditProfile() {
       if (phoneNumber) {
         const phoneRegex = /^\+?[0-9]{10,13}$/
         if (!phoneRegex.test(phoneNumber)) {
-          toast.error('Format nomor telepon tidak valid')
+          toast.error('Format nomor telepon tidak valid', { position: "bottom-center" })
           return
         }
         request.phoneNumber = phoneNumber
       }
     }
     if (Object.keys(request).length === 0) {
-      toast.info('Tidak ada perubahan yang dilakukan')
+      toast.info('Tidak ada perubahan yang dilakukan', { position: "bottom-center" })
       return
     }
     userUpdate(request)
   }
-
-  const logout = (event) => {
-    event.preventDefault()
-    handleLogout()
-  }
-
   return (
     <Container className="profile-page">
       <Container
@@ -186,7 +181,7 @@ function EditProfile() {
             </div>
             <hr style={{ marginTop: '10px', color: '#3c3c3c' }} />
             <div
-              onClick={logout}
+              onClick={handleLogout}
               style={{
                 cursor: 'pointer',
                 backgroundColor: '#7126B5',
