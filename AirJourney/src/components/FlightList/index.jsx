@@ -234,11 +234,11 @@ const FlightList = ({
                         <p className="mb-0 mt-2">
                           <strong>Informasi:</strong>
                           <br />
-                          Baggage 20 kg
+                          Bagasi 20 kg
                           <br />
-                          Cabin baggage 7 kg
+                          Bagasi Kabin 7 kg
                           <br />
-                          In-Flight Entertainment
+                          Hiburan Dalam Penerbangan
                         </p>
                       </Col>
                     </Row>

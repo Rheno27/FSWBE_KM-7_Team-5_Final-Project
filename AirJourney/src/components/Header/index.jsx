@@ -16,7 +16,7 @@ const Header = ({ flights = [], onFilteredFlightsChange,fetchFlightsData,isFromS
   const departureDate = urlParams.get("departureDate") ? new Date(urlParams.get("departureDate")).toLocaleDateString("en-CA") : (flights?.length ? flights[0]?.departureDate : new Date().toLocaleDateString("en-CA"));
   const departureDateFrom = useSelector(state=>state.searchQuery.departureDate);
   const arrivalDate = useSelector(state=>state.searchQuery.arrivalDate);
-  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const getDaysWithDates = () => {
