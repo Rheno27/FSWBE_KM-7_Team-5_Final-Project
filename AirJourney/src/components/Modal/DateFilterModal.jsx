@@ -4,15 +4,39 @@ import Close from "@mui/icons-material/Close";
 import "react-day-picker/dist/style.css";
 import "./style.css";
 
-const DateFilterModal = ({ isOpen, onClose, position, onFilter }) => {
+const DateFilterModal = ({ isOpen, onClose, position, onFilter, onClear }) => {
   if (!isOpen) return null;
   const [selectedRange, setSelectedRange] = useState(null);
+  const [searchParams, setSearchParams] = useState({});
 
   const handleSave = () => {
     if (selectedRange) {
-      onFilter(selectedRange);
+      let fromDate = selectedRange.from;
+      let toDate = selectedRange.to || fromDate;
+  
+      // Adjust 'to' date only if it's a single date selection
+      if (!selectedRange.to) {
+        toDate = new Date(fromDate);
+        toDate.setHours(23, 59, 59, 999); // Set 'to' to the end of the day
+      }
+  
+      // Pass the updated range to the parent component
+      onFilter({ from: fromDate, to: toDate });
     }
+
     onClose();
+  };
+
+  const handleClear = () => {
+    onClear();
+    onClose();
+  }
+
+  const handleSelect = (range) => {
+    if (range && range.from && !range.to) {
+      range.to = range.from; // If no 'to' date, set 'to' to 'from'
+    }
+    setSelectedRange(range);
   };
 
   return (
@@ -26,7 +50,7 @@ const DateFilterModal = ({ isOpen, onClose, position, onFilter }) => {
           <DayPicker
             mode="range" // Supports single or range selection
             selected={selectedRange}
-            onSelect={setSelectedRange}
+            onSelect={handleSelect}
             footer={
               selectedRange && selectedRange.from && selectedRange.to ? (
                 <p>
@@ -38,7 +62,10 @@ const DateFilterModal = ({ isOpen, onClose, position, onFilter }) => {
               )
             }
           />
-          <div className="d-flex justify-content-end">
+          <div className="d-flex justify-content-between mx-2">
+          <button onClick={handleClear} className="clear-button">
+              Hapus Filter
+            </button>
             <button onClick={handleSave} className="save-button">
               Simpan
             </button>
@@ -48,5 +75,6 @@ const DateFilterModal = ({ isOpen, onClose, position, onFilter }) => {
     </>
   );
 };
+
 
 export default DateFilterModal;

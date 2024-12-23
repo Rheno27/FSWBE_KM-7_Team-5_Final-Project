@@ -5,12 +5,11 @@ import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
 import { AlertBox } from '../../../../components/ui/alertBox.jsx'
 import { toast, ToastContainer } from "react-toastify";
 import { useQuery } from '@tanstack/react-query'
-import OrderDetailCard from "../../../../components/PaymentDetails";
+import OrderDetailCard from "../../../../components/OrderDetails";
 import { getDetailTransaction, cancelTransaction } from '../../../../services/transaction/index.js'
 import { useSelector } from 'react-redux'
 import { useMutation } from '@tanstack/react-query'
-import Notification from "../../../../components/Notification/dropdown.jsx"; 
-import axios from 'axios'
+import { use } from 'react'
 
 export const Route = createLazyFileRoute('/users/private/payment/$id')({
   component: Payment,
@@ -18,25 +17,17 @@ export const Route = createLazyFileRoute('/users/private/payment/$id')({
 
 function Payment() {
   const { id } = Route.useParams();
-  const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const [timeRemaining, setTimeRemaining] = useState(null);
 
-  useEffect(() => {
-    if (!token || token.trim() === "") {
-      toast.error("Unauthorized, redirecting to homepage", {
-        position: "bottom-center", // Toast will appear at the bottom-center
-        autoClose: 4000, 
-      });
+  const isValidId = (id) => {
+    if (!id) return false;
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    return uuidRegex.test(id);
+  };
   
-      const timer = setTimeout(() => {
-        navigate({ to : '/'}); // Redirect to the homepage
-      }, 4000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [token, navigate]);
-  
-  const { data: transaction, isSuccess, isLoading, isError } = useQuery({
+  const { data: transaction, isSuccess, isError, isLoading } = useQuery({
     queryKey: ["transaction", id],
     queryFn: () => getDetailTransaction(id),
     enabled: !!id,
@@ -47,92 +38,73 @@ function Payment() {
     },
   });
 
-
-  // Fetch existing notifications
-  const { data: notificationsList } = useQuery({
-    queryKey: ["notifications"], 
-    queryFn: async () => {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/notifications`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    return response.data.data || [];
-  }});
-
-  const { mutate: cancelTransactionMutation } = useMutation({
-    mutationFn: () => cancelTransaction(id),
-    onSuccess: () => {
-      toast.success("Transaction cancelled successfully", {
-        position: "bottom-center",
-        autoClose: 2000,
+  useEffect(() => {
+    if (!token || token.trim() === "") {
+      toast.error("Unauthorized, redirecting to homepage", {
+        position: "bottom-center", // Toast will appear at the bottom-center
+        autoClose: 3000, 
       });
-      navigate({ to: `/` });
-    },
-    onError: (err) => {
-      toast.error(err.message || "Failed to cancel transaction");
-    },
-  });
+  
+      const timer = setTimeout(() => {
+        navigate({ to : '/'}); // Redirect to the homepage
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+
+    if (!isValidId(id)) {
+      const timer = setTimeout(() => {
+        navigate({ to : '/'}); // Redirect to the homepage
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+
+  }, [id, token, navigate]);
+
 
   const capitalizeFirstLetter = (str) => {
     if (!str) return str; // Check if the string is empty or null
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(); // Capitalize the first letter and append the rest
   };
   
-  const [notification, setNotification] = useState(null);
-  const expiredAt = new Date(
-    transaction?.data?.payment?.expiredAt
-  ).toLocaleString("id-ID", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  })
+  const expiredAt = transaction?.data?.payment?.expiredAt
+
+  useEffect(() => {
+    if (!expiredAt) return;
+
+    const calculateTimeRemaining = () => {
+      const expirationTime = new Date(expiredAt).getTime();
+      const currentTime = new Date().getTime();
+      const timeLeft = expirationTime - currentTime;
+
+      if (timeLeft <= 0) {
+        setTimeRemaining(0);
+        clearInterval(timer); // Stop the timer if the time has expired
+      } else {
+        setTimeRemaining(timeLeft);
+      }
+    };
+
+    const timer = setInterval(() => {
+      calculateTimeRemaining();
+    }, 1000); // Update every second
+
+    // Run the calculation on mount
+    calculateTimeRemaining();
+
+    // Cleanup the interval on unmount
+    return () => clearInterval(timer);
+  }, [expiredAt]);
+
+  const formatTime = (time) => {
+    const hours = Math.floor(time / (1000 * 60 * 60));
+    const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((time % (1000 * 60)) / 1000);
+    return `${hours}:${minutes}:${seconds}`;
+  };
 
   const isPaymentSuccess = transaction?.data?.payment?.status === 'SUCCESS';
-  // post notif bukannya harus admin yk? gk bisa mah pake token user wkwk
-
-  // Create notification on page load
-  // useEffect(() => { 
-  //   const createNotificationIfNotExist = async () => {
-  //     try {
-  //       if (id && notificationsList) {
-  //         const isNotificationExists = notificationsList.some(
-  //           (notif) =>
-  //             notif.message.includes(id)
-  //         );
-
-  //         if (!isNotificationExists) {
-  //           const shortId = id.slice(0, 5);
-  //           const notificationPayload = {
-  //             title: `Status Pembayaran (${capitalizeFirstLetter(transaction?.data?.payment?.status)})`,
-  //             message: `Selesaikan pembayaran Anda sebelum ${expiredAt} untuk transaksi ${shortId}...`,
-  //             userId: transaction?.data?.userId, // or another identifier for the user
-  //           };
-
-  //           await axios.post(
-  //             `${import.meta.env.VITE_API_URL}/notifications/`,
-  //             notificationPayload,
-  //             {
-  //               headers: { Authorization: `Bearer ${token}` },
-  //             }
-  //           );
-
-  //           setNotification(notificationPayload); // Set notification for frontend display
-  //           // Optional: Automatically remove notification after some time
-  //           const timer = setTimeout(() => setNotification(null), 5000);
-  //           return () => clearTimeout(timer);
-  //         }
-  //       }
-  //     } catch (error) {
-  //     }
-  //   };
-
-  //   createNotificationIfNotExist();
-  // }, [])
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -150,58 +122,129 @@ function Payment() {
       const snapToken = transaction.data.payment.snapToken;
       
       if (!document.getElementById('snap-container').hasChildNodes()) {
+
         window.snap?.embed(snapToken, {
           embedId: 'snap-container',
           onSuccess: function (result) {
             // alert('Payment success! Redirecting to success page...');
           },
           onPending: function (result) {
-            alert('Waiting for payment!');
+            alert('Menunggu proses pembayaran!');
           },
           onError: function (result) {
-            alert('Payment failed!');
+            alert('Pembayaran tidak berhasil!');
           },
           onClose: function () {
             if (!isPaymentSuccess) {
-              alert('Are you sure you want to close the payment form?');
+              alert('Apakah yakin ingin menutup form pembayaran?');
             }
           },
         });
       }
     }
   }, [isSuccess, transaction]);
-  
-  useEffect(() => {
-    if (isSuccess && isPaymentSuccess) {
-      toast.success('Payment success! Redirecting...');
-    const timer = setTimeout(() => {
-      navigate({ to : `/users/private/payment/success?id=${id}`});
-    }, 4000);
 
-    return () => clearTimeout(timer);;
+  useEffect(() => {
+    if (!transaction?.data) {
+      // Handle case where transaction data is not available
+      toast.error("Data transaksi tidak ditemukan. Mengembalikan...", {
+        position: "bottom-center",
+        autoClose: 3000,
+      });
+    
+      const timer = setTimeout(() => {
+        navigate({ to: '/users/private/order-history' });
+      }, 3000);
+    
+      return () => clearTimeout(timer);
     }
-  }, [transaction, navigate]);
+
+    if (id !== transaction?.data?.id) {
+      // Priority: ID mismatch error
+      console.log("transaction", transaction);
+      toast.error("ID transaksi tidak ditemukan. Mengembalikan...", {
+        position: "bottom-center",
+        autoClose: 3000,
+      });
+    
+      const timer = setTimeout(() => {
+        navigate({ to: '/users/private/order-history' }); // Redirect to the order history page
+      }, 3000);
+    
+      return () => clearTimeout(timer);
+    }
+    
+    if (isSuccess && isPaymentSuccess) {
+      // Payment success logic
+      toast.success('Pembayaran berhasil!');
+      const timer = setTimeout(() => {
+        navigate({ to: `/users/private/payment/success?id=${id}` });
+      }, 4000);
+    
+      return () => clearTimeout(timer);
+    }
+
+    // if (transaction?.data?.payment?.status === 'CANCELLED') {
+    //   toast.error("ID transaksi anda sudah kadaluarsa. Mengembalikan...", {
+    //     position: "bottom-center", // Toast will appear at the bottom-center
+    //     autoClose: 3000, 
+    //   });
+  
+    //   const timer = setTimeout(() => {
+    //     navigate({ to : '/users/private/order-history'}); // Redirect to the homepage
+    //   }, 3000);
+
+    //   return () => clearTimeout(timer);
+    // }
+  }, [id, transaction, navigate]);
+
+  const { mutate: cancelTransactionMutation } = useMutation({
+    mutationFn: () => cancelTransaction(id),
+    onSuccess: () => {
+      toast.success("Pembatalan transaksi berhasil", {
+        position: "bottom-center",
+        autoClose: 5000,
+      });
+      navigate({ to: `/users/private/order-history` });
+    },
+    onError: (err) => {
+      toast.warn("Harap pilih metode pembayaran sebelum membatalkan.");
+    },
+  });
 
   const handleCancelTransaction = async () => {
-    const response = await cancelTransactionMutation();
-    if (response.status) {
-      toast.success("Transaction cancelled successfully");
-      navigate({ to: `/` });
+    const confirmCancel = window.confirm("Apakah yakin untuk membatalkan transaksi?");
+  
+    if (confirmCancel) {
+      cancelTransactionMutation(); 
+      // try {
+      //   const response = await cancelTransactionMutation();
+      //   if (response.status) {
+      //     toast.success("Pembatalan transaksi berhasil");
+      //     navigate({ to: `/users/private/order-history` });
+      //   } else {
+      //     toast.error("Gagal membatalkan transaksi");
+      //   }
+      // } catch (error) {
+      //   toast.error("An error occurred while cancelling the transaction.");
+      // }
     } else {
-        toast.error("Failed to cancel transaction");
+      // User declined the action
+      toast.info("Pembatalan transaksi dibatalkan.");
     }
-}
+  };
+  
 
   return (
     <div className="payment-page">
       <ToastContainer
-        position="bottom-center" // Mengatur posisi toast
-        autoClose={4000}
-        closeOnClic
+        position="bottom-center"
+        autoClose={3000}
+        closeOnClick
         draggable
       />
       <Row className="justify-content-center mt-2 mb-4 py-3 shadow-sm">
-        <Col lg={9} md={10}>
+        <Col lg={10} md={9} sm={9} xs={10}>
           <BreadcrumbNav
             items={[
               { label: 'Isi Data Diri', path: '/users/private/checkout' },
@@ -209,26 +252,50 @@ function Payment() {
               { label: 'Selesai' },
             ]}
           />
-          <AlertBox
-            type="warning"
-            message={`Selesaikan pembayaran anda sebelum ${expiredAt}`}
-          />
+           {timeRemaining !== null && timeRemaining > 0 && (
+        <AlertBox
+          type="warning"
+          message={`Selesaikan pembayaran anda dalam ${formatTime(timeRemaining)}`}
+        />
+      )}
         </Col>
       </Row>
-      <Container>
-        <Row className="justify-content-center my-4 gap-1">
-          <Col lg={6} md={6} className="my-2">
-              <Card id="snap-container" className="p-3 shadow-sm rounded-3 w-100" style={{border: '1px solid #7126B5'}}></Card>
-              <p className='my-5 text-secondary'>Halaman pembayaran tidak muncul? Silahkan refresh halaman</p>
-          </Col>
-
-          {id ? (
-            <OrderDetailCard id={id} handleCancelTransaction={handleCancelTransaction} />
-          ) : (
-            <p className="text-danger">Transaction ID is missing</p>
-          )}
-        </Row>
-      </Container>
+      <div className='m-3'>
+         {!token || token.trim() === "" ? (
+                  <div className="d-flex flex-column align-items-center mt-5 py-5">
+                    <Col
+                      xs={12}
+                      sm={10}
+                      md={7}
+                      lg={6}
+                      className="text-center my-2 mt-5"
+                    >
+                      <p style={{ color: "#a06ece", fontWeight: 500 }}>
+                        Oops! Kamu belum login! <br />
+                        <span className="text-dark my-2">
+                          Login untuk bisa mengakses halaman ini
+                        </span>
+                      </p>
+                    </Col>
+                  </div>
+            ) : !isValidId(id) ? (
+              <p style={{ color: 'red' }}>ID Invalid. Mohon cek URL anda. Mengarahkan ulang ...</p>
+            ) : (
+              <Row className="justify-content-center my-4 gap-1">
+                <Col lg={6} md={6} className="my-2 justify-content-center">
+                    <Card id="snap-container" className="p-3 shadow-sm rounded-3 w-100"></Card>
+                    {isLoading && <p className='my-2'>Memuat form pembayaran...</p>}
+                </Col>
+                <Col lg={4} md={4}>
+                {id ? (
+                  <OrderDetailCard id={id} handleCancelTransaction={handleCancelTransaction}/>
+                ) : (
+                  <p className="text-danger">Transaction ID is missing</p>
+                )}
+                </Col>
+              </Row>
+            )}
+      </div>
     </div>
   )
 }
