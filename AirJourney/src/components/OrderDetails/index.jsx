@@ -52,7 +52,6 @@ const OrderDetailCard = ({
   // Function to count passengers by type
   const countPassengersByType = (passengerArray) => {
     if (!Array.isArray(passengerArray)) {
-      console.error("Passenger data is not an array:", passengerArray);
       return {}; // Return an empty object if the input is invalid
     }
     return passengerArray.reduce((counts, passenger) => {

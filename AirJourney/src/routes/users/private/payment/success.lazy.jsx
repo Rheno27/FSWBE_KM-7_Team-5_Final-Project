@@ -19,21 +19,44 @@ function PaymentSuccess({ transaction }) {
   const id = queryParams.get('id');
   const token = localStorage.getItem('token');
 
-  // useEffect(() => {
-  //   if (!transaction?.data) {
-  //         // Handle case where transaction data is not available
-  //         toast.error("Data transaksi tidak ditemukan. Mengembalikan...", {
-  //           position: "bottom-center",
-  //           autoClose: 3000,
-  //         });
-        
-  //         const timer = setTimeout(() => {
-  //           navigate({ to: '/users/private/order-history' });
-  //         }, 3000);
-        
-  //         return () => clearTimeout(timer);
-  //       }
-  // }, [id, navigate])
+  const INVALID_ID_TOAST = "invalid-id";
+
+  const isValidId = (id) => {
+    if (!id) return false;
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    return uuidRegex.test(id);
+  };
+
+    useEffect(() => {
+      if (!token || token.trim() === "") {
+        toast.error("Unauthorized, redirecting to homepage", {
+          position: "bottom-center", // Toast will appear at the bottom-center
+          autoClose: 3000, 
+        });
+    
+        const timer = setTimeout(() => {
+          navigate({ to : '/'}); // Redirect to the homepage
+        }, 5000);
+  
+        return () => clearTimeout(timer);
+      }
+  
+      if (!isValidId(id)) {
+        if (!toast.isActive(INVALID_ID_TOAST)) { // Check if the toast is already active
+          toast.error("ID transaksi invalid. Mengembalikan...",{
+            position: "bottom-center", // Toast will appear at the bottom-center
+            autoClose: 3000, 
+            toastId: INVALID_ID_TOAST
+          });
+        }
+        const timer = setTimeout(() => {
+          navigate({ to : '/'}); // Redirect to the homepage
+        }, 5000);
+  
+        return () => clearTimeout(timer);
+      }
+  
+    }, [id, token, navigate]);
 
   // Mutation for sending request link through email
   const { mutate: sendTicket, isPending } = useMutation({
@@ -56,14 +79,16 @@ function PaymentSuccess({ transaction }) {
     },
 
     onError: (error) => {
-      console.log("Error sending ticket:", error);
       if (error.response?.status === 404) {
-        toast.error("Your email was not found in our records.", {
+        toast.error("Email atau ID transaksi invalid.", {
           autoClose: 4000,
           position: "bottom-center",
         });
       } else {
-        toast.error("An unexpected error occured");
+        toast.error("An unexpected error occured", {
+          position: "bottom-center", // Toast will appear at the bottom-center
+          autoClose: 4000, 
+        });
       }
     },
   });
