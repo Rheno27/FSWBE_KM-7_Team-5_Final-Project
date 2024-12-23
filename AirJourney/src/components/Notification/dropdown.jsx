@@ -14,7 +14,7 @@ const NotificationDropdown = () => {
   const { data: notifications, isLoading, isError, refetch } = useQuery({
     queryKey: ["notifications"],
     queryFn: async () => {
-      if (!token) throw new Error("No token found. Please log in.");
+      if (!token) throw new Error("Tidak ada token. Silakan login.");
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/notifications`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -93,9 +93,9 @@ const NotificationDropdown = () => {
           }}
         >
           {isLoading ? (
-            <p>Loading...</p>
+            <p>Memuat...</p>
           ) : isError ? (
-            <p>Error fetching notifications</p>
+            <p>Gagal mengambil notifikasi</p>
           ) : notifications && notifications.length > 0 ? (
             notifications.map((notification) => (
               <div

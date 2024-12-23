@@ -57,13 +57,13 @@ function Register() {
 
         const resData = response.data.data;
 
-        showToast("success", "Registration successful! Redirecting to OTP...", false, toastId);
+        showToast("success", "Registrasi berhasil! Mengarahkan ke OTP...", false, toastId);
         dispatch(setUser(resData));
         navigate({ to: "/otp" });
       } catch (error) {
         const errorMessage = error.response
-          ? error.response.data?.message || "Registration failed."
-          : "Network error. Please try again later.";
+          ? error.response.data?.message || "Registrasi gagal."
+          : "Kesalahan jaringan. Silakan coba lagi nanti.";
         showToast("error", errorMessage, false, toastId);
       }
     },
@@ -74,12 +74,12 @@ function Register() {
     const { name, email, phoneNumber, password } = formData;
 
     if (!name || !email || !phoneNumber || !password) {
-      toast.warn("Please fill in all fields", { position: "bottom-center" });
+      toast.warn("Silakan isi semua field", { position: "bottom-center" });
       return;
     }
 
     if (password.length < 6) {
-      toast.warn("Password must be at least 6 characters long", { position: "bottom-center" });
+      toast.warn("Sandi harus terdiri dari setidaknya 6 karakter", { position: "bottom-center" });
       return;
     }
 
@@ -159,10 +159,10 @@ function Register() {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="password">
-              <Form.Label>Buat Password</Form.Label>
+              <Form.Label>Buat Sandi</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="Buat Password"
+                placeholder="Buat Sandi"
                 value={formData.password}
                 onChange={handleChange}
                 required

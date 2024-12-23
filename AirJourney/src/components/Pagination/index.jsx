@@ -50,7 +50,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           ...styles.button,
           ...(currentPage === 1 ? styles.disabledButton : {}),
         }}
-        aria-label="Go to previous page"
+        aria-label="Pindah ke halaman sebelumnya"
       >
         <ChevronLeftRounded fontSize="medium" />
       </button>
@@ -64,7 +64,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             ...styles.button,
             ...(page === currentPage ? styles.activeButton : {}),
           }}
-          aria-label={`Go to page ${page}`}
+          aria-label={`Pindah ke halaman ${page}`}
         >
           {page}
         </button>
@@ -78,7 +78,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           ...styles.button,
           ...(currentPage === totalPages ? styles.disabledButton : {}),
         }}
-        aria-label="Go to next page"
+        aria-label="Pindah ke halaman berikutnya"
       >
         <ChevronRightRounded fontSize="medium" />
       </button>
