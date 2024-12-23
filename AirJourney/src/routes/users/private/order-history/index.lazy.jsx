@@ -313,7 +313,7 @@ function OrderHistory({ id }) {
         onFilter={handleFilter}
         onClear={handleClear}
       />
-      <Container>
+      <div className="m-3">
         {!token || token.trim() === "" ? (
           <div className="d-flex flex-column align-items-center mt-5 py-5">
             <Col
@@ -592,7 +592,11 @@ function OrderHistory({ id }) {
                   )
                 )}
               </Col>
-              <Col lg={4} md={5} className="mt-4">
+              <Col lg={4} md={5} className="mt-4" style={{
+                  position: 'sticky',
+                  top: 0,
+                  zIndex: 10, // Optional, just to ensure it's above other elements
+                }}>
                 {selectedTransactionId ? (
                   <OrderDetailCard
                     id={selectedTransactionId}
@@ -609,11 +613,11 @@ function OrderHistory({ id }) {
               <Row>
                 {/* Pagination */}
                 <Col className="justify-content-center d-flex my-5">
-                  <Pagination
+                  {/* <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={handlePageChange}
-                  />
+                  /> */}
                 </Col>
                 {/* <Col className="justify-content-center d-flex my-5">
               <button
@@ -674,7 +678,7 @@ function OrderHistory({ id }) {
             </div>
           </Container>
         )}
-      </Container>
+      </div>
     </div>
   );
 }
