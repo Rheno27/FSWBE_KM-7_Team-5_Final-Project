@@ -202,7 +202,7 @@ function OrderHistory({ id }) {
       ),
 
     onSuccess: () => {
-      toast.success("Ticket was sent successfully! Please check your email", {
+      toast.success("Tiket berhasil diterbitkan! Mohon cek email anda", {
         autoClose: 4000,
         position: "bottom-center",
       });
@@ -224,14 +224,6 @@ function OrderHistory({ id }) {
   // Form submission handler
   const handleSendTicket = async () => {
     const response = sendTicket();
-    console.log("response", response);
-    console.log("id", id);
-    // if (response.status) {
-    //   toast.success("Transaction cancelled successfully");
-    //   navigate({ to: `/` });
-    // } else {
-    //     toast.error("Failed to cancel transaction");
-    // }
   };
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {

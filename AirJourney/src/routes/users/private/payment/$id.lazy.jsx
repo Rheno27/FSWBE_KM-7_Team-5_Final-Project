@@ -9,6 +9,7 @@ import OrderDetailCard from "../../../../components/OrderDetails";
 import { getDetailTransaction, cancelTransaction } from '../../../../services/transaction/index.js'
 import { useSelector } from 'react-redux'
 import { useMutation } from '@tanstack/react-query'
+import { use } from 'react'
 
 export const Route = createLazyFileRoute('/users/private/payment/$id')({
   component: Payment,
@@ -16,8 +17,8 @@ export const Route = createLazyFileRoute('/users/private/payment/$id')({
 
 function Payment() {
   const { id } = Route.useParams();
-  const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
   const [timeRemaining, setTimeRemaining] = useState(null);
 
   const isValidId = (id) => {
@@ -59,35 +60,8 @@ function Payment() {
       return () => clearTimeout(timer);
     }
 
-    // if (id !== transaction?.data?.id) {
-    //   console.log("transaction", transaction);
-    //   toast.error("Transaction ID not found. Redirecting ...", {
-    //     position: "bottom-center", // Toast will appear at the bottom-center
-    //     autoClose: 4000, 
-    //   });
-  
-    //   const timer = setTimeout(() => {
-    //     navigate({ to : '/users/private/order-history'}); // Redirect to the homepage
-    //   }, 4000);
-
-    //   return () => clearTimeout(timer);
-    // }
   }, [id, token, navigate]);
 
-  useEffect(() => {
-    if (transaction?.data?.payment?.status === 'CANCELLED') {
-      toast.error("Your transaction id has expired. Redirecting ...", {
-        position: "bottom-center", // Toast will appear at the bottom-center
-        autoClose: 4000, 
-      });
-  
-      const timer = setTimeout(() => {
-        navigate({ to : '/users/private/order-history'}); // Redirect to the homepage
-      }, 4000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [id, navigate]);
 
   const capitalizeFirstLetter = (str) => {
     if (!str) return str; // Check if the string is empty or null
@@ -169,17 +143,60 @@ function Payment() {
       }
     }
   }, [isSuccess, transaction]);
-  
-  useEffect(() => {
-    if (isSuccess && isPaymentSuccess) {
-      toast.success('Pembayaran berhasil!');
-    const timer = setTimeout(() => {
-      navigate({ to : `/users/private/payment/success?id=${id}`});
-    }, 4000);
 
-    return () => clearTimeout(timer);;
+  useEffect(() => {
+    if (!transaction?.data) {
+      // Handle case where transaction data is not available
+      toast.error("Data transaksi tidak ditemukan. Mengembalikan...", {
+        position: "bottom-center",
+        autoClose: 3000,
+      });
+    
+      const timer = setTimeout(() => {
+        navigate({ to: '/users/private/order-history' });
+      }, 3000);
+    
+      return () => clearTimeout(timer);
     }
-  }, [transaction, navigate]);
+
+    if (id !== transaction?.data?.id) {
+      // Priority: ID mismatch error
+      console.log("transaction", transaction);
+      toast.error("ID transaksi tidak ditemukan. Mengembalikan...", {
+        position: "bottom-center",
+        autoClose: 3000,
+      });
+    
+      const timer = setTimeout(() => {
+        navigate({ to: '/users/private/order-history' }); // Redirect to the order history page
+      }, 3000);
+    
+      return () => clearTimeout(timer);
+    }
+    
+    if (isSuccess && isPaymentSuccess) {
+      // Payment success logic
+      toast.success('Pembayaran berhasil!');
+      const timer = setTimeout(() => {
+        navigate({ to: `/users/private/payment/success?id=${id}` });
+      }, 4000);
+    
+      return () => clearTimeout(timer);
+    }
+
+    // if (transaction?.data?.payment?.status === 'CANCELLED') {
+    //   toast.error("ID transaksi anda sudah kadaluarsa. Mengembalikan...", {
+    //     position: "bottom-center", // Toast will appear at the bottom-center
+    //     autoClose: 3000, 
+    //   });
+  
+    //   const timer = setTimeout(() => {
+    //     navigate({ to : '/users/private/order-history'}); // Redirect to the homepage
+    //   }, 3000);
+
+    //   return () => clearTimeout(timer);
+    // }
+  }, [id, transaction, navigate]);
 
   const { mutate: cancelTransactionMutation } = useMutation({
     mutationFn: () => cancelTransaction(id),
@@ -262,7 +279,7 @@ function Payment() {
                     </Col>
                   </div>
             ) : !isValidId(id) ? (
-              <p style={{ color: 'red' }}>Invalid ID. Please check your URL. Redirecting ...</p>
+              <p style={{ color: 'red' }}>ID Invalid. Mohon cek URL anda. Mengarahkan ulang ...</p>
             ) : (
               <Row className="justify-content-center my-4 gap-1">
                 <Col lg={6} md={6} className="my-2 justify-content-center">

@@ -92,7 +92,7 @@ function ResetPassword() {
       return resetPassword(data);
     },
     onSuccess: (response) => {
-      toast.success('Password reset successfull. Redirecting to homepage...', {
+      toast.success('Reset password berhasil. Mengarahkan ke homepage...', {
         autoClose: 4000, 
       });
       setTimeout(() => navigate({ to: "/" }), 4000);
@@ -117,7 +117,7 @@ function ResetPassword() {
     e.preventDefault();
 
     if (!isTokenValid) {
-      toast.error("Token has expired or is invalid.", {
+      toast.error("Token kadaluarsa atau invalid.", {
         position: "top-center",
         autoClose: 5000,
       });
@@ -127,10 +127,10 @@ function ResetPassword() {
     // Basic password validation checks
     const validatePassword = () => {
       if (newPassword.length < 6) {
-        return "Password must be at least 6 characters long";
+        return "Password harus minimal 6 karakter.";
       }
       if (newPassword !== confirmPassword) {
-        return "Passwords do not match.";
+        return "Password tidak sesuai.";
       }
   
       return null;

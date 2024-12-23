@@ -235,21 +235,7 @@ function Checkout() {
         <>
             <Container className="checkout-page">
                 {/* Progress Bar */}
-                <Row className="justify-content-center mt-2 mb-4 py-3 shadow-sm">
-                    <Col lg={9} md={10}>
-                        <BreadcrumbNav
-                            items={[
-                            { label: 'Isi Data Diri', disabled: true, cursor: 'default' },
-                            { label: 'Bayar', disabled: true, cursor: 'default' },
-                            { label: 'Selesai', disabled: true, cursor: 'default' },
-                            ]}
-                        />
-                        <AlertBox
-                            type="warning"
-                            message="Selesaikan Pengisian Data Dalam 15:00"
-                        />
-                    </Col>
-                </Row>
+                <ProgressBar />
                 {/* Checkout Content */}
                 <Row>
                     {/* Left Side: Form Data Diri */}
