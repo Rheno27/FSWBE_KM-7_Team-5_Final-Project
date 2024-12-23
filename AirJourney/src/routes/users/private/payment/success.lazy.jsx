@@ -55,8 +55,27 @@ function PaymentSuccess({ transaction }) {
   
         return () => clearTimeout(timer);
       }
+
+      const now = new Date(); // Get the current date and time
+      const expiredAt = transaction?.data?.payment?.expiredAt 
+        ? new Date(transaction.data.payment.expiredAt) 
+        : null;
+
+      if (expiredAt && expiredAt <= now) {
+        // The expiredAt date has passed
+        toast.error("Transaksi sudah kadaluarsa. Mengembalikan...", {
+          position: "bottom-center",
+          autoClose: 3000,
+        });
+
+        const timer = setTimeout(() => {
+          navigate({ to: '/users/private/order-history' });
+        }, 3000);
+
+        return () => clearTimeout(timer);
+      }
   
-    }, [id, token, navigate]);
+    }, [id, token, navigate, transaction]);
 
   // Mutation for sending request link through email
   const { mutate: sendTicket, isPending } = useMutation({

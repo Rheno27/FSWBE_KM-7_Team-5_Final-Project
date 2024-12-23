@@ -157,7 +157,7 @@ function OrderHistory({ id }) {
   : transactionsArray;
  // Show all transactions if no date range is selected
 
-
+    console.log("transactions", transactions)
 
   const groupedFilteredTransactions =
     groupHistoriesByMonth(filteredTransactions);

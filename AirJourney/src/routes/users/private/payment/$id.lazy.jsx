@@ -265,12 +265,13 @@ function Payment() {
                 <Col lg={6} md={6} className="my-2 justify-content-center">
                     <Card id="snap-container" className="p-3 shadow-sm rounded-3 w-100"></Card>
                     {isLoading && <p className='my-2'>Memuat form pembayaran...</p>}
+                    <p>Halaman pembayaran tidak muncul? silahkan refresh halaman</p>
                 </Col>
                 <Col lg={4} md={4}>
                 {id ? (
                   <OrderDetailCard id={id} handleCancelTransaction={handleCancelTransaction}/>
                 ) : (
-                  <p className="text-danger">Transaction ID is missing</p>
+                  <p className="text-danger">ID transaksi tidak ditemukan</p>
                 )}
                 </Col>
               </Row>
