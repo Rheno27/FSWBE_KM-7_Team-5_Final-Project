@@ -34,10 +34,10 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const classList = [
-        { name: "Economy" },
-        { name: "Premium Economy" },
-        { name: "Business" },
-        { name: "First Class" },
+        { name: "Ekonomi" },
+        { name: "Premium Ekonomi" },
+        { name: "Bisnis" },
+        { name: "Kelas Satu" },
     ];
     const [passenger, setPassenger] = useState({
         ADULT: 1,
@@ -104,7 +104,7 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
                 <div className="flex flex-col gap-4 flex-1">
                     <div className="flex gap-2">
                         <FlightClassIcon color="disabled" />
-                        <span className="font-semibold">Pilih Class</span>
+                        <span className="font-semibold">Pilih Kelas</span>
                     </div>
                     <div className="flex flex-col text-nowrap gap-2">
                         {classList.map((item) => {

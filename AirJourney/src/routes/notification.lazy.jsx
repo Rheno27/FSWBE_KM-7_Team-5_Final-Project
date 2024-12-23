@@ -9,7 +9,7 @@ export const Route = createLazyFileRoute("/notification")({
     const token = state?.auth?.token; 
 
     if (!token) {
-      return { notifications: [], error: "No token found. Please log in." };
+      return { notifications: [], error: "Tidak ada token. Silakan login." };
     }
 
     try {
@@ -21,12 +21,12 @@ export const Route = createLazyFileRoute("/notification")({
           },
         });
       if (response.status === 404) {
-        throw new Error("Notifications not found.");
+        throw new Error("Notifikasi tidak ditemukan.");
       }
 
       return { notifications: response.data.data }; 
     } catch (err) {
-      return { notifications: [], error: "Failed to fetch notifications." };
+      return { notifications: [], error: "Gagal mengambil notifikasi." };
     }
   },
 });

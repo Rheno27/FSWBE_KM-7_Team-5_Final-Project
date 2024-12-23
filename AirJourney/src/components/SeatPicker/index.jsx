@@ -79,7 +79,7 @@ const SeatPicker = ({
                             textAlign: "left",
                             marginBottom: "15px",
                         }}
-                    >Pilih Kursi</div>
+                    >Pilih Kursi Keberangkatan</div>
                     <Card.Header
                         className="form-header"
                         style={{
@@ -92,7 +92,7 @@ const SeatPicker = ({
                             textAlign: "center",
                         }}
                     >
-                        <div className="class-seat">{detailFlight?.departureFlight?.class} CLASS</div>
+                        <div className="class-seat">{detailFlight?.departureFlight?.class} KELAS</div>
                     </Card.Header>
                     <Row>
                         <Col lg={12} className="p-4">
@@ -192,7 +192,7 @@ const SeatPicker = ({
                                 textAlign: "left",
                                 marginBottom: "15px",
                             }}
-                        >Pilih Kursi Penerbangan Kembali</div>
+                        >Pilih Kursi Penerbangan Pulang</div>
                         <Card.Header
                             className="form-header"
                             style={{
@@ -205,7 +205,7 @@ const SeatPicker = ({
                                 textAlign: "center",
                             }}
                         >
-                            <div className="class-seat">{returnDetailFlight?.departureFlight?.class} CLASS</div>
+                            <div className="class-seat">{returnDetailFlight?.departureFlight?.class} KELAS</div>
                         </Card.Header>
                         <Row>
                             <Col lg={12} className="p-4">

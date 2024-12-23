@@ -2,12 +2,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import PropTypes from "prop-types";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
+//saya ingin mengubah semua bahasa inggris menjadi bahasa indonesia
 const ClassModal = ({ setShowClassModal, classType, setClassType }) => {
     const classList = [
-        { name: "Economy" },
-        { name: "Premium Economy" },
-        { name: "Business" },
-        { name: "First Class" },
+        { name: "Ekonomi" },
+        { name: "Premium Ekonomi" },
+        { name: "Bisnis" },
+        { name: "Kelas Satu" },
     ];
 
     return (

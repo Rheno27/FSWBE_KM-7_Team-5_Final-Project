@@ -27,7 +27,7 @@ function Payment() {
 
   useEffect(() => {
     if (!token || token.trim() === "") {
-      toast.error("Unauthorized, redirecting to homepage", {
+      toast.error("Tidak diizinkan, mengarahkan ke halaman utama", {
         position: "bottom-center", // Toast will appear at the bottom-center
         autoClose: 3000, 
       });
@@ -163,7 +163,7 @@ function Payment() {
     }
 
     // if (transaction?.data?.payment?.status === 'CANCELLED') {
-    //   toast.error("ID transaksi anda sudah kadaluarsa. Mengembalikan...", {
+    //   toast.error("ID transaksi anda sudah kadaluarsa. Memuat ulang halaman...", {
     //     position: "bottom-center", // Toast will appear at the bottom-center
     //     autoClose: 3000, 
     //   });

@@ -138,7 +138,7 @@ const FlightList = ({
                       </Col>
                       <Col xs={7} className="text-center">
                         <small className="text-muted">
-                          {flight.duration ?? "N/A"} minutes
+                          {flight.duration ?? "N/A"} menit
                         </small>
                         <hr className="m-1" />
                         <small>{flight.description ?? "Direct"}</small>
@@ -169,7 +169,7 @@ const FlightList = ({
                           <span>{flight.price.toLocaleString("id-ID")}</span>
                         </>
                       ) : (
-                        "Price Unavailable"
+                        "Harga Tidak Tersedia"
                       )}
                     </h6>
                     <div className="d-grid">
@@ -205,7 +205,7 @@ const FlightList = ({
                         </small>
                         <br />
                         <small>
-                          {airportFrom?.name ?? "Unknown Origin"} - Terminal{" "}
+                          {airportFrom?.name ?? "Asal tidak diketahui"} - Terminal{" "}
                           {flight.terminal ?? "N/A"}
                         </small>
                       </Col>
@@ -234,11 +234,11 @@ const FlightList = ({
                         <p className="mb-0 mt-2">
                           <strong>Informasi:</strong>
                           <br />
-                          Baggage 20 kg
+                          Bagasi 20 kg
                           <br />
-                          Cabin baggage 7 kg
+                          Bagasi Kabin 7 kg
                           <br />
-                          In-Flight Entertainment
+                          Hiburan Dalam Penerbangan
                         </p>
                       </Col>
                     </Row>
@@ -254,7 +254,7 @@ const FlightList = ({
                         </small>
                         <br />
                         <small>
-                          {airportTo?.name ?? "Unknown Destination"}
+                          {airportTo?.name ?? "Tujuan tidak diketahui"}
                         </small>
                       </Col>
                       <Col xs="auto" className="text-end">

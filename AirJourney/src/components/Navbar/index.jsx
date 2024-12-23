@@ -69,30 +69,6 @@ const NavigationBar = () => {
                                 <img src={logo} alt="logo" style={{ maxHeight: "40px" }} />
                             </Navbar.Brand>
 
-                            <Form
-                                className="d-none d-md-flex ms-3"
-                                style={{ position: "relative", width: "300px" }}
-                            >
-                                <Form.Control
-                                    type="search"
-                                    placeholder="Search"
-                                    aria-label="Search"
-                                    style={{
-                                        borderRadius: "12px",
-                                        paddingLeft: "20px",
-                                    }}
-                                />
-                                <SearchIcon
-                                    style={{
-                                        position: "absolute",
-                                        right: "10px",
-                                        top: "50%",
-                                        transform: "translateY(-50%)",
-                                        color: "gray",
-                                    }}
-                                />
-                            </Form>
-
                             <Navbar.Toggle aria-controls="navbarScroll" className="ms-auto" />
                         </div>
 
@@ -126,7 +102,7 @@ const NavigationBar = () => {
                                             }}
                                         >
                                             <HistoryIcon style={{ marginRight: "8px" }} />
-                                            <span className="d-md-none">History</span>
+                                            <span className="d-md-none">Riwayat</span>
                                         </Nav.Link>
                                         <NotificationDropdown />
                                         <Nav.Link
@@ -139,7 +115,7 @@ const NavigationBar = () => {
                                             }}
                                         >
                                             <ProfileIcon style={{ marginRight: "8px" }} />
-                                            <span className="d-md-none">Profile</span>
+                                            <span className="d-md-none">Profil</span>
                                         </Nav.Link>
                                     </>
                                 ) : (
@@ -162,34 +138,6 @@ const NavigationBar = () => {
                                 )}
                             </Nav>
                         </Navbar.Collapse>
-
-
-                        <Form
-                            className="d-flex d-md-none mt-3"
-                            style={{
-                                position: "relative",
-                                width: "100%",
-                            }}
-                        >
-                            <Form.Control
-                                type="search"
-                                placeholder="Search"
-                                aria-label="Search"
-                                style={{
-                                    borderRadius: "12px",
-                                    paddingLeft: "20px",
-                                }}
-                            />
-                            <SearchIcon
-                                style={{
-                                    position: "absolute",
-                                    right: "10px",
-                                    top: "50%",
-                                    transform: "translateY(-50%)",
-                                    color: "gray",
-                                }}
-                            />
-                        </Form>
                     </Container>
                 </Navbar>
             )}
