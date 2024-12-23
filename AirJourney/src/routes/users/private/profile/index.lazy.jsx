@@ -97,12 +97,6 @@ function EditProfile() {
     }
     userUpdate(request)
   }
-
-  const logout = (event) => {
-    event.preventDefault()
-    handleLogout()
-  }
-
   return (
     <Container className="profile-page">
       <Container
@@ -187,7 +181,7 @@ function EditProfile() {
             </div>
             <hr style={{ marginTop: '10px', color: '#3c3c3c' }} />
             <div
-              onClick={logout}
+              onClick={handleLogout}
               style={{
                 cursor: 'pointer',
                 backgroundColor: '#7126B5',
