@@ -158,8 +158,10 @@ function Checkout() {
     //submit
     const handleSubmit = async (e) => {
         e.preventDefault();
+        let isFilled = false;
         const passengers = Array.from({ length: totalPassengers }).map(
             (_, index) => {
+                isFilled = false;
                 const passenger = {
                     birthday: birthDays[index] || "",
                     departureSeatId: selectedSeats[index],
@@ -175,46 +177,47 @@ function Checkout() {
                 if (returnFlightId && selectedReturnSeats) {
                     passenger.returnSeatId = selectedReturnSeats[index];
                     if(passenger.returnSeatId === ""){
-                        toast.error("Kursi kembali tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                        toast.error(`Form penumpang ke ${index + 1} belum terisi`)
                         return;
                     }
                 }
                 if(passenger.departureSeatId === ""){
-                    toast.error("Kursi tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
                     return;
                 }
                 if(title[index] === ""){
-                    toast.error("Title tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
                     return;
                 }
                 if(firstNames[index] === ""){
-                    toast.error("Nama depan tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
                     return;
                 }
                 if(familyNames[index] === ""){
-                    toast.error("Nama keluarga tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
                     return;
                 }
                 if(birthDays[index] === ""){
-                    toast.error("Tanggal lahir tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
                     return;
                 }
                 if(nationalities[index] === ""){
-                    toast.error("Kewarganegaraan tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
                     return;
                 }
                 if(identityNumbers[index] === ""){
-                    toast.error("Nomor identitas tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
                     return;
                 }
                 if(expiredAt[index] === ""){
-                    toast.error("Tanggal kadaluarsa tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
                     return;
                 }
                 if(originCountries[index] === ""){
-                    toast.error("Asal negara tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
                     return;
                 }
+                isFilled = true;
                 return passenger;
             }
         );
@@ -225,7 +228,9 @@ function Checkout() {
         if (returnFlightId) {
             data.returnFlightId = returnFlightId;
         }
-        postTransaction(data);
+        if (isFilled){
+            postTransaction(data);
+        };
 
     };
 
