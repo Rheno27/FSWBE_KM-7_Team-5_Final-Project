@@ -119,7 +119,6 @@ function OrderHistory({ id }) {
   const totalPages = meta?.totalPages || 1;
 
   const isAvailable = transactions.length > 0;
-  console.log("transactions", transactions);
 
   const transactionsArray = Array.isArray(transactions) ? transactions : [];
 
@@ -209,7 +208,6 @@ function OrderHistory({ id }) {
     },
 
     onError: (error) => {
-      console.log("Error sending ticket:", error);
       if (error.response?.status === 404) {
         toast.error("Email anda tidak ditemukan di database kami.", {
           autoClose: 4000,

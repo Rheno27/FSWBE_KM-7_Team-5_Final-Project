@@ -236,9 +236,9 @@ const FlightList = ({
                           <br />
                           Bagasi 20 kg
                           <br />
-                          Bagasi kabin 7 kg
+                          Bagasi Kabin 7 kg
                           <br />
-                          Hiburan di pesawat
+                          Hiburan Dalam Penerbangan
                         </p>
                       </Col>
                     </Row>

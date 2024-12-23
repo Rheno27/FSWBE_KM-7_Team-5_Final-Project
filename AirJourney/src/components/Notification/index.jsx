@@ -244,7 +244,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
           ))
         ) : (
           <p style={{ textAlign: "center", color: "#8A8A8A", padding: "10px" }}>
-            Tidak ada notifikasi.
+            Tidak ada pemberitahuan yang tersedia
           </p>
         )}
       </div>
