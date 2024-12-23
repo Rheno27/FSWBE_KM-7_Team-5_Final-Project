@@ -1,8 +1,8 @@
 import { React, useEffect, useState } from 'react'
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
 import { Row, Col, Card, Form, Button, Container } from 'react-bootstrap'
-import { BreadcrumbNav } from '../../../../components/ui/BreadcrumbNav'
-import { AlertBox } from '../../../../components/ui/AlertBox'
+import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
+import { AlertBox } from '../../../../components/ui/alertBox.jsx'
 import { toast, ToastContainer } from "react-toastify";
 import { useQuery } from '@tanstack/react-query'
 import OrderDetailCard from "../../../../components/OrderDetails";
