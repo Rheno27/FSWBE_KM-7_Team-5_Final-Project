@@ -162,7 +162,7 @@ function Checkout() {
             (_, index) => {
                 const passenger = {
                     birthday: birthDays[index] || "",
-                    departureSeatId: selectedSeats[index],
+                    departureSeatId: selectedSeats[index] || "",
                     expiredAt: expiredAt[index] || "",
                     familyName: familyNames[index] || "",
                     firstName: firstNames[index] || "",
@@ -172,8 +172,48 @@ function Checkout() {
                     title: title[index] || "",
                     type: passengerTypes[index] || getPassengerType(index),
                 };
+                if(passenger.departureSeatId === ""){
+                    toast.error("Kursi tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
                 if (returnFlightId && selectedReturnSeats) {
-                    passenger.returnSeatId = selectedReturnSeats[index];
+                    passenger.returnSeatId = selectedReturnSeats[index] || "";
+                    if(passenger.returnSeatId === ""){
+                        toast.error("Kursi kembali tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                        return;
+                    }
+                }
+                if(title[index] === ""){
+                    toast.error("Title tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(firstNames[index] === ""){
+                    toast.error("Nama depan tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(familyNames[index] === ""){
+                    toast.error("Nama keluarga tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(birthDays[index] === ""){
+                    toast.error("Tanggal lahir tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(nationalities[index] === ""){
+                    toast.error("Kewarganegaraan tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(identityNumbers[index] === ""){
+                    toast.error("Nomor identitas tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(expiredAt[index] === ""){
+                    toast.error("Tanggal kadaluarsa tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(originCountries[index] === ""){
+                    toast.error("Asal negara tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
                 }
                 return passenger;
             }

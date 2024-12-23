@@ -12,6 +12,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
         queryKey: ["flight", flightId],
         queryFn: async () => {
             const response = await getFlightByID(flightId);
+            console.log("detailFlight", response);
             return response;
         },
         enabled: !!flightId,
@@ -123,7 +124,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                                         alignItems: "center",
                                     }}
                                 >
-                                    <img src={Thumbnail} alt="Flight" />
+                                    <img src={detailFlight?.departureFlight?.airline?.image || Thumbnail} alt="Flight" />
                                 </div>
                             </Col>
                             <Col lg={10}>
@@ -342,7 +343,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                                     alignItems: "center",
                                 }}
                             >
-                                <img src={Thumbnail} alt="Flight" />
+                                <img src={returnDetailFlight?.departureFlight?.airline?.image || Thumbnail} alt="Flight" />
                             </div>
                         </Col>
                         <Col lg={10}>
