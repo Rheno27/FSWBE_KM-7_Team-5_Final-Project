@@ -109,10 +109,10 @@ const FlightList = ({
                 <Row className="align-items-center">
                   <Col xs={8} sm={8} className="d-flex align-items-center">
                     <img
-                      src={logo}
+                      src={flight.airline?.image || logo}
                       alt="Airline Logo"
                       className="flight-logo img-fluid"
-                      style={{ maxWidth: "50px" }}
+                      style={{ maxWidth: "100px" }}
                     />
                     <h6
                       className="mb-0 fw-bold text-truncate"
@@ -201,9 +201,7 @@ const FlightList = ({
                           {flight.departureTime ?? "00:00"}
                         </h6>
                         <small>
-                          {new Date(flight.departureDate).toLocaleDateString(
-                            "en-CA"
-                          ) ?? "N/A"}
+                          {flight.departureDate.split("T")[0] ?? "N/A"}
                         </small>
                         <br />
                         <small>
@@ -221,10 +219,10 @@ const FlightList = ({
                     <Row className="align-items-center mb-4">
                       <Col xs="auto" className="text-start">
                         <img
-                          src={logo}
+                          src={flight.airline?.image || logo}
                           alt="Informasi Icon"
                           className="informasi-icon img-fluid"
-                          style={{ maxWidth: "40px" }}
+                          style={{ maxWidth: "90px" }}
                         />
                       </Col>
                       <Col>
@@ -252,9 +250,7 @@ const FlightList = ({
                           {flight.arrivalTime ?? "00:00"}
                         </h6>
                         <small>
-                          {new Date(flight.arrivalDate).toLocaleDateString(
-                            "en-CA"
-                          ) ?? "N/A"}
+                          {flight.arrivalDate.split("T")[0] ?? "N/A"}
                         </small>
                         <br />
                         <small>

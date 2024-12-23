@@ -40,7 +40,6 @@ function Payment() {
     },
   });
 
-  console.log("transaction", transaction)
 
   // Fetch existing notifications
   const { data: notificationsList } = useQuery({
@@ -175,7 +174,6 @@ function Payment() {
   //         }
   //       }
   //     } catch (error) {
-  //       console.error("Failed to create notification:", error);
   //     }
   //   };
 
@@ -231,7 +229,6 @@ function Payment() {
     if (isSuccess && isPaymentSuccess) {
       toast.success('Payment success! Redirecting...');
     const timer = setTimeout(() => {
-      console.log("id", id);
       navigate({ to : `/users/private/payment/success?id=${id}`});
     }, 4000);
 
@@ -250,8 +247,6 @@ function Payment() {
 
     try {
     const response = await cancelTransactionMutation();
-    console.log("response", response);
-
     if (response.status) {
       toast.success("Transaction cancelled successfully");
       navigate({ to: `/` });

@@ -16,7 +16,6 @@ export const getUser = async () => {
     }
     return result?.data;
     } catch(err){
-        console.log(err);
         throw new Error(err);
     }
     
@@ -29,9 +28,7 @@ export const updateUser = async (data) => {
     const requestData = {};
     if (data.name) requestData.name = data.name;
     if (data.phoneNumber) requestData.phoneNumber = data.phoneNumber;
-    
-    console.log("Data yang dikirim ke server:", requestData);
-    
+        
     const response = await fetch(
         `${import.meta.env.VITE_API_URL}/users/me`,
         {

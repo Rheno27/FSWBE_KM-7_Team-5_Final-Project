@@ -89,17 +89,15 @@ const DestinationModal = ({
                         ? filteredSearch.map((data) => (
                               <div
                                   key={data.id}
-                                  className="flex justify-between border-b py-1 text-sm"
+                                  className="flex justify-between border-b py-1 text-sm cursor-pointer hover:bg-slate-200 rounded-md px-2"
+                                  onClick={() => {
+                                    destinationClickHandler(
+                                        data.name,
+                                        data.id
+                                    );
+                                }}
                               >
-                                  <span
-                                      className="cursor-pointer"
-                                      onClick={() => {
-                                          destinationClickHandler(
-                                              data.name,
-                                              data.id
-                                          );
-                                      }}
-                                  >
+                                  <span>
                                       {data.name}
                                   </span>
                               </div>
@@ -107,17 +105,15 @@ const DestinationModal = ({
                         : destinationHistory.map((data) => (
                               <div
                                   key={data.id}
-                                  className="flex justify-between border-b py-1 text-sm"
+                                  className="flex justify-between border-b py-1 text-sm cursor-pointer hover:bg-slate-200 rounded-md px-2"
+                                  onClick={() => {
+                                    destinationClickHandler(
+                                        data.name,
+                                        data.id
+                                    );
+                                }}
                               >
-                                  <span
-                                      className="cursor-pointer"
-                                      onClick={() => {
-                                          destinationClickHandler(
-                                              data.name,
-                                              data.id
-                                          );
-                                      }}
-                                  >
+                                  <span>
                                       {data.name}
                                   </span>
                               </div>

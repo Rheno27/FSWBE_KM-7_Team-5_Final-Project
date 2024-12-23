@@ -32,7 +32,7 @@ function Checkout() {
     const [nationalities, setNationalities] = useState([]);
     const [identityNumbers, setIdentityNumbers] = useState([]);
     const [originCountries, setOriginCountries] = useState([]);
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState([]);
     const [passengerTypes, setPassengerTypes] = useState([]);
 
     useEffect(() => {
@@ -53,7 +53,6 @@ function Checkout() {
             return;
         },
         onError: (error) => {
-            console.log("error", error);
             toast.error("Gagal membuat pemesanan");
         },
     });
@@ -86,6 +85,7 @@ function Checkout() {
             setIdentityNumbers(Array(total).fill(""));
             setOriginCountries(Array(total).fill(""));
             setPassengerTypes(Array(total).fill(""));
+            setTitle(Array(total).fill(""));
         }
     }, [passenger]);
 
@@ -138,8 +138,24 @@ function Checkout() {
                 updated[index] = value;
                 return updated;
             });
+        } else if (field === "title") {
+            setTitle((prev) => {
+                const updated = [...prev];
+                updated[index] = value;
+                return updated;
+            });
         }
     };
+
+    const passengerType = (index) => {
+        if (index < passenger?.ADULT) {
+            return "Dewasa";
+        } else if (index < passenger?.ADULT + passenger?.CHILD) {
+            return "Anak";
+        } else {
+            return "Bayi";
+        }
+    }
 
     //submit
     const handleSubmit = async (e) => {
@@ -155,11 +171,51 @@ function Checkout() {
                     nationality: nationalities[index] || "",
                     identityNumber: identityNumbers[index] || "",
                     originCountry: originCountries[index] || "",
-                    title: title || "",
+                    title: title[index] || "",
                     type: passengerTypes[index] || getPassengerType(index),
                 };
                 if (returnFlightId && selectedReturnSeats) {
                     passenger.returnSeatId = selectedReturnSeats[index];
+                    if(passenger.returnSeatId === ""){
+                        toast.error("Kursi kembali tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                        return;
+                    }
+                }
+                if(passenger.departureSeatId === ""){
+                    toast.error("Kursi tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(title[index] === ""){
+                    toast.error("Title tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(firstNames[index] === ""){
+                    toast.error("Nama depan tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(familyNames[index] === ""){
+                    toast.error("Nama keluarga tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(birthDays[index] === ""){
+                    toast.error("Tanggal lahir tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(nationalities[index] === ""){
+                    toast.error("Kewarganegaraan tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(identityNumbers[index] === ""){
+                    toast.error("Nomor identitas tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(expiredAt[index] === ""){
+                    toast.error("Tanggal kadaluarsa tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
+                }
+                if(originCountries[index] === ""){
+                    toast.error("Asal negara tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)))
+                    return;
                 }
                 return passenger;
             }
@@ -171,7 +227,6 @@ function Checkout() {
         if (returnFlightId) {
             data.returnFlightId = returnFlightId;
         }
-        console.log("data yg akan dikirim", data);
         postTransaction(data);
 
     };
