@@ -37,7 +37,6 @@ function EditProfile() {
 
   const handleLogout = useCallback(
     (event) => {
-      event.preventDefault()
       localStorage.removeItem('token')
       dispatch(setUser(null))
       dispatch(setToken(null))
