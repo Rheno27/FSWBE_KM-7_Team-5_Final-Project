@@ -9,8 +9,6 @@ import OrderDetailCard from "../../../../components/OrderDetails";
 import { getDetailTransaction, cancelTransaction } from '../../../../services/transaction/index.js'
 import { useSelector } from 'react-redux'
 import { useMutation } from '@tanstack/react-query'
-import Notification from "../../../../components/Notification/dropdown.jsx"; 
-import axios from 'axios'
 
 export const Route = createLazyFileRoute('/users/private/payment/$id')({
   component: Payment,
@@ -20,8 +18,7 @@ function Payment() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isWidgetInitialized, setIsWidgetInitialized] = useState(false); 
+  const [timeRemaining, setTimeRemaining] = useState(null);
 
   const isValidId = (id) => {
     if (!id) return false;
@@ -29,7 +26,7 @@ function Payment() {
     return uuidRegex.test(id);
   };
   
-  const { data: transaction, isSuccess, isError } = useQuery({
+  const { data: transaction, isSuccess, isError, isLoading } = useQuery({
     queryKey: ["transaction", id],
     queryFn: () => getDetailTransaction(id),
     enabled: !!id,
@@ -37,35 +34,6 @@ function Payment() {
       toast.error(
         err.message || "An error occurred while fetching transaction data"
       );
-    },
-  });
-
-
-  // Fetch existing notifications
-  const { data: notificationsList } = useQuery({
-    queryKey: ["notifications"], 
-    queryFn: async () => {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/notifications`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    return response.data.data || [];
-  }});
-
-  const { mutate: cancelTransactionMutation } = useMutation({
-    mutationFn: () => cancelTransaction(id),
-    onSuccess: () => {
-      toast.success("Transaction cancelled successfully", {
-        position: "bottom-center",
-        autoClose: 2000,
-      });
-      navigate({ to: `/` });
-    },
-    onError: (err) => {
-      console.log("error cancel", err);
-      toast.error("Choose payment method first");
     },
   });
 
@@ -126,59 +94,43 @@ function Payment() {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(); // Capitalize the first letter and append the rest
   };
   
-  const [notification, setNotification] = useState(null);
-  const expiredAt = new Date(
-    transaction?.data?.payment?.expiredAt
-  ).toLocaleString("id-ID", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  })
+  const expiredAt = transaction?.data?.payment?.expiredAt
+
+  useEffect(() => {
+    if (!expiredAt) return;
+
+    const calculateTimeRemaining = () => {
+      const expirationTime = new Date(expiredAt).getTime();
+      const currentTime = new Date().getTime();
+      const timeLeft = expirationTime - currentTime;
+
+      if (timeLeft <= 0) {
+        setTimeRemaining(0);
+        clearInterval(timer); // Stop the timer if the time has expired
+      } else {
+        setTimeRemaining(timeLeft);
+      }
+    };
+
+    const timer = setInterval(() => {
+      calculateTimeRemaining();
+    }, 1000); // Update every second
+
+    // Run the calculation on mount
+    calculateTimeRemaining();
+
+    // Cleanup the interval on unmount
+    return () => clearInterval(timer);
+  }, [expiredAt]);
+
+  const formatTime = (time) => {
+    const hours = Math.floor(time / (1000 * 60 * 60));
+    const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((time % (1000 * 60)) / 1000);
+    return `${hours}:${minutes}:${seconds}`;
+  };
 
   const isPaymentSuccess = transaction?.data?.payment?.status === 'SUCCESS';
-  // post notif bukannya harus admin yk? gk bisa mah pake token user wkwk
-
-  // Create notification on page load
-  // useEffect(() => { 
-  //   const createNotificationIfNotExist = async () => {
-  //     try {
-  //       if (id && notificationsList) {
-  //         const isNotificationExists = notificationsList.some(
-  //           (notif) =>
-  //             notif.message.includes(id)
-  //         );
-
-  //         if (!isNotificationExists) {
-  //           const shortId = id.slice(0, 5);
-  //           const notificationPayload = {
-  //             title: `Status Pembayaran (${capitalizeFirstLetter(transaction?.data?.payment?.status)})`,
-  //             message: `Selesaikan pembayaran Anda sebelum ${expiredAt} untuk transaksi ${shortId}...`,
-  //             userId: transaction?.data?.userId, // or another identifier for the user
-  //           };
-
-  //           await axios.post(
-  //             `${import.meta.env.VITE_API_URL}/notifications/`,
-  //             notificationPayload,
-  //             {
-  //               headers: { Authorization: `Bearer ${token}` },
-  //             }
-  //           );
-
-  //           setNotification(notificationPayload); // Set notification for frontend display
-  //           // Optional: Automatically remove notification after some time
-  //           const timer = setTimeout(() => setNotification(null), 5000);
-  //           return () => clearTimeout(timer);
-  //         }
-  //       }
-  //     } catch (error) {
-  //     }
-  //   };
-
-  //   createNotificationIfNotExist();
-  // }, [])
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -194,30 +146,23 @@ function Payment() {
   useEffect(() => {
     if (isSuccess && transaction?.data?.payment?.snapToken) {
       const snapToken = transaction.data.payment.snapToken;
-
-      setIsLoading(true);
       
-      if (!isWidgetInitialized && !document.getElementById('snap-container').hasChildNodes()) {
-        setIsWidgetInitialized(true);
+      if (!document.getElementById('snap-container').hasChildNodes()) {
 
         window.snap?.embed(snapToken, {
           embedId: 'snap-container',
           onSuccess: function (result) {
             // alert('Payment success! Redirecting to success page...');
-            setIsLoading(false);
           },
           onPending: function (result) {
-            setIsLoading(false);
-            alert('Waiting for payment!');
+            alert('Menunggu proses pembayaran!');
           },
           onError: function (result) {
-            setIsLoading(false);
-            alert('Payment failed!');
+            alert('Pembayaran tidak berhasil!');
           },
           onClose: function () {
-            setIsLoading(false);
             if (!isPaymentSuccess) {
-              alert('Are you sure you want to close the payment form?');
+              alert('Apakah yakin ingin menutup form pembayaran?');
             }
           },
         });
@@ -227,7 +172,7 @@ function Payment() {
   
   useEffect(() => {
     if (isSuccess && isPaymentSuccess) {
-      toast.success('Payment success! Redirecting...');
+      toast.success('Pembayaran berhasil!');
     const timer = setTimeout(() => {
       navigate({ to : `/users/private/payment/success?id=${id}`});
     }, 4000);
@@ -236,28 +181,42 @@ function Payment() {
     }
   }, [transaction, navigate]);
 
-  const handleCancelTransaction = async () => {
-    const confirmCancel = window.confirm("Are you sure you want to cancel this transaction?");
-  
-  if (!confirmCancel) {
-    // User declined the action
-    toast.info("Transaction cancellation aborted.");
-    return;
-  }
+  const { mutate: cancelTransactionMutation } = useMutation({
+    mutationFn: () => cancelTransaction(id),
+    onSuccess: () => {
+      toast.success("Pembatalan transaksi berhasil", {
+        position: "bottom-center",
+        autoClose: 5000,
+      });
+      navigate({ to: `/users/private/order-history` });
+    },
+    onError: (err) => {
+      toast.warn("Harap pilih metode pembayaran sebelum membatalkan.");
+    },
+  });
 
-    try {
-    const response = await cancelTransactionMutation();
-    if (response.status) {
-      toast.success("Transaction cancelled successfully");
-      navigate({ to: `/` });
+  const handleCancelTransaction = async () => {
+    const confirmCancel = window.confirm("Apakah yakin untuk membatalkan transaksi?");
+  
+    if (confirmCancel) {
+      cancelTransactionMutation(); 
+      // try {
+      //   const response = await cancelTransactionMutation();
+      //   if (response.status) {
+      //     toast.success("Pembatalan transaksi berhasil");
+      //     navigate({ to: `/users/private/order-history` });
+      //   } else {
+      //     toast.error("Gagal membatalkan transaksi");
+      //   }
+      // } catch (error) {
+      //   toast.error("An error occurred while cancelling the transaction.");
+      // }
     } else {
-      toast.error("Failed to cancel transaction");
+      // User declined the action
+      toast.info("Pembatalan transaksi dibatalkan.");
     }
-  } catch (error) {
-    console.error("Error cancelling transaction:", error);
-    toast.error("An error occurred while cancelling the transaction.");
-  }
-}
+  };
+  
 
   return (
     <div className="payment-page">
@@ -268,7 +227,7 @@ function Payment() {
         draggable
       />
       <Row className="justify-content-center mt-2 mb-4 py-3 shadow-sm">
-        <Col lg={9} md={10}>
+        <Col lg={10} md={9} sm={9} xs={10}>
           <BreadcrumbNav
             items={[
               { label: 'Isi Data Diri', path: '/users/private/checkout' },
@@ -276,13 +235,15 @@ function Payment() {
               { label: 'Selesai' },
             ]}
           />
-          <AlertBox
-            type="warning"
-            message='Selesaikan pembayaran anda 15 menit setelah memilih metode pembayaran'
-          />
+           {timeRemaining !== null && timeRemaining > 0 && (
+        <AlertBox
+          type="warning"
+          message={`Selesaikan pembayaran anda dalam ${formatTime(timeRemaining)}`}
+        />
+      )}
         </Col>
       </Row>
-      <Container>
+      <div className='m-3'>
          {!token || token.trim() === "" ? (
                   <div className="d-flex flex-column align-items-center mt-5 py-5">
                     <Col
@@ -300,26 +261,24 @@ function Payment() {
                       </p>
                     </Col>
                   </div>
-                ) : !isValidId(id) ? (
-                  <p style={{ color: 'red' }}>Invalid ID. Please check your URL. Redirecting ...</p>
+            ) : !isValidId(id) ? (
+              <p style={{ color: 'red' }}>Invalid ID. Please check your URL. Redirecting ...</p>
+            ) : (
+              <Row className="justify-content-center my-4 gap-1">
+                <Col lg={6} md={6} className="my-2 justify-content-center">
+                    <Card id="snap-container" className="p-3 shadow-sm rounded-3 w-100"></Card>
+                    {isLoading && <p className='my-2'>Memuat form pembayaran...</p>}
+                </Col>
+                <Col lg={4} md={4}>
+                {id ? (
+                  <OrderDetailCard id={id} handleCancelTransaction={handleCancelTransaction}/>
                 ) : (
-                  <Row className="justify-content-center my-4 gap-1">
-          <Col lg={6} md={6} className="my-2 justify-content-center">
-          {isLoading && <p>Memuat halaman pembayaran...</p>}
-              <Card id="snap-container" className="p-3 shadow-sm rounded-3 w-100"></Card>
-              {/* <p className='my-5 text-secondary'>Halaman pembayaran tidak muncul? Silahkan refresh halaman</p> */}
-          </Col>
-          <Col lg={4} md={4}>
-          {id ? (
-            <OrderDetailCard id={id} handleCancelTransaction={handleCancelTransaction}/>
-          ) : (
-            <p className="text-danger">Transaction ID is missing</p>
-          )}
-          </Col>
-        </Row>
+                  <p className="text-danger">Transaction ID is missing</p>
                 )}
-        
-      </Container>
+                </Col>
+              </Row>
+            )}
+      </div>
     </div>
   )
 }

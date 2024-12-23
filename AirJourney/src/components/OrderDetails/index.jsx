@@ -169,7 +169,8 @@ const OrderDetailCard = ({
           >Detail Pesanan</div>
           </Col>
           <Col xs="auto">
-          <Alert
+          {isInOrderHistoryPage && (
+            <Alert
             className={`bg-${getPaymentStatus(transaction?.data?.payment?.status || "untracked")} text-white mb-0 align-items-end`}
             style={statusBadge}
           >
@@ -177,9 +178,10 @@ const OrderDetailCard = ({
               transaction?.data?.payment?.status || "Untracked"
             )}
           </Alert>
+          )}
           </Col>
           </Row>
-          <h6>
+          <h6 className="mb-1">
             Booking Code :{" "}
             <TruncatableText
               text={transaction?.data?.id || "Not found"}
@@ -256,12 +258,12 @@ const OrderDetailCard = ({
                   {transaction?.data?.departureFlight?.airline?.code}
                 </div>
                 <div className="info-box mt-2">
-                  <div className="info-title"
+                  <span className="info-title"
                   style={{
                       fontSize: "14px",
                       fontWeight: "bold",
                   }}
-                  >Informasi:</div>
+                  >Informasi:</span>
                   <ul className="list-unstyled">
                       <li>Baggage 20 kg</li>
                       <li>Cabin baggage 7 kg</li>
@@ -342,7 +344,7 @@ const OrderDetailCard = ({
           <Card.Body>
             <Row>
               <h6
-                className="text-center text-muted my-1"
+                className="text-center text-muted my-2"
                 style={{ fontSize: "0.9rem" }}
               >
                 --- Kepulangan ---
@@ -360,7 +362,7 @@ const OrderDetailCard = ({
                 <div className="departure mt-2 mb-2">
                   <div className="date">
                     {formatDate(
-                      transaction?.data?.departureFlight?.departureDate
+                      transaction?.data?.returnFlight?.departureDate
                     )}
                   </div>
                 </div>
@@ -379,7 +381,7 @@ const OrderDetailCard = ({
                 </div>
               </Col>
               <span style={{ fontSize: "0.95rem" }}>
-                    {transaction?.data?.departureFlight?.airportFrom?.name}
+                    {transaction?.data?.returnFlight?.airportFrom?.name}
                   </span>
             </Row>
             <hr />
@@ -444,12 +446,9 @@ const OrderDetailCard = ({
                 <div className="arrival mt-2 mb-2">
                   <div className="date">
                     {formatDate(
-                      transaction?.data?.departureFlight?.arrivalDate
+                      transaction?.data?.returnFlight?.arrivalDate
                     )}
                   </div>
-                  <span style={{ fontSize: "0.95rem" }}>
-                    {transaction?.data?.departureFlight?.airportTo?.name}
-                  </span>
                 </div>
               </Col>
               <Col lg={5}>
@@ -465,18 +464,9 @@ const OrderDetailCard = ({
                   Kedatangan
                 </div>
               </Col>
-              <Col lg={6}>
-                <div
-                  className="Kedatangan"
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                    textAlign: "right",
-                  }}
-                >
-                  {transaction?.data?.arrivalFlight?.airportTo?.name}
-                </div>
-              </Col>
+              <span style={{ fontSize: "0.95rem" }}>
+                {transaction?.data?.returnFlight?.airportTo?.name}
+              </span>
             </Row>
             <hr />
             <Row className="mt-2 mb-2">
@@ -512,33 +502,23 @@ const OrderDetailCard = ({
         className="p-3 shadow-sm rounded-3 w-100"
       >
         <Form>
-          <div>
           {isInOrderHistoryPage && (
+          <div>
             <PassengerList transaction={transaction}/>
-          )}
-            {/* <Row>
-              <span>Penumpang :</span>
-              <div>
-                {transaction?.data?.passenger?.length > 0 ? (
-                  transaction.data.passenger.map((passenger, index) => (
-                    <Row key={passenger.id} className="d-flex flex-column" style={{ color: "#7126B5" }}>
-                      <span className="no-wrap">
-                        {index + 1} : {passenger.title} {passenger.firstName}{" "}
-                        {passenger.familyName} |{" "}
-                        <TruncatableText text={passenger.id} maxLength={15} />
-                      </span>
-                    </Row>
-                  ))
-                ) : (
-                  <p>No passengers available.</p>
-                )}
-              </div>
-            </Row> */}
             <hr />
           </div>
+          )}
 
           <Row className="my-2">
-            <h6>Rincian Harga</h6>
+            <span
+                  className="hargadeparture mb-2"
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Rincian Harga
+                </span>
             <Col xs={7}>
               {Object.entries(passengerCounts).map(([type, count]) => (
                 <div key={type}>
@@ -582,7 +562,15 @@ const OrderDetailCard = ({
           <hr />
           <Row className="mt-2 justify-content-between">
             <Col>
-              <h5>Total :</h5>
+              <span
+                  className="hargadeparture"
+                  style={{
+                    fontSize: "1.2rem",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Total :
+                </span>
             </Col>
             <Col className="text-end align-self-start">
               {paymentStatus === "CANCELLED" ? (
@@ -638,7 +626,15 @@ const OrderDetailCard = ({
           {!isInOrderHistoryPage && (
             <Button
               onClick={handleCancelTransaction}
-              className="btn-danger w-100 my-2 py-2 rounded-3"
+              style={{
+                backgroundColor: "#dc3545",
+                border: "none",
+                borderRadius: "8px",
+                width: "100%",
+                padding: "10px 0",
+                fontSize: "1.1rem",
+                marginTop: "5px",
+              }}
             >
               Batalkan Pembayaran
             </Button>

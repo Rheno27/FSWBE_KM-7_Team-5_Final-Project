@@ -116,15 +116,16 @@ function EditProfile() {
         <div className="progress-bar">
           <div className="d-flex flex-column">
             <div className="progress-steps mb-2 d-flex align-items-start mx-4">
-              <h4
+              <div
                 className="progress-step"
                 style={{
+                  fontSize: '20px',
                   fontWeight: 'bold',
                   marginRight: '10px',
                 }}
               >
                 Akun
-              </h4>
+              </div>
             </div>
             <Row>
               <Col lg={12}>
@@ -163,8 +164,18 @@ function EditProfile() {
       <Row>
         {/* Left Side */}
         <Col lg={5}>
-          <Row className="mt-4 mx-auto" style={{ width: '90%' }}>
-            <h5>
+          <Row className="mt-4 mx-auto" style={{ width: '100%' }}>
+            <div 
+            className="ubahprofil"
+            style={{
+              marginTop: '10px',
+              borderRadius: '10px',
+              padding: '10px 20px',
+              color: '#7126B5',
+              fontWeight: 'bold',
+              fontSize: '20px',
+            }}
+            >
               <DriveFileRenameOutlineIcon
                 style={{
                   marginRight: '20px',
@@ -172,33 +183,23 @@ function EditProfile() {
                 }}
               />
               Ubah Profil
-            </h5>
+            </div>
             <hr style={{ marginTop: '10px', color: '#3c3c3c' }} />
-            <h5>
-              <SettingsIcon
-                style={{
-                  marginRight: '20px',
-                  color: '#7126B5',
-                }}
-              />
-              Pengaturan Akun
-            </h5>
-            <hr style={{ marginTop: '10px', color: '#3c3c3c' }} />
-            <h5
+            <div
               onClick={logout}
               style={{
                 cursor: 'pointer',
+                backgroundColor: '#7126B5',
+                marginTop: '10px',
+                borderRadius: '10px',
+                padding: '10px 20px',
+                color: 'white',
+                marginBottom: '20px',
+                textAlign: 'center',
               }}
             >
-              <LogoutIcon
-                style={{
-                  marginRight: '20px',
-                  color: '#7126B5',
-                }}
-              />
               Keluar
-            </h5>
-            <hr style={{ marginTop: '10px', color: '#3c3c3c' }} />
+            </div>
           </Row>
         </Col>
 
@@ -206,7 +207,14 @@ function EditProfile() {
         <Col lg={7}>
           <Card className="shadow-sm mb-4" style={{ borderRadius: '8px' }}>
             <Card.Body>
-              <h4 className="fw-bold">Ubah Data Profil</h4>
+              <div 
+                className="fw-bold"
+                style={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  color: '',
+                }}
+              >Ubah Data Profil</div>
               <div
                 className="p-3 shadow-sm rounded mb-2"
                 style={{

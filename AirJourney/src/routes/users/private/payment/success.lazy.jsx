@@ -17,7 +17,7 @@ function PaymentSuccess() {
   return (
     <div>
       <Row className="justify-content-center mt-2 mb-4 py-3 shadow-sm">
-        <Col lg={9} md={10}>
+        <Col lg={9} md={10} sm={10} xs={10}>
           <BreadcrumbNav
             items={[
               { label: 'Isi Data Diri', path: '/users/private/checkout' },
@@ -31,13 +31,13 @@ function PaymentSuccess() {
           />
         </Col>
       </Row>
-      <Container className="py-5">
+      <Container className="py-4">
         <div className="d-flex flex-column align-items-center">
-          <Col xs={9} sm={8} md={5} lg={4} className="text-center mt-2">
+          <Col xs={12} sm={10} md={5} lg={5} className="text-center">
             <img
               src={paymentSuccess}
               alt="payment success"
-              className="img-fluid mb-2 mx-auto w-75"
+              className="img-fluid mb-2 mx-auto w-50"
             />
             <p style={{ color: '#a06ece', fontWeight: 500 }}>
               Selamat!<br />
@@ -58,7 +58,7 @@ function PaymentSuccess() {
                 boxShadow: '2px 2px 5px 1px rgba(0, 0, 0, 0.1)',
                 width: '100%',
                 padding: '10px 0',
-                margin: '15px 0',
+                margin: '10px 0',
               }}
             >
               Terbitkan Tiket
