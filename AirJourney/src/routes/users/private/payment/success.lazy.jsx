@@ -56,14 +56,14 @@ function PaymentSuccess({ transaction }) {
     },
 
     onError: (error) => {
-      console.log("Error sending ticket:", error);
+      console.log("Error mengirim tiket:", error);
       if (error.response?.status === 404) {
-        toast.error("Your email was not found in our records.", {
+        toast.error("Email anda tidak ditemukan di database kami.", {
           autoClose: 4000,
           position: "bottom-center",
         });
       } else {
-        toast.error("An unexpected error occured");
+        toast.error("Terjadi kesalahan yang tidak diketahui");
       }
     },
   });

@@ -70,7 +70,7 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
   };
 
   const formatDate = (dateStr) => {
-    if (!dateStr) return "Not found";
+    if (!dateStr) return "tidak ditemukan";
     return new Intl.DateTimeFormat("en-GB", {
       day: "2-digit",
       month: "short",
@@ -109,7 +109,7 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
     }
   }
 
-  const paymentStatus = transaction?.data?.payment?.status || 'untracked';
+  const paymentStatus = transaction?.data?.payment?.status || 'tidak terlacak';
 
   const handlePaymentRedirect = () => {
     let url = `/users/private/payment/${id}`;
@@ -129,22 +129,22 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
           </Col>
           <Col xs='auto' className="text-end align-self-start">
             <Alert
-              className={`bg-${getPaymentStatus(transaction?.data?.payment?.status || 'untracked')} text-white`}
+              className={`bg-${getPaymentStatus(transaction?.data?.payment?.status || 'tidak terlacak')} text-white`}
               style={statusBadge}
             >
-              {capitalizeFirstLetter(transaction?.data?.payment?.status || 'Untracked')}
+              {capitalizeFirstLetter(transaction?.data?.payment?.status || 'tidak terlacak')}
             </Alert>
           </Col>
         </Row>
         <h6>
-          Booking Code : <TruncatableText text={transaction?.data?.id || "Not found"} maxLength={15} />
+          Kode Pemesanan : <TruncatableText text={transaction?.data?.id || "tidak ditemukan"} maxLength={15} />
         </h6>
         <div className="mt-3">
-          {/* Departure Flight Section */}
+          {/* Penerbangan Keberangkatan Section */}
           <Row className="d-flex justify-content-between">
-            <h6 className="text-center text-muted" style={{fontSize:'0.9rem'}}>--- Departure Flight ---</h6>
+            <h6 className="text-center text-muted" style={{fontSize:'0.9rem'}}>--- Penerbangan Keberangkatan ---</h6>
             <Col xs={6} className="d-flex flex-column">
-              <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Origin :</span>
+              <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Asal :</span>
               <span>
                 <strong>
                   {transaction?.data?.departureFlight?.departureTime}
@@ -158,7 +158,7 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
               <span style={{color:'#7126B5', fontSize:'0.95rem'}}>{transaction?.data?.departureFlight?.airportFrom?.name}</span>
             </Col>
             <Col xs={6} className="d-flex flex-column align-items-end">
-              <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Destination :</span>
+              <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Tujuan :</span>
               <span>
                 <strong>
                   {transaction?.data?.departureFlight?.arrivalTime}
@@ -171,7 +171,7 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
             </Col>
           </Row>
           <Row className="mt-2">
-            <span className="text-center text-muted" style={{fontSize:'0.9rem'}}>------ Airline ------</span>
+            <span className="text-center text-muted" style={{fontSize:'0.9rem'}}>------ Maskapai Penerbangan ------</span>
             <Col xs={2}>
               <img
                 src={transaction?.data?.departureFlight?.airline?.image}
@@ -183,7 +183,7 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
                 <b>
                   {transaction?.data?.departureFlight?.airline?.name} -{" "}
                   {capitalizeFirstLetter(
-                    transaction?.data?.departureFlight?.class || "Not found"
+                    transaction?.data?.departureFlight?.class || "tidak ditemukan"
                   )}
                 </b>
                 <br />
@@ -192,15 +192,15 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
             </Col>
           </Row>
           <hr style={{ height: '2px', backgroundColor: '#000000', border: 'none' }}/>
-          {/* End of departure flight section */}
+          {/* End of Penerbangan Keberangkatan section */}
 
           {/* Return Flight Section */}
           {transaction?.data?.returnFlight && (
           <>
             <Row className="d-flex justify-content-between">
-              <h6 className="text-center text-muted" style={{fontSize:'0.9rem'}}>--- Return Flight ---</h6>
+              <h6 className="text-center text-muted" style={{fontSize:'0.9rem'}}>--- Penerbangan Kembali ---</h6>
               <Col xs={6} className="d-flex flex-column">
-                <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Origin :</span>
+                <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Asal :</span>
                 <span>
                   <strong>
                     {transaction?.data?.returnFlight?.departureTime}
@@ -214,7 +214,7 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
                 <span style={{color:'#7126B5', fontSize:'0.95rem'}}>{transaction?.data?.returnFlight?.airportFrom?.name}</span>
               </Col>
               <Col xs={6} className="d-flex flex-column align-items-end">
-                <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Destination :</span>
+                <span style={{marginBottom:'5px', fontSize:'0.95rem'}}>Tujuan :</span>
                 <span>
                   <strong>
                     {transaction?.data?.returnFlight?.arrivalTime}
@@ -227,7 +227,7 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
               </Col>
             </Row>
             <Row className="mt-2">
-              <span className="text-center text-muted" style={{fontSize:'0.9rem'}}>------ Airline ------</span>
+              <span className="text-center text-muted" style={{fontSize:'0.9rem'}}>------ Maskapai Penerbangan ------</span>
               <Col xs={2}>
                 <img
                   src={transaction?.data?.returnFlight?.airline?.image}
@@ -239,7 +239,7 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
                     <b>
                     {transaction?.data?.returnFlight?.airline?.name} -{" "}
                     {capitalizeFirstLetter(
-                      transaction?.data?.returnFlight?.class || "Not found"
+                      transaction?.data?.returnFlight?.class || "tidak ditemukan"
                     )}
                     </b>
                   <br />
@@ -262,7 +262,7 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
                     </div>
                   ))
                 ) : (
-                  <p>No passengers available.</p>
+                  <p>Tidak ada penumpang.</p>
                 )}
               </div>
           </Row>
@@ -278,7 +278,7 @@ export const OrderDetailCard = ({ id, setTotalPrice }) => {
                 </span>
               </div>
             ))}
-            Tax
+            Pajak
           </Col>
           <Col xs={5} className="text-end align-self-start">
             <div className="d-flex flex-column">

@@ -39,7 +39,7 @@ export const SelectedFlight = ({selectedFlightId, setSelectedFlightId,setIsFromS
         >
             {isSuccess && (
                 <>
-                    <p className="mb-4">Penerbangan Awal :</p>
+                    <p className="mb-4">Penerbangan Keberangkatan :</p>
                     <div className="flex flex-col gap-1">
                         <p className="font-semibold">
                             {flight?.data?.data?.departureFlight.airline.name} - {flight?.data?.data?.departureFlight.class}

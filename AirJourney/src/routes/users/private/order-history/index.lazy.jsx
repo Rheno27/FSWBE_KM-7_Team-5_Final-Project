@@ -105,7 +105,7 @@ function OrderHistory({ id }) {
     onError: (error) => {
       toast.error(
         error.response?.data?.message ||
-          "An error occurred while fetching the transaction data"
+          "Terjadi kesalahan saat mengambil data transaksi"
       );
     },
     onSuccess: (transactions) => {
@@ -166,7 +166,7 @@ function OrderHistory({ id }) {
   useEffect(() => {
     // Show toast when token is missing or empty
     if (!token || token.trim() === "") {
-      toast.error("Unauthorized, redirect to homepage", {
+      toast.error("Tidak diizinkan, redirect ke halaman utama", {
         position: "bottom-center",
         autoClose: 3000,
       });
@@ -184,7 +184,7 @@ function OrderHistory({ id }) {
     if (selectedTransactionId) {
       navigate({ to: url });
     } else {
-      toast.error("Transaction ID is missing!");
+      toast.error("ID transaksi tidak ditemukan!");
     }
   };
 
@@ -211,12 +211,12 @@ function OrderHistory({ id }) {
     onError: (error) => {
       console.log("Error sending ticket:", error);
       if (error.response?.status === 404) {
-        toast.error("Your email was not found in our records.", {
+        toast.error("Email anda tidak ditemukan di database kami.", {
           autoClose: 4000,
           position: "bottom-center",
         });
       } else {
-        toast.error("An unexpected error occured");
+        toast.error("Terjadi kesalahan yang tidak diketahui");
       }
     },
   });
@@ -355,11 +355,11 @@ function OrderHistory({ id }) {
                           }
                         >
                           <Alert
-                            className={`bg-${getPaymentStatus(transaction?.payment?.status || "untracked")} text-white mb-0`}
+                            className={`bg-${getPaymentStatus(transaction?.payment?.status || "Tidak diketahui")} text-white mb-0`}
                             style={statusBadge}
                           >
                             {capitalizeFirstLetter(
-                              transaction?.payment?.status || "Untracked"
+                              transaction?.payment?.status || "Tidak diketahui"
                             )}
                           </Alert>
 
@@ -372,7 +372,7 @@ function OrderHistory({ id }) {
                               --- Keberangkatan (
                               {capitalizeFirstLetter(
                                 transaction?.departureFlight?.class ||
-                                  "Not found"
+                                  "Tidak diketahui"
                               )}
                               ) ---
                             </span>
@@ -383,7 +383,7 @@ function OrderHistory({ id }) {
                               <span>
                                 <b>
                                   {transaction?.departureFlight?.airportFrom
-                                    ?.city || "Not found"}
+                                    ?.city || "Tidak diketahui"}
                                 </b>
                               </span>
                               <br />
@@ -395,14 +395,14 @@ function OrderHistory({ id }) {
                               <br />
                               <span>
                                 {transaction?.departureFlight?.departureTime ||
-                                  "Not found"}
+                                  "Tidak diketahui"}
                               </span>
                             </Col>
                             <Col xs={4} className="p-0 text-center mx-auto">
                               <span className="pe-3 text-muted">
                                 {transaction?.departureFlight?.duration
                                   ? `${Math.floor(transaction.departureFlight?.duration / 60)}j ${transaction.departureFlight.duration % 60}m`
-                                  : "Not found"}
+                                  : "Tidak diketahui"}
                               </span>
                               <br />
                               <svg
@@ -433,7 +433,7 @@ function OrderHistory({ id }) {
                               <span>
                                 <b>
                                   {transaction?.departureFlight?.airportTo
-                                    ?.city || "Not found"}
+                                    ?.city || "Tidak diketahui"}
                                 </b>
                               </span>
                               <br />
@@ -445,7 +445,7 @@ function OrderHistory({ id }) {
                               <br />
                               <span>
                                 {transaction?.departureFlight?.arrivalTime ||
-                                  "Not found"}
+                                  "Tidak diketahui"}
                               </span>
                             </Col>
                           </Row>
@@ -463,7 +463,7 @@ function OrderHistory({ id }) {
                                   ---- Kepulangan (
                                   {capitalizeFirstLetter(
                                     transaction?.returnFlight?.class ||
-                                      "Not found"
+                                      "Tidak diketahui"
                                   )}
                                   ) ----
                                 </span>
@@ -474,7 +474,7 @@ function OrderHistory({ id }) {
                                   <span>
                                     <b>
                                       {transaction?.returnFlight?.airportTo
-                                        ?.city || "Not found"}
+                                        ?.city || "Tidak diketahui"}
                                     </b>
                                   </span>
                                   <br />
@@ -486,7 +486,7 @@ function OrderHistory({ id }) {
                                   <br />
                                   <span>
                                     {transaction?.returnFlight?.arrivalTime ||
-                                      "Not found"}
+                                      "Tidak diketahui"}
                                   </span>
                                 </Col>
                                 <Col
@@ -496,7 +496,7 @@ function OrderHistory({ id }) {
                                   <span className="text-muted">
                                     {transaction?.returnFlight?.duration
                                       ? `${Math.floor(transaction.returnFlight?.duration / 60)}j ${transaction.returnFlight.duration % 60}m`
-                                      : "Not found"}
+                                      : "Tidak diketahui"}
                                   </span>
                                   <br />
                                   <svg
@@ -527,7 +527,7 @@ function OrderHistory({ id }) {
                                   <span>
                                     <b>
                                       {transaction?.returnFlight?.airportFrom
-                                        ?.city || "Not found"}
+                                        ?.city || "Tidak diketahui"}
                                     </b>
                                   </span>
                                   <br />
@@ -539,7 +539,7 @@ function OrderHistory({ id }) {
                                   <br />
                                   <span>
                                     {transaction?.returnFlight?.departureTime ||
-                                      "Not found"}
+                                      "Tidak diketahui"}
                                   </span>
                                 </Col>
                               </Row>

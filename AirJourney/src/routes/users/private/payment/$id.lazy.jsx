@@ -33,14 +33,14 @@ function Payment() {
     enabled: !!id,
     onError: (err) => {
       toast.error(
-        err.message || "An error occurred while fetching transaction data"
+        err.message || "Terjadi kesalahan saat mengambil data transaksi"
       );
     },
   });
 
   useEffect(() => {
     if (!token || token.trim() === "") {
-      toast.error("Unauthorized, redirecting to homepage", {
+      toast.error("Tidak diizinkan, mengarahkan ke halaman utama", {
         position: "bottom-center", // Toast will appear at the bottom-center
         autoClose: 3000, 
       });
@@ -147,7 +147,7 @@ function Payment() {
   useEffect(() => {
     if (!transaction?.data) {
       // Handle case where transaction data is not available
-      toast.error("Data transaksi tidak ditemukan. Mengembalikan...", {
+      toast.error("Data transaksi tidak ditemukan. Memuat ulang halaman...", {
         position: "bottom-center",
         autoClose: 3000,
       });
@@ -161,8 +161,8 @@ function Payment() {
 
     if (id !== transaction?.data?.id) {
       // Priority: ID mismatch error
-      console.log("transaction", transaction);
-      toast.error("ID transaksi tidak ditemukan. Mengembalikan...", {
+      console.log("Transaksi", transaction);
+      toast.error("ID transaksi tidak ditemukan. Memuat ulang halaman...", {
         position: "bottom-center",
         autoClose: 3000,
       });
@@ -185,7 +185,7 @@ function Payment() {
     }
 
     // if (transaction?.data?.payment?.status === 'CANCELLED') {
-    //   toast.error("ID transaksi anda sudah kadaluarsa. Mengembalikan...", {
+    //   toast.error("ID transaksi anda sudah kadaluarsa. Memuat ulang halaman...", {
     //     position: "bottom-center", // Toast will appear at the bottom-center
     //     autoClose: 3000, 
     //   });
@@ -290,7 +290,7 @@ function Payment() {
                 {id ? (
                   <OrderDetailCard id={id} handleCancelTransaction={handleCancelTransaction}/>
                 ) : (
-                  <p className="text-danger">Transaction ID is missing</p>
+                  <p className="text-danger">ID transaksi tidak ditemukan</p>
                 )}
                 </Col>
               </Row>

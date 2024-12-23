@@ -19,17 +19,17 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
         enabled: !!id,
         onError: (err) => {
             toast.error(
-            err.message || "An error occurred while fetching transaction data"
+            err.message || "Terjadi kesalahan saat mengambil data transaksi"
             );
         },
     });
 
     if (isLoading) {
-        return <p>Loading order details...</p>;
+        return <p>Memuat detail pesanan...</p>;
     }
 
     if (isError || !detailTransaction) {
-        return <p>Error loading order details. Please try again.</p>;
+        return <p>Gagal memuat detail pesanan. Silakan coba lagi.</p>;
     }
     const allPassenger = detailTransaction?.data?.passenger || []
     const passengerAdult = allPassenger.filter(passenger => passenger.type === 'ADULT').length
@@ -121,7 +121,7 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                                     alignItems: "center",
                                 }}
                             >
-                                <img src={Thumbnail} alt="Flight" />
+                                <img src={detailTransaction?.data?.departureFlight?.airline?.logo || Thumbnail} alt="Flight" />
                             </div>
                         </Col>
                         <Col lg={10}>
@@ -160,9 +160,9 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                                     }}
                                     >Informasi:</div>
                                     <ul className="list-unstyled">
-                                        <li>Baggage 20 kg</li>
-                                        <li>Cabin baggage 7 kg</li>
-                                        <li>In Flight Entertainment</li>
+                                        <li>Bagasi 20 kg</li>
+                                        <li>Bagasi kabin 7 kg</li>
+                                        <li>Hiburan di pesawat</li>
                                     </ul>
                                 </div>
                             </div>
@@ -340,7 +340,7 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                                     alignItems: "center",
                                 }}
                             >
-                                <img src={Thumbnail} alt="Flight" />
+                                <img src={detailTransaction?.data?.returnFlight?.airline?.logo || Thumbnail} alt="Flight" />
                             </div>
                         </Col>
                         <Col lg={10}>
@@ -379,9 +379,9 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                                     }}
                                     >Informasi:</div>
                                     <ul className="list-unstyled">
-                                        <li>Baggage 20 kg</li>
-                                        <li>Cabin baggage 7 kg</li>
-                                        <li>In Flight Entertainment</li>
+                                        <li>Bagasi 20 kg</li>
+                                        <li>Bagasi kabin 7 kg</li>
+                                        <li>Hiburan di pesawat</li>
                                     </ul>
                                 </div>
                             </div>
@@ -492,13 +492,13 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                                 Departure
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                {passengerAdult} Adult
+                                {passengerAdult} Dewasa
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                {passengerChild} Child
+                                {passengerChild} Anak
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                {passengerInfant} Infant
+                                {passengerInfant} Bayi
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>Tax</div>
                         </Col>
@@ -545,13 +545,13 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                                         Return
                                     </div>
                                     <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                        {passengerAdult} Adult
+                                        {passengerAdult} Dewasa
                                     </div>
                                     <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                        {passengerChild} Child
+                                        {passengerChild} Anak
                                     </div>
                                     <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                        {passengerInfant} Infant
+                                        {passengerInfant} Bayi
                                     </div>
                                     <div style={{ fontSize: "16px", marginBottom: "5px" }}>Tax</div>
                                 </Col>
@@ -619,7 +619,7 @@ function OrderDetailCard({ id, handleCancelTransaction }) {
                 }}
                 onClick={handleCancelTransaction}
             >
-                Cencel Transaction
+                Batalkan Transaksi
             </Button>
             </Col>
         </>
