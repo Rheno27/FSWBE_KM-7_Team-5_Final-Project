@@ -328,11 +328,11 @@ const HomepageTicketSearch = () => {
                             {/* date */}
                             <div className="flex items-start flex-1 gap-3 relative sm:items-center">
                                 <DateRangeIcon color="disabled" />
-                                <span className="text-gray-500 w-10">Date</span>
+                                <span className="text-gray-500 w-10">Tanggal</span>
                                 <div className="flex flex-col gap-4 flex-1 justify-between md:flex-row phone:gap-0">
                                     <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
                                         <span className="text-gray-500 w-10">
-                                            Departure
+                                            Keberangkatan
                                         </span>
                                         <button
                                             className="flex-1 text-lg text-start font-semibold overflow-hidden whitespace-nowrap text-ellipsis"
@@ -348,7 +348,7 @@ const HomepageTicketSearch = () => {
                                     <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
                                         <div>
                                             <div className="text-gray-500 w-full flex justify-between">
-                                                <span>Return</span>
+                                                <span>Kembali</span>
                                                 <Switch
                                                     checked={isReturn}
                                                     onCheckedChange={() => {
@@ -412,7 +412,7 @@ const HomepageTicketSearch = () => {
                                     {/* passenger */}
                                     <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1 relative">
                                         <span className="text-gray-500 w-10">
-                                            Passengers
+                                            Penumpang
                                         </span>
                                         <button
                                             className="flex-1 text-lg text-start font-semibold text-nowrap"
@@ -449,7 +449,7 @@ const HomepageTicketSearch = () => {
                                     <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1 relative">
                                         <div>
                                             <span className="text-gray-500 w-10">
-                                                Seat Class
+                                                Kelas Kursi
                                             </span>
                                         </div>
                                         <button

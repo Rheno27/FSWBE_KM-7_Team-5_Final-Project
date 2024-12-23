@@ -30,7 +30,6 @@ const Sidebar = ({
         } else if (Array.isArray(data)) {
           setAirlines(data);
         } else {
-          console.error('Unexpected data format from /airlines:', data);
         }
       })
       .catch(error => console.error('Error fetching airlines:', error));

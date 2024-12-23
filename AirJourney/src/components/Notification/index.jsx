@@ -41,7 +41,6 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
           setLocalNotifications(response.data.data);
         }
       } catch (err) {
-        console.error("Failed to fetch notifications:", err);
         setLocalError("Failed to fetch notifications.");
       } finally {
         setLocalLoading(false);

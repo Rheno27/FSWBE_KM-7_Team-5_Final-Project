@@ -37,6 +37,7 @@ function EditProfile() {
 
   const handleLogout = useCallback(
     (event) => {
+      event.preventDefault()
       localStorage.removeItem('token')
       dispatch(setUser(null))
       dispatch(setToken(null))
@@ -57,10 +58,10 @@ function EditProfile() {
     mutationFn: updateUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      toast.success("Profil berhasil diperbarui")
+      toast.success("Profil berhasil diperbarui", { position: "bottom-center" })
     },
     onError: (error) => {
-      toast.error(error.message)
+      toast.error(error.message, { position: "bottom-center" })
     },
   })
 
@@ -84,24 +85,18 @@ function EditProfile() {
       if (phoneNumber) {
         const phoneRegex = /^\+?[0-9]{10,13}$/
         if (!phoneRegex.test(phoneNumber)) {
-          toast.error('Format nomor telepon tidak valid')
+          toast.error('Format nomor telepon tidak valid', { position: "bottom-center" })
           return
         }
         request.phoneNumber = phoneNumber
       }
     }
     if (Object.keys(request).length === 0) {
-      toast.info('Tidak ada perubahan yang dilakukan')
+      toast.info('Tidak ada perubahan yang dilakukan', { position: "bottom-center" })
       return
     }
     userUpdate(request)
   }
-
-  const logout = (event) => {
-    event.preventDefault()
-    handleLogout()
-  }
-
   return (
     <Container className="profile-page">
       <Container
@@ -116,15 +111,16 @@ function EditProfile() {
         <div className="progress-bar">
           <div className="d-flex flex-column">
             <div className="progress-steps mb-2 d-flex align-items-start mx-4">
-              <h4
+              <div
                 className="progress-step"
                 style={{
+                  fontSize: '20px',
                   fontWeight: 'bold',
                   marginRight: '10px',
                 }}
               >
                 Akun
-              </h4>
+              </div>
             </div>
             <Row>
               <Col lg={12}>
@@ -163,8 +159,18 @@ function EditProfile() {
       <Row>
         {/* Left Side */}
         <Col lg={5}>
-          <Row className="mt-4 mx-auto" style={{ width: '90%' }}>
-            <h5>
+          <Row className="mt-4 mx-auto" style={{ width: '100%' }}>
+            <div 
+            className="ubahprofil"
+            style={{
+              marginTop: '10px',
+              borderRadius: '10px',
+              padding: '10px 20px',
+              color: '#7126B5',
+              fontWeight: 'bold',
+              fontSize: '20px',
+            }}
+            >
               <DriveFileRenameOutlineIcon
                 style={{
                   marginRight: '20px',
@@ -172,33 +178,23 @@ function EditProfile() {
                 }}
               />
               Ubah Profil
-            </h5>
+            </div>
             <hr style={{ marginTop: '10px', color: '#3c3c3c' }} />
-            <h5>
-              <SettingsIcon
-                style={{
-                  marginRight: '20px',
-                  color: '#7126B5',
-                }}
-              />
-              Pengaturan Akun
-            </h5>
-            <hr style={{ marginTop: '10px', color: '#3c3c3c' }} />
-            <h5
-              onClick={logout}
+            <div
+              onClick={handleLogout}
               style={{
                 cursor: 'pointer',
+                backgroundColor: '#7126B5',
+                marginTop: '10px',
+                borderRadius: '10px',
+                padding: '10px 20px',
+                color: 'white',
+                marginBottom: '20px',
+                textAlign: 'center',
               }}
             >
-              <LogoutIcon
-                style={{
-                  marginRight: '20px',
-                  color: '#7126B5',
-                }}
-              />
               Keluar
-            </h5>
-            <hr style={{ marginTop: '10px', color: '#3c3c3c' }} />
+            </div>
           </Row>
         </Col>
 
@@ -206,7 +202,14 @@ function EditProfile() {
         <Col lg={7}>
           <Card className="shadow-sm mb-4" style={{ borderRadius: '8px' }}>
             <Card.Body>
-              <h4 className="fw-bold">Ubah Data Profil</h4>
+              <div 
+                className="fw-bold"
+                style={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  color: '',
+                }}
+              >Ubah Data Profil</div>
               <div
                 className="p-3 shadow-sm rounded mb-2"
                 style={{

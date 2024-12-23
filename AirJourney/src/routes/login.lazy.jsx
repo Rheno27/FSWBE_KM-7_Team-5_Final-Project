@@ -10,6 +10,7 @@ import { setToken } from "../redux/slices/auth";
 import { login } from "../services/auth";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 export const Route = createLazyFileRoute("/login")({
     component: Login,
@@ -46,7 +47,7 @@ function Login() {
             navigate({ to: "/" });
         },
         onError: (error) => {
-            toast.error(error.message);
+            toast.error(error.message, { position: "bottom-center" });
         },
     });
 
@@ -60,6 +61,38 @@ function Login() {
 
         //hit api
         loginUser(body);
+    };
+
+    const handleGoogleLogin = () => {
+        const popup = window.open(
+            `${import.meta.env.VITE_API_URL}/auth/google`,
+            "Google Login",
+            "width=500,height=500"
+        );
+
+        const popupInterval = setInterval(() => {
+            try {
+                const currentUrl = popup.location.href;
+                if (currentUrl.includes("/auth/google/callback")) {
+                    clearInterval(popupInterval);
+                    const urlParams = new URLSearchParams(
+                        new URL(currentUrl).search
+                    );
+                    const token = urlParams.get("token");
+                    dispatch(setToken(token));
+                    localStorage.setItem("token", token);
+                    toast.success("Authentikasi berhasil", { position: "bottom-center" });
+                    navigate({ to: "/" });
+                    popup.close();
+                }
+            } catch (err) {
+                console.log(err);
+            }
+
+            if (popup.closed) {
+                clearInterval(popupInterval);
+            }
+        }, 500);
     };
 
     return (
@@ -79,34 +112,27 @@ function Login() {
                     className="d-none d-lg-block p-0"
                     style={{
                         position: "relative",
+                        overflow: "hidden",
                     }}
                 ></Col>
                 <Col
                     lg={6}
                     md={12}
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: "1rem",
-                    }}
+                    className="d-flex flex-column align-items-center justify-content-center p-5"
                 >
                     <Form
                         style={{
                             width: "100%",
                             maxWidth: "452px",
-                            backgroundColor: "rgba(255, 255, 255, 0.85)",
-                            borderRadius: "16px",
-                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                            padding: "1.5rem",
-                            margin: "0 auto",
+                            padding: "20px",
                         }}
+                        className="bg-white bg-opacity-75 border-1 rounded-xl p-5 shadow-sm"
                         onSubmit={onSubmit}
                     >
                         <h1
+                            className="mb-4"
                             style={{
-                                fontSize: "1.8rem",
+                                fontSize: "2rem",
                                 fontWeight: "bold",
                                 fontFamily: "Poppins, sans-serif",
                                 textAlign: "left",
@@ -116,7 +142,7 @@ function Login() {
                             Masuk
                         </h1>
                         <Form.Group controlId="email" className="mb-3">
-                            <Form.Label style={{ fontSize: "1rem" }}>Email</Form.Label>
+                            <Form.Label>Email</Form.Label>
                             <Form.Control
                                 type="email"
                                 placeholder="Example: johndoe@gmail.com"
@@ -125,8 +151,6 @@ function Login() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 style={{
                                     borderRadius: "16px",
-                                    padding: "0.75rem",
-                                    fontSize: "0.9rem",
                                 }}
                             />
                         </Form.Group>
@@ -175,13 +199,13 @@ function Login() {
                         </Form.Group>
                         <Button
                             type="submit"
+                            className="w-100"
                             style={{
                                 backgroundColor: "#7126B5",
                                 borderColor: "#7126B5",
                                 borderRadius: "16px",
                                 marginBottom: "16px",
                             }}
-                            className="w-100"
                         >
                             Masuk
                         </Button>
