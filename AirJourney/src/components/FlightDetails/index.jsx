@@ -123,7 +123,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                                         alignItems: "center",
                                     }}
                                 >
-                                    <img src={Thumbnail} alt="Flight" />
+                                    <img src={detailFlight?.departureFlight?.airline?.image || Thumbnail} alt="Flight" />
                                 </div>
                             </Col>
                             <Col lg={10}>
@@ -342,7 +342,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                                     alignItems: "center",
                                 }}
                             >
-                                <img src={Thumbnail} alt="Flight" />
+                                <img src={returnDetailFlight?.departureFlight?.airline?.image || Thumbnail} alt="Flight" />
                             </div>
                         </Col>
                         <Col lg={10}>
