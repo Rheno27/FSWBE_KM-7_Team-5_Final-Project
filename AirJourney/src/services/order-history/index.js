@@ -12,7 +12,6 @@ export const getTransactionById = async (id) => {
     });
     return response.data;
   } catch (error) {
-    console.log("error.response?.data? :", error.response?.data);
     throw new Error(error.response?.data?.message || "Something went wrong");
   }
 };
@@ -33,7 +32,6 @@ export const getAllTransactions = async () => {
     });
     return response.data; // Transactions fetched for the logged-in user
   } catch (error) {
-    console.error("Error fetching transactions:", error);
     throw new Error(
       error.response?.data?.message || error.message || "Something went wrong"
     );
