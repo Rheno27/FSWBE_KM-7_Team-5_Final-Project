@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from 'react'
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { Row, Col, Card, Form, Button, Container } from 'react-bootstrap'
-import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav.jsx'
+import { Row, Col, Card } from 'react-bootstrap'
+import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav'
 import { AlertBox } from '../../../../components/ui/alertBox.jsx'
 import { toast, ToastContainer } from "react-toastify";
 import { useQuery } from '@tanstack/react-query'
@@ -9,7 +9,6 @@ import OrderDetailCard from "../../../../components/OrderDetails";
 import { getDetailTransaction, cancelTransaction } from '../../../../services/transaction/index.js'
 import { useSelector } from 'react-redux'
 import { useMutation } from '@tanstack/react-query'
-import { use } from 'react'
 
 export const Route = createLazyFileRoute('/users/private/payment/$id')({
   component: Payment,
@@ -19,24 +18,12 @@ function Payment() {
   const { id } = Route.useParams();
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const [timeRemaining, setTimeRemaining] = useState(null);
 
   const isValidId = (id) => {
     if (!id) return false;
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     return uuidRegex.test(id);
   };
-  
-  const { data: transaction, isSuccess, isError, isLoading } = useQuery({
-    queryKey: ["transaction", id],
-    queryFn: () => getDetailTransaction(id),
-    enabled: !!id,
-    onError: (err) => {
-      toast.error(
-        err.message || "An error occurred while fetching transaction data"
-      );
-    },
-  });
 
   useEffect(() => {
     if (!token || token.trim() === "") {
@@ -61,6 +48,17 @@ function Payment() {
     }
 
   }, [id, token, navigate]);
+  
+  const { data: transaction, isSuccess, isError, isLoading } = useQuery({
+    queryKey: ["transaction", id],
+    queryFn: () => getDetailTransaction(id),
+    enabled: !!id,
+    onError: (err) => {
+      toast.error(
+        err.message || "An error occurred while fetching transaction data"
+      );
+    },
+  });
 
 
   const capitalizeFirstLetter = (str) => {
@@ -68,41 +66,16 @@ function Payment() {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(); // Capitalize the first letter and append the rest
   };
   
-  const expiredAt = transaction?.data?.payment?.expiredAt
-
-  useEffect(() => {
-    if (!expiredAt) return;
-
-    const calculateTimeRemaining = () => {
-      const expirationTime = new Date(expiredAt).getTime();
-      const currentTime = new Date().getTime();
-      const timeLeft = expirationTime - currentTime;
-
-      if (timeLeft <= 0) {
-        setTimeRemaining(0);
-        clearInterval(timer); // Stop the timer if the time has expired
-      } else {
-        setTimeRemaining(timeLeft);
-      }
-    };
-
-    const timer = setInterval(() => {
-      calculateTimeRemaining();
-    }, 1000); // Update every second
-
-    // Run the calculation on mount
-    calculateTimeRemaining();
-
-    // Cleanup the interval on unmount
-    return () => clearInterval(timer);
-  }, [expiredAt]);
-
-  const formatTime = (time) => {
-    const hours = Math.floor(time / (1000 * 60 * 60));
-    const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((time % (1000 * 60)) / 1000);
-    return `${hours}:${minutes}:${seconds}`;
-  };
+  const expiredAt = new Date(
+    transaction?.data?.payment?.expiredAt
+  ).toLocaleString("id-ID", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  })
 
   const isPaymentSuccess = transaction?.data?.payment?.status === 'SUCCESS';
 
@@ -145,41 +118,46 @@ function Payment() {
   }, [isSuccess, transaction]);
 
   useEffect(() => {
-    if (!transaction?.data) {
-      // Handle case where transaction data is not available
-      toast.error("Data transaksi tidak ditemukan. Mengembalikan...", {
+    if (transaction?.isError) {
+      // Backend error occurred or transaction data could not be fetched
+      toast.error("Terjadi kesalahan saat mengambil data transaksi. Mengembalikan...", {
         position: "bottom-center",
         autoClose: 3000,
       });
-    
+  
       const timer = setTimeout(() => {
         navigate({ to: '/users/private/order-history' });
       }, 3000);
-    
+  
       return () => clearTimeout(timer);
     }
 
-    if (id !== transaction?.data?.id) {
-      // Priority: ID mismatch error
-      console.log("transaction", transaction);
-      toast.error("ID transaksi tidak ditemukan. Mengembalikan...", {
-        position: "bottom-center",
-        autoClose: 3000,
-      });
+    if (!transaction?.data) {
+      if (id !== transaction?.data?.id) {
+        // ID mismatch detected
+        toast.error("ID transaksi tidak ditemukan. Mengembalikan...", {
+          position: "bottom-center",
+          autoClose: 3000,
+        });
     
-      const timer = setTimeout(() => {
-        navigate({ to: '/users/private/order-history' }); // Redirect to the order history page
-      }, 3000);
+        const timer = setTimeout(() => {
+          navigate({ to: '/users/private/order-history' }); // Redirect to the order history page
+        }, 3000);
     
-      return () => clearTimeout(timer);
+        return () => clearTimeout(timer);
+      }
+      return // Prevent toast or navigation until we know the status
     }
     
     if (isSuccess && isPaymentSuccess) {
       // Payment success logic
-      toast.success('Pembayaran berhasil!');
+      toast.success('Pembayaran berhasil!', {
+        position: "bottom-center",
+        autoClose: 5000,
+      });
       const timer = setTimeout(() => {
         navigate({ to: `/users/private/payment/success?id=${id}` });
-      }, 4000);
+      }, 5000);
     
       return () => clearTimeout(timer);
     }
@@ -190,11 +168,11 @@ function Payment() {
     //     autoClose: 3000, 
     //   });
   
-    //   const timer = setTimeout(() => {
-    //     navigate({ to : '/users/private/order-history'}); // Redirect to the homepage
-    //   }, 3000);
+      // const timer = setTimeout(() => {
+      //   navigate({ to : '/users/private/order-history'}); // Redirect to the homepage
+      // }, 3000);
 
-    //   return () => clearTimeout(timer);
+      // return () => clearTimeout(timer);
     // }
   }, [id, transaction, navigate]);
 
@@ -205,7 +183,11 @@ function Payment() {
         position: "bottom-center",
         autoClose: 5000,
       });
-      navigate({ to: `/users/private/order-history` });
+      const timer = setTimeout(() => {
+        navigate({ to : '/users/private/order-history'}); // Redirect to the homepage
+      }, 5000);
+
+      return () => clearTimeout(timer);
     },
     onError: (err) => {
       toast.warn("Harap pilih metode pembayaran sebelum membatalkan.");
@@ -252,12 +234,10 @@ function Payment() {
               { label: 'Selesai' },
             ]}
           />
-           {timeRemaining !== null && timeRemaining > 0 && (
         <AlertBox
           type="warning"
-          message={`Selesaikan pembayaran anda dalam ${formatTime(timeRemaining)}`}
+          message={`Selesaikan pembayaran anda sebelum ${expiredAt}`}
         />
-      )}
         </Col>
       </Row>
       <div className='m-3'>
