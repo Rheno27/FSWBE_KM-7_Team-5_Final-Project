@@ -16,7 +16,7 @@ export const SelectedFlight = ({selectedFlightId, setSelectedFlightId,setIsFromS
     const clickHandler = () =>{
       setIsFromSelected(false);
       setSelectedFlightId(null);
-      fetchFlightsData(true,returnDate,true);
+      fetchFlightsData(true,returnDate,true,true);
     }
 
     return (
@@ -29,7 +29,7 @@ export const SelectedFlight = ({selectedFlightId, setSelectedFlightId,setIsFromS
                 width: "70%",
                 height: "auto",
                 marginLeft: "5rem",
-                marginTop: "2rem",
+                marginBottom: "2rem",
                 // Responsive design for small screens
                 "@media (max-width: 768px)": {
                     width: "100%",
@@ -42,13 +42,13 @@ export const SelectedFlight = ({selectedFlightId, setSelectedFlightId,setIsFromS
                     <p className="mb-4">Penerbangan Awal :</p>
                     <div className="flex flex-col gap-1">
                         <p className="font-semibold">
-                            {flight?.data.data.departureFlight.airline.name} - {flight?.data.data.departureFlight.class}
+                            {flight?.data?.data?.departureFlight.airline.name} - {flight?.data?.data?.departureFlight.class}
                         </p>
                         <div className="flex flex-col gap-3">
                             <div className="flex justify-between">
-                                <p className="font-bold">{flight?.data.data.departureFlight.departureTime} - {flight?.data.data.departureFlight.arrivalTime}</p>
+                                <p className="font-bold">{flight?.data?.data?.departureFlight.departureTime} - {flight?.data?.data?.departureFlight.arrivalTime}</p>
                                 <p className="text-darkblue4 font-bold">
-                                    IDR {flight?.data.data.departureFlight.price}
+                                    IDR {flight?.data?.data?.departureFlight.price}
                                 </p>
                             </div>
                             <div className="flex justify-end">

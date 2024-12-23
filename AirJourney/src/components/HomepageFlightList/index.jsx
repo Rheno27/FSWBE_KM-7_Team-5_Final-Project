@@ -3,6 +3,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import HomepageFlightClick from "../HomepageFlightClick";
+import { useQuery } from "@tanstack/react-query";
 
 const HomepageFlightList = () => {
     const [isHasMore, setIsHasMore] = useState(true);
@@ -29,7 +30,9 @@ const HomepageFlightList = () => {
 
     const seedLoader = (destinationQuery, isDestinationChanged) => {
         setIsHasMore(true);
-        const params = {};
+        const params = {
+            favourite: true,
+        };
 
         if (destination != "ALL") {
             params.continent = destinationQuery || destination;
@@ -37,20 +40,24 @@ const HomepageFlightList = () => {
         if (isDestinationChanged) {
             setDestinationList([]);
         } else if (destinationList.length > 0) {
-            params.cursorId = cursorId;
+            params.page = cursorId;
         }
 
         axios
             .get(`${import.meta.env.VITE_API_URL}/flights`, { params })
             .then((res) => {
+                const newFlights = res.data.data.filter((flight) => {
+                    return (
+                        !destinationList.find(
+                            (existingFlight) => existingFlight.id === flight.id
+                        ) && new Date(flight.departureDate) > new Date()
+                    );
+                });
                 isDestinationChanged
                     ? setDestinationList(res.data.data)
-                    : setDestinationList([
-                          ...destinationList,
-                          ...res.data.data,
-                      ]);
-                setCursorId(res.data.meta.cursorId);
-                if (res.data.data.length < 3) {
+                    : setDestinationList([...destinationList, ...newFlights]);
+                setCursorId(++res.data.meta.page);
+                if (res.data.meta.page >= res.data.meta.totalPage) {
                     setIsHasMore(false);
                 }
             });
@@ -63,6 +70,15 @@ const HomepageFlightList = () => {
             setIsInitialized(true);
         }
     }, [destination]);
+
+    useQuery({
+        queryKey: ["initiateFlights"],
+        queryFn: () => {
+            seedLoader();
+            return null;
+        },
+        refetchOnWindowFocus: false,
+    });
 
     return (
         <div className="w-full max-w-5xl flex flex-col px-8 pt-96 mt-16 gap-4 sm:mt-0 sm:pt-24 lg:pt-0 lg:mt-0">
@@ -90,7 +106,6 @@ const HomepageFlightList = () => {
                 dataLength={destinationList.length}
                 next={() => {
                     seedLoader();
-                    console.log("from infinite");
                 }}
                 hasMore={isHasMore}
                 loader={loadersCount.map((count, index) => (
@@ -125,9 +140,9 @@ const HomepageFlightList = () => {
                             }}
                         >
                             <img
-                                src={data?.picture}
+                                src={data?.image || data?.airline.image}
                                 alt=""
-                                className="rounded-md overflow-hidden w-full h-32"
+                                className="rounded-md overflow-hidden w-full h-32 object-contain"
                             />
                             <div className="flex flex-col flex-initial justify-between h-28">
                                 <p className="font-medium">
@@ -154,7 +169,10 @@ const HomepageFlightList = () => {
             </InfiniteScroll>
             {isShowModal && (
                 <div className="fixed z-0 w-full h-full inset-0 flex overflow-hidden items-center justify-center">
-                    <HomepageFlightClick setIsShowModal={setIsShowModal} selectedFlight={selectedFlight} />
+                    <HomepageFlightClick
+                        setIsShowModal={setIsShowModal}
+                        selectedFlight={selectedFlight}
+                    />
                     <div
                         className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
                         onClick={() => setIsShowModal(false)}

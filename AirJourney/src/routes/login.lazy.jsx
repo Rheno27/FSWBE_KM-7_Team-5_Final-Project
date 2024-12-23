@@ -157,6 +157,7 @@ function Login() {
                         <Form.Group controlId="password" className="mb-3">
                             <div className="d-flex justify-content-between align-items-center">
                                 <Form.Label>Password</Form.Label>
+<<<<<<< HEAD
                             </div>
                             <div style={{ position: "relative" }}>
                                 <Form.Control
@@ -196,6 +197,47 @@ function Login() {
                                     Lupa password
                                 </a>
                             </div>
+=======
+                            </div>
+                            <div style={{ position: "relative" }}>
+                                <Form.Control
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Enter password"
+                                    name="password"
+                                    value={password}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
+                                    style={{
+                                        paddingRight: "3rem",
+                                        borderRadius: "16px",
+                                    }}
+                                />
+                                <div
+                                    style={{
+                                        position: "absolute",
+                                        top: "30%",
+                                        right: "10px",
+                                        transform: "translateY(-50%)",
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={togglePassword}
+                                >
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </div>
+                                <a
+                                    href="/reset-password-request"
+                                    style={{
+                                        fontSize: "0.875rem",
+                                        fontWeight: "400",
+                                        color: "#7126B5",
+                                        textDecoration: "none",
+                                    }}
+                                >
+                                    Lupa password
+                                </a>
+                            </div>
+>>>>>>> 00dbf076d15f86d4fbee782414cbc135cdfb6229
                         </Form.Group>
                         <Button
                             type="submit"
@@ -211,7 +253,10 @@ function Login() {
                         </Button>
                         <Button
                             href={`${import.meta.env.VITE_API_URL}/auth/google`}
+<<<<<<< HEAD
                             // onClick={handleGoogleLogin}
+=======
+>>>>>>> 00dbf076d15f86d4fbee782414cbc135cdfb6229
                             className="border-1 border border-1 border-dark w-100 d-flex align-items-center justify-content-center gap-2"
                             style={{
                                 backgroundColor: "#fff",

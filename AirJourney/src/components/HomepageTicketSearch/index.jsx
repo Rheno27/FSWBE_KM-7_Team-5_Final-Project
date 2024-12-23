@@ -22,47 +22,75 @@ import {
     setClassTypeRedux,
     setIsReturnRedux,
 } from "../../redux/slices/searchQuery";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const HomepageTicketSearch = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    const storageFormData = localStorage.getItem("searchQuery");
     // for component state
     const [isReturn, setIsReturn] = useState(
         useSelector((state) => state.searchQuery.isReturn) || false
     );
     const [isReturnFilled, setIsReturnFilled] = useState(true);
     const [showDestinationModal, setShowDestinationModal] = useState(false);
+    const [showFromDestinationModal, setShowFromDestinationModal] =
+        useState(false);
     const [isFromModal, setIsFromModal] = useState(false);
     const [showDateModal, setShowDateModal] = useState(false);
     const [showPassengerModal, setShowPassengerModal] = useState(false);
     const [showClassModal, setShowClassModal] = useState(false);
-
     // for query
     const [fromDestination, setFromDestination] = useState(
-        useSelector((state) => state.searchQuery.fromDestination) || null
+        useSelector((state) => state.searchQuery.fromDestination) ||
+            storageFormData?.fromDestination ||
+            null
     );
     const [toDestination, setToDestination] = useState(
-        useSelector((state) => state.searchQuery.toDestination) || null
+        useSelector((state) => state.searchQuery.toDestination) ||
+            storageFormData?.toDestination ||
+            null
     );
     const [fromDestinationId, setFromDestinationId] = useState(
-        useSelector((state) => state.searchQuery.fromDestinationId) || null
+        useSelector((state) => state.searchQuery.fromDestinationId) ||
+            storageFormData?.airportIdFrom ||
+            null
     );
     const [toDestinationId, setToDestinationId] = useState(
-        useSelector((state) => state.searchQuery.toDestinationId || null)
+        useSelector((state) => state.searchQuery.toDestinationId) ||
+            storageFormData?.airportIdTo ||
+            null
+    );
+    const departureDateRedux = useSelector(
+        (state) => state.searchQuery.departureDate
+    );
+    const arrivalDateRedux = useSelector(
+        (state) => state.searchQuery.arrivalDate
     );
     const [searchDate, setSearchDate] = useState(
-        useSelector((state) => state.searchQuery.searchDate) || new Date()
+        arrivalDateRedux
+            ? {
+                  from: new Date(departureDateRedux),
+                  to: new Date(arrivalDateRedux),
+              }
+            : (departureDateRedux && new Date(departureDateRedux)) ||
+                  (storageFormData?.departureDate &&
+                      new Date(storageFormData?.departureDate)) ||
+                  new Date()
     );
     const [passenger, setPassenger] = useState(
-        useSelector((state) => state.searchQuery.passenger) || {
-            ADULT: 1,
-            CHILD: 0,
-            INFANT: 0,
-        }
+        useSelector((state) => state.searchQuery.passenger) ||
+            storageFormData?.passenger || {
+                ADULT: 1,
+                CHILD: 0,
+                INFANT: 0,
+            }
     );
     const [classType, setClassType] = useState(
-        useSelector((state) => state.searchQuery.classType) || "Economy"
+        useSelector((state) => state.searchQuery.classType) ||
+            storageFormData?.class ||
+            "Economy"
     );
 
     const MONTH = [
@@ -80,6 +108,19 @@ const HomepageTicketSearch = () => {
         "Des",
     ];
 
+    const { data: airportList, isSuccess } = useQuery({
+        queryKey: ["airports"],
+        queryFn: () => axios.get(`${import.meta.env.VITE_API_URL}/airports`),
+    });
+
+    useEffect(() => {
+        if (isSuccess) {
+            setFromDestination(airportList.data.data[0].name);
+            setToDestination(airportList.data.data[1].name);
+            setFromDestinationId(airportList.data.data[0].id);
+            setToDestinationId(airportList.data.data[1].id);
+        }
+    }, [isSuccess]);
     const searchClickHandler = () => {
         dispatch(setFromDestinationRedux(fromDestination));
         dispatch(setFromDestinationIdRedux(fromDestinationId));
@@ -114,7 +155,15 @@ const HomepageTicketSearch = () => {
             formData.departureDate = formatDate(searchDate);
             dispatch(setDepartureDateRedux(formData.departureDate));
         }
-        console.log(formData);
+        localStorage.setItem(
+            "searchQuery",
+            JSON.stringify({
+                ...formData,
+                passenger,
+                fromDestination,
+                toDestination,
+            })
+        );
         navigate({
             to: `/users/public/detailPenerbangan?${new URLSearchParams(formData).toString()}`,
         });
@@ -123,7 +172,12 @@ const HomepageTicketSearch = () => {
     useEffect(() => {
         if (isReturn && searchDate.to && fromDestinationId && toDestinationId) {
             setIsReturnFilled(true);
-        } else if (isReturn && !searchDate.to && !fromDestinationId && !toDestinationId) {
+        } else if (
+            isReturn &&
+            !searchDate.to &&
+            !fromDestinationId &&
+            !toDestinationId
+        ) {
             setIsReturnFilled(false);
         }
     }, [searchDate, isReturn, fromDestinationId, toDestinationId]);
@@ -139,22 +193,64 @@ const HomepageTicketSearch = () => {
                     <div className="flex flex-col h-fit justify-between gap-12">
                         {/* destination */}
                         <div className="flex flex-col w-full gap-4 justify-between relative sm:flex-row">
-                            <div className="flex items-center flex-1 gap-3">
-                                <FlightTakeoffIcon color="disabled" />
-                                <span className="text-gray-500 w-10">From</span>
-                                <button
-                                    className="flex-1 pb-1 mx-3 text-lg text-start font-semibold border-b"
-                                    onClick={() => {
-                                        setShowDestinationModal(true);
-                                        setIsFromModal(true);
-                                    }}
-                                >
-                                    {fromDestination || (
-                                        <span className="text-darkblue4">
-                                            Pilih destinasi
-                                        </span>
-                                    )}
-                                </button>
+                            <div className="relative flex-1">
+                                <div className="flex items-center flex-1 gap-3 relative">
+                                    <FlightTakeoffIcon color="disabled" />
+                                    <span className="text-gray-500 w-10">
+                                        From
+                                    </span>
+                                    <button
+                                        className="flex-1 pb-1 mx-3 text-lg text-start font-semibold border-b"
+                                        onClick={() => {
+                                            setShowFromDestinationModal(true);
+                                            setIsFromModal(true);
+                                        }}
+                                    >
+                                        {fromDestination || (
+                                            <span className="text-darkblue4">
+                                                Pilih destinasi
+                                            </span>
+                                        )}
+                                    </button>
+                                </div>
+
+                                {showFromDestinationModal && (
+                                    <>
+                                        <DestinationModal
+                                            setShowDestinationModal={
+                                                setShowDestinationModal
+                                            }
+                                            setShowFromDestinationModal={
+                                                setShowFromDestinationModal
+                                            }
+                                            setFromDestination={
+                                                setFromDestination
+                                            }
+                                            setToDestination={setToDestination}
+                                            isFromModal={isFromModal}
+                                            setIsFromModal={setIsFromModal}
+                                            fromDestination={fromDestination}
+                                            toDestination={toDestination}
+                                            setFromDestinationId={
+                                                setFromDestinationId
+                                            }
+                                            setToDestinationId={
+                                                setToDestinationId
+                                            }
+                                            airportList={airportList}
+                                            isSuccess={isSuccess}
+                                        />
+                                        <div
+                                            className="fixed z-1 w-screen h-screen inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
+                                            onClick={() => {
+                                                setIsFromModal(false);
+                                                setShowFromDestinationModal(
+                                                    false
+                                                );
+                                            }}
+                                        ></div>
+                                    </>
+                                )}
                             </div>
                             <button>
                                 <SwapHorizIcon
@@ -162,53 +258,69 @@ const HomepageTicketSearch = () => {
                                     sx={{ color: "#4B1979" }}
                                     onClick={() => {
                                         const fromTemp = fromDestination;
+                                        const fromIdTemp = fromDestinationId;
                                         setFromDestination(toDestination);
+                                        setFromDestinationId(toDestinationId);
+                                        setToDestinationId(fromIdTemp);
                                         setToDestination(fromTemp);
                                     }}
                                 />
                             </button>
-                            <div className="flex items-center flex-1 gap-3">
-                                <FlightTakeoffIcon color="disabled" />
-                                <span className="text-gray-500 w-10">To</span>
-                                <button
-                                    className="flex-1 pb-1 mx-3 text-lg text-start font-semibold border-b"
-                                    onClick={() =>
-                                        setShowDestinationModal(true)
-                                    }
-                                >
-                                    {toDestination || (
-                                        <span className="text-darkblue4">
-                                            Pilih destinasi
-                                        </span>
-                                    )}
-                                </button>
+                            <div className="flex-1 relative">
+                                <div className="flex items-center flex-1 gap-3">
+                                    <FlightTakeoffIcon color="disabled" />
+                                    <span className="text-gray-500 w-10">
+                                        To
+                                    </span>
+                                    <button
+                                        className="flex-1 pb-1 mx-3 text-lg text-start font-semibold border-b"
+                                        onClick={() =>
+                                            setShowDestinationModal(true)
+                                        }
+                                    >
+                                        {toDestination || (
+                                            <span className="text-darkblue4">
+                                                Pilih destinasi
+                                            </span>
+                                        )}
+                                    </button>
+                                </div>
+                                {showDestinationModal && (
+                                    <>
+                                        <DestinationModal
+                                            setShowDestinationModal={
+                                                setShowDestinationModal
+                                            }
+                                            setFromDestination={
+                                                setFromDestination
+                                            }
+                                            setShowFromDestinationModal={
+                                                setShowFromDestinationModal
+                                            }
+                                            setToDestination={setToDestination}
+                                            isFromModal={isFromModal}
+                                            setIsFromModal={setIsFromModal}
+                                            fromDestination={fromDestination}
+                                            toDestination={toDestination}
+                                            setFromDestinationId={
+                                                setFromDestinationId
+                                            }
+                                            setToDestinationId={
+                                                setToDestinationId
+                                            }
+                                            airportList={airportList}
+                                            isSuccess={isSuccess}
+                                        />
+                                        <div
+                                            className="fixed z-1 w-screen h-screen inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
+                                            onClick={() => {
+                                                setIsFromModal(false);
+                                                setShowDestinationModal(false);
+                                            }}
+                                        ></div>
+                                    </>
+                                )}
                             </div>
-                            {showDestinationModal && (
-                                <>
-                                    <DestinationModal
-                                        setShowDestinationModal={
-                                            setShowDestinationModal
-                                        }
-                                        setFromDestination={setFromDestination}
-                                        setToDestination={setToDestination}
-                                        isFromModal={isFromModal}
-                                        setIsFromModal={setIsFromModal}
-                                        fromDestination={fromDestination}
-                                        toDestination={toDestination}
-                                        setFromDestinationId={
-                                            setFromDestinationId
-                                        }
-                                        setToDestinationId={setToDestinationId}
-                                    />
-                                    <div
-                                        className="fixed z-1 w-full h-full inset-0 bg-opacity-50 bg-black flex overflow-hidden items-center"
-                                        onClick={() => {
-                                            setIsFromModal(false);
-                                            setShowDestinationModal(false);
-                                        }}
-                                    ></div>
-                                </>
-                            )}
                         </div>
 
                         {/* date & passenger*/}
@@ -216,11 +328,11 @@ const HomepageTicketSearch = () => {
                             {/* date */}
                             <div className="flex items-start flex-1 gap-3 relative sm:items-center">
                                 <DateRangeIcon color="disabled" />
-                                <span className="text-gray-500 w-10">Date</span>
+                                <span className="text-gray-500 w-10">Tanggal</span>
                                 <div className="flex flex-col gap-4 flex-1 justify-between md:flex-row phone:gap-0">
                                     <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
                                         <span className="text-gray-500 w-10">
-                                            Departure
+                                            Keberangkatan
                                         </span>
                                         <button
                                             className="flex-1 text-lg text-start font-semibold overflow-hidden whitespace-nowrap text-ellipsis"
@@ -236,7 +348,7 @@ const HomepageTicketSearch = () => {
                                     <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
                                         <div>
                                             <div className="text-gray-500 w-full flex justify-between">
-                                                <span>Return</span>
+                                                <span>Kembali</span>
                                                 <Switch
                                                     checked={isReturn}
                                                     onCheckedChange={() => {
@@ -300,7 +412,7 @@ const HomepageTicketSearch = () => {
                                     {/* passenger */}
                                     <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1 relative">
                                         <span className="text-gray-500 w-10">
-                                            Passengers
+                                            Penumpang
                                         </span>
                                         <button
                                             className="flex-1 text-lg text-start font-semibold text-nowrap"
@@ -337,7 +449,7 @@ const HomepageTicketSearch = () => {
                                     <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1 relative">
                                         <div>
                                             <span className="text-gray-500 w-10">
-                                                Seat Class
+                                                Kelas Kursi
                                             </span>
                                         </div>
                                         <button
@@ -374,7 +486,14 @@ const HomepageTicketSearch = () => {
                 <button
                     className="py-2.5 bg-darkblue4 disabled:bg-darkblue2 text-white font-semibold rounded-b-xl"
                     onClick={searchClickHandler}
-                    disabled={isReturn && !isReturnFilled || (toDestination ? (fromDestination ? false : true) : false)}
+                    disabled={
+                        (isReturn && !isReturnFilled) ||
+                        (toDestination
+                            ? fromDestination
+                                ? false
+                                : true
+                            : false)
+                    }
                 >
                     Cari Penerbangan
                 </button>

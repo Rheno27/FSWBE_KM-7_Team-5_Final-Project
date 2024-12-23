@@ -77,7 +77,7 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
             return `${year}-${month}-${day}`;
         }; // toISOString() placeholder since its have a bug;
 
-        if(classType){
+        if (classType) {
             formData.class = classType.toUpperCase().replace(/\s/g, "_");
         }
         if (isReturn) {
@@ -86,7 +86,6 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
         } else {
             dispatch(setDepartureDateRedux(formData.departureDate));
         }
-        console.log(formData);
         navigate({
             to: `/users/public/detailPenerbangan?${new URLSearchParams(formData).toString()}`,
         });
@@ -282,7 +281,11 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
                                 setSearchDate(value);
                             }}
                             mode="single"
-                            disabled={{ before: new Date(selectedFlight.departureDate.split("T")[0]) }}
+                            disabled={{
+                                before: new Date(
+                                    selectedFlight.departureDate
+                                ).toLocaleDateString("en-CA"),
+                            }}
                             required
                         />
                     )}
@@ -305,10 +308,8 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
                                 Departure :{" "}
                                 <span className="font-semibold">
                                     {
-                                        selectedFlight?.departureDate.split(
-                                            "T"
-                                        )[0]
-                                    }
+                                        selectedFlight?.departureDate
+                                    .split("T")[0]}
                                 </span>
                             </span>
                         </div>

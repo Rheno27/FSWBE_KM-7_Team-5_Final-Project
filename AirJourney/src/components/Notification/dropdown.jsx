@@ -32,7 +32,6 @@ const NotificationDropdown = () => {
       });
       refetch(); 
     } catch (err) {
-      console.error("Failed to mark notifications as read:", err);
     }
   };
 
@@ -53,6 +52,7 @@ const NotificationDropdown = () => {
     >
       <Nav.Link as={Link} to="/notification" onClick={handleIconClick}>
         <NotificationIcon style={{ marginRight: "8px", cursor: "pointer" }} />
+        <span className="d-md-none">Notification</span>
         {unreadNotifications.length > 0 && (
           <span
             style={{

@@ -1,51 +1,52 @@
 import React, { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-import { DayPicker } from "react-day-picker";  // Import DayPicker
-import "react-day-picker/dist/style.css";  // Import default styles for DayPicker
+import { DayPicker } from "react-day-picker";
+import Close from "@mui/icons-material/Close";
+import "react-day-picker/dist/style.css";
+import "./style.css";
 
-function DateFilterModal({ show, onHide }) {
-  const [selectedDate, setSelectedDate] = useState(null);
+const DateFilterModal = ({ isOpen, onClose, position, onFilter }) => {
+  if (!isOpen) return null;
+  const [selectedRange, setSelectedRange] = useState(null);
 
-  // Handle date selection
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-
-  // Handle save action
   const handleSave = () => {
-    if (selectedDate) {
-      console.log("Selected Date: ", selectedDate);
-      // You can handle the date or filter logic here
+    if (selectedRange) {
+      onFilter(selectedRange);
     }
-    onHide(); // Close the modal after saving
+    onClose();
   };
 
   return (
-    <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Filter By Date</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {/* DayPicker for date selection */}
-        <DayPicker selected={selectedDate} onDayClick={handleDateChange} />
-        <div className="mt-3">
-          {selectedDate ? (
-            <p>Selected Date: {selectedDate.toLocaleDateString()}</p>
-          ) : (
-            <p>Please select a date</p>
-          )}
+    <>
+      <div className="modal-overlay" onClick={onClose} />
+      <div className="custom-modal" style={position}>
+        <div className="modal-header">
+          <Close onClick={onClose} className={{ cursor: "pointer" }} />
         </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={handleSave}>
-          Save
-        </Button>
-      </Modal.Footer>
-    </Modal>
+        <div>
+          <DayPicker
+            mode="range" // Supports single or range selection
+            selected={selectedRange}
+            onSelect={setSelectedRange}
+            footer={
+              selectedRange && selectedRange.from && selectedRange.to ? (
+                <p>
+                  From {selectedRange?.from?.toLocaleDateString()} to{" "}
+                  {selectedRange?.to?.toLocaleDateString()}
+                </p>
+              ) : (
+                <p>Please pick a date range.</p>
+              )
+            }
+          />
+          <div className="d-flex justify-content-end">
+            <button onClick={handleSave} className="save-button">
+              Simpan
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
   );
-}
+};
 
 export default DateFilterModal;
