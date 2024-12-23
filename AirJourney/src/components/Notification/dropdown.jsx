@@ -52,7 +52,7 @@ const NotificationDropdown = () => {
       onMouseLeave={handleMouseLeave}
     >
       <Nav.Link as={Link} to="/notification" onClick={handleIconClick}>
-        <NotificationIcon style={{ marginRight: "8px", cursor: "pointer" }} />
+        <NotificationIcon style={{ marginRight: "8px", marginBottom:"5px", cursor: "pointer" }} />
         <span className="d-md-none">Notification</span>
         {unreadNotifications.length > 0 && (
           <span
@@ -184,7 +184,7 @@ const NotificationDropdown = () => {
             ))
           ) : (
             <p style={{ padding: "10px 15px", color: "#888", textAlign: "center" }}>
-              No notifications available
+              Tidak ada pemberitahuan yang tersedia
             </p>
           )}
         </div>

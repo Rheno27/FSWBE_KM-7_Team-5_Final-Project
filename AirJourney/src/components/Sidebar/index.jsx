@@ -89,7 +89,7 @@ const Sidebar = ({
       <Accordion expanded={expanded.includes('panel1')} onChange={handleChange('panel1')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1d-content" id="panel1d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <FlightClassIcon /> Class
+            <FlightClassIcon /> Kelas
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -124,7 +124,7 @@ const Sidebar = ({
       <Accordion expanded={expanded.includes('panel2')} onChange={handleChange('panel2')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2d-content" id="panel2d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <SortIcon /> Sort By
+            <SortIcon /> Urut Berdasarkan
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -145,10 +145,10 @@ const Sidebar = ({
                   onChange={handleSortByChange} 
                   style={{ marginRight: "5px" }}
                 />
-                {classType === "price" ? "Price" 
-                : classType === "duration" ? "Duration" 
-                : classType === "departureDate" ? "Departure Date" 
-                : classType === "arrivalDate" ? "Arrival Date" : classType.replace("_", " ")}
+                {classType === "price" ? "Harga" 
+                : classType === "duration" ? "Durasi" 
+                : classType === "departureDate" ? "Tanggal Penerbangan" 
+                : classType === "arrivalDate" ? "Tanggal Kedatangan" : classType.replace("_", " ")}
               </label>
               <br />
             </div>
@@ -159,7 +159,7 @@ const Sidebar = ({
       <Accordion expanded={expanded.includes('panel3')} onChange={handleChange('panel3')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel3d-content" id="panel3d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <SwapVertIcon style={{fontSize: "1.8rem" }} /> Sort Order
+            <SwapVertIcon style={{fontSize: "1.8rem" }} />Urutan
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -180,8 +180,8 @@ const Sidebar = ({
                   onChange={handleSortOrderChange} 
                   style={{ marginRight: "5px" }}
                 />
-                {classType === "asc" ? "Lowest to Highest" 
-                : classType === "desc" ? "Highest to Lowest" : classType.replace("_", " ")}
+                {classType === "asc" ? "Terendah ke Tertinggi" 
+                : classType === "desc" ? "Tertinggi ke Terendah" : classType.replace("_", " ")}
               </label>
               <br />
             </div>
@@ -192,7 +192,7 @@ const Sidebar = ({
       <Accordion expanded={expanded.includes('panel4')} onChange={handleChange('panel4')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel4d-content" id="panel4d-header">
           <Typography sx={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <FlightIcon style={{ transform: "rotate(50deg)" }} /> Choose by Airlines
+            <FlightIcon style={{ transform: "rotate(50deg)" }} /> Pilih Maskapai
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -219,11 +219,11 @@ const Sidebar = ({
       
       <button onClick={handleApplyFilters} className="sort-apply-button cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" disabled={(selectedSortBy.length > 0 ? (!selectedSortOrder) : false) || (selectedSortOrder ? (selectedSortBy.length == 0):false) }
         style={{ width: "100%", marginTop: "20px", alignItems: "center", textAlign: "center", backgroundColor: "#CDC1FF", color: "black", border: "none", borderRadius: "5px", padding: "10px 20px" }}>
-        Apply Filters
+        Terapkan Filter
       </button>
       <button onClick={clearFilters} className="sort-apply-button" 
         style={{ width: "100%", marginTop: "10px", textAlign: "center", backgroundColor: "#E5D9F2", color: "black", border: "none", borderRadius: "5px", padding: "10px 20px", cursor: "pointer" }}>
-        Clear Filters
+        Bersihkan Filter
       </button>
     </div>
   );
