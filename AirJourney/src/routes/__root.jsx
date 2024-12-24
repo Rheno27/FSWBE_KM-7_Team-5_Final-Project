@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
@@ -16,11 +16,6 @@ function RootComponent() {
             <NavigationBar />
             <Outlet />
             <ToastContainer limit={3} />
-            {import.meta.env.MODE === "development" && (
-                <React.Suspense fallback={<div>Loading DevTools...</div>}>
-                    <TanStackRouterDevtools />
-                </React.Suspense>
-            )}
             {import.meta.env.MODE === "development" && <TanStackRouterDevtools />}
         </>
     );
