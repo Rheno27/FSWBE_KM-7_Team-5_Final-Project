@@ -32,7 +32,6 @@ function ResetPassword() {
 
     // Cleanup timer when component unmounts or re-renders
     return () => clearTimeout(timer);
-    return;
   }
 
   // Input fields state
@@ -49,7 +48,7 @@ function ResetPassword() {
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
  
-  let validationUrl = `${import.meta.env.VITE_API_URL}/auth/reset-password/validate/${token}`;
+  const validationUrl = `${import.meta.env.VITE_API_URL}/auth/reset-password/validate/${token}`;
 
   // Token validation
   useEffect(() => {
@@ -95,8 +94,13 @@ function ResetPassword() {
       toast.success('Reset password berhasil. Mengarahkan ke homepage...', {
         autoClose: 4000, 
       });
-      setTimeout(() => navigate({ to: "/" }), 4000);
+      const timer = setTimeout(() => {
+        navigate({ to: "/" });
+      }, 5000);
+  
       setIsTokenValid(false);
+      // Cleanup timer when component unmounts or re-renders
+      return () => clearTimeout(timer);
     },
 
     onError: (error) => {

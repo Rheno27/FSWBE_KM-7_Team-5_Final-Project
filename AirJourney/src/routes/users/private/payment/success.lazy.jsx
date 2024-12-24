@@ -28,6 +28,7 @@ function PaymentSuccess({ transaction }) {
   };
 
     useEffect(() => {
+      const isInSuccessPage = window.location.pathname.includes('/payment/success');
       if (!token || token.trim() === "") {
         toast.error("Unauthorized, redirecting to homepage", {
           position: "bottom-center", // Toast will appear at the bottom-center
@@ -41,7 +42,7 @@ function PaymentSuccess({ transaction }) {
         return () => clearTimeout(timer);
       }
   
-      if (!isValidId(id)) {
+      if (isInSuccessPage && !isValidId(id)) {
         if (!toast.isActive(INVALID_ID_TOAST)) { // Check if the toast is already active
           toast.error("ID transaksi invalid. Mengembalikan...",{
             position: "bottom-center", // Toast will appear at the bottom-center

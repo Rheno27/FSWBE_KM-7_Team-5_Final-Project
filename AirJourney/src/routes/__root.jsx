@@ -11,17 +11,17 @@ export const Route = createRootRoute({
 
 function RootComponent() {
 
-const hideNavbar = ["/register", "/login", "/reset-password", "/reset-password-request", "/otp"];
-const showNavbar = !hideNavbar.includes(window.location.pathname);
-
     return (    
         <>
-            {showNavbar && (
-                <NavigationBar />
-            )}
+            <NavigationBar />
             <Outlet />
             <ToastContainer limit={3} />
-            {import.meta.env.MODE == "development" && <TanStackRouterDevtools />}
+            {import.meta.env.MODE === "development" && (
+                <React.Suspense fallback={<div>Loading DevTools...</div>}>
+                    <TanStackRouterDevtools />
+                </React.Suspense>
+            )}
+            {import.meta.env.MODE === "development" && <TanStackRouterDevtools />}
         </>
     );
 }

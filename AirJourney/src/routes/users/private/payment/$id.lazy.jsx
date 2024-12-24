@@ -18,6 +18,8 @@ function Payment() {
   const { id } = Route.useParams();
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  const [scriptLoaded, setScriptLoaded] = useState(false); // Track if the script is loaded
+  const [snapInitialized, setSnapInitialized] = useState(false); 
 
   const isValidId = (id) => {
     if (!id) return false;
@@ -84,6 +86,16 @@ function Payment() {
     script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
     script.setAttribute('data-client-key', import.meta.env.VITE_MIDTRANS_CLIENT_KEY);
     script.async = true;
+
+    script.onload = () => {
+      setScriptLoaded(true); // Script is loaded successfully
+      console.log('Snap.js script loaded');
+    };
+
+    script.onerror = (error) => {
+      console.error('Snap.js script failed to load', error);
+    };
+
     document.body.appendChild(script);
     return () => {
       document.body.removeChild(script);
@@ -91,90 +103,128 @@ function Payment() {
   }, []);
 
   useEffect(() => {
-    if (isSuccess && transaction?.data?.payment?.snapToken) {
+    if (scriptLoaded && isSuccess && transaction?.data?.payment?.snapToken && !snapInitialized) {
       const snapToken = transaction.data.payment.snapToken;
       
       if (!document.getElementById('snap-container').hasChildNodes()) {
 
-        window.snap?.embed(snapToken, {
-          embedId: 'snap-container',
-          onSuccess: function (result) {
-            // alert('Payment success! Redirecting to success page...');
-          },
-          onPending: function (result) {
-            alert('Menunggu proses pembayaran!');
-          },
-          onError: function (result) {
-            alert('Pembayaran tidak berhasil!');
-          },
-          onClose: function () {
-            if (!isPaymentSuccess) {
-              alert('Apakah yakin ingin menutup form pembayaran?');
-            }
-          },
-        });
+        try {
+          window.snap?.embed(snapToken, {
+            embedId: 'snap-container',
+            onSuccess: function (result) {
+              console.log('Payment Success:', result);
+              // Add your success logic here
+            },
+            onPending: function (result) {
+              console.log('Payment Pending:', result);
+              alert('Menunggu proses pembayaran!');
+            },
+            onError: function (result) {
+              console.error('Payment Error:', result);
+              alert('Pembayaran tidak berhasil!');
+            },
+            onClose: function () {
+              if (!isPaymentSuccess) {
+                alert('Apakah yakin ingin menutup form pembayaran?');
+              }
+            },
+          });
+
+          setSnapInitialized(true); // Mark Snap as initialized
+        } catch (error) {
+          console.error('Error during snap embed:', error);
+        }
       }
+      // Cleanup logic for reusing Snap UI when closing or reopening the modal
+    return () => {
+      // Reset the snap initialization flag
+      setSnapInitialized(false);
+    };
     }
-  }, [isSuccess, transaction]);
+  }, [scriptLoaded, isSuccess, transaction, isPaymentSuccess]);
 
   useEffect(() => {
-    if (transaction?.isError) {
-      // Backend error occurred or transaction data could not be fetched
-      toast.error("Terjadi kesalahan saat mengambil data transaksi. Mengembalikan...", {
-        position: "bottom-center",
-        autoClose: 3000,
-      });
+    // Function to validate the transaction ID
+    const validateTransaction = async () => {
+      // Prevent unnecessary execution while loading
+      if (isLoading) return;
   
-      const timer = setTimeout(() => {
-        navigate({ to: '/users/private/order-history' });
-      }, 3000);
+      try {
+        // Handle backend errors (e.g., ID not found or invalid)
+        if (transaction?.isError || !transaction?.data) {
+          toast.error("Data transaksi tidak ditemukan atau tidak valid. Mengembalikan...", {
+            position: "bottom-center",
+            autoClose: 3000,
+          });
   
-      return () => clearTimeout(timer);
-    }
-
-    if (!transaction?.data) {
-      if (id !== transaction?.data?.id) {
-        // ID mismatch detected
-        toast.error("ID transaksi tidak ditemukan. Mengembalikan...", {
+          const timer = setTimeout(() => {
+            navigate({ to: '/users/private/order-history' });
+          }, 3000);
+  
+          return () => clearTimeout(timer);
+        }
+  
+        // Check if the ID in the URL matches the data fetched from the backend
+        if (id !== transaction?.data?.id) {
+          toast.error("ID transaksi tidak cocok. Mengembalikan...", {
+            position: "bottom-center",
+            autoClose: 3000,
+          });
+  
+          const timer = setTimeout(() => {
+            navigate({ to: '/users/private/order-history' });
+          }, 3000);
+  
+          return () => clearTimeout(timer);
+        }
+  
+        // Check if the payment has expired
+        const now = new Date();
+        const expiredAt = new Date(transaction?.data?.payment?.expiredAt);
+        if (now > expiredAt) {
+          toast.error("Transaksi telah kedaluwarsa. Mengembalikan...", {
+            position: "bottom-center",
+            autoClose: 3000,
+          });
+  
+          const timer = setTimeout(() => {
+            navigate({ to: '/users/private/order-history' });
+          }, 3000);
+  
+          return () => clearTimeout(timer);
+        }
+  
+        // If payment succeeded, redirect to success page
+        if (isSuccess && isPaymentSuccess) {
+          toast.success("Pembayaran berhasil!", {
+            position: "bottom-center",
+            autoClose: 5000,
+          });
+  
+          const timer = setTimeout(() => {
+            navigate({ to: `/users/private/payment/success?id=${id}` });
+          }, 5000);
+  
+          return () => clearTimeout(timer);
+        }
+      } catch (error) {
+        console.error("Error validating transaction:", error);
+        toast.error("Terjadi kesalahan saat memvalidasi transaksi. Mengembalikan...", {
           position: "bottom-center",
           autoClose: 3000,
         });
-    
+  
         const timer = setTimeout(() => {
-          navigate({ to: '/users/private/order-history' }); // Redirect to the order history page
+          navigate({ to: '/users/private/order-history' });
         }, 3000);
-    
+  
         return () => clearTimeout(timer);
       }
-      return // Prevent toast or navigation until we know the status
-    }
-    
-    if (isSuccess && isPaymentSuccess) {
-      // Payment success logic
-      toast.success('Pembayaran berhasil!', {
-        position: "bottom-center",
-        autoClose: 5000,
-      });
-      const timer = setTimeout(() => {
-        navigate({ to: `/users/private/payment/success?id=${id}` });
-      }, 5000);
-    
-      return () => clearTimeout(timer);
-    }
-
-    // if (transaction?.data?.payment?.status === 'CANCELLED') {
-    //   toast.error("ID transaksi anda sudah kadaluarsa. Memuat ulang halaman...", {
-    //     position: "bottom-center", // Toast will appear at the bottom-center
-    //     autoClose: 3000, 
-    //   });
+    };
   
-      // const timer = setTimeout(() => {
-      //   navigate({ to : '/users/private/order-history'}); // Redirect to the homepage
-      // }, 3000);
-
-      // return () => clearTimeout(timer);
-    // }
-  }, [id, transaction, navigate]);
+    // Call the validation function
+    validateTransaction();
+  }, [id, transaction, isLoading, isSuccess, isPaymentSuccess, navigate]);  
 
   const { mutate: cancelTransactionMutation } = useMutation({
     mutationFn: () => cancelTransaction(id),
