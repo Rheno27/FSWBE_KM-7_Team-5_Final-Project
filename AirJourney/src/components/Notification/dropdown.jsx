@@ -85,7 +85,7 @@ const NotificationDropdown = () => {
             backgroundColor: "white",
             borderRadius: "12px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-            width: "360px",
+            width: "470px",
             zIndex: 1000,
             maxHeight: "400px",
             overflowY: "auto",
