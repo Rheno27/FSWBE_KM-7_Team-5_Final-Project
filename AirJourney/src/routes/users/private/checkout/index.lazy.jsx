@@ -164,7 +164,7 @@ function Checkout() {
                 isFilled = true;
                 const passenger = {
                     birthday: birthDays[index] || "",
-                    departureSeatId: selectedSeats[index],
+                    departureSeatId: selectedSeats[index] || "",
                     expiredAt: expiredAt[index] || "",
                     familyName: familyNames[index] || "",
                     firstName: firstNames[index] || "",
@@ -174,8 +174,12 @@ function Checkout() {
                     title: title[index] || "",
                     type: passengerTypes[index] || getPassengerType(index),
                 };
+                if(passenger.departureSeatId === ""){
+                    toast.error("Kursi tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)), { position: "bottom-center" });
+                    return;
+                }
                 if (returnFlightId && selectedReturnSeats) {
-                    passenger.returnSeatId = selectedReturnSeats[index];
+                    passenger.returnSeatId = selectedReturnSeats[index] || "";
                     if(passenger.returnSeatId === ""){
                         toast.error(`Form penumpang ke ${index + 1} belum terisi`)
                         return;

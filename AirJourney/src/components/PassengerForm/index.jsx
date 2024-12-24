@@ -184,7 +184,7 @@ const PassengerForm = ({
                                         color: "#4B1979",
                                     }}
                                 >
-                                    Title
+                                    Sapaan
                                 </Form.Label>
                                 <Form.Select
                                     value={title[index]}
@@ -195,17 +195,17 @@ const PassengerForm = ({
                                             e.target.value
                                         );
                                     }}
-                                    placeholder="Pilih Title"
+                                    placeholder="Pilih `Title`"
                                     style={{
                                         borderRadius: "8px",
                                         boxShadow: "0 0 5px rgba(0,0,0,0.1)",
                                     }}
                                 >
                                     <option disabled value="">
-                                        Pilih Title
+                                        Pilih Sapaan
                                     </option>
-                                    <option value="Mr">Mr.</option>
-                                    <option value="Mrs">Mrs.</option>
+                                    <option value="Mr">Tuan</option>
+                                    <option value="Mrs">Nyonya</option>
                                 </Form.Select>
                             </Form.Group>
 

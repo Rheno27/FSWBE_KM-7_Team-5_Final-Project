@@ -162,9 +162,9 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                                         }}
                                         >Informasi:</div>
                                         <ul className="list-unstyled">
-                                            <li>Baggage 20 kg</li>
-                                            <li>Cabin baggage 7 kg</li>
-                                            <li>In Flight Entertainment</li>
+                                            <li>Bagasi 20 kg</li>
+                                            <li>Bagasi kabin 7 kg</li>
+                                            <li>Hiburan di pesawat</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -381,9 +381,9 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                                     }}
                                     >Informasi:</div>
                                     <ul className="list-unstyled">
-                                        <li>Baggage 20 kg</li>
-                                        <li>Cabin baggage 7 kg</li>
-                                        <li>In Flight Entertainment</li>
+                                        <li>Bagasi 20 kg</li>
+                                        <li>Bagasi kabin 7 kg</li>
+                                        <li>Hiburan di pesawat</li>
                                     </ul>
                                 </div>
                             </div>
@@ -492,15 +492,15 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                             }}
                         >
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                {passengerAdult} Adult
+                                {passengerAdult} Dewasa
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                {passengerChild} Child
+                                {passengerChild} Anak
                             </div>
                             <div style={{ fontSize: "16px", marginBottom: "5px" }}>
-                                {passengerInfant} Infant
+                                {passengerInfant} Bayi
                             </div>
-                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>Tax</div>
+                            <div style={{ fontSize: "16px", marginBottom: "5px" }}>Pajak</div>
                         </Col>
 
                         <Col
@@ -563,7 +563,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                 onClick={handleSubmit}
                 disabled={isPending}
             >
-                Lanjutkan Pembayaran
+                Lanjutkan ke Pembayaran
             </Button>
             </Col>
         </>

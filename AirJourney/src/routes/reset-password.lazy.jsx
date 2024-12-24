@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useMutation } from '@tanstack/react-query';
 import { useSearchParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
+import { Row, Col, Form, Button } from 'react-bootstrap';
 import { createLazyFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -26,7 +26,12 @@ function ResetPassword() {
       position: "top-center",
       autoClose: 5000,
     });
-    navigate({ to: "/reset-password-request" });
+    const timer = setTimeout(() => {
+      navigate({ to: "/reset-password-request" });
+    }, 5000);
+
+    // Cleanup timer when component unmounts or re-renders
+    return () => clearTimeout(timer);
     return;
   }
 
@@ -57,11 +62,17 @@ function ResetPassword() {
           setIsTokenValid(true);
         } else {
           setIsTokenValid(false);
-          toast.error("Token has expired or is invalid")
+          toast.error("Token sudah kadaluarsa atau tidak valid", {
+            position: "top-center",
+            autoClose: 5000,
+          })
         }
       } catch (error) {
         setIsTokenValid(false);
-        toast.error(error.message || "An unexpected error occured");
+        toast.error("Terjadi kesalahan yang tidak diketahui", {
+          position: "top-center",
+          autoClose: 5000,
+        });
       } finally {
         setIsLoading(false); // Set loading to false after validation
       }
@@ -81,17 +92,22 @@ function ResetPassword() {
       return resetPassword(data);
     },
     onSuccess: (response) => {
-      toast.success('Password reset successfull. Redirecting to login page...', {
+      toast.success('Reset password berhasil. Mengarahkan ke homepage...', {
         autoClose: 4000, 
       });
-      setTimeout(() => navigate({ to: "/login" }), 4000);
+      setTimeout(() => navigate({ to: "/" }), 4000);
+      setIsTokenValid(false);
     },
 
     onError: (error) => {
       if (error.response?.status === 503) {
-        toast.error('Service unavailable. Please try again later.')
+        toast.error('Layanan tidak tersedia. Silakan coba lagi nanti.', {
+          autoClose: 4000, 
+        })
       } else {
-        toast.error(error.message || "An unexpected error occurred.")
+        toast.error(error.message || "Terjadi kesalahan yang tidak diketahui", {
+          autoClose: 4000, 
+        })
       }
     },
   })
@@ -101,17 +117,20 @@ function ResetPassword() {
     e.preventDefault();
 
     if (!isTokenValid) {
-      toast.error("Token has expired or is invalid.");
+      toast.error("Token kadaluarsa atau invalid.", {
+        position: "top-center",
+        autoClose: 5000,
+      });
       return; 
     }
   
     // Basic password validation checks
     const validatePassword = () => {
       if (newPassword.length < 6) {
-        return "Password must be at least 6 characters long";
+        return "Password harus minimal 6 karakter.";
       }
       if (newPassword !== confirmPassword) {
-        return "Passwords do not match.";
+        return "Password tidak sesuai.";
       }
   
       return null;
@@ -119,7 +138,9 @@ function ResetPassword() {
   
     const passwordError = validatePassword();
     if (passwordError) {
-      toast.warn(passwordError);
+      toast.warn(passwordError, {
+        autoClose: 4000, 
+      });
       return;
     }
 
@@ -156,7 +177,7 @@ function ResetPassword() {
             className="d-flex flex-column align-items-center justify-content-center"
         >
         {isLoading ? (
-          <p className='p-3 bg-light bg-opacity-75 border-2 shadow-sm rounded'>Validating token, please wait...</p>
+          <p className='p-3 bg-light bg-opacity-75 border-2 shadow-sm rounded'>Memvalidasi token, silakan tunggu...</p>
         ) : (
           <Form
               style={{
@@ -186,12 +207,12 @@ function ResetPassword() {
                       marginBottom: "1rem",
                   }}
               >
-                  Reset Password
+                  Reset Sandi
               </h1>
 
               {/* New password form field */}
               <Form.Group controlId="newPassword" className="mb-3">
-                <Form.Label>Masukkan Password Baru</Form.Label>
+                <Form.Label>Masukkan Sandi Baru</Form.Label>
                 <div style={{ position: "relative" }}>
                   <Form.Control
                     name='newPassword'
@@ -222,7 +243,7 @@ function ResetPassword() {
 
               {/* Confirm new password form field */}
               <Form.Group controlId="confirmPassword">
-                <Form.Label>Ulangi Password Baru</Form.Label>
+                <Form.Label>Ulangi Sandi Baru</Form.Label>
                 <div style={{ position: "relative" }}>
                   <Form.Control
                     name='confirmPassword'
@@ -251,7 +272,7 @@ function ResetPassword() {
                 </div>
               </Form.Group>
               <div className="text-muted mb-4 mt-2">
-                <span>*Password must be at least 6 characters long.</span>
+                <span>*Sandi harus terdiri dari setidaknya 6 karakter.</span>
               </div>
 
               {/* Submit button */}
@@ -272,7 +293,7 @@ function ResetPassword() {
               {/* Back to login link */}
               <div className="text-center mt-3">
                 <span>
-                  Sudah ingat password?{" "}
+                  Sudah ingat sandi?{" "}
                   <Link
                     to={`/login`}
                     style={{ color: "#7126B5", fontWeight: "bold" }}
@@ -286,11 +307,11 @@ function ResetPassword() {
               {!isTokenValid && (
                 <div className="text-center text-danger mt-5">
                   <span>
-                    {message || "Token has expired or is invalid"}. {" "}
+                    {message || "Token sudah kadaluarsa atau tidak valid"}. {" "}
                     <Link 
                       to={`/reset-password-request`} 
                       style={{ color: "#7126B5" }}>
-                      Please try again
+                      Silakan coba lagi
                     </Link>
                   </span>
                 </div>

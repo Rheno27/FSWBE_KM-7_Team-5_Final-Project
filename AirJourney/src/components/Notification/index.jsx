@@ -153,7 +153,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
         }}
       >
         {localLoading ? (
-          <p style={{ textAlign: "center" }}>Loading notifications...</p>
+          <p style={{ textAlign: "center" }}>Memuat notifikasi...</p>
         ) : localError ? (
           <p style={{ textAlign: "center" }}>{localError}</p>
         ) : searchNotifications.length > 0 ? (
@@ -244,7 +244,7 @@ const Notification = ({ notifications = [], error = "", loading = false }) => {
           ))
         ) : (
           <p style={{ textAlign: "center", color: "#8A8A8A", padding: "10px" }}>
-            No notifications found.
+            Tidak ada pemberitahuan yang tersedia
           </p>
         )}
       </div>

@@ -24,7 +24,6 @@ export const getUser = async () => {
 export const updateUser = async (data) => {
     const token = localStorage.getItem("token");
     
-    // Hanya kirim field yang berubah
     const requestData = {};
     if (data.name) requestData.name = data.name;
     if (data.phoneNumber) requestData.phoneNumber = data.phoneNumber;
