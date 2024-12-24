@@ -153,20 +153,6 @@ function Payment() {
       if (!document.getElementById('snap-container').hasChildNodes()) {
         window.snap?.embed(snapToken, {
           embedId: 'snap-container',
-          onSuccess: function (result) {
-            // alert('Payment success! Redirecting to success page...');
-          },
-          onPending: function (result) {
-            alert('Waiting for payment!');
-          },
-          onError: function (result) {
-            alert('Payment failed!');
-          },
-          onClose: function () {
-            if (!isPaymentSuccess) {
-              alert('Are you sure you want to close the payment form?');
-            }
-          },
         });
       }
       setRefresh(false);
