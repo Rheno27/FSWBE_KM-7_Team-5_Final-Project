@@ -20,6 +20,7 @@ function Payment() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
+  const [refresh,setRefresh] = useState(false);
 
   useEffect(() => {
     if (!token || token.trim() === "") {
@@ -168,8 +169,9 @@ function Payment() {
           },
         });
       }
+      setRefresh(false);
     }
-  }, [isSuccess, transaction]);
+  }, [isSuccess, transaction,refresh]);
   
   useEffect(() => {
     if (isSuccess && isPaymentSuccess) {
@@ -219,7 +221,7 @@ function Payment() {
         <Row className="justify-content-center my-4 gap-1">
           <Col lg={6} md={6} className="my-2">
               <Card id="snap-container" className="p-3 shadow-sm rounded-3 w-100" style={{border: '1px solid #7126B5'}}></Card>
-              <p className='my-5 text-secondary'>Halaman pembayaran tidak muncul? Silahkan refresh halaman</p>
+              <p className='my-5 text-secondary' style={{cursor: 'pointer'}} onClick={()=>{setRefresh(true)}}>Halaman pembayaran tidak muncul? Klik disini</p>
           </Col>
 
           {id ? (
