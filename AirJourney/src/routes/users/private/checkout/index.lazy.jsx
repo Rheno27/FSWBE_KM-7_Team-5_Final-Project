@@ -161,7 +161,7 @@ function Checkout() {
         let isFilled = false;
         const passengers = Array.from({ length: totalPassengers }).map(
             (_, index) => {
-                isFilled = false;
+                isFilled = true;
                 const passenger = {
                     birthday: birthDays[index] || "",
                     departureSeatId: selectedSeats[index],
@@ -181,43 +181,17 @@ function Checkout() {
                         return;
                     }
                 }
-                if(passenger.departureSeatId === ""){
+                const totalForm = [passenger.departureSeatId,title[index],firstNames[index],familyNames[index],birthDays[index],nationalities[index],identityNumbers[index],originCountries[index],expiredAt[index]];
+                totalForm.map((item)=>{
+                    if(item === ""){
+                        isFilled = false;
+                        return;
+                    }
+                })
+                if(!isFilled){
                     toast.error(`Form penumpang ke ${index + 1} belum terisi`)
                     return;
                 }
-                if(title[index] === ""){
-                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
-                    return;
-                }
-                if(firstNames[index] === ""){
-                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
-                    return;
-                }
-                if(familyNames[index] === ""){
-                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
-                    return;
-                }
-                if(birthDays[index] === ""){
-                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
-                    return;
-                }
-                if(nationalities[index] === ""){
-                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
-                    return;
-                }
-                if(identityNumbers[index] === ""){
-                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
-                    return;
-                }
-                if(expiredAt[index] === ""){
-                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
-                    return;
-                }
-                if(originCountries[index] === ""){
-                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
-                    return;
-                }
-                isFilled = true;
                 return passenger;
             }
         );
