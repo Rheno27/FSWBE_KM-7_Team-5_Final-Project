@@ -29,7 +29,7 @@ function ResetRequest() {
       if (error.response?.status === 404) {
         toast.error("Email anda tidak terdaftar.");
       } else {
-        toast.error("An unexpected error occured");
+        toast.error("Terjadi kesalahan yang tidak diketahui");
       }
     },
   });
@@ -97,7 +97,7 @@ function ResetRequest() {
                 marginBottom: "1rem",
               }}
             >
-              Lupa Password
+              Lupa Sandi
             </h1>
 
             {/* Email form field */}
@@ -133,7 +133,7 @@ function ResetRequest() {
                       boxShadow: "2px 2px 5px 1px rgba(0, 0, 0, 0.1)",
                     }}
                   >
-                    Kembali ke Login
+                    Kembali Masuk
                   </Button>
                 </div>
               </Col>

@@ -66,7 +66,7 @@ const PassengerList = ({ transaction }) => {
             )}
           </>
         ) : (
-          <p>No passengers available.</p>
+          <p>Tidak ada penumpang.</p>
         )}
       </div>
     </Row>

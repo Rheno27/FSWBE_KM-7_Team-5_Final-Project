@@ -32,21 +32,21 @@ const OrderDetailCard = ({
     enabled: !!id,
     onError: (err) => {
       toast.error(
-        err.message || "An error occurred while fetching transaction data"
+        err.message || "Terjadi kesalahan saat mengambil data transaksi"
       );
     },
   });
 
   if (token && isLoading) {
-    return <p>Loading order details...</p>;
+    return <p>Memuat detail pesanan...</p>;
   }
 
   if (token && !transaction) {
-    return <p>No transaction details found.</p>;
+    return <p>Tidak ada detail transaksi.</p>;
   }
 
   if (isError || !transaction) {
-    return <p>Error loading order details. Please try again.</p>;
+    return <p>Gagal memuat detail pesanan. Silakan coba lagi.</p>;
   }
 
   // Function to count passengers by type
@@ -91,7 +91,7 @@ const OrderDetailCard = ({
   const totalPrice =
     adultTotalPrice + childTotalPrice + infantTotalPrice + totalTax;
 
-  const paymentStatus = transaction?.data?.payment?.status || "untracked";
+  const paymentStatus = transaction?.data?.payment?.status || "Tidak terlacak";
 
   const getPaymentStatus = (status) => {
     switch (status.toUpperCase()) {
@@ -170,20 +170,20 @@ const OrderDetailCard = ({
           <Col xs="auto">
           {isInOrderHistoryPage && (
             <Alert
-            className={`bg-${getPaymentStatus(transaction?.data?.payment?.status || "untracked")} text-white mb-0 align-items-end`}
+            className={`bg-${getPaymentStatus(transaction?.data?.payment?.status || "Tidak terlacak")} text-white mb-0 align-items-end`}
             style={statusBadge}
           >
             {capitalizeFirstLetter(
-              transaction?.data?.payment?.status || "Untracked"
+              transaction?.data?.payment?.status || "Tidak terlacak"
             )}
           </Alert>
           )}
           </Col>
           </Row>
           <h6 className="mb-1">
-            Booking Code :{" "}
+            Kode Booking :{" "}
             <TruncatableText
-              text={transaction?.data?.id || "Not found"}
+              text={transaction?.data?.id || "Tidak ditemukan"}
               maxLength={20}
             />
           </h6>
@@ -264,9 +264,9 @@ const OrderDetailCard = ({
                   }}
                   >Informasi:</span>
                   <ul className="list-unstyled">
-                      <li>Baggage 20 kg</li>
-                      <li>Cabin baggage 7 kg</li>
-                      <li>In Flight Entertainment</li>
+                      <li>Bagasi 20 kg</li>
+                      <li>Bagasi kabin 7 kg</li>
+                      <li>Hiburan di pesawat</li>
                   </ul>
                 </div>
               </div>
@@ -422,9 +422,9 @@ const OrderDetailCard = ({
                   }}
                   >Informasi:</div>
                   <ul className="list-unstyled">
-                      <li>Baggage 20 kg</li>
-                      <li>Cabin baggage 7 kg</li>
-                      <li>In Flight Entertainment</li>
+                      <li>Bagasi 20 kg</li>
+                      <li>Bagasi kabin 7 kg</li>
+                      <li>Hiburan di pesawat</li>
                   </ul>
                 </div>
               </div>
