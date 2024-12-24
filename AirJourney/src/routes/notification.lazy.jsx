@@ -26,7 +26,6 @@ export const Route = createLazyFileRoute("/notification")({
 
       return { notifications: response.data.data }; 
     } catch (err) {
-      console.error(err);
       return { notifications: [], error: "Failed to fetch notifications." };
     }
   },

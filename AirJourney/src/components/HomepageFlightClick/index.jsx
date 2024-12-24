@@ -86,7 +86,6 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
         } else {
             dispatch(setDepartureDateRedux(formData.departureDate));
         }
-        console.log(formData);
         navigate({
             to: `/users/public/detailPenerbangan?${new URLSearchParams(formData).toString()}`,
         });

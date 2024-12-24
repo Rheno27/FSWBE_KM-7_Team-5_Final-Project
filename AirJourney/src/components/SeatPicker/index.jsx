@@ -44,13 +44,11 @@ const SeatPicker = ({
         if (selectedSeats.includes(seatId)) {
             setSelectedSeats((prev) => {
                 const updatedSeats = prev.filter((s) => s !== seatId);
-                console.log("selectedSeats after removal:", updatedSeats);
                 return updatedSeats;
             });
         } else if (selectedSeats.length < totalPassengerSeat) {
             setSelectedSeats((prev) => {
                 const updatedSeats = [...prev, seatId];
-                console.log("selectedSeats after addition:", updatedSeats);
                 return updatedSeats;
             });
         }
@@ -59,16 +57,11 @@ const SeatPicker = ({
         if (selectedReturnSeats.includes(seatId)) {
             setSelectedReturnSeats((prev) => {
                 const updatedSeats = prev.filter((s) => s !== seatId);
-                console.log("selectedReturnSeats after removal:", updatedSeats);
                 return updatedSeats;
             });
         } else if (selectedReturnSeats.length < totalPassengerSeat) {
             setSelectedReturnSeats((prev) => {
                 const updatedSeats = [...prev, seatId];
-                console.log(
-                    "selectedReturnSeats after addition:",
-                    updatedSeats
-                );
                 return updatedSeats;
             });
         }
