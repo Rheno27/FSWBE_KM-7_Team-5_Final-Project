@@ -65,13 +65,14 @@ function Payment() {
   })
 
   const isPaymentSuccess = transaction?.data?.payment?.status === 'SUCCESS';
-
+  const [initScript, setInitScript] = useState(false);
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
     script.setAttribute('data-client-key', import.meta.env.VITE_MIDTRANS_CLIENT_KEY);
     script.async = true;
     document.body.appendChild(script);
+    setInitScript(true);
     return () => {
       document.body.removeChild(script);
     };
@@ -81,7 +82,7 @@ function Payment() {
     if (isSuccess && transaction?.data?.payment?.snapToken) {
       const snapToken = transaction.data.payment.snapToken;
       
-      if (!document.getElementById('snap-container').hasChildNodes()) {
+      if (!document.getElementById('snap-container').hasChildNodes() && initScript) {
 
         window.snap?.embed(snapToken, {
           embedId: 'snap-container',
@@ -89,7 +90,7 @@ function Payment() {
       }
       setRefresh(false);
     }
-  }, [isSuccess, transaction,refresh]);
+  }, [isSuccess, transaction,refresh,initScript]);
   
   useEffect(() => {
     if (transaction?.isError) {
