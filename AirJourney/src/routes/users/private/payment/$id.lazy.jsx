@@ -79,18 +79,19 @@ function Payment() {
   }, []);
 
   useEffect(() => {
-    if (isSuccess && transaction?.data?.payment?.snapToken) {
-      const snapToken = transaction.data.payment.snapToken;
-      
-      if (!document.getElementById('snap-container').hasChildNodes() && initScript) {
-
+    try {
+      const snapContainer = document.getElementById("snap-container");
+      if (isSuccess && snapContainer && initScript) {
+        const snapToken = transaction.data.payment.snapToken;
         window.snap?.embed(snapToken, {
           embedId: 'snap-container',
         });
+        setRefresh(false);
       }
-      setRefresh(false);
+    } catch (error) {
+      console.log(error);
     }
-  }, [isSuccess, transaction,refresh,initScript]);
+  }, [isSuccess,initScript,refresh]);
   
   useEffect(() => {
     if (transaction?.isError) {
