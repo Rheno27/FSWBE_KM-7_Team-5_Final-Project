@@ -30,7 +30,7 @@ function PaymentSuccess({ transaction }) {
     useEffect(() => {
       const isInSuccessPage = window.location.pathname.includes('/payment/success');
       if (!token || token.trim() === "") {
-        toast.error("Unauthorized, redirecting to homepage", {
+        toast.error("Tidak ada autorisasi, mengarahkan ke homepage...", {
           position: "bottom-center", // Toast will appear at the bottom-center
           autoClose: 3000, 
         });
@@ -44,7 +44,7 @@ function PaymentSuccess({ transaction }) {
   
       if (isInSuccessPage && !isValidId(id)) {
         if (!toast.isActive(INVALID_ID_TOAST)) { // Check if the toast is already active
-          toast.error("ID transaksi invalid. Mengembalikan...",{
+          toast.error("ID transaksi tidak valid. Mengembalikan...",{
             position: "bottom-center", // Toast will appear at the bottom-center
             autoClose: 3000, 
             toastId: INVALID_ID_TOAST
@@ -100,12 +100,12 @@ function PaymentSuccess({ transaction }) {
 
     onError: (error) => {
       if (error.response?.status === 404) {
-        toast.error("Email atau ID transaksi invalid.", {
+        toast.error("Email atau ID transaksi tidak valid.", {
           autoClose: 4000,
           position: "bottom-center",
         });
       } else {
-        toast.error("An unexpected error occured", {
+        toast.error("Terjadi kesalahan yang tidak diketahui", {
           position: "bottom-center", // Toast will appear at the bottom-center
           autoClose: 4000, 
         });
@@ -120,7 +120,7 @@ function PaymentSuccess({ transaction }) {
   return (
     <div>
       <Row className="justify-content-center mt-2 mb-4 py-3 shadow-sm">
-        <Col lg={9} md={10} sm={10} xs={10}>
+        <Col lg={9} md={10} sm={11} xs={11}>
           <BreadcrumbNav
             items={[
               { label: 'Isi Data Diri', path: '/users/private/checkout' },

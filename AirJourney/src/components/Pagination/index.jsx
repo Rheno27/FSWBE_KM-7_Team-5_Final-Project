@@ -1,6 +1,8 @@
 import { ChevronLeftRounded, ChevronRightRounded } from "@mui/icons-material";
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  if (!totalPages || totalPages <= 1) return null;
+
   const maxButtons = 3;
 
   // Define range of page numbers to display
@@ -11,10 +13,11 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const endPage = Math.min(startPage + maxButtons - 1, totalPages);
 
   // Create an array of page numbers to display
-  const pageNumbers = [];
-  for (let i = startPage; i <= endPage; i++) {
-    pageNumbers.push(i);
-  }
+  // const pageNumbers = [];
+  // for (let i = startPage; i <= endPage; i++) {
+  //   pageNumbers.push(i);
+  // }
+  const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 
   const styles = {
     button: {
@@ -37,8 +40,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       opacity: 0.5,
     },
   };
-
-  if (!totalPages || totalPages < 1) return null;
 
   return (
     <div>

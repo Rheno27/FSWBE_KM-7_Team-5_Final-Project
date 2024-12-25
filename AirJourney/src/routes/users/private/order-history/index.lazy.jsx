@@ -116,6 +116,7 @@ function OrderHistory({ id }) {
   
   // Safely destructure the `data` and `meta` from `data` fetched by useQuery
   const { meta = {}, data: transactions = [] } = data || {};
+  // const { totalPages, page: currentPageFromMeta } = meta || {};
   const totalPages = meta?.totalPages || 1;
 
   const isAvailable = transactions.length > 0;
@@ -362,9 +363,9 @@ function OrderHistory({ id }) {
                           </Alert>
 
                           {/* Departure flight section */}
-                          <Row className="align-items-center fs-8">
+                          <Row className="d-flex align-items-center justify-content-center fs-8">
                             <span
-                              className="text-center text-muted mb-3"
+                              className="text-center text-muted mb-3 mt-1"
                               style={{ fontSize: "0.9rem" }}
                             >
                               --- Keberangkatan (
@@ -374,7 +375,7 @@ function OrderHistory({ id }) {
                               )}
                               ) ---
                             </span>
-                            <Col xs={1} className="m-0">
+                            <Col xs={1} className="d-flex justify-content-center align-items-center">
                               <Place color="secondary" />
                             </Col>
                             <Col xs={3} className="p-0 m-0">
@@ -396,7 +397,7 @@ function OrderHistory({ id }) {
                                   "Tidak diketahui"}
                               </span>
                             </Col>
-                            <Col xs={4} className="p-0 text-center mx-auto">
+                            <Col xs={4} className="p-0 px-2 pe-1 text-center mx-auto">
                               <span className="pe-3 text-muted">
                                 {transaction?.departureFlight?.duration
                                   ? `${Math.floor(transaction.departureFlight?.duration / 60)}j ${transaction.departureFlight.duration % 60}m`
@@ -424,7 +425,7 @@ function OrderHistory({ id }) {
                                 />
                               </svg>
                             </Col>
-                            <Col xs={1} className="m-0">
+                            <Col xs={1} className="d-flex justify-content-center align-items-center">
                               <Place color="secondary" />
                             </Col>
                             <Col xs={3} className="p-0 m-0">
@@ -453,7 +454,7 @@ function OrderHistory({ id }) {
                           {/* Return flight section */}
                           {transaction?.returnFlight && (
                             <>
-                              <Row className="align-items-center fs-8">
+                              <Row className="d-flex align-items-center justify-content-center fs-8">
                                 <span
                                   className="text-center text-muted mb-3"
                                   style={{ fontSize: "0.9rem" }}
@@ -465,7 +466,7 @@ function OrderHistory({ id }) {
                                   )}
                                   ) ----
                                 </span>
-                                <Col xs={1} className="m-0">
+                                <Col xs={1} className="d-flex justify-content-center align-items-center">
                                   <Place />
                                 </Col>
                                 <Col xs={3} className="p-0 m-0">
@@ -518,7 +519,7 @@ function OrderHistory({ id }) {
                                     />
                                   </svg>
                                 </Col>
-                                <Col xs={1} className="m-0">
+                                <Col xs={1} className="d-flex justify-content-center align-items-center">
                                   <Place />
                                 </Col>
                                 <Col xs={3} className="p-0 m-0">
@@ -546,10 +547,10 @@ function OrderHistory({ id }) {
                           )}
                           {/* End */}
 
-                          <Row className="justify-content-between align-items-end fs-8">
+                          <Row className="justify-content-between align-items-start px-2 fs-8">
                             <Col xs={5}>
                               <span>
-                                <b>Booking Code :</b>
+                                <b>Kode Booking :</b>
                               </span>
                               <br />
                               <span>
@@ -582,11 +583,7 @@ function OrderHistory({ id }) {
                   )
                 )}
               </Col>
-              <Col lg={4} md={5} className="mt-4" style={{
-                  position: 'sticky',
-                  top: 0,
-                  zIndex: 10, // Optional, just to ensure it's above other elements
-                }}>
+              <Col lg={4} md={5} className="mt-4">
                 {selectedTransactionId ? (
                   <OrderDetailCard
                     id={selectedTransactionId}
@@ -603,11 +600,11 @@ function OrderHistory({ id }) {
               <Row>
                 {/* Pagination */}
                 <Col className="justify-content-center d-flex my-5">
-                  {/* <Pagination
+                  <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={handlePageChange}
-                  /> */}
+                  />
                 </Col>
                 {/* <Col className="justify-content-center d-flex my-5">
               <button

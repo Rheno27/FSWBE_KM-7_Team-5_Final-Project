@@ -54,8 +54,15 @@ const OrderDetailCard = ({
     if (!Array.isArray(passengerArray)) {
       return {}; // Return an empty object if the input is invalid
     }
+
+    const passengerType = {
+      "ADULT": "Dewasa",
+      "CHILD": "Anak",
+      "INFANT": "Bayi",
+    };
+
     return passengerArray.reduce((counts, passenger) => {
-      const type = passenger.type;
+      const type = passengerType[passenger.type] || passenger.type;
       counts[type] = (counts[type] || 0) + 1;
       return counts;
     }, {}); // Initialize result as an empty object
@@ -69,18 +76,18 @@ const OrderDetailCard = ({
   const returnPrice = transaction?.data?.returnFlight?.price || 0;
   const totalFlightPrice = (transaction?.data?.departureFlight?.price + (transaction?.data?.returnFlight?.price || 0)) || 0;
 
-  const adultDeparturePrice = departurePrice * (passengerCounts.ADULT || 0);
-  const childDeparturePrice = departurePrice * (passengerCounts.CHILD || 0);
+  const adultDeparturePrice = departurePrice * (passengerCounts.Dewasa || 0);
+  const childDeparturePrice = departurePrice * (passengerCounts.Anak || 0);
   const infantDeparturePrice = departurePrice * 0;
   const totalDepartureTax = (adultDeparturePrice + childDeparturePrice + infantDeparturePrice) * 0.1;
 
-  const adultReturnPrice = returnPrice * (passengerCounts.ADULT || 0);
-  const childReturnPrice =returnPrice * (passengerCounts.CHILD || 0);
+  const adultReturnPrice = returnPrice * (passengerCounts.Dewasa || 0);
+  const childReturnPrice =returnPrice * (passengerCounts.Anak || 0);
   const infantReturnPrice = returnPrice * 0;
   const totalReturnTax = (adultReturnPrice + childReturnPrice + infantReturnPrice) * 0.1;
 
-  const adultTotalPrice = totalFlightPrice * (passengerCounts.ADULT || 0);
-  const childTotalPrice = totalFlightPrice * (passengerCounts.CHILD || 0);
+  const adultTotalPrice = totalFlightPrice * (passengerCounts.Dewasa || 0);
+  const childTotalPrice = totalFlightPrice * (passengerCounts.Anak || 0);
   const infantTotalPrice = totalFlightPrice * 0;
   const totalTax = (adultTotalPrice + childTotalPrice + infantTotalPrice) * 0.1;
 
@@ -92,6 +99,14 @@ const OrderDetailCard = ({
     adultTotalPrice + childTotalPrice + infantTotalPrice + totalTax;
 
   const paymentStatus = transaction?.data?.payment?.status || "Tidak terlacak";
+  const today = new Date();
+  today.setHours(23, 59, 59, 999); // Reset time to 00:00:00
+  
+  const isDeparted = transaction?.data?.departureFlight?.departureDate
+  ? new Date(transaction?.data?.departureFlight?.departureDate) < today : false;
+  const isReturned = transaction?.data?.returnFlight?.departureDate
+  ? new Date(transaction?.data?.returnFlight?.departureDate) < today : false;
+  
 
   const getPaymentStatus = (status) => {
     switch (status.toUpperCase()) {
@@ -152,7 +167,7 @@ const OrderDetailCard = ({
   };
 
   return (
-    <div>
+    <div style={{ position: "sticky", top: "0" }}>
       <Card
         className="shadow-sm my-2 rounded-3"
       >
@@ -194,7 +209,7 @@ const OrderDetailCard = ({
             >
               --- Keberangkatan ---
             </h6>
-            <Col lg={7}>
+            <Col lg={7} md={7} xs={7}>
               <div
                 className="time"
                 style={{
@@ -208,9 +223,8 @@ const OrderDetailCard = ({
                 {formatDate(transaction?.data?.departureFlight?.departureDate)}
               </div>
             </Col>
-            <Col lg={5}>
+            <Col lg={5} md={5} xs={5}>
               <div
-                className="keberangkatan"
                 style={{
                   fontSize: "16px",
                   fontWeight: "bold",
@@ -232,7 +246,7 @@ const OrderDetailCard = ({
               <img
                 src={transaction?.data?.departureFlight?.airline?.image}
                 alt="Flight"
-                className="w-100 px-0"
+                className="w-100 px-0 fluid"
               />
             </Col>
             <Col lg={9}>
@@ -273,8 +287,8 @@ const OrderDetailCard = ({
             </Col>
           </Row>
           <hr />
-          <Row>
-            <Col lg={7}>
+          <Row className="my-2">
+            <Col lg={7} md={7} xs={7}>
               <div
                 className="time"
                 style={{
@@ -290,7 +304,7 @@ const OrderDetailCard = ({
                 </div>
               </div>
             </Col>
-            <Col lg={5}>
+            <Col lg={5} md={5} xs={5}>  
               <div
                 className="Kedatangan"
                 style={{
@@ -309,7 +323,7 @@ const OrderDetailCard = ({
           </Row>
           <hr />
           <Row className="mt-2 mb-2">
-            <Col lg={7} className="">
+            <Col lg={7} xs={6} className="">
               <div
                 className="hargadeparture"
                 style={{
@@ -320,7 +334,7 @@ const OrderDetailCard = ({
                 Harga
               </div>
             </Col>
-            <Col lg={5}>
+            <Col lg={5} xs={6}>
               <div
                 className="hargadeparture"
                 style={{
@@ -348,7 +362,7 @@ const OrderDetailCard = ({
               >
                 --- Kepulangan ---
               </h6>
-              <Col lg={7}>
+              <Col lg={7} md={7} xs={7}>
                 <div
                   className="time"
                   style={{
@@ -366,7 +380,7 @@ const OrderDetailCard = ({
                   </div>
                 </div>
               </Col>
-              <Col lg={5}>
+              <Col lg={5} md={5} xs={5}>
                 <div
                   className="keberangkatan"
                   style={{
@@ -390,7 +404,7 @@ const OrderDetailCard = ({
               <img
                 src={transaction?.data?.returnFlight?.airline?.image}
                 alt="Flight"
-                className="w-100 px-0"
+                className="w-100 px-0 fluid"
               />
             </Col>
             <Col lg={9}>
@@ -432,7 +446,7 @@ const OrderDetailCard = ({
           </Row>
             <hr />
             <Row>
-              <Col lg={7}>
+              <Col lg={7} md={7} xs={7}>
                 <div
                   className="time"
                   style={{
@@ -450,7 +464,7 @@ const OrderDetailCard = ({
                   </div>
                 </div>
               </Col>
-              <Col lg={5}>
+              <Col lg={5} md={5} xs={5}>
                 <div
                   className="Kedatangan"
                   style={{
@@ -469,7 +483,7 @@ const OrderDetailCard = ({
             </Row>
             <hr />
             <Row className="mt-2 mb-2">
-              <Col lg={7} className="">
+              <Col lg={6} xs={6}>
                 <div
                   className="hargadeparture"
                   style={{
@@ -480,7 +494,7 @@ const OrderDetailCard = ({
                   Harga
                 </div>
               </Col>
-              <Col lg={5}>
+              <Col lg={6} xs={6}>
                 <div
                   className="hargadeparture"
                   style={{
@@ -526,21 +540,21 @@ const OrderDetailCard = ({
                   </span>
                 </div>
               ))}
-              Tax
+              Pajak
             </Col>
             <Col xs={5} className="text-end align-self-start">
               <div className="d-flex flex-column">
-                {passengerCounts.ADULT > 0 && (
+                {passengerCounts.Dewasa > 0 && (
                   <span>
                     Rp. {new Intl.NumberFormat("id-ID").format(adultTotalPrice)}
                   </span>
                 )}
-                {passengerCounts.CHILD > 0 && (
+                {passengerCounts.Anak > 0 && (
                   <span>
                     Rp. {new Intl.NumberFormat("id-ID").format(childTotalPrice)}
                   </span>
                 )}
-                {passengerCounts.INFANT > 0 && (
+                {passengerCounts.Bayi > 0 && (
                   <span>
                     Rp.{" "}
                     {new Intl.NumberFormat("id-ID").format(infantTotalPrice)}
@@ -568,7 +582,7 @@ const OrderDetailCard = ({
                     fontWeight: "bold",
                   }}
                 >
-                  Total :
+                  Total Harga:
                 </span>
             </Col>
             <Col className="text-end align-self-start">
@@ -582,7 +596,7 @@ const OrderDetailCard = ({
             </Col>
           </Row>
           <hr />
-          {paymentStatus === "SUCCESS" && (
+          {paymentStatus === "SUCCESS" && !isDeparted && !isReturned && (
             <Button
               type="button"
               onClick={handleSendTicket}
@@ -613,7 +627,7 @@ const OrderDetailCard = ({
                 width: "100%",
                 padding: "10px 0",
                 fontSize: "1.1rem",
-                marginTop: "5px",
+                marginTop: "10px",
               }}
             >
               Lanjut Bayar
@@ -632,7 +646,7 @@ const OrderDetailCard = ({
                 width: "100%",
                 padding: "10px 0",
                 fontSize: "1.1rem",
-                marginTop: "5px",
+                marginTop: "10px",
               }}
             >
               Batalkan Pembayaran

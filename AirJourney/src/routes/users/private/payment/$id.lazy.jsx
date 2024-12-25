@@ -276,7 +276,7 @@ function Payment() {
         draggable
       />
       <Row className="justify-content-center mt-2 mb-4 py-3 shadow-sm">
-        <Col lg={10} md={9} sm={9} xs={10}>
+        <Col lg={9} md={10} sm={11} xs={11}>
           <BreadcrumbNav
             items={[
               { label: 'Isi Data Diri', path: '/users/private/checkout' },
