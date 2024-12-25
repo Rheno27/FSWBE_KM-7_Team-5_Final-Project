@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react'
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { Row, Col, Card } from 'react-bootstrap'
+import { Row, Col, Card, Container } from 'react-bootstrap'
 import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav'
 import { AlertBox } from '../../../../components/ui/alertBox.jsx'
 import { toast, ToastContainer } from "react-toastify";
@@ -17,13 +17,8 @@ export const Route = createLazyFileRoute('/users/private/payment/$id')({
 function Payment() {
   const { id } = Route.useParams();
   const { token } = useSelector((state) => state.auth);
+  const [refresh,setRefresh] = useState(false);
   const navigate = useNavigate();
-
-  const isValidId = (id) => {
-    if (!id) return false;
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    return uuidRegex.test(id);
-  };
 
   useEffect(() => {
     if (!token || token.trim() === "") {
@@ -35,14 +30,6 @@ function Payment() {
       const timer = setTimeout(() => {
         navigate({ to : '/'}); // Redirect to the homepage
       }, 3000);
-
-      return () => clearTimeout(timer);
-    }
-
-    if (!isValidId(id)) {
-      const timer = setTimeout(() => {
-        navigate({ to : '/'}); // Redirect to the homepage
-      }, 5000);
 
       return () => clearTimeout(timer);
     }
@@ -78,13 +65,14 @@ function Payment() {
   })
 
   const isPaymentSuccess = transaction?.data?.payment?.status === 'SUCCESS';
-
+  const [initScript, setInitScript] = useState(false);
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
     script.setAttribute('data-client-key', import.meta.env.VITE_MIDTRANS_CLIENT_KEY);
     script.async = true;
     document.body.appendChild(script);
+    setInitScript(true);
     return () => {
       document.body.removeChild(script);
     };
@@ -94,36 +82,19 @@ function Payment() {
     if (isSuccess && transaction?.data?.payment?.snapToken) {
       const snapToken = transaction.data.payment.snapToken;
       
-      if (!document.getElementById('snap-container').hasChildNodes()) {
+      if (!document.getElementById('snap-container').hasChildNodes() && initScript) {
 
         window.snap?.embed(snapToken, {
           embedId: 'snap-container',
-          onSuccess: function (result) {
-            // alert('Payment success! Redirecting to success page...');
-          },
-          onPending: function (result) {
-            alert('Menunggu proses pembayaran!');
-          },
-          onError: function (result) {
-            alert('Pembayaran tidak berhasil!');
-          },
-          onClose: function () {
-            if (!isPaymentSuccess) {
-              alert('Apakah yakin ingin menutup form pembayaran?');
-            }
-          },
         });
       }
+      setRefresh(false);
     }
-  }, [isSuccess, transaction]);
-
+  }, [isSuccess, transaction,refresh,initScript]);
+  
   useEffect(() => {
     if (transaction?.isError) {
       // Backend error occurred or transaction data could not be fetched
-      toast.error("Terjadi kesalahan saat mengambil data transaksi. Mengembalikan...", {
-        position: "bottom-center",
-        autoClose: 3000,
-      });
   
       const timer = setTimeout(() => {
         navigate({ to: '/users/private/order-history' });
@@ -135,11 +106,6 @@ function Payment() {
     if (!transaction?.data) {
       if (id !== transaction?.data?.id) {
         // ID mismatch detected
-        toast.error("ID transaksi tidak ditemukan. Mengembalikan...", {
-          position: "bottom-center",
-          autoClose: 3000,
-        });
-    
         const timer = setTimeout(() => {
           navigate({ to: '/users/private/order-history' }); // Redirect to the order history page
         }, 3000);
@@ -153,11 +119,11 @@ function Payment() {
       // Payment success logic
       toast.success('Pembayaran berhasil!', {
         position: "bottom-center",
-        autoClose: 5000,
+        autoClose: 2000,
       });
       const timer = setTimeout(() => {
         navigate({ to: `/users/private/payment/success?id=${id}` });
-      }, 5000);
+      }, 2000);
     
       return () => clearTimeout(timer);
     }
@@ -240,42 +206,22 @@ function Payment() {
         />
         </Col>
       </Row>
-      <div className='m-3'>
-         {!token || token.trim() === "" ? (
-                  <div className="d-flex flex-column align-items-center mt-5 py-5">
-                    <Col
-                      xs={12}
-                      sm={10}
-                      md={7}
-                      lg={6}
-                      className="text-center my-2 mt-5"
-                    >
-                      <p style={{ color: "#a06ece", fontWeight: 500 }}>
-                        Oops! Kamu belum login! <br />
-                        <span className="text-dark my-2">
-                          Login untuk bisa mengakses halaman ini
-                        </span>
-                      </p>
-                    </Col>
-                  </div>
-            ) : !isValidId(id) ? (
-              <p style={{ color: 'red' }}>ID Invalid. Mohon cek URL anda. Mengarahkan ulang ...</p>
-            ) : (
-              <Row className="justify-content-center my-4 gap-1">
-                <Col lg={6} md={6} className="my-2 justify-content-center">
-                    <Card id="snap-container" className="p-3 shadow-sm rounded-3 w-100"></Card>
-                    {isLoading && <p className='my-2'>Memuat form pembayaran...</p>}
-                </Col>
-                <Col lg={4} md={4}>
-                {id ? (
-                  <OrderDetailCard id={id} handleCancelTransaction={handleCancelTransaction}/>
-                ) : (
-                  <p className="text-danger">ID transaksi tidak ditemukan</p>
-                )}
-                </Col>
-              </Row>
-            )}
-      </div>
+      <Container>
+        <Row className="justify-content-center my-4 gap-1">
+          <Col lg={6} md={6} className="my-2">
+              <Card id="snap-container" className="p-3 shadow-sm rounded-3 w-100" style={{border: '1px solid #7126B5'}}></Card>
+              <p className='my-5 text-secondary' style={{cursor: 'pointer'}} onClick={()=>{setRefresh(true)}}>Halaman pembayaran tidak muncul? Klik disini</p>
+          </Col>
+
+          <Col lg={4} md={4}>
+          {id ? (
+            <OrderDetailCard lg={6} md={6} className="my-2" id={id} handleCancelTransaction={handleCancelTransaction} />
+          ) : (
+            <p className="text-danger">ID transaksi tidak ditemukan</p>
+          )}
+          </Col>
+        </Row>
+      </Container>
     </div>
   )
 }
