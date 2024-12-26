@@ -3,8 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Row, Col, Button, Card, Form, Alert } from "react-bootstrap";
 import { useState } from "react";
 import { getDetailTransaction } from "../../services/transaction/index";
-import { useLocation } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useLocation } from "@tanstack/react-router"
 import { useSelector } from "react-redux";
 import PassengerList from "./passengerList";
 
@@ -15,6 +14,7 @@ const OrderDetailCard = ({
   handleSendTicket,
   isPending
 }) => {
+
   const location = useLocation();
   const token = useSelector((state) => state.auth.token);
 
@@ -150,10 +150,7 @@ const OrderDetailCard = ({
 
   const TruncatableText = ({ text, maxLength = 10 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-
     const toggleText = () => setIsExpanded(!isExpanded);
-
-    // Fallback for undefined or null text
     const safeText = text || "";
 
     return (
@@ -657,10 +654,5 @@ const OrderDetailCard = ({
     </div>
   );
 };
-
-// OrderDetailCard.propTypes = {
-//   handleCancelTransaction: PropTypes.any,
-//   passenger: PropTypes.any,
-// };
 
 export default OrderDetailCard;

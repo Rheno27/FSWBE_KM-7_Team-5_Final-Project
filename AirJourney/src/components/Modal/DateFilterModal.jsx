@@ -23,7 +23,6 @@ const DateFilterModal = ({ isOpen, onClose, position, onFilter, onClear }) => {
       // Pass the updated range to the parent component
       onFilter({ from: fromDate, to: toDate });
     }
-
     onClose();
   };
 
@@ -76,6 +75,5 @@ const DateFilterModal = ({ isOpen, onClose, position, onFilter, onClear }) => {
     </>
   );
 };
-
 
 export default DateFilterModal;

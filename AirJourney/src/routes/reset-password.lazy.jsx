@@ -136,7 +136,6 @@ function ResetPassword() {
       if (newPassword !== confirmPassword) {
         return "Password tidak sesuai.";
       }
-
       return null;
     };
 

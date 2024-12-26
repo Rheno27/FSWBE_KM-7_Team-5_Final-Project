@@ -31,16 +31,6 @@ function OrderHistory({ id }) {
     }, [location, currentPage]); // Triggered when page or filter changes
 
   // Initialize selectedRange from query parameters on mount
-  // useEffect(() => {
-  //   const from = searchParams.get("from");
-  //   const to = searchParams.get("to");
-  //   if (from || to) {
-  //     setSelectedRange({
-  //       from: from ? new Date(from) : null,
-  //       to: to ? new Date(to) : null,
-  //     });
-  //   }
-  // }, [searchParams]);
   useEffect(() => {
     const pageFromParams = parseInt(searchParams.get("page"), 10) || 1;
     if (pageFromParams >= 1) {
@@ -104,7 +94,6 @@ function OrderHistory({ id }) {
   });  
   
   const totalData = allTransactions?.length || 0;
-  console.log("totalData", totalData);  
 
   const { data: responseData, isLoading, isError } = useQuery({
     queryKey: [
@@ -141,14 +130,10 @@ function OrderHistory({ id }) {
     },
   });
   
-  console.log("data", responseData)
   // Safely destructure the `data` and `meta` fetched by useQuery
   const { meta = {}, data: transactions = [] } = responseData || {};
   const totalPages = Math.ceil(totalData / meta.limit) || 1;
 
-  console.log("totalPages", totalPages)
-  console.log("currentPage", currentPage)
-  console.log("meta", meta)
   const isAvailable = transactions.length > 0;
 
   const transactionsArray = Array.isArray(transactions) ? transactions : [];
@@ -188,8 +173,6 @@ function OrderHistory({ id }) {
     })
   : transactionsArray;
  // Show all transactions if no date range is selected
-
-    console.log("transactions", transactions);
 
   const groupedFilteredTransactions =
     groupHistoriesByMonth(filteredTransactions);

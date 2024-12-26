@@ -88,8 +88,7 @@ function Payment() {
     script.async = true;
 
     script.onload = () => {
-      setScriptLoaded(true); // Script is loaded successfully
-      console.log('Snap.js script loaded');
+      setScriptLoaded(true); 
     };
 
     script.onerror = (error) => {
@@ -112,11 +111,9 @@ function Payment() {
           window.snap?.embed(snapToken, {
             embedId: 'snap-container',
             onSuccess: function (result) {
-              console.log('Payment Success:', result);
               // Add your success logic here
             },
             onPending: function (result) {
-              console.log('Payment Pending:', result);
               alert('Menunggu proses pembayaran!');
             },
             onError: function (result) {
@@ -249,19 +246,7 @@ function Payment() {
   
     if (confirmCancel) {
       cancelTransactionMutation(); 
-      // try {
-      //   const response = await cancelTransactionMutation();
-      //   if (response.status) {
-      //     toast.success("Pembatalan transaksi berhasil");
-      //     navigate({ to: `/users/private/order-history` });
-      //   } else {
-      //     toast.error("Gagal membatalkan transaksi");
-      //   }
-      // } catch (error) {
-      //   toast.error("An error occurred while cancelling the transaction.");
-      // }
     } else {
-      // User declined the action
       toast.info("Pembatalan transaksi dibatalkan.");
     }
   };

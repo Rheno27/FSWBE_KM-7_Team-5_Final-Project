@@ -34,7 +34,6 @@ export const HeaderNav = ({ selectedRange, setSelectedRange, onFilter, onClear }
 
   // Handlers to hide modals
   const dateModalClose = () => setDateModalOpen(false);
-  // const searchModalClose = () => setSearchModalOpen(false);
 
   const filterBtn = {
     padding: '8px 10px',
@@ -100,8 +99,8 @@ export const HeaderNav = ({ selectedRange, setSelectedRange, onFilter, onClear }
               top: `${position.top}px`,
               left: `${position.left}px`,
             }}
-            onFilter={onFilter} // Pass the filter logic to DateFilter
-            onClear={onClear} // Pass the clear filter logic to DateFilter
+            onFilter={onFilter} 
+            onClear={onClear}
             selectedRange={selectedRange}
             setSelectedRange={setSelectedRange}
           />

@@ -13,16 +13,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const endPage = Math.min(totalPages, startPage + maxButtons - 1);
 
   // Create an array of page numbers to display
-  // const pageNumbers = [];
-  // for (let i = startPage; i <= endPage; i++) {
-  //   pageNumbers.push(i);
-  // }
-  // const pageNumbers = [];
-  // for (let i = startPage; i <= Math.min(totalPages, endPage); i++) {
-  //   pageNumbers.push(i);
-  // }
   const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
-  console.log("Total Pages Passed to Pagination:", totalPages); // Should log 4
 
   const styles = {
     button: {
