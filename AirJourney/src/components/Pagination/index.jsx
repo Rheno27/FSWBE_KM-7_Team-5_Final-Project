@@ -2,7 +2,6 @@ import { ChevronLeftRounded, ChevronRightRounded } from "@mui/icons-material";
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   if (!totalPages || totalPages <= 1) return null;
-
   const maxButtons = 3;
 
   // Define range of page numbers to display
