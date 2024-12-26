@@ -22,13 +22,6 @@
   padding: 15px;
 }
 
-.modal-header {
-  display: flex;
-  justify-content: flex-end;
-  font-size: 2rem;
-  font-weight: bold;
-}
-
 .save-button {
   background-color: #7126b4;
   color: white;

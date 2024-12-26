@@ -1,29 +1,28 @@
 import React, { useState } from "react";
 import { DayPicker } from "react-day-picker";
+import { Col } from "react-bootstrap";
 import Close from "@mui/icons-material/Close";
 import "react-day-picker/dist/style.css";
-import "./style.css";
+import "./DateFilterModal.css";
 
 const DateFilterModal = ({ isOpen, onClose, position, onFilter, onClear }) => {
   if (!isOpen) return null;
   const [selectedRange, setSelectedRange] = useState(null);
-  const [searchParams, setSearchParams] = useState({});
 
   const handleSave = () => {
     if (selectedRange) {
       let fromDate = selectedRange.from;
       let toDate = selectedRange.to || fromDate;
-  
+
       // Adjust 'to' date only if it's a single date selection
       if (!selectedRange.to) {
         toDate = new Date(fromDate);
         toDate.setHours(23, 59, 59, 999); // Set 'to' to the end of the day
       }
-  
+
       // Pass the updated range to the parent component
       onFilter({ from: fromDate, to: toDate });
     }
-
     onClose();
   };
 
@@ -43,8 +42,9 @@ const DateFilterModal = ({ isOpen, onClose, position, onFilter, onClear }) => {
     <>
       <div className="modal-overlay" onClick={onClose} />
       <div className="custom-modal" style={position}>
-        <div className="modal-header">
-          <Close onClick={onClose} className={{ cursor: "pointer" }} />
+        <div className="d-flex justify-content-between mx-2">
+          <Col xs={10}><span><small>Filter berdasarkan tanggal pesanan dibuat</small></span></Col>
+          <Col className="text-end"><Close onClick={onClose} className={{ cursor: "pointer" }} /></Col>
         </div>
         <div>
           <DayPicker
@@ -58,12 +58,12 @@ const DateFilterModal = ({ isOpen, onClose, position, onFilter, onClear }) => {
                   {selectedRange?.to?.toLocaleDateString()}
                 </p>
               ) : (
-                <p>Please pick a date range.</p>
+                <p>Silahkan pilih rentang tanggal.</p>
               )
             }
           />
           <div className="d-flex justify-content-between mx-2">
-          <button onClick={handleClear} className="clear-button">
+            <button onClick={handleClear} className="clear-button">
               Hapus Filter
             </button>
             <button onClick={handleSave} className="save-button">
@@ -75,6 +75,5 @@ const DateFilterModal = ({ isOpen, onClose, position, onFilter, onClear }) => {
     </>
   );
 };
-
 
 export default DateFilterModal;

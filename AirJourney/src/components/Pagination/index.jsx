@@ -1,20 +1,18 @@
 import { ChevronLeftRounded, ChevronRightRounded } from "@mui/icons-material";
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  if (!totalPages || totalPages <= 1) return null;
   const maxButtons = 3;
 
   // Define range of page numbers to display
   const startPage = Math.max(
     1,
-    Math.min(currentPage - Math.floor(maxButtons / 2), totalPages - maxButtons + 1)
+    Math.min(currentPage - Math.floor(maxButtons / 2), totalPages - (maxButtons - 1))
   );
-  const endPage = Math.min(startPage + maxButtons - 1, totalPages);
+  const endPage = Math.min(totalPages, startPage + maxButtons - 1);
 
   // Create an array of page numbers to display
-  const pageNumbers = [];
-  for (let i = startPage; i <= endPage; i++) {
-    pageNumbers.push(i);
-  }
+  const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 
   const styles = {
     button: {
@@ -22,11 +20,14 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       padding: "5px 10px",
       cursor: "pointer",
       borderRadius: "5px",
-    },
-    activeButton: {
-      border: "3px solid #7126B5",
+      border: "2px solid #7126B5",
       background: "white",
       color: "#7126B5",
+    },
+    activeButton: {
+      border: "2px solid #7126B5",
+      background: "#7126B5",
+      color: "white",
       fontWeight: "bold",
     },
     disabledButton: {
@@ -37,8 +38,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       opacity: 0.5,
     },
   };
-
-  if (!totalPages || totalPages < 1) return null;
 
   return (
     <div>
@@ -60,6 +59,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         <button
           key={page}
           onClick={() => onPageChange(page)}
+          disabled={page === currentPage}
           style={{
             ...styles.button,
             ...(page === currentPage ? styles.activeButton : {}),

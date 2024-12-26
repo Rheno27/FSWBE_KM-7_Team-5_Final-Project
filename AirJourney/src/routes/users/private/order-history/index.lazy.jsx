@@ -5,12 +5,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Row, Col, Container, Card, Alert, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { Place } from "@mui/icons-material";
-import { getAllTransactions } from "../../../../services/transaction";
+import { getAllTransactions, getAllTransactionsByUser } from "../../../../services/transaction";
 import { HeaderNav } from "../../../../components/ui/headerNav";
 import OrderDetailCard from "../../../../components/OrderDetails";
 import Pagination from "../../../../components/Pagination";
 import notFound from "../../../../assets/img/notfound.png";
-import { Skeleton } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 
 export const Route = createLazyFileRoute("/users/private/order-history/")({
@@ -24,19 +23,20 @@ function OrderHistory({ id }) {
   const [selectedRange, setSelectedRange] = useState(null);
   const token = localStorage.getItem("token");
 
-  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const [currentPage, setCurrentPage] = useState(1); // Track current 
+  
+     // Reset selectedTransactionId when the location (page or filter) changes
+     useEffect(() => {
+      setSelectedTransactionId(null);
+    }, [location, currentPage]); // Triggered when page or filter changes
 
   // Initialize selectedRange from query parameters on mount
   useEffect(() => {
-    const from = searchParams.get("from");
-    const to = searchParams.get("to");
-    if (from || to) {
-      setSelectedRange({
-        from: from ? new Date(from) : null,
-        to: to ? new Date(to) : null,
-      });
+    const pageFromParams = parseInt(searchParams.get("page"), 10) || 1;
+    if (pageFromParams >= 1) {
+      setCurrentPage(pageFromParams); // Initialize currentPage from URL
     }
-  }, [searchParams]);
+  }, [searchParams])
 
   const formatLocalDateString = (date) => {
     const year = date.getFullYear();
@@ -68,18 +68,34 @@ function OrderHistory({ id }) {
     const params = {
       from: formatLocalDateString(fromDate),
       to: formatLocalDateString(toDate),
+      page: 1,
     };
   
     setSelectedRange({ from: fromDate, to: toDate }); // Update selectedRange state
     setSearchParams(params); // Update URL query params
+    setCurrentPage(1); // Reset to the first page
   };
 
   const handleClear = () => {
     setSelectedRange(null); // Reset the selected range
     setSearchParams({}); // Clear all URL search parameters
+    setCurrentPage(1);
   }
+
+  const { data: allTransactions, error } = useQuery({
+    queryKey: ["allTransactions"],
+    queryFn: getAllTransactionsByUser,
+    onError: (error) => {
+      toast.error(
+        error.response?.data?.message ||
+          "Terjadi kesalahan saat mengambil data transaksi"
+      );
+    },
+  });  
   
-  const { data, isLoading, isError } = useQuery({
+  const totalData = allTransactions?.length || 0;
+
+  const { data: responseData, isLoading, isError } = useQuery({
     queryKey: [
       "transactions",
       currentPage,
@@ -114,9 +130,9 @@ function OrderHistory({ id }) {
     },
   });
   
-  // Safely destructure the `data` and `meta` from `data` fetched by useQuery
-  const { meta = {}, data: transactions = [] } = data || {};
-  const totalPages = meta?.totalPages || 1;
+  // Safely destructure the `data` and `meta` fetched by useQuery
+  const { meta = {}, data: transactions = [] } = responseData || {};
+  const totalPages = Math.ceil(totalData / meta.limit) || 1;
 
   const isAvailable = transactions.length > 0;
 
@@ -128,6 +144,7 @@ function OrderHistory({ id }) {
       if (isNaN(date)) {
         return grouped;
       }
+      
       const yearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 
       // Group transactions by the year-month key
@@ -156,8 +173,6 @@ function OrderHistory({ id }) {
     })
   : transactionsArray;
  // Show all transactions if no date range is selected
-
-
 
   const groupedFilteredTransactions =
     groupHistoriesByMonth(filteredTransactions);
@@ -221,13 +236,22 @@ function OrderHistory({ id }) {
 
   // Form submission handler
   const handleSendTicket = async () => {
-    const response = sendTicket();
+    sendTicket();
   };
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
+      // Explicitly update the URL and navigate to the correct route
+    navigate({
+      to: '/users/private/order-history', // Ensure the correct route
+      search: (prev) => ({ ...Object.fromEntries(prev), page }), // Retain other params and update 'page'
+    });
     }
   };
+
+  const handleCardClick = (transactionId) => {
+    setSelectedTransactionId(transactionId); // Set selected transaction
+  };  
 
   const getPaymentStatus = (status) => {
     switch (status.toUpperCase()) {
@@ -281,7 +305,6 @@ function OrderHistory({ id }) {
     const monthName = indonesianMonthsShort[parseInt(month, 10) - 1];
     return `${day} ${monthName} ${year}`;
   };
-  
 
   const TruncatableText = ({ text, maxLength = 10 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -339,12 +362,7 @@ function OrderHistory({ id }) {
                       {transactions.map((transaction) => (
                         <Card
                           key={transaction.id}
-                          onClick={() => {
-                            setSelectedTransactionId(transaction.id); // Set selected transaction
-                            navigate(
-                              `/users/private/order-history/${transaction.id}`
-                            ); // Navigate with the transactionId
-                          }}
+                          onClick={() => handleCardClick(transaction.id)}
                           className="p-3 shadow-sm rounded-3 mt-2 w-100 cursor-pointer"
                           style={
                             transaction.id === selectedTransactionId
@@ -362,9 +380,9 @@ function OrderHistory({ id }) {
                           </Alert>
 
                           {/* Departure flight section */}
-                          <Row className="align-items-center fs-8">
+                          <Row className="d-flex align-items-center justify-content-center fs-8">
                             <span
-                              className="text-center text-muted mb-3"
+                              className="text-center text-muted mb-3 mt-1"
                               style={{ fontSize: "0.9rem" }}
                             >
                               --- Keberangkatan (
@@ -374,7 +392,7 @@ function OrderHistory({ id }) {
                               )}
                               ) ---
                             </span>
-                            <Col xs={1} className="m-0">
+                            <Col xs={1} className="d-flex justify-content-center align-items-center">
                               <Place color="secondary" />
                             </Col>
                             <Col xs={3} className="p-0 m-0">
@@ -396,7 +414,7 @@ function OrderHistory({ id }) {
                                   "Tidak diketahui"}
                               </span>
                             </Col>
-                            <Col xs={4} className="p-0 text-center mx-auto">
+                            <Col xs={4} className="p-0 px-2 pe-1 text-center mx-auto">
                               <span className="pe-3 text-muted">
                                 {transaction?.departureFlight?.duration
                                   ? `${Math.floor(transaction.departureFlight?.duration / 60)}j ${transaction.departureFlight.duration % 60}m`
@@ -424,7 +442,7 @@ function OrderHistory({ id }) {
                                 />
                               </svg>
                             </Col>
-                            <Col xs={1} className="m-0">
+                            <Col xs={1} className="d-flex justify-content-center align-items-center">
                               <Place color="secondary" />
                             </Col>
                             <Col xs={3} className="p-0 m-0">
@@ -453,7 +471,7 @@ function OrderHistory({ id }) {
                           {/* Return flight section */}
                           {transaction?.returnFlight && (
                             <>
-                              <Row className="align-items-center fs-8">
+                              <Row className="d-flex align-items-center justify-content-center fs-8">
                                 <span
                                   className="text-center text-muted mb-3"
                                   style={{ fontSize: "0.9rem" }}
@@ -465,7 +483,7 @@ function OrderHistory({ id }) {
                                   )}
                                   ) ----
                                 </span>
-                                <Col xs={1} className="m-0">
+                                <Col xs={1} className="d-flex justify-content-center align-items-center">
                                   <Place />
                                 </Col>
                                 <Col xs={3} className="p-0 m-0">
@@ -518,7 +536,7 @@ function OrderHistory({ id }) {
                                     />
                                   </svg>
                                 </Col>
-                                <Col xs={1} className="m-0">
+                                <Col xs={1} className="d-flex justify-content-center align-items-center">
                                   <Place />
                                 </Col>
                                 <Col xs={3} className="p-0 m-0">
@@ -546,10 +564,10 @@ function OrderHistory({ id }) {
                           )}
                           {/* End */}
 
-                          <Row className="justify-content-between align-items-end fs-8">
+                          <Row className="justify-content-between align-items-start px-2 fs-8">
                             <Col xs={5}>
                               <span>
-                                <b>Booking Code :</b>
+                                <b>Kode Booking :</b>
                               </span>
                               <br />
                               <span>
@@ -582,12 +600,9 @@ function OrderHistory({ id }) {
                   )
                 )}
               </Col>
-              <Col lg={4} md={5} className="mt-4" style={{
-                  position: 'sticky',
-                  top: 0,
-                  zIndex: 10, // Optional, just to ensure it's above other elements
-                }}>
-                {selectedTransactionId ? (
+              <Col lg={4} md={5} className="mt-4">
+                {selectedTransactionId && 
+                  transactions.some(transaction => transaction.id === selectedTransactionId) ? (
                   <OrderDetailCard
                     id={selectedTransactionId}
                     handlePaymentRedirect={handlePaymentRedirect}
@@ -602,12 +617,14 @@ function OrderHistory({ id }) {
               </Col>
               <Row>
                 {/* Pagination */}
-                <Col className="justify-content-center d-flex my-5">
-                  {/* <Pagination
+                <Col className="justify-content-center d-flex mt-5 mb-3">
+                {totalPages > 1 && (
+                  <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={handlePageChange}
-                  /> */}
+                  />
+                )}
                 </Col>
                 {/* <Col className="justify-content-center d-flex my-5">
               <button
