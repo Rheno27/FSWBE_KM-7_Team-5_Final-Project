@@ -30,11 +30,14 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       padding: "5px 10px",
       cursor: "pointer",
       borderRadius: "5px",
-    },
-    activeButton: {
-      border: "3px solid #7126B5",
+      border: "2px solid #7126B5",
       background: "white",
       color: "#7126B5",
+    },
+    activeButton: {
+      border: "2px solid #7126B5",
+      background: "#7126B5",
+      color: "white",
       fontWeight: "bold",
     },
     disabledButton: {

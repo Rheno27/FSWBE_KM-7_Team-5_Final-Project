@@ -14,12 +14,6 @@ import { useSearchParams } from "react-router-dom";
 
 export const Route = createLazyFileRoute("/users/private/order-history/")({
   component: OrderHistory,
-  parseParams: (search) => ({
-    currentPage: Number(search.currentPage) || 1, // Default to page 1
-  }),
-  stringifyParams: (params) => ({
-    currentPage: params.currentPage?.toString() || "1",
-  }),
 });
 
 function OrderHistory({ id }) {
@@ -29,7 +23,12 @@ function OrderHistory({ id }) {
   const [selectedRange, setSelectedRange] = useState(null);
   const token = localStorage.getItem("token");
 
-  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const [currentPage, setCurrentPage] = useState(1); // Track current 
+  
+     // Reset selectedTransactionId when the location (page or filter) changes
+     useEffect(() => {
+      setSelectedTransactionId(null);
+    }, [location, currentPage]); // Triggered when page or filter changes
 
   // Initialize selectedRange from query parameters on mount
   // useEffect(() => {
@@ -254,14 +253,22 @@ function OrderHistory({ id }) {
 
   // Form submission handler
   const handleSendTicket = async () => {
-    const response = sendTicket();
+    sendTicket();
   };
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
-      setSearchParams((prev) => ({ ...Object.fromEntries(prev), page })); // Update URL
+      // Explicitly update the URL and navigate to the correct route
+    navigate({
+      to: '/users/private/order-history', // Ensure the correct route
+      search: (prev) => ({ ...Object.fromEntries(prev), page }), // Retain other params and update 'page'
+    });
     }
   };
+
+  const handleCardClick = (transactionId) => {
+    setSelectedTransactionId(transactionId); // Set selected transaction
+  };  
 
   const getPaymentStatus = (status) => {
     switch (status.toUpperCase()) {
@@ -372,12 +379,7 @@ function OrderHistory({ id }) {
                       {transactions.map((transaction) => (
                         <Card
                           key={transaction.id}
-                          onClick={() => {
-                            setSelectedTransactionId(transaction.id); // Set selected transaction
-                            navigate(
-                              `/users/private/order-history/${transaction.id}`
-                            ); // Navigate with the transactionId
-                          }}
+                          onClick={() => handleCardClick(transaction.id)}
                           className="p-3 shadow-sm rounded-3 mt-2 w-100 cursor-pointer"
                           style={
                             transaction.id === selectedTransactionId
@@ -616,7 +618,8 @@ function OrderHistory({ id }) {
                 )}
               </Col>
               <Col lg={4} md={5} className="mt-4">
-                {selectedTransactionId ? (
+                {selectedTransactionId && 
+                  transactions.some(transaction => transaction.id === selectedTransactionId) ? (
                   <OrderDetailCard
                     id={selectedTransactionId}
                     handlePaymentRedirect={handlePaymentRedirect}
