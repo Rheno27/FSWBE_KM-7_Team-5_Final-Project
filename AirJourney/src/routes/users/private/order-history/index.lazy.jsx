@@ -5,16 +5,21 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Row, Col, Container, Card, Alert, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { Place } from "@mui/icons-material";
-import { getAllTransactions } from "../../../../services/transaction";
+import { getAllTransactions, getAllTransactionsByUser } from "../../../../services/transaction";
 import { HeaderNav } from "../../../../components/ui/headerNav";
 import OrderDetailCard from "../../../../components/OrderDetails";
 import Pagination from "../../../../components/Pagination";
 import notFound from "../../../../assets/img/notfound.png";
-import { Skeleton } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 
 export const Route = createLazyFileRoute("/users/private/order-history/")({
   component: OrderHistory,
+  parseParams: (search) => ({
+    currentPage: Number(search.currentPage) || 1, // Default to page 1
+  }),
+  stringifyParams: (params) => ({
+    currentPage: params.currentPage?.toString() || "1",
+  }),
 });
 
 function OrderHistory({ id }) {
@@ -27,16 +32,22 @@ function OrderHistory({ id }) {
   const [currentPage, setCurrentPage] = useState(1); // Track current page
 
   // Initialize selectedRange from query parameters on mount
+  // useEffect(() => {
+  //   const from = searchParams.get("from");
+  //   const to = searchParams.get("to");
+  //   if (from || to) {
+  //     setSelectedRange({
+  //       from: from ? new Date(from) : null,
+  //       to: to ? new Date(to) : null,
+  //     });
+  //   }
+  // }, [searchParams]);
   useEffect(() => {
-    const from = searchParams.get("from");
-    const to = searchParams.get("to");
-    if (from || to) {
-      setSelectedRange({
-        from: from ? new Date(from) : null,
-        to: to ? new Date(to) : null,
-      });
+    const pageFromParams = parseInt(searchParams.get("page"), 10) || 1;
+    if (pageFromParams >= 1) {
+      setCurrentPage(pageFromParams); // Initialize currentPage from URL
     }
-  }, [searchParams]);
+  }, [searchParams])
 
   const formatLocalDateString = (date) => {
     const year = date.getFullYear();
@@ -68,18 +79,35 @@ function OrderHistory({ id }) {
     const params = {
       from: formatLocalDateString(fromDate),
       to: formatLocalDateString(toDate),
+      page: 1,
     };
   
     setSelectedRange({ from: fromDate, to: toDate }); // Update selectedRange state
     setSearchParams(params); // Update URL query params
+    setCurrentPage(1); // Reset to the first page
   };
 
   const handleClear = () => {
     setSelectedRange(null); // Reset the selected range
     setSearchParams({}); // Clear all URL search parameters
+    setCurrentPage(1);
   }
+
+  const { data: allTransactions, error } = useQuery({
+    queryKey: ["allTransactions"],
+    queryFn: getAllTransactionsByUser,
+    onError: (error) => {
+      toast.error(
+        error.response?.data?.message ||
+          "Terjadi kesalahan saat mengambil data transaksi"
+      );
+    },
+  });  
   
-  const { data, isLoading, isError } = useQuery({
+  const totalData = allTransactions?.length || 0;
+  console.log("totalData", totalData);  
+
+  const { data: responseData, isLoading, isError } = useQuery({
     queryKey: [
       "transactions",
       currentPage,
@@ -114,11 +142,14 @@ function OrderHistory({ id }) {
     },
   });
   
-  // Safely destructure the `data` and `meta` from `data` fetched by useQuery
-  const { meta = {}, data: transactions = [] } = data || {};
-  // const { totalPages, page: currentPageFromMeta } = meta || {};
-  const totalPages = meta?.totalPages || 1;
+  console.log("data", responseData)
+  // Safely destructure the `data` and `meta` fetched by useQuery
+  const { meta = {}, data: transactions = [] } = responseData || {};
+  const totalPages = Math.ceil(totalData / meta.limit) || 1;
 
+  console.log("totalPages", totalPages)
+  console.log("currentPage", currentPage)
+  console.log("meta", meta)
   const isAvailable = transactions.length > 0;
 
   const transactionsArray = Array.isArray(transactions) ? transactions : [];
@@ -129,6 +160,7 @@ function OrderHistory({ id }) {
       if (isNaN(date)) {
         return grouped;
       }
+      
       const yearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 
       // Group transactions by the year-month key
@@ -158,7 +190,7 @@ function OrderHistory({ id }) {
   : transactionsArray;
  // Show all transactions if no date range is selected
 
-    console.log("transactions", transactions)
+    console.log("transactions", transactions);
 
   const groupedFilteredTransactions =
     groupHistoriesByMonth(filteredTransactions);
@@ -227,6 +259,7 @@ function OrderHistory({ id }) {
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
+      setSearchParams((prev) => ({ ...Object.fromEntries(prev), page })); // Update URL
     }
   };
 
@@ -282,7 +315,6 @@ function OrderHistory({ id }) {
     const monthName = indonesianMonthsShort[parseInt(month, 10) - 1];
     return `${day} ${monthName} ${year}`;
   };
-  
 
   const TruncatableText = ({ text, maxLength = 10 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -599,12 +631,14 @@ function OrderHistory({ id }) {
               </Col>
               <Row>
                 {/* Pagination */}
-                <Col className="justify-content-center d-flex my-5">
+                <Col className="justify-content-center d-flex mt-5 mb-3">
+                {totalPages > 1 && (
                   <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={handlePageChange}
                   />
+                )}
                 </Col>
                 {/* <Col className="justify-content-center d-flex my-5">
               <button

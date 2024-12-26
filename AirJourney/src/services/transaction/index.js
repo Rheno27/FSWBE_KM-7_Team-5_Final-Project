@@ -58,6 +58,43 @@ export const getAllTransactions = async (page, filter) => {
     }
 };
 
+export const getAllTransactionsByUser = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("No authentication token found. Please log in.");
+    }
+  
+    const url = `${import.meta.env.VITE_API_URL}/transactions`;
+    let allTransactions = [];
+    let currentPage = 1;
+    let totalPages = 1;
+  
+    try {
+      while (currentPage <= totalPages) {
+        const response = await axios.get(url, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+          params: {
+            page: currentPage,
+          },
+        });
+  
+        const { data, meta } = response.data;
+  
+        allTransactions = [...allTransactions, ...data];
+        totalPages = meta.totalPage; // Ensure the backend response includes this
+        currentPage++;
+      }
+  
+      return allTransactions; // Return all accumulated transactions
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || error.message || "Something went wrong"
+      );
+    }
+  };
+
 export const getTransactionById = async (id) => {
     const token = localStorage.getItem("token");
     const url = `${import.meta.env.VITE_API_URL}/transactions/${id}`;

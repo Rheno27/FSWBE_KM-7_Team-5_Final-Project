@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import Close from "@mui/icons-material/Close";
 import "react-day-picker/dist/style.css";
-import "./style.css";
+import "./DateFilterModal.css";
+import { Col, Row } from "react-bootstrap";
 
 const DateFilterModal = ({ isOpen, onClose, position, onFilter, onClear }) => {
   if (!isOpen) return null;
   const [selectedRange, setSelectedRange] = useState(null);
-  const [searchParams, setSearchParams] = useState({});
 
   const handleSave = () => {
     if (selectedRange) {
@@ -43,8 +43,9 @@ const DateFilterModal = ({ isOpen, onClose, position, onFilter, onClear }) => {
     <>
       <div className="modal-overlay" onClick={onClose} />
       <div className="custom-modal" style={position}>
-        <div className="modal-header">
-          <Close onClick={onClose} className={{ cursor: "pointer" }} />
+        <div className="d-flex justify-content-between mx-2">
+          <Col xs={10}><span><small>Filter berdasarkan tanggal pesanan dibuat</small></span></Col>
+          <Col className="text-end"><Close onClick={onClose} className={{ cursor: "pointer" }} /></Col>
         </div>
         <div>
           <DayPicker
@@ -58,7 +59,7 @@ const DateFilterModal = ({ isOpen, onClose, position, onFilter, onClear }) => {
                   {selectedRange?.to?.toLocaleDateString()}
                 </p>
               ) : (
-                <p>Please pick a date range.</p>
+                <p>Silahkan pilih rentang tanggal.</p>
               )
             }
           />

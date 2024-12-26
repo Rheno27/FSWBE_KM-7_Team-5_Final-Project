@@ -8,16 +8,21 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   // Define range of page numbers to display
   const startPage = Math.max(
     1,
-    Math.min(currentPage - Math.floor(maxButtons / 2), totalPages - maxButtons + 1)
+    Math.min(currentPage - Math.floor(maxButtons / 2), totalPages - (maxButtons - 1))
   );
-  const endPage = Math.min(startPage + maxButtons - 1, totalPages);
+  const endPage = Math.min(totalPages, startPage + maxButtons - 1);
 
   // Create an array of page numbers to display
   // const pageNumbers = [];
   // for (let i = startPage; i <= endPage; i++) {
   //   pageNumbers.push(i);
   // }
+  // const pageNumbers = [];
+  // for (let i = startPage; i <= Math.min(totalPages, endPage); i++) {
+  //   pageNumbers.push(i);
+  // }
   const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  console.log("Total Pages Passed to Pagination:", totalPages); // Should log 4
 
   const styles = {
     button: {
@@ -61,6 +66,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         <button
           key={page}
           onClick={() => onPageChange(page)}
+          disabled={page === currentPage}
           style={{
             ...styles.button,
             ...(page === currentPage ? styles.activeButton : {}),
