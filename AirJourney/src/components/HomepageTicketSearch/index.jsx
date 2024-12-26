@@ -28,11 +28,14 @@ import { useQuery } from "@tanstack/react-query";
 const HomepageTicketSearch = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const storageFormData = localStorage.getItem("searchQuery");
+    const storageFormData =
+        localStorage.getItem("searchQuery") &&
+        JSON.parse(localStorage.getItem("searchQuery"));
     // for component state
-    const [isReturn, setIsReturn] = useState(
-        useSelector((state) => state.searchQuery.isReturn) || false
-    );
+    const [isReturn, setIsReturn] =
+        useState(useSelector((state) => state.searchQuery.isReturn)) ||
+        storageFormData?.isReturn ||
+        false;
     const [isReturnFilled, setIsReturnFilled] = useState(true);
     const [showDestinationModal, setShowDestinationModal] = useState(false);
     const [showFromDestinationModal, setShowFromDestinationModal] =
@@ -74,8 +77,8 @@ const HomepageTicketSearch = () => {
                   from: new Date(departureDateRedux),
                   to: new Date(arrivalDateRedux),
               }
-            : (departureDateRedux && new Date(departureDateRedux)) ||
-                  (storageFormData?.departureDate &&
+            : (departureDateRedux ? new Date(departureDateRedux) : null) ||
+                  ((new Date(storageFormData?.departureDate) > new Date()) &&
                       new Date(storageFormData?.departureDate)) ||
                   new Date()
     );
@@ -114,7 +117,7 @@ const HomepageTicketSearch = () => {
     });
 
     useEffect(() => {
-        if (isSuccess) {
+        if (isSuccess && (!fromDestination || !toDestination)) {
             setFromDestination(airportList.data.data[0].name);
             setToDestination(airportList.data.data[1].name);
             setFromDestinationId(airportList.data.data[0].id);
@@ -162,6 +165,7 @@ const HomepageTicketSearch = () => {
                 passenger,
                 fromDestination,
                 toDestination,
+                isReturn,
             })
         );
         navigate({
@@ -328,7 +332,9 @@ const HomepageTicketSearch = () => {
                             {/* date */}
                             <div className="flex items-start flex-1 gap-3 relative sm:items-center">
                                 <DateRangeIcon color="disabled" />
-                                <span className="text-gray-500 w-10">Tanggal</span>
+                                <span className="text-gray-500 w-10">
+                                    Tanggal
+                                </span>
                                 <div className="flex flex-col gap-4 flex-1 justify-between md:flex-row phone:gap-0">
                                     <div className="flex flex-1 flex-col pb-1 mx-3 border-b gap-1">
                                         <span className="text-gray-500 w-10">

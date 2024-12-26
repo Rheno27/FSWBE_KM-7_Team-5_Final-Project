@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react'
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { Row, Col, Card } from 'react-bootstrap'
+import { Row, Col, Card, Container } from 'react-bootstrap'
 import { BreadcrumbNav } from '../../../../components/ui/breadcrumbNav'
 import { AlertBox } from '../../../../components/ui/alertBox.jsx'
 import { toast, ToastContainer } from "react-toastify";
@@ -17,6 +17,7 @@ export const Route = createLazyFileRoute('/users/private/payment/$id')({
 function Payment() {
   const { id } = Route.useParams();
   const { token } = useSelector((state) => state.auth);
+  const [refresh,setRefresh] = useState(false);
   const navigate = useNavigate();
   const [scriptLoaded, setScriptLoaded] = useState(false); // Track if the script is loaded
   const [snapInitialized, setSnapInitialized] = useState(false); 
@@ -37,14 +38,6 @@ function Payment() {
       const timer = setTimeout(() => {
         navigate({ to : '/'}); // Redirect to the homepage
       }, 3000);
-
-      return () => clearTimeout(timer);
-    }
-
-    if (!isValidId(id)) {
-      const timer = setTimeout(() => {
-        navigate({ to : '/'}); // Redirect to the homepage
-      }, 5000);
 
       return () => clearTimeout(timer);
     }
@@ -80,7 +73,7 @@ function Payment() {
   })
 
   const isPaymentSuccess = transaction?.data?.payment?.status === 'SUCCESS';
-
+  const [initScript, setInitScript] = useState(false);
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
@@ -96,6 +89,7 @@ function Payment() {
     };
 
     document.body.appendChild(script);
+    setInitScript(true);
     return () => {
       document.body.removeChild(script);
     };
