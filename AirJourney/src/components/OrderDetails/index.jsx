@@ -239,14 +239,14 @@ const OrderDetailCard = ({
           <hr />
           {/* Flight Details Section */}
           <Row>
-            <Col lg={3} className="d-flex align-items-center">
+            <Col xs={3} md={3} className="d-flex align-items-center">
               <img
                 src={transaction?.data?.departureFlight?.airline?.image}
                 alt="Flight"
                 className="w-100 px-0 fluid"
               />
             </Col>
-            <Col lg={9}>
+            <Col xs={9} md={9}>
               <div className="flight-info">
                 <div
                   className="airline"

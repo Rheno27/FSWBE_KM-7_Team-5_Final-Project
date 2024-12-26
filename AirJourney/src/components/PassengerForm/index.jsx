@@ -218,7 +218,7 @@ const PassengerForm = ({
                                         color: "#4B1979",
                                     }}
                                 >
-                                    Nama Lengkap
+                                    Nama Depan
                                 </Form.Label>
                                 <Form.Control
                                     type="text"
@@ -229,7 +229,7 @@ const PassengerForm = ({
                                             e.target.value
                                         )
                                     }
-                                    placeholder="Masukkan Nama Lengkap"
+                                    placeholder="Masukkan Nama Depan"
                                     style={{
                                         borderRadius: "8px",
                                         boxShadow: "0 0 5px rgba(0,0,0,0.1)",
@@ -246,7 +246,7 @@ const PassengerForm = ({
                                         color: "#4B1979",
                                     }}
                                 >
-                                    Nama Keluarga
+                                    Nama Belakang
                                 </Form.Label>
                                 <Form.Control
                                     type="text"
@@ -257,14 +257,13 @@ const PassengerForm = ({
                                             e.target.value
                                         )
                                     }
-                                    placeholder="Masukkan Nama Keluarga"
+                                    placeholder="Masukkan Nama Belakang"
                                     style={{
                                         borderRadius: "8px",
                                         boxShadow: "0 0 5px rgba(0,0,0,0.1)",
                                     }}
                                 />
                             </Form.Group>
-
                             {/* Tanggal Lahir */}
                             <Form.Group className="mt-3">
                                 <Form.Label
@@ -358,6 +357,7 @@ const PassengerForm = ({
                                             e.target.value
                                         )
                                     }
+                                    min={new Date().toISOString().split('T')[0]}
                                     style={{
                                         borderRadius: "8px",
                                         boxShadow: "0 0 5px rgba(0,0,0,0.1)",

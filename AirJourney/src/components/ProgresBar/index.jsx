@@ -43,6 +43,8 @@ const ProgressBar = ({ children }) => {
                 width: "100%", // Memastikan elemen di dalam timer ikut penuh
             }}>
                 Selesaikan dalam {hours}:{minutes}:{seconds}
+                <br/>
+                Jangan Keluar Dari Halaman Ini!
             </div></div>
 
                 )
@@ -126,6 +128,7 @@ const ProgressBar = ({ children }) => {
                             />
                         </Col>
                     </Row>
+                    
                 </div>
             </div>
         </Container>
