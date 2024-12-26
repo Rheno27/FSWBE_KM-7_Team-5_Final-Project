@@ -53,6 +53,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                 style={{
                     position: "sticky",
                     top: "100px",
+                    zIndex: 5,
                 }}
             >
                 <Card className="shadow-sm">
@@ -568,6 +569,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                     backgroundColor: "#FF0000",
                     borderColor: "#FF0000",
                     opacity: isPending ? 0.5 : 1,
+                    zIndex: 10,
                 }}
                 onClick={handleSubmit}
                 disabled={isPending}
