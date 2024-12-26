@@ -13,10 +13,7 @@ const PassengerList = ({ transaction }) => {
 
   const TruncatableText = ({ text, maxLength = 10 }) => {
       const [isExpanded, setIsExpanded] = useState(false);
-  
       const toggleText = () => setIsExpanded(!isExpanded);
-  
-      // Fallback for undefined or null text
       const safeText = text || "";
   
       return (

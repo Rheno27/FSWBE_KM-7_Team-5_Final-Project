@@ -18,7 +18,7 @@ export const HeaderNav = ({ selectedRange, setSelectedRange, onFilter, onClear }
         // Center modal on smaller screens
         setPosition({
           top: window.innerHeight / 2.45 - 150, // Vertically centered (assuming modal height is 300px)
-          left: window.innerWidth / 2.2 - 150, // Horizontally centered (assuming modal width is 300px)
+          left: window.innerWidth / 2.25 - 150, // Horizontally centered (assuming modal width is 300px)
         });
       } else {
         // Position relative to button for larger screens
@@ -34,7 +34,6 @@ export const HeaderNav = ({ selectedRange, setSelectedRange, onFilter, onClear }
 
   // Handlers to hide modals
   const dateModalClose = () => setDateModalOpen(false);
-  // const searchModalClose = () => setSearchModalOpen(false);
 
   const filterBtn = {
     padding: '8px 10px',
@@ -100,8 +99,8 @@ export const HeaderNav = ({ selectedRange, setSelectedRange, onFilter, onClear }
               top: `${position.top}px`,
               left: `${position.left}px`,
             }}
-            onFilter={onFilter} // Pass the filter logic to DateFilter
-            onClear={onClear} // Pass the clear filter logic to DateFilter
+            onFilter={onFilter} 
+            onClear={onClear}
             selectedRange={selectedRange}
             setSelectedRange={setSelectedRange}
           />
