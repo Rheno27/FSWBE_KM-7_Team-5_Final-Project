@@ -111,12 +111,12 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                         <hr />
                         {/* Flight Details Section */}
                         <Row>
-                            <Col lg={2}>
+                            <Col xs={3} md={3}>
                                 <div
                                     className="flight-image"
                                     style={{
                                         width: "100%",
-                                        height: "100%",
+                                        height: "auto",
                                         objectFit: "cover",
                                         display: "flex",
                                         justifyContent: "center",
@@ -126,7 +126,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                                     <img src={detailFlight?.departureFlight?.airline?.image || Thumbnail} alt="Flight" />
                                 </div>
                             </Col>
-                            <Col lg={10}>
+                            <Col xs={9} md={9}>
                                 <div className="flight-info mb-2 mt-3">
                                     <div
                                         className="airline"
@@ -466,7 +466,13 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                 </Card.Body>
             </Card>
             )}
-            <Card className="mt-3">
+            <Card className="mt-3" 
+            style={{
+                position: "sticky",
+                top: "15px",
+                height: "fit-content",
+            }}
+            >
                 <Card.Body>
                     {/* Heading */}
                     <Row>
@@ -529,7 +535,7 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
                     <hr />
 
                     {/* Total Harga */}
-                    <Row>
+                    <Row className="mt-2">
                         <Col
                             xs={8}
                             style={{
@@ -556,6 +562,9 @@ function FlightDetails({ handleSubmit, passenger, flightId, returnFlightId, isPe
             <Button
                 className="mt-3 w-100 mb-4"
                 style={{
+                    position: "sticky",
+                    top: "280px",
+                    height: "fit-content",
                     backgroundColor: "#FF0000",
                     borderColor: "#FF0000",
                     opacity: isPending ? 0.5 : 1,

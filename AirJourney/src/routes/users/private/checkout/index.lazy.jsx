@@ -158,10 +158,9 @@ function Checkout() {
     //submit
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let isFilled = false;
+        let isFilled = true;
         const passengers = Array.from({ length: totalPassengers }).map(
             (_, index) => {
-                isFilled = true;
                 const passenger = {
                     birthday: birthDays[index] || "",
                     departureSeatId: selectedSeats[index] || "",
@@ -174,31 +173,62 @@ function Checkout() {
                     title: title[index] || "",
                     type: passengerTypes[index] || getPassengerType(index),
                 };
-                if(passenger.departureSeatId === ""){
-                    toast.error("Kursi tidak boleh kosong pada penumpang ke-" + (index + 1) + " dengan tipe " + (passengerType(index)), { position: "bottom-center" });
-                    return;
+                if (passenger.departureSeatId === "") {
+                    toast.error(
+                        "Kursi tidak boleh kosong pada penumpang ke-" +
+                            (index + 1) +
+                            " dengan tipe " +
+                            passengerType(index),
+                        { position: "bottom-center" }
+                    );
+                    isFilled = false;
+                    return null;
                 }
                 if (returnFlightId && selectedReturnSeats) {
                     passenger.returnSeatId = selectedReturnSeats[index] || "";
-                    if(passenger.returnSeatId === ""){
-                        toast.error(`Form penumpang ke ${index + 1} belum terisi`)
-                        return;
+                    if (passenger.returnSeatId === "") {
+                        toast.error(`Form penumpang ke ${index + 1} belum terisi`);
+                        isFilled = false;
+                        return null;
                     }
                 }
-                const totalForm = [passenger.departureSeatId,title[index],firstNames[index],familyNames[index],birthDays[index],nationalities[index],identityNumbers[index],originCountries[index],expiredAt[index]];
-                totalForm.map((item)=>{
-                    if(item === ""){
+                const totalForm = [
+                    passenger.departureSeatId,
+                    title[index],
+                    firstNames[index],
+                    familyNames[index],
+                    birthDays[index],
+                    nationalities[index],
+                    identityNumbers[index],
+                    originCountries[index],
+                    expiredAt[index],
+                ];
+                for (let itemIndex = 0; itemIndex < totalForm.length; itemIndex++) {
+                    const item = totalForm[itemIndex];
+                    if (item === "") {
                         isFilled = false;
-                        return;
+                        toast.error(
+                            `Form penumpang ke ${index + 1} belum terisi`,
+                            {position: "bottom-center"}
+                        );
+                        return null;
                     }
-                })
-                if(!isFilled){
-                    toast.error(`Form penumpang ke ${index + 1} belum terisi`)
-                    return;
+                    if (itemIndex === 6) {
+                        if (item.length !== 16 || !/^\d{16}$/.test(item)) {
+                            isFilled = false;
+                            toast.error(
+                                `Nomor KTP pada penumpang ke-${index + 1} harus 16 digit`,
+                                { position: "bottom-center" }
+                            );
+                            return null;
+                        }
+                    }
                 }
                 return passenger;
             }
         );
+        if (!isFilled) return;
+    
         const data = {
             departureFlightId: flightId,
             passengers,
@@ -206,11 +236,9 @@ function Checkout() {
         if (returnFlightId) {
             data.returnFlightId = returnFlightId;
         }
-        if (isFilled){
-            postTransaction(data);
-        };
-
+        postTransaction(data);
     };
+    
 
     return (
         <>
