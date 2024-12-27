@@ -53,30 +53,30 @@ function OrderHistory({ id }) {
 
   const handleFilter = (range) => {
     if (!range || !range.from) return;
-
+  
     const fromDate = new Date(range.from);
     let toDate = range.to ? new Date(range.to) : new Date(range.from);
-
+  
     // Set 'from' to the start of the day (00:00:00)
     fromDate.setHours(0, 0, 0, 0);
-
-    // Adjust 'to' to the end of the day if no 'to' date is provided (single date)
-    if (!range.to) {
-      toDate.setHours(23, 59, 59, 999);
-    } else {
-      toDate.setHours(23, 59, 59, 999); // Ensure 'to' is at the end of the range's day
-    }
-
-    const params = {
-      from: formatLocalDateString(fromDate),
-      to: formatLocalDateString(toDate),
-      page: 1,
-    };
-
+  
+    // Adjust 'to' to the end of the day if no 'to' date is provided
+    toDate.setHours(23, 59, 59, 999);
+  
+    const params = new URLSearchParams();
+    params.set("from", fromDate.toISOString());
+    params.set("to", toDate.toISOString());
+    params.set("page", 1); // Reset to the first page
+  
     setSelectedRange({ from: fromDate, to: toDate }); // Update selectedRange state
-    setSearchParams(params); 
     setCurrentPage(1); // Reset to the first page
-  };
+  
+    // Navigate to the correct route with the new query parameters
+    navigate({
+      to: "/users/private/order-history", // Explicitly set the correct route
+      search: params.toString(), // Convert URLSearchParams to a query string
+    });
+  };  
 
   const handleClear = () => {
     setSelectedRange(null); 
