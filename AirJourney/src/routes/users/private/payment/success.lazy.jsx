@@ -132,7 +132,6 @@ function PaymentSuccess({ transaction }) {
             </p>
           </Col>
           <Col xs={10} sm={8} md={5} lg={4}>
-            {
               <Button
                 type="button"
                 onClick={handleSendTicket}
@@ -150,7 +149,6 @@ function PaymentSuccess({ transaction }) {
               >
                 {isPending ? "Mengirim..." : "Terbitkan Tiket"}
               </Button>
-            }
             <Button
               as={Link}
               href={`/`}
