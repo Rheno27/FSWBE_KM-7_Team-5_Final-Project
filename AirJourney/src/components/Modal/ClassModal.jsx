@@ -5,10 +5,10 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 //saya ingin mengubah semua bahasa inggris menjadi bahasa indonesia
 const ClassModal = ({ setShowClassModal, classType, setClassType }) => {
     const classList = [
-        { name: "Ekonomi" },
-        { name: "Premium Ekonomi" },
-        { name: "Bisnis" },
-        { name: "Kelas Satu" },
+        { name: "Economy" },
+        { name: "Premium Economy" },
+        { name: "Business" },
+        { name: "First Class" },
     ];
 
     return (
