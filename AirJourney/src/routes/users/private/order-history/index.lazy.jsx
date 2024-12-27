@@ -5,7 +5,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Row, Col, Container, Card, Alert, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { Place } from "@mui/icons-material";
-import { getAllTransactions, getAllTransactionsByUser } from "../../../../services/transaction";
+import {
+  getAllTransactions,
+  getAllTransactionsByUser,
+} from "../../../../services/transaction";
 import { HeaderNav } from "../../../../components/ui/headerNav";
 import OrderDetailCard from "../../../../components/OrderDetails";
 import Pagination from "../../../../components/Pagination";
@@ -18,25 +21,24 @@ export const Route = createLazyFileRoute("/users/private/order-history/")({
 
 function OrderHistory({ id }) {
   const navigate = useNavigate();
-  const [selectedTransactionId, setSelectedTransactionId] = useState(null); // Track selected card
+  const [selectedTransactionId, setSelectedTransactionId] = useState(null); 
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedRange, setSelectedRange] = useState(null);
   const token = localStorage.getItem("token");
 
-  const [currentPage, setCurrentPage] = useState(1); // Track current 
-  
-     // Reset selectedTransactionId when the location (page or filter) changes
-     useEffect(() => {
-      setSelectedTransactionId(null);
-    }, [location, currentPage]); // Triggered when page or filter changes
+  const [currentPage, setCurrentPage] = useState(1); 
+  // Reset selectedTransactionId when the location (page or filter) changes
+  useEffect(() => {
+    setSelectedTransactionId(null);
+  }, [location, currentPage]); 
 
   // Initialize selectedRange from query parameters on mount
   useEffect(() => {
     const pageFromParams = parseInt(searchParams.get("page"), 10) || 1;
     if (pageFromParams >= 1) {
-      setCurrentPage(pageFromParams); // Initialize currentPage from URL
+      setCurrentPage(pageFromParams);
     }
-  }, [searchParams])
+  }, [searchParams]);
 
   const formatLocalDateString = (date) => {
     const year = date.getFullYear();
@@ -45,66 +47,57 @@ function OrderHistory({ id }) {
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
     const seconds = date.getSeconds().toString().padStart(2, "0");
-  
+
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-  };  
-  
+  };
+
   const handleFilter = (range) => {
     if (!range || !range.from) return;
-  
+
     const fromDate = new Date(range.from);
     let toDate = range.to ? new Date(range.to) : new Date(range.from);
-  
+
     // Set 'from' to the start of the day (00:00:00)
     fromDate.setHours(0, 0, 0, 0);
-  
+
     // Adjust 'to' to the end of the day if no 'to' date is provided (single date)
     if (!range.to) {
       toDate.setHours(23, 59, 59, 999);
     } else {
       toDate.setHours(23, 59, 59, 999); // Ensure 'to' is at the end of the range's day
     }
-  
+
     const params = {
       from: formatLocalDateString(fromDate),
       to: formatLocalDateString(toDate),
       page: 1,
     };
-  
+
     setSelectedRange({ from: fromDate, to: toDate }); // Update selectedRange state
-    setSearchParams(params); // Update URL query params
+    setSearchParams(params); 
     setCurrentPage(1); // Reset to the first page
   };
 
   const handleClear = () => {
-    setSelectedRange(null); // Reset the selected range
+    setSelectedRange(null); 
     setSearchParams({}); // Clear all URL search parameters
     setCurrentPage(1);
-  }
+  };
 
-  const { data: allTransactions, error } = useQuery({
-    queryKey: ["allTransactions"],
-    queryFn: getAllTransactionsByUser,
-    onError: (error) => {
-      toast.error(
-        error.response?.data?.message ||
-          "Terjadi kesalahan saat mengambil data transaksi"
-      );
-    },
-  });  
-  
-  const totalData = allTransactions?.length || 0;
-
-  const { data: responseData, isLoading, isError } = useQuery({
+  const {
+    data: responseData,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: [
       "transactions",
       currentPage,
       selectedRange?.from ? formatLocalDateString(selectedRange.from) : null,
       selectedRange?.to
         ? formatLocalDateString(selectedRange.to)
-        : selectedRange?.from 
-        ? formatLocalDateString(selectedRange.from)
-        : null, // Use `from` as `to` if `to` is missing
+        : selectedRange?.from
+          ? formatLocalDateString(selectedRange.from)
+          : null, // Use `from` as `to` if `to` is missing
     ],
     queryFn: () =>
       getAllTransactions(currentPage, {
@@ -114,25 +107,26 @@ function OrderHistory({ id }) {
         endDate: selectedRange?.to
           ? formatLocalDateString(selectedRange.to)
           : selectedRange?.from
-          ? formatLocalDateString(selectedRange.from)
-          : null,
+            ? formatLocalDateString(selectedRange.from)
+            : null,
       }),
     keepPreviousData: true,
-    onError: (error) => {
-      toast.error(
+    staleTime: 60000, 
+    retry: 3, // Retry up to 3 times if the query fails
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff (max 30 seconds)
+    onError: (error) => toast.error(
         error.response?.data?.message ||
           "Terjadi kesalahan saat mengambil data transaksi"
-      );
-    },
+        ),
     onSuccess: (transactions) => {
       const grouped = groupHistoriesByMonth(transactions.data);
       setSelectedTransactionId(transactions.data);
     },
   });
-  
+
   // Safely destructure the `data` and `meta` fetched by useQuery
   const { meta = {}, data: transactions = [] } = responseData || {};
-  const totalPages = Math.ceil(totalData / meta.limit) || 1;
+  const totalPages = meta.totalPage || 1;
 
   const isAvailable = transactions.length > 0;
 
@@ -144,7 +138,7 @@ function OrderHistory({ id }) {
       if (isNaN(date)) {
         return grouped;
       }
-      
+
       const yearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 
       // Group transactions by the year-month key
@@ -159,20 +153,20 @@ function OrderHistory({ id }) {
 
   // Filter transactions based on the selected date range
   const filteredTransactions = selectedRange
-  ? transactionsArray.filter((transaction) => {
-      const createdAt = new Date(transaction.createdAt); // Convert createdAt to a Date object
-      const fromDate = new Date(selectedRange.from); // Start of the range
-      const toDate = new Date(selectedRange.to); // End of the range (adjusted)
+    ? transactionsArray.filter((transaction) => {
+        const createdAt = new Date(transaction.createdAt); 
+        const fromDate = new Date(selectedRange.from); 
+        const toDate = new Date(selectedRange.to); 
 
-      // Normalize 'from' and 'to' to ignore time for comparison
-      fromDate.setHours(0, 0, 0, 0);
-      toDate.setHours(23, 59, 59, 999);
+        // Normalize 'from' and 'to' to ignore time for comparison
+        fromDate.setHours(0, 0, 0, 0);
+        toDate.setHours(23, 59, 59, 999);
 
-      // Compare the transaction date with the range
-      return createdAt >= fromDate && createdAt <= toDate;
-    })
-  : transactionsArray;
- // Show all transactions if no date range is selected
+        // Compare the transaction date with the range
+        return createdAt >= fromDate && createdAt <= toDate;
+      })
+    : transactionsArray;
+  // Show all transactions if no date range is selected
 
   const groupedFilteredTransactions =
     groupHistoriesByMonth(filteredTransactions);
@@ -242,18 +236,27 @@ function OrderHistory({ id }) {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
       // Explicitly update the URL and navigate to the correct route
-    navigate({
-      to: '/users/private/order-history', // Ensure the correct route
-      search: (prev) => ({ ...Object.fromEntries(prev), page }), // Retain other params and update 'page'
-    });
+      navigate({
+        to: "/users/private/order-history", // Ensure the correct route
+        search: (prev) => ({ ...Object.fromEntries(prev), page }), // Retain other params and update 'page'
+      });
     }
   };
 
   const handleCardClick = (transactionId) => {
     setSelectedTransactionId(transactionId); // Set selected transaction
-  };  
+  };
 
-  const getPaymentStatus = (status) => {
+  const getPaymentStatus = (status, expiredAt) => {
+    const currentTime = new Date();
+    const expiredTime = new Date(expiredAt);
+
+    // Check if status is PENDING and expired
+    if (status.toUpperCase() === "PENDING" && expiredTime < currentTime) {
+      return "secondary"; 
+    }
+
+    // Default cases
     switch (status.toUpperCase()) {
       case "SUCCESS":
         return "success";
@@ -284,24 +287,34 @@ function OrderHistory({ id }) {
 
   const capitalizeFirstLetter = (str) => {
     if (!str) return str; // Handle null or undefined
-  return str
-    .split('_') // Split the string into an array by underscores
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
-    .join(' '); // Join the words with a space
+    return str
+      .split("_") // Split the string into an array by underscores
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+      .join(" "); // Join the words with a space
   };
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "Not found";
-  
+
     const [year, month, day] = dateStr.split("T")[0].split("-");
     const indonesianMonthsShort = [
-      "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
-      "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Agu",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Des",
     ];
-  
+
     // Ensure parsed values are valid
     if (!year || !month || !day) return "Invalid Date";
-  
+
     const monthName = indonesianMonthsShort[parseInt(month, 10) - 1];
     return `${day} ${monthName} ${year}`;
   };
@@ -348,276 +361,303 @@ function OrderHistory({ id }) {
           <div>Loading...</div> // Show loading state
         ) : isAvailable &&
           Object.keys(groupedFilteredTransactions).length > 0 ? (
-            <Row className="justify-content-center my-4">
-              <Col lg={6} md={6}>
-                {Object.entries(groupedFilteredTransactions).map(
-                  ([yearMonth, transactions]) => (
-                    <div key={yearMonth} style={{ marginBottom: "20px" }}>
-                      <h5 className="mb-2 fw-bold">
-                        {new Date(yearMonth + "-01").toLocaleString("default", {
-                          month: "long",
-                          year: "numeric",
-                        })}
-                      </h5>
-                      {transactions.map((transaction) => (
-                        <Card
-                          key={transaction.id}
-                          onClick={() => handleCardClick(transaction.id)}
-                          className="p-3 shadow-sm rounded-3 mt-2 w-100 cursor-pointer"
-                          style={
-                            transaction.id === selectedTransactionId
-                              ? activeCard
-                              : { cursor: "pointer" }
-                          }
-                        >
-                          <Alert
+          <Row className="justify-content-center my-4">
+            <Col lg={6} md={6}>
+              {Object.entries(groupedFilteredTransactions).map(
+                ([yearMonth, transactions]) => (
+                  <div key={yearMonth} style={{ marginBottom: "20px" }}>
+                    <h5 className="mb-2 fw-bold">
+                      {new Date(yearMonth + "-01").toLocaleString("default", {
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </h5>
+                    {transactions.map((transaction) => (
+                      <Card
+                        key={transaction.id}
+                        onClick={() => handleCardClick(transaction.id)}
+                        className="p-3 shadow-sm rounded-3 mt-2 w-100 cursor-pointer"
+                        style={
+                          transaction.id === selectedTransactionId
+                            ? activeCard
+                            : { cursor: "pointer" }
+                        }
+                      >
+                        {/* <Alert
                             className={`bg-${getPaymentStatus(transaction?.payment?.status || "Tidak diketahui")} text-white mb-0`}
                             style={statusBadge}
                           >
                             {capitalizeFirstLetter(
                               transaction?.payment?.status || "Tidak diketahui"
                             )}
-                          </Alert>
-
-                          {/* Departure flight section */}
-                          <Row className="d-flex align-items-center justify-content-center fs-8">
-                            <span
-                              className="text-center text-muted mb-3 mt-1"
-                              style={{ fontSize: "0.9rem" }}
-                            >
-                              --- Keberangkatan (
-                              {capitalizeFirstLetter(
-                                transaction?.departureFlight?.class ||
-                                  "Tidak diketahui"
-                              )}
-                              ) ---
-                            </span>
-                            <Col xs={1} className="d-flex justify-content-center align-items-center">
-                              <Place color="secondary" />
-                            </Col>
-                            <Col xs={3} className="p-0 m-0">
-                              <span>
-                                <b>
-                                  {transaction?.departureFlight?.airportFrom
-                                    ?.city || "Tidak diketahui"}
-                                </b>
-                              </span>
-                              <br />
-                              <span>
-                                {formatDate(
-                                  transaction?.departureFlight?.departureDate
-                                )}
-                              </span>
-                              <br />
-                              <span>
-                                {transaction?.departureFlight?.departureTime ||
-                                  "Tidak diketahui"}
-                              </span>
-                            </Col>
-                            <Col xs={4} className="p-0 px-2 pe-1 text-center mx-auto">
-                              <span className="pe-3 text-muted">
-                                {transaction?.departureFlight?.duration
-                                  ? `${Math.floor(transaction.departureFlight?.duration / 60)}j ${transaction.departureFlight.duration % 60}m`
-                                  : "Tidak diketahui"}
-                              </span>
-                              <br />
-                              <svg
-                                width="100%"
-                                height="24"
-                                viewBox="0 0 160 24"
-                              >
-                                {/* Increased the tail length */}
-                                <line
-                                  x1="0"
-                                  y1="12"
-                                  x2="140"
-                                  y2="12"
-                                  stroke="#7126b4"
-                                  strokeWidth="2"
-                                />
-                                {/* Arrowhead repositioned at the end of the line */}
-                                <polygon
-                                  points="140,12 130,6 130,18"
-                                  fill="#7126b4"
-                                />
-                              </svg>
-                            </Col>
-                            <Col xs={1} className="d-flex justify-content-center align-items-center">
-                              <Place color="secondary" />
-                            </Col>
-                            <Col xs={3} className="p-0 m-0">
-                              <span>
-                                <b>
-                                  {transaction?.departureFlight?.airportTo
-                                    ?.city || "Tidak diketahui"}
-                                </b>
-                              </span>
-                              <br />
-                              <span>
-                                {formatDate(
-                                  transaction?.departureFlight?.arrivalDate
-                                )}
-                              </span>
-                              <br />
-                              <span>
-                                {transaction?.departureFlight?.arrivalTime ||
-                                  "Tidak diketahui"}
-                              </span>
-                            </Col>
-                          </Row>
-                          <hr />
-                          {/* End */}
-
-                          {/* Return flight section */}
-                          {transaction?.returnFlight && (
-                            <>
-                              <Row className="d-flex align-items-center justify-content-center fs-8">
-                                <span
-                                  className="text-center text-muted mb-3"
-                                  style={{ fontSize: "0.9rem" }}
-                                >
-                                  ---- Kepulangan (
-                                  {capitalizeFirstLetter(
-                                    transaction?.returnFlight?.class ||
-                                      "Tidak diketahui"
-                                  )}
-                                  ) ----
-                                </span>
-                                <Col xs={1} className="d-flex justify-content-center align-items-center">
-                                  <Place />
-                                </Col>
-                                <Col xs={3} className="p-0 m-0">
-                                  <span>
-                                    <b>
-                                      {transaction?.returnFlight?.airportTo
-                                        ?.city || "Tidak diketahui"}
-                                    </b>
-                                  </span>
-                                  <br />
-                                  <span>
-                                    {formatDate(
-                                      transaction?.returnFlight?.arrivalDate
-                                    )}
-                                  </span>
-                                  <br />
-                                  <span>
-                                    {transaction?.returnFlight?.arrivalTime ||
-                                      "Tidak diketahui"}
-                                  </span>
-                                </Col>
-                                <Col
-                                  xs={4}
-                                  className="p-0 pe-4 mx-auto text-center"
-                                >
-                                  <span className="text-muted">
-                                    {transaction?.returnFlight?.duration
-                                      ? `${Math.floor(transaction.returnFlight?.duration / 60)}j ${transaction.returnFlight.duration % 60}m`
-                                      : "Tidak diketahui"}
-                                  </span>
-                                  <br />
-                                  <svg
-                                    width="100%"
-                                    height="24"
-                                    viewBox="0 0 160 24"
-                                  >
-                                    {/* Arrowhead at the left side */}
-                                    <polygon
-                                      points="10,12 16,6 16,18"
-                                      fill="#000000"
-                                    />
-                                    {/* Tail starts from the arrowhead and extends to the right */}
-                                    <line
-                                      x1="16"
-                                      y1="12"
-                                      x2="160"
-                                      y2="12"
-                                      stroke="#000000"
-                                      strokeWidth="2"
-                                    />
-                                  </svg>
-                                </Col>
-                                <Col xs={1} className="d-flex justify-content-center align-items-center">
-                                  <Place />
-                                </Col>
-                                <Col xs={3} className="p-0 m-0">
-                                  <span>
-                                    <b>
-                                      {transaction?.returnFlight?.airportFrom
-                                        ?.city || "Tidak diketahui"}
-                                    </b>
-                                  </span>
-                                  <br />
-                                  <span>
-                                    {formatDate(
-                                      transaction?.returnFlight?.departureDate
-                                    )}
-                                  </span>
-                                  <br />
-                                  <span>
-                                    {transaction?.returnFlight?.departureTime ||
-                                      "Tidak diketahui"}
-                                  </span>
-                                </Col>
-                              </Row>
-                              <hr />
-                            </>
+                          </Alert> */}
+                        <Alert
+                          className={`bg-${getPaymentStatus(
+                            transaction?.payment?.status || "Tidak terlacak",
+                            transaction?.payment?.expiredAt
+                          )} text-white mb-0 align-items-end`}
+                          style={statusBadge}
+                        >
+                          {capitalizeFirstLetter(
+                            transaction?.payment?.status === "PENDING" &&
+                              new Date(transaction?.payment?.expiredAt) <
+                                new Date()
+                              ? "CANCELLED"
+                              : transaction?.payment?.status || "Tidak terlacak"
                           )}
-                          {/* End */}
+                        </Alert>
 
-                          <Row className="justify-content-between align-items-start px-2 fs-8">
-                            <Col xs={5}>
-                              <span>
-                                <b>Kode Booking :</b>
-                              </span>
-                              <br />
-                              <span>
-                                <TruncatableText
-                                  text={transaction?.id}
-                                  maxLength={20}
-                                />
-                              </span>
-                            </Col>
-                            <Col xs={5} className="text-end">
-                              <span>
-                                <b>Total :</b>{" "}
-                                {transaction?.payment?.status ===
-                                "CANCELLED" ? (
-                                  <span>--</span>
-                                ) : (
-                                  <b style={{ color: "#7126B5" }}>
-                                    Rp.{" "}
-                                    {new Intl.NumberFormat("id-ID").format(
-                                      transaction?.amount
-                                    )}
-                                  </b>
+                        {/* Departure flight section */}
+                        <Row className="d-flex align-items-center justify-content-center fs-8">
+                          <span
+                            className="text-center text-muted mb-3 mt-1"
+                            style={{ fontSize: "0.9rem" }}
+                          >
+                            --- Keberangkatan (
+                            {capitalizeFirstLetter(
+                              transaction?.departureFlight?.class ||
+                                "Tidak diketahui"
+                            )}
+                            ) ---
+                          </span>
+                          <Col
+                            xs={1}
+                            className="d-flex justify-content-center align-items-center"
+                          >
+                            <Place color="secondary" />
+                          </Col>
+                          <Col xs={3} className="p-0 m-0">
+                            <span>
+                              <b>
+                                {transaction?.departureFlight?.airportFrom
+                                  ?.city || "Tidak diketahui"}
+                              </b>
+                            </span>
+                            <br />
+                            <span>
+                              {formatDate(
+                                transaction?.departureFlight?.departureDate
+                              )}
+                            </span>
+                            <br />
+                            <span>
+                              {transaction?.departureFlight?.departureTime ||
+                                "Tidak diketahui"}
+                            </span>
+                          </Col>
+                          <Col
+                            xs={4}
+                            className="p-0 px-2 pe-1 text-center mx-auto"
+                          >
+                            <span className="pe-3 text-muted">
+                              {transaction?.departureFlight?.duration
+                                ? `${Math.floor(transaction.departureFlight?.duration / 60)}j ${transaction.departureFlight.duration % 60}m`
+                                : "Tidak diketahui"}
+                            </span>
+                            <br />
+                            <svg width="100%" height="24" viewBox="0 0 160 24">
+                              {/* Increased the tail length */}
+                              <line
+                                x1="0"
+                                y1="12"
+                                x2="140"
+                                y2="12"
+                                stroke="#7126b4"
+                                strokeWidth="2"
+                              />
+                              {/* Arrowhead repositioned at the end of the line */}
+                              <polygon
+                                points="140,12 130,6 130,18"
+                                fill="#7126b4"
+                              />
+                            </svg>
+                          </Col>
+                          <Col
+                            xs={1}
+                            className="d-flex justify-content-center align-items-center"
+                          >
+                            <Place color="secondary" />
+                          </Col>
+                          <Col xs={3} className="p-0 m-0">
+                            <span>
+                              <b>
+                                {transaction?.departureFlight?.airportTo
+                                  ?.city || "Tidak diketahui"}
+                              </b>
+                            </span>
+                            <br />
+                            <span>
+                              {formatDate(
+                                transaction?.departureFlight?.arrivalDate
+                              )}
+                            </span>
+                            <br />
+                            <span>
+                              {transaction?.departureFlight?.arrivalTime ||
+                                "Tidak diketahui"}
+                            </span>
+                          </Col>
+                        </Row>
+                        <hr />
+                        {/* End */}
+
+                        {/* Return flight section */}
+                        {transaction?.returnFlight && (
+                          <>
+                            <Row className="d-flex align-items-center justify-content-center fs-8">
+                              <span
+                                className="text-center text-muted mb-3"
+                                style={{ fontSize: "0.9rem" }}
+                              >
+                                ---- Kepulangan (
+                                {capitalizeFirstLetter(
+                                  transaction?.returnFlight?.class ||
+                                    "Tidak diketahui"
                                 )}
+                                ) ----
                               </span>
-                            </Col>
-                          </Row>
-                        </Card>
-                      ))}
-                    </div>
-                  )
-                )}
-              </Col>
-              <Col lg={4} md={5} className="mt-4">
-                {selectedTransactionId && 
-                  transactions.some(transaction => transaction.id === selectedTransactionId) ? (
-                  <OrderDetailCard
-                    id={selectedTransactionId}
-                    handlePaymentRedirect={handlePaymentRedirect}
-                    handleSendTicket={handleSendTicket}
-                    isPending={isPending} 
-                  />
-                ) : (
-                  <p style={{ color: "#7126B5" }} className="text-center my-4">
-                    Pilih riwayat untuk menampilkan detail
-                  </p>
-                )}
-              </Col>
-              <Row>
-                {/* Pagination */}
-                <Col className="justify-content-center d-flex mt-5 mb-3">
+                              <Col
+                                xs={1}
+                                className="d-flex justify-content-center align-items-center"
+                              >
+                                <Place />
+                              </Col>
+                              <Col xs={3} className="p-0 m-0">
+                                <span>
+                                  <b>
+                                    {transaction?.returnFlight?.airportTo
+                                      ?.city || "Tidak diketahui"}
+                                  </b>
+                                </span>
+                                <br />
+                                <span>
+                                  {formatDate(
+                                    transaction?.returnFlight?.arrivalDate
+                                  )}
+                                </span>
+                                <br />
+                                <span>
+                                  {transaction?.returnFlight?.arrivalTime ||
+                                    "Tidak diketahui"}
+                                </span>
+                              </Col>
+                              <Col
+                                xs={4}
+                                className="p-0 pe-4 mx-auto text-center"
+                              >
+                                <span className="text-muted">
+                                  {transaction?.returnFlight?.duration
+                                    ? `${Math.floor(transaction.returnFlight?.duration / 60)}j ${transaction.returnFlight.duration % 60}m`
+                                    : "Tidak diketahui"}
+                                </span>
+                                <br />
+                                <svg
+                                  width="100%"
+                                  height="24"
+                                  viewBox="0 0 160 24"
+                                >
+                                  {/* Arrowhead at the left side */}
+                                  <polygon
+                                    points="10,12 16,6 16,18"
+                                    fill="#000000"
+                                  />
+                                  {/* Tail starts from the arrowhead and extends to the right */}
+                                  <line
+                                    x1="16"
+                                    y1="12"
+                                    x2="160"
+                                    y2="12"
+                                    stroke="#000000"
+                                    strokeWidth="2"
+                                  />
+                                </svg>
+                              </Col>
+                              <Col
+                                xs={1}
+                                className="d-flex justify-content-center align-items-center"
+                              >
+                                <Place />
+                              </Col>
+                              <Col xs={3} className="p-0 m-0">
+                                <span>
+                                  <b>
+                                    {transaction?.returnFlight?.airportFrom
+                                      ?.city || "Tidak diketahui"}
+                                  </b>
+                                </span>
+                                <br />
+                                <span>
+                                  {formatDate(
+                                    transaction?.returnFlight?.departureDate
+                                  )}
+                                </span>
+                                <br />
+                                <span>
+                                  {transaction?.returnFlight?.departureTime ||
+                                    "Tidak diketahui"}
+                                </span>
+                              </Col>
+                            </Row>
+                            <hr />
+                          </>
+                        )}
+                        {/* End */}
+
+                        <Row className="justify-content-between align-items-start px-2 fs-8">
+                          <Col xs={5}>
+                            <span>
+                              <b>Kode Booking :</b>
+                            </span>
+                            <br />
+                            <span>
+                              <TruncatableText
+                                text={transaction?.id}
+                                maxLength={20}
+                              />
+                            </span>
+                          </Col>
+                          <Col xs={5} className="text-end">
+                            <span>
+                              <b>Total :</b>{" "}
+                              {transaction?.payment?.status === "CANCELLED" ? (
+                                <span>--</span>
+                              ) : (
+                                <b style={{ color: "#7126B5" }}>
+                                  Rp.{" "}
+                                  {new Intl.NumberFormat("id-ID").format(
+                                    transaction?.amount
+                                  )}
+                                </b>
+                              )}
+                            </span>
+                          </Col>
+                        </Row>
+                      </Card>
+                    ))}
+                  </div>
+                )
+              )}
+            </Col>
+            <Col lg={4} md={5} className="mt-4">
+              {selectedTransactionId &&
+              transactions.some(
+                (transaction) => transaction.id === selectedTransactionId
+              ) ? (
+                <OrderDetailCard
+                  id={selectedTransactionId}
+                  handlePaymentRedirect={handlePaymentRedirect}
+                  handleSendTicket={handleSendTicket}
+                  isPending={isPending}
+                />
+              ) : (
+                <p style={{ color: "#7126B5" }} className="text-center my-4">
+                  Pilih riwayat untuk menampilkan detail
+                </p>
+              )}
+            </Col>
+            <Row>
+              {/* Pagination */}
+              <Col className="justify-content-center d-flex mt-5 mb-3">
                 {totalPages > 1 && (
                   <Pagination
                     currentPage={currentPage}
@@ -625,8 +665,8 @@ function OrderHistory({ id }) {
                     onPageChange={handlePageChange}
                   />
                 )}
-                </Col>
-                {/* <Col className="justify-content-center d-flex my-5">
+              </Col>
+              {/* <Col className="justify-content-center d-flex my-5">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -647,8 +687,8 @@ function OrderHistory({ id }) {
                 Next
               </button>
               </Col> */}
-              </Row>
             </Row>
+          </Row>
         ) : (
           <Container className="py-5">
             <div className="d-flex flex-column align-items-center">
