@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Row, Col, Button, Card, Form, Alert } from "react-bootstrap";
 import { useState } from "react";
 import { getDetailTransaction } from "../../services/transaction/index";
-import { useLocation } from "@tanstack/react-router"
+import { useLocation } from "@tanstack/react-router";
 import { useSelector } from "react-redux";
 import PassengerList from "./passengerList";
 
@@ -12,9 +12,8 @@ const OrderDetailCard = ({
   handleCancelTransaction,
   handlePaymentRedirect,
   handleSendTicket,
-  isPending
+  isPending,
 }) => {
-
   const location = useLocation();
   const token = useSelector((state) => state.auth.token);
 
@@ -30,6 +29,9 @@ const OrderDetailCard = ({
     queryKey: ["transaction", id],
     queryFn: () => getDetailTransaction(id),
     enabled: !!id,
+    staleTime: 60000, // 5 menit
+    retry: 3, // Retry hingga 3 kali jika gagal
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000), // Penundaan exponential backoff
     onError: (err) => {
       toast.error(
         err.message || "Terjadi kesalahan saat mengambil data transaksi"
@@ -56,9 +58,9 @@ const OrderDetailCard = ({
     }
 
     const passengerType = {
-      "ADULT": "Dewasa",
-      "CHILD": "Anak",
-      "INFANT": "Bayi",
+      ADULT: "Dewasa",
+      CHILD: "Anak",
+      INFANT: "Bayi",
     };
 
     return passengerArray.reduce((counts, passenger) => {
@@ -74,41 +76,67 @@ const OrderDetailCard = ({
 
   const departurePrice = transaction?.data?.departureFlight?.price || 0;
   const returnPrice = transaction?.data?.returnFlight?.price || 0;
-  const totalFlightPrice = (transaction?.data?.departureFlight?.price + (transaction?.data?.returnFlight?.price || 0)) || 0;
+  const totalFlightPrice =
+    transaction?.data?.departureFlight?.price +
+      (transaction?.data?.returnFlight?.price || 0) || 0;
 
   const adultDeparturePrice = departurePrice * (passengerCounts.Dewasa || 0);
   const childDeparturePrice = departurePrice * (passengerCounts.Anak || 0);
   const infantDeparturePrice = departurePrice * 0;
-  const totalDepartureTax = (adultDeparturePrice + childDeparturePrice + infantDeparturePrice) * 0.1;
+  const totalDepartureTax =
+    (adultDeparturePrice + childDeparturePrice + infantDeparturePrice) * 0.1;
 
   const adultReturnPrice = returnPrice * (passengerCounts.Dewasa || 0);
-  const childReturnPrice =returnPrice * (passengerCounts.Anak || 0);
+  const childReturnPrice = returnPrice * (passengerCounts.Anak || 0);
   const infantReturnPrice = returnPrice * 0;
-  const totalReturnTax = (adultReturnPrice + childReturnPrice + infantReturnPrice) * 0.1;
+  const totalReturnTax =
+    (adultReturnPrice + childReturnPrice + infantReturnPrice) * 0.1;
 
   const adultTotalPrice = totalFlightPrice * (passengerCounts.Dewasa || 0);
   const childTotalPrice = totalFlightPrice * (passengerCounts.Anak || 0);
   const infantTotalPrice = totalFlightPrice * 0;
   const totalTax = (adultTotalPrice + childTotalPrice + infantTotalPrice) * 0.1;
 
-  const totalDeparturePrice = adultDeparturePrice + childDeparturePrice + infantDeparturePrice + totalDepartureTax;
-  const totalReturnPrice = adultReturnPrice + childReturnPrice + infantReturnPrice + totalReturnTax;
- 
+  const totalDeparturePrice =
+    adultDeparturePrice +
+    childDeparturePrice +
+    infantDeparturePrice +
+    totalDepartureTax;
+  const totalReturnPrice =
+    adultReturnPrice + childReturnPrice + infantReturnPrice + totalReturnTax;
+
   // Calculate total price for the entire transaction
   const totalPrice =
     adultTotalPrice + childTotalPrice + infantTotalPrice + totalTax;
 
   const paymentStatus = transaction?.data?.payment?.status || "Tidak terlacak";
-  const today = new Date();
-  today.setHours(23, 59, 59, 999); // Reset time to 00:00:00
-  
-  const isDeparted = transaction?.data?.departureFlight?.departureDate
-  ? new Date(transaction?.data?.departureFlight?.departureDate) < today : false;
-  const isReturned = transaction?.data?.returnFlight?.departureDate
-  ? new Date(transaction?.data?.returnFlight?.departureDate) < today : false;
-  
 
-  const getPaymentStatus = (status) => {
+  const today = new Date();
+  const expiredAt = transaction?.data?.payment?.expiredAt
+    ? new Date(transaction.data.payment.expiredAt)
+    : null;
+
+  const isExpired = expiredAt && expiredAt < today;
+
+  today.setHours(23, 59, 59, 999); // Reset time to 00:00:00
+
+  const isDeparted = transaction?.data?.departureFlight?.departureDate
+    ? new Date(transaction?.data?.departureFlight?.departureDate) < today
+    : false;
+  const isReturned = transaction?.data?.returnFlight?.departureDate
+    ? new Date(transaction?.data?.returnFlight?.departureDate) < today
+    : false;
+
+  const getPaymentStatus = (status, expiredAt) => {
+    const currentTime = new Date();
+    const expiredTime = new Date(expiredAt);
+
+    // Check if status is PENDING and expired
+    if (status.toUpperCase() === "PENDING" && expiredTime < currentTime) {
+      return "secondary"; // Treat expired pending as "CANCELLED"
+    }
+
+    // Default cases
     switch (status.toUpperCase()) {
       case "SUCCESS":
         return "success";
@@ -132,11 +160,11 @@ const OrderDetailCard = ({
   };
 
   const capitalizeFirstLetter = (str) => {
-    if (!str) return str; // Handle null or undefined
-  return str
-    .split('_') // Split the string into an array by underscores
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
-    .join(' '); // Join the words with a space
+    if (!str) return str;
+    return str
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+      .join(" ");
   };
 
   const formatDate = (dateStr) => {
@@ -165,32 +193,40 @@ const OrderDetailCard = ({
 
   return (
     <div style={{ position: "sticky", top: "0" }}>
-      <Card
-        className="shadow-sm my-2 rounded-3"
-      >
+      <Card className="shadow-sm my-2 rounded-3">
         <Card.Body>
           <Row className="justify-content-between mb-2">
-          <Col>
-          <div className="mb-2"
-          style={{
-              fontSize: "22px",
-              fontWeight: "bold",
-              color: "black",
-          }}
-          >Detail Pesanan</div>
-          </Col>
-          <Col xs="auto">
-          {isInOrderHistoryPage && (
-            <Alert
-            className={`bg-${getPaymentStatus(transaction?.data?.payment?.status || "Tidak terlacak")} text-white mb-0 align-items-end`}
-            style={statusBadge}
-          >
-            {capitalizeFirstLetter(
-              transaction?.data?.payment?.status || "Tidak terlacak"
-            )}
-          </Alert>
-          )}
-          </Col>
+            <Col>
+              <div
+                className="mb-2"
+                style={{
+                  fontSize: "22px",
+                  fontWeight: "bold",
+                  color: "black",
+                }}
+              >
+                Detail Pesanan
+              </div>
+            </Col>
+            <Col xs="auto">
+              {isInOrderHistoryPage && (
+                <Alert
+                  className={`bg-${getPaymentStatus(
+                    transaction?.data?.payment?.status || "Tidak terlacak",
+                    transaction?.data?.payment?.expiredAt
+                  )} text-white mb-0 align-items-end`}
+                  style={statusBadge}
+                >
+                  {capitalizeFirstLetter(
+                    transaction?.data?.payment?.status === "PENDING" &&
+                      new Date(transaction?.data?.payment?.expiredAt) <
+                        new Date()
+                      ? "CANCELLED"
+                      : transaction?.data?.payment?.status || "Tidak terlacak"
+                  )}
+                </Alert>
+              )}
+            </Col>
           </Row>
           <h6 className="mb-1">
             Kode Booking :{" "}
@@ -256,7 +292,9 @@ const OrderDetailCard = ({
                   }}
                 >
                   {transaction?.data?.departureFlight?.airline?.name} -{" "}
-                  {capitalizeFirstLetter(transaction?.data?.departureFlight?.class)}
+                  {capitalizeFirstLetter(
+                    transaction?.data?.departureFlight?.class
+                  )}
                 </div>
                 <div
                   className="flight-number"
@@ -268,16 +306,19 @@ const OrderDetailCard = ({
                   {transaction?.data?.departureFlight?.airline?.code}
                 </div>
                 <div className="info-box mt-2">
-                  <span className="info-title"
-                  style={{
+                  <span
+                    className="info-title"
+                    style={{
                       fontSize: "14px",
                       fontWeight: "bold",
-                  }}
-                  >Informasi:</span>
+                    }}
+                  >
+                    Informasi:
+                  </span>
                   <ul className="list-unstyled">
-                      <li>Bagasi 20 kg</li>
-                      <li>Bagasi kabin 7 kg</li>
-                      <li>Hiburan di pesawat</li>
+                    <li>Bagasi 20 kg</li>
+                    <li>Bagasi kabin 7 kg</li>
+                    <li>Hiburan di pesawat</li>
                   </ul>
                 </div>
               </div>
@@ -301,7 +342,7 @@ const OrderDetailCard = ({
                 </div>
               </div>
             </Col>
-            <Col lg={5} md={5} xs={5}>  
+            <Col lg={5} md={5} xs={5}>
               <div
                 className="Kedatangan"
                 style={{
@@ -348,9 +389,7 @@ const OrderDetailCard = ({
       </Card>
 
       {transaction?.data?.returnFlight && (
-        <Card
-          className="shadow-sm rounded-3 mb-2"
-        >
+        <Card className="shadow-sm rounded-3 mb-2">
           <Card.Body>
             <Row>
               <h6
@@ -371,9 +410,7 @@ const OrderDetailCard = ({
                 </div>
                 <div className="departure mt-2 mb-2">
                   <div className="date">
-                    {formatDate(
-                      transaction?.data?.returnFlight?.departureDate
-                    )}
+                    {formatDate(transaction?.data?.returnFlight?.departureDate)}
                   </div>
                 </div>
               </Col>
@@ -391,56 +428,61 @@ const OrderDetailCard = ({
                 </div>
               </Col>
               <span style={{ fontSize: "0.95rem" }}>
-                    {transaction?.data?.returnFlight?.airportFrom?.name}
-                  </span>
+                {transaction?.data?.returnFlight?.airportFrom?.name}
+              </span>
             </Row>
             <hr />
             {/* Flight Details Section */}
             <Row>
-            <Col lg={3} className="d-flex align-items-center">
-              <img
-                src={transaction?.data?.returnFlight?.airline?.image}
-                alt="Flight"
-                className="w-100 px-0 fluid"
-              />
-            </Col>
-            <Col lg={9}>
-              <div className="flight-info">
-                <div
-                  className="airline"
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {transaction?.data?.returnFlight?.airline?.name} -{" "}
-                  {capitalizeFirstLetter(transaction?.data?.returnFlight?.class)}
-                </div>
-                <div
-                  className="flight-number"
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {transaction?.data?.returnFlight?.airline?.code}
-                </div>
-                <div className="info-box mt-2">
-                  <div className="info-title"
-                  style={{
-                      fontSize: "14px",
+              <Col lg={3} className="d-flex align-items-center">
+                <img
+                  src={transaction?.data?.returnFlight?.airline?.image}
+                  alt="Flight"
+                  className="w-100 px-0 fluid"
+                />
+              </Col>
+              <Col lg={9}>
+                <div className="flight-info">
+                  <div
+                    className="airline"
+                    style={{
+                      fontSize: "16px",
                       fontWeight: "bold",
-                  }}
-                  >Informasi:</div>
-                  <ul className="list-unstyled">
+                    }}
+                  >
+                    {transaction?.data?.returnFlight?.airline?.name} -{" "}
+                    {capitalizeFirstLetter(
+                      transaction?.data?.returnFlight?.class
+                    )}
+                  </div>
+                  <div
+                    className="flight-number"
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {transaction?.data?.returnFlight?.airline?.code}
+                  </div>
+                  <div className="info-box mt-2">
+                    <div
+                      className="info-title"
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Informasi:
+                    </div>
+                    <ul className="list-unstyled">
                       <li>Bagasi 20 kg</li>
                       <li>Bagasi kabin 7 kg</li>
                       <li>Hiburan di pesawat</li>
-                  </ul>
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            </Col>
-          </Row>
+              </Col>
+            </Row>
             <hr />
             <Row>
               <Col lg={7} md={7} xs={7}>
@@ -455,9 +497,7 @@ const OrderDetailCard = ({
                 </div>
                 <div className="arrival mt-2 mb-2">
                   <div className="date">
-                    {formatDate(
-                      transaction?.data?.returnFlight?.arrivalDate
-                    )}
+                    {formatDate(transaction?.data?.returnFlight?.arrivalDate)}
                   </div>
                 </div>
               </Col>
@@ -508,27 +548,25 @@ const OrderDetailCard = ({
         </Card>
       )}
 
-      <Card
-        className="p-3 shadow-sm rounded-3 w-100"
-      >
+      <Card className="p-3 shadow-sm rounded-3 w-100">
         <Form>
           {isInOrderHistoryPage && (
-          <div>
-            <PassengerList transaction={transaction}/>
-            <hr />
-          </div>
+            <div>
+              <PassengerList transaction={transaction} />
+              <hr />
+            </div>
           )}
 
           <Row className="my-2">
             <span
-                  className="hargadeparture mb-2"
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Rincian Harga
-                </span>
+              className="hargadeparture mb-2"
+              style={{
+                fontSize: "18px",
+                fontWeight: "bold",
+              }}
+            >
+              Rincian Harga
+            </span>
             <Col xs={7}>
               {Object.entries(passengerCounts).map(([type, count]) => (
                 <div key={type}>
@@ -573,14 +611,14 @@ const OrderDetailCard = ({
           <Row className="mt-2 justify-content-between">
             <Col>
               <span
-                  className="hargadeparture"
-                  style={{
-                    fontSize: "1.2rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Total Harga:
-                </span>
+                className="hargadeparture"
+                style={{
+                  fontSize: "1.2rem",
+                  fontWeight: "bold",
+                }}
+              >
+                Total Harga:
+              </span>
             </Col>
             <Col className="text-end align-self-start">
               {paymentStatus === "CANCELLED" ? (
@@ -593,47 +631,52 @@ const OrderDetailCard = ({
             </Col>
           </Row>
           <hr />
-          {paymentStatus === "SUCCESS" && !isDeparted && !isReturned && (
-            <Button
-              type="button"
-              onClick={handleSendTicket}
-              disabled={isPending}
-              style={{
-                backgroundColor: "#7126B5",
-                border: "none",
-                borderRadius: "8px",
-                width: "100%",
-                padding: "10px 0",
-                fontSize: "1.15rem",
-                marginTop: "5px",
-                opacity: isPending ? 0.5 : 1,
-              }}
-            >
-              {isPending ? "Mengirim..." : "Cetak Tiket"}
-            </Button>
-          )}
+          {isInOrderHistoryPage &&
+            paymentStatus === "SUCCESS" &&
+            !isDeparted &&
+            !isReturned && (
+              <Button
+                type="button"
+                onClick={handleSendTicket}
+                disabled={isPending}
+                style={{
+                  backgroundColor: "#7126B5",
+                  border: "none",
+                  borderRadius: "8px",
+                  width: "100%",
+                  padding: "10px 0",
+                  fontSize: "1.15rem",
+                  marginTop: "5px",
+                  opacity: isPending ? 0.5 : 1,
+                }}
+              >
+                {isPending ? "Mengirim..." : "Cetak Tiket"}
+              </Button>
+            )}
 
-          {isInOrderHistoryPage && paymentStatus === "PENDING" && (
-            <Button
-              onClick={handlePaymentRedirect}
-              type="button"
-              style={{
-                backgroundColor: "#dc3545",
-                border: "none",
-                borderRadius: "8px",
-                width: "100%",
-                padding: "10px 0",
-                fontSize: "1.1rem",
-                marginTop: "10px",
-              }}
-            >
-              Lanjut Bayar
-            </Button>
-          )}
+          {paymentStatus === "PENDING" &&
+            !isExpired &&
+            isInOrderHistoryPage && (
+              <Button
+                onClick={handlePaymentRedirect}
+                type="button"
+                style={{
+                  backgroundColor: "#dc3545",
+                  border: "none",
+                  borderRadius: "8px",
+                  width: "100%",
+                  padding: "10px 0",
+                  fontSize: "1.1rem",
+                  marginTop: "10px",
+                }}
+              >
+                Lanjut Bayar
+              </Button>
+            )}
 
           {paymentStatus === "CANCELLED" && null}
           {!["SUCCESS", "PENDING", "CANCELLED"].includes(paymentStatus) && null}
-          {!isInOrderHistoryPage && (
+          {!isInOrderHistoryPage && paymentStatus === "PENDING" && (
             <Button
               onClick={handleCancelTransaction}
               style={{
@@ -646,7 +689,7 @@ const OrderDetailCard = ({
                 marginTop: "10px",
               }}
             >
-              Batalkan Pembayaran
+              Batalkan Transaksi
             </Button>
           )}
         </Form>
