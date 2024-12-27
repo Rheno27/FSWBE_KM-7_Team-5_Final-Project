@@ -80,11 +80,17 @@ function OrderHistory({ id }) {
     });
   };    
 
+
   const handleClear = () => {
-    setSelectedRange(null); 
-    setSearchParams({}); // Clear all URL search parameters
-    setCurrentPage(1);
-  };
+    setSelectedRange(null); // Clear the selected range state
+    setCurrentPage(1); // Reset to the first page
+  
+    // Navigate to the correct route with no search parameters
+    navigate({
+      to: "/users/private/order-history", // Explicitly set the correct route
+      search: {}, // Clear all search parameters
+    });
+  };  
 
   const {
     data: responseData,
