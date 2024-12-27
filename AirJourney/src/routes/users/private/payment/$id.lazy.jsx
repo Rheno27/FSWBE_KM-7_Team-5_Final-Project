@@ -106,16 +106,21 @@ function Payment() {
         ) {
           window.snap?.embed(snapToken, {
             embedId: 'snap-container',
-            onSuccess: function (result) {
-              // Add your success logic here
+            onSuccess: () => {
+              toast.success("Pembayaran berhasil!");
+              navigateWithTimeout(
+                navigate,
+                `/users/private/payment/success?id=${id}`,
+                4000
+              );
             },
             onPending: () => {
               toast.info("Menunggu proses pembayaran!");
             },
-            onError: () => alert("Terjadi kesalahan saat pembayaran"),
+            onError: () => toast.error("Terjadi kesalahan saat pembayaran"),
             onClose: () => {
               if (paymentStatus !== "SUCCESS") {
-                alert("Apakah yakin ingin menutup form pembayaran?");
+                toast.warn("Apakah yakin ingin menutup form pembayaran?");
               }
             },
           });
@@ -161,14 +166,9 @@ function Payment() {
         return;
       }
 
-      if (paymentStatus === "SUCCESS") {
-        toast.success("Pembayaran berhasil!");
-        navigateWithTimeout(
-          navigate,
-          `/users/private/payment/success?id=${id}`,
-          4000
-        );
-      }
+      // if (paymentStatus === "SUCCESS") {
+        
+      // }
       if (isExpired) {
         toast.error("Transaksi telah kadaluwarsa. Mengembalikan...", {
           autoClose: 3000,
