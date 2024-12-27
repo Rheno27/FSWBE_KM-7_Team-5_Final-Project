@@ -34,10 +34,10 @@ const HomepageFlightClick = ({ setIsShowModal, selectedFlight }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const classList = [
-        { name: "Ekonomi" },
-        { name: "Premium Ekonomi" },
-        { name: "Bisnis" },
-        { name: "Kelas Satu" },
+        { name: "Economy" },
+        { name: "Premium Economy" },
+        { name: "Business" },
+        { name: "First Class" },
     ];
     const [passenger, setPassenger] = useState({
         ADULT: 1,
