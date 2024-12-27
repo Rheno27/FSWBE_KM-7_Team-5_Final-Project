@@ -24,7 +24,8 @@ function PaymentSuccess({ transaction }) {
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get("id");
   const token = localStorage.getItem("token");
-  const [hasNavigated, setHasNavigated] = useState(false);
+  const isInSuccessPage = location.pathname.includes("users/private/payment/success");
+  const isInOrderHistoryPage = location.pathname.includes("users/private/order-history");
 
   const INVALID_ID_TOAST = "invalid-id";
 
@@ -35,13 +36,23 @@ function PaymentSuccess({ transaction }) {
     return uuidRegex.test(id);
   };
 
+   useEffect(() => {
+    if (!isInSuccessPage) return;
+
+    if (isInSuccessPage && !isInOrderHistoryPage && !isValidId(id)) {
+      if (!toast.isActive(INVALID_ID_TOAST)) {
+        toast.error("ID transaksi tidak valid. Mengembalikan...", {
+          position: "bottom-center",
+          autoClose: 4000,
+          toastId: INVALID_ID_TOAST,
+        });
+      }
+      navigateWithTimeout(navigate, `/users/private/order-history`, 4000);
+    }
+
+  }, [isInSuccessPage, isInOrderHistoryPage, id, navigate, isValidId]);
+
   useEffect(() => {
-    const isInSuccessPage = window.location.pathname.includes(
-      `users/private/payment/success`
-    );
-    const isInOrderHistoryPage = window.location.pathname.includes(
-      `users/private/order-history`
-    );
     if (!token || token.trim() === "") {
       toast.error("Tidak ada autorisasi, mengarahkan ke homepage...", {
         position: "bottom-center",
@@ -49,24 +60,7 @@ function PaymentSuccess({ transaction }) {
       });
       navigateWithTimeout(navigate, `/`, 4000);
     }
-
-    // if (!hasNavigated && isInSuccessPage && !isInOrderHistoryPage && !isValidId(id)) {
-    //   setHasNavigated(true); // Prevent re-execution
-    //   if (!toast.isActive(INVALID_ID_TOAST)) {
-    //     // Check if the toast is already active
-    //     toast.error("ID transaksi tidak valid. Mengembalikan...", {
-    //       position: "bottom-center",
-    //       autoClose: 3000,
-    //       toastId: INVALID_ID_TOAST,
-    //     });
-    //   }
-    //   navigateWithTimeout(navigate, `/`, 4000);
-    // }
-
-    // return () => {
-    //   toast.dismiss(INVALID_ID_TOAST); // Clear the toast on component unmount
-    // };
-  }, [id, token, hasNavigated, navigate, isValidId]);
+  }, [token, navigate]);
 
   // Mutation for sending request link through email
   const { mutate: sendTicket, isPending } = useMutation({
