@@ -163,7 +163,6 @@ function Checkout() {
             (_, index) => {
                 const passenger = {
                     birthday: birthDays[index] || "",
-                    departureSeatId: selectedSeats[index] || "",
                     expiredAt: expiredAt[index] || "",
                     familyName: familyNames[index] || "",
                     firstName: firstNames[index] || "",
@@ -173,7 +172,10 @@ function Checkout() {
                     title: title[index] || "",
                     type: passengerTypes[index] || getPassengerType(index),
                 };
-                if (passenger.departureSeatId === "") {
+                if(passenger.type !== "INFANT"){
+                    passenger.departureSeatId = selectedSeats[index] || "";
+                }
+                if (passenger.departureSeatId === "" && passenger.type !== "INFANT") {
                     toast.error(
                         "Kursi tidak boleh kosong pada penumpang ke-" +
                             (index + 1) +
@@ -193,7 +195,6 @@ function Checkout() {
                     }
                 }
                 const totalForm = [
-                    passenger.departureSeatId,
                     title[index],
                     firstNames[index],
                     familyNames[index],
@@ -203,6 +204,9 @@ function Checkout() {
                     originCountries[index],
                     expiredAt[index],
                 ];
+                if (passenger.departureSeatId){
+                    totalForm.push(selectedSeats[index]);
+                }
                 for (let itemIndex = 0; itemIndex < totalForm.length; itemIndex++) {
                     const item = totalForm[itemIndex];
                     if (item === "") {
@@ -213,7 +217,7 @@ function Checkout() {
                         );
                         return null;
                     }
-                    if (itemIndex === 6) {
+                    if (itemIndex === 5) {
                         if (item.length !== 16 || !/^\d{16}$/.test(item)) {
                             isFilled = false;
                             toast.error(
