@@ -105,9 +105,9 @@ function Payment() {
           !document.getElementById("snap-container").hasChildNodes()
         ) {
           window.snap?.embed(snapToken, {
-            embedId: "snap-container",
-            onSuccess: () => {
-              
+            embedId: 'snap-container',
+            onSuccess: function (result) {
+              // Add your success logic here
             },
             onPending: () => {
               toast.info("Menunggu proses pembayaran!");
