@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   createLazyFileRoute,
   Link,
@@ -24,6 +24,7 @@ function PaymentSuccess({ transaction }) {
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get("id");
   const token = localStorage.getItem("token");
+  const [hasNavigated, setHasNavigated] = useState(false);
 
   const INVALID_ID_TOAST = "invalid-id";
 
@@ -38,6 +39,9 @@ function PaymentSuccess({ transaction }) {
     const isInSuccessPage = window.location.pathname.includes(
       `users/private/payment/success`
     );
+    const isInOrderHistoryPage = window.location.pathname.includes(
+      `users/private/order-history`
+    );
     if (!token || token.trim() === "") {
       toast.error("Tidak ada autorisasi, mengarahkan ke homepage...", {
         position: "bottom-center",
@@ -46,7 +50,8 @@ function PaymentSuccess({ transaction }) {
       navigateWithTimeout(navigate, `/`, 4000);
     }
 
-    if (isInSuccessPage && !isValidId(id)) {
+    if (!hasNavigated && isInSuccessPage && !isInOrderHistoryPage && !isValidId(id)) {
+      setHasNavigated(true); // Prevent re-execution
       if (!toast.isActive(INVALID_ID_TOAST)) {
         // Check if the toast is already active
         toast.error("ID transaksi tidak valid. Mengembalikan...", {
@@ -57,7 +62,11 @@ function PaymentSuccess({ transaction }) {
       }
       navigateWithTimeout(navigate, `/`, 4000);
     }
-  }, [id, token, navigate, isValidId]);
+
+    return () => {
+      toast.dismiss(INVALID_ID_TOAST); // Clear the toast on component unmount
+    };
+  }, [id, token, hasNavigated, navigate, isValidId]);
 
   // Mutation for sending request link through email
   const { mutate: sendTicket, isPending } = useMutation({
