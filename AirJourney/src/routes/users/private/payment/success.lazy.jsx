@@ -50,22 +50,22 @@ function PaymentSuccess({ transaction }) {
       navigateWithTimeout(navigate, `/`, 4000);
     }
 
-    if (!hasNavigated && isInSuccessPage && !isInOrderHistoryPage && !isValidId(id)) {
-      setHasNavigated(true); // Prevent re-execution
-      if (!toast.isActive(INVALID_ID_TOAST)) {
-        // Check if the toast is already active
-        toast.error("ID transaksi tidak valid. Mengembalikan...", {
-          position: "bottom-center",
-          autoClose: 3000,
-          toastId: INVALID_ID_TOAST,
-        });
-      }
-      navigateWithTimeout(navigate, `/`, 4000);
-    }
+    // if (!hasNavigated && isInSuccessPage && !isInOrderHistoryPage && !isValidId(id)) {
+    //   setHasNavigated(true); // Prevent re-execution
+    //   if (!toast.isActive(INVALID_ID_TOAST)) {
+    //     // Check if the toast is already active
+    //     toast.error("ID transaksi tidak valid. Mengembalikan...", {
+    //       position: "bottom-center",
+    //       autoClose: 3000,
+    //       toastId: INVALID_ID_TOAST,
+    //     });
+    //   }
+    //   navigateWithTimeout(navigate, `/`, 4000);
+    // }
 
-    return () => {
-      toast.dismiss(INVALID_ID_TOAST); // Clear the toast on component unmount
-    };
+    // return () => {
+    //   toast.dismiss(INVALID_ID_TOAST); // Clear the toast on component unmount
+    // };
   }, [id, token, hasNavigated, navigate, isValidId]);
 
   // Mutation for sending request link through email
