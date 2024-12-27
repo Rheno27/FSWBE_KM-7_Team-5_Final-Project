@@ -55,28 +55,30 @@ function OrderHistory({ id }) {
     if (!range || !range.from) return;
   
     const fromDate = new Date(range.from);
-    let toDate = range.to ? new Date(range.to) : new Date(range.from);
+    const toDate = range.to ? new Date(range.to) : new Date(range.from);
   
-    // Set 'from' to the start of the day (00:00:00)
+    // Ensure 'from' is at the start of the day
     fromDate.setHours(0, 0, 0, 0);
-  
-    // Adjust 'to' to the end of the day if no 'to' date is provided
+    // Ensure 'to' is at the end of the day
     toDate.setHours(23, 59, 59, 999);
   
-    const params = new URLSearchParams();
-    params.set("from", fromDate.toISOString());
-    params.set("to", toDate.toISOString());
-    params.set("page", 1); // Reset to the first page
+    // Define new query parameters explicitly
+    const params = {
+      from: fromDate.toISOString(),
+      to: toDate.toISOString(),
+      page: 1, // Always reset to the first page
+    };
   
-    setSelectedRange({ from: fromDate, to: toDate }); // Update selectedRange state
-    setCurrentPage(1); // Reset to the first page
+    // Update the selected range and page state
+    setSelectedRange({ from: fromDate, to: toDate });
+    setCurrentPage(1);
   
-    // Navigate to the correct route with the new query parameters
+    // Use the new parameters for navigation
     navigate({
-      to: "/users/private/order-history", // Explicitly set the correct route
-      search: params.toString(), // Convert URLSearchParams to a query string
+      to: "/users/private/order-history", // Explicit route
+      search: params, // Pass parameters directly as an object
     });
-  };  
+  };    
 
   const handleClear = () => {
     setSelectedRange(null); 
