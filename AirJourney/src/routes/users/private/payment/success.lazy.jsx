@@ -36,7 +36,7 @@ function PaymentSuccess({ transaction }) {
 
   useEffect(() => {
     const isInSuccessPage = window.location.pathname.includes(
-      `users/private/payment/success?id=${id}`
+      `users/private/payment/success`
     );
     if (!token || token.trim() === "") {
       toast.error("Tidak ada autorisasi, mengarahkan ke homepage...", {
