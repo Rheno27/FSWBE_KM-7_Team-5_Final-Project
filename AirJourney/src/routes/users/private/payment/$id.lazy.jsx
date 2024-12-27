@@ -106,13 +106,15 @@ function Payment() {
         ) {
           window.snap?.embed(snapToken, {
             embedId: 'snap-container',
-            onSuccess: () => {
-              toast.success("Pembayaran berhasil!");
-              navigateWithTimeout(
-                navigate,
-                `/users/private/payment/success?id=${id}`,
-                4000
-              );
+            onSuccess: (result) => {
+            toast.success("Pembayaran berhasil!");
+
+            navigateWithTimeout(
+              navigate,
+              `/users/private/payment/success?id=${id}`,
+              4000
+            );
+            return false;
             },
             onPending: () => {
               toast.info("Menunggu proses pembayaran!");
@@ -140,12 +142,12 @@ function Payment() {
     }
   }, [
     scriptLoaded,
-    transaction,
+    transaction?.data?.payment?.snapToken,
     snapInitialized,
     isExpired,
     navigate,
     id,
-    PAYMENT_SUCCESS_TOAST,
+    paymentStatus,
   ]);
 
   const validateTransaction = async () => {
