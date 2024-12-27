@@ -107,7 +107,7 @@ function Payment() {
           window.snap?.embed(snapToken, {
             embedId: "snap-container",
             onSuccess: () => {
-              // alert("Pembayaran berhasil!");
+              
             },
             onPending: () => {
               toast.info("Menunggu proses pembayaran!");
@@ -161,7 +161,7 @@ function Payment() {
         return;
       }
 
-      if (!isExpired && paymentStatus === "SUCCESS") {
+      if (paymentStatus === "SUCCESS") {
         toast.success("Pembayaran berhasil!");
         navigateWithTimeout(
           navigate,
