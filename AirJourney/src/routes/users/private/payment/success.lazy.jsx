@@ -37,7 +37,6 @@ function PaymentSuccess({ transaction }) {
   };
 
    useEffect(() => {
-    if (!isInSuccessPage) return;
 
     if (isInSuccessPage && !isInOrderHistoryPage && !isValidId(id)) {
       if (!toast.isActive(INVALID_ID_TOAST)) {
